@@ -1,7 +1,7 @@
 # soen343
-Team project : SOEN 343 Concordia University Fall 2018
+## Team project : SOEN 343 Concordia University Fall 2018
 
-Team Members :
+## Team Members :
 
 Name|Student ID| email
 ---|---|---
