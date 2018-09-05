@@ -11,4 +11,5 @@ Patrick Pin | 26789366 | patrickpin840@hotmail.com
 Petia Pavlova | 40029863  | petia2397@gmail.com
 Vineet Koppalkar | 40029699 | koppalkarvineet@gmail.com
 Pierre Watine | 40027675 | watinepierre@gmail.com
+Dmitry Feoktistov | 29229566 | d_feokti@live.concordia.ca
 
