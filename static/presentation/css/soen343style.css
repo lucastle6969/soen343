@@ -1,0 +1,5 @@
+@font-face{font-family:dindin; src:url(../fonts/DINReg.ttf)}
+
+.exampleClass {font-family: dindin, Arial, sans-serif; font-size:1.2em}
+
+.navbar {font-family: dindin, Arial, sans-serif; font-size:1.2em}

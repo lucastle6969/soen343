@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>SOEN343 Team Project</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='presentation/css/soen343style.css') }}">
+        <link rel="shortcut icon" href="{{ url_for('static', filename='presentation/img/pomofavi.png') }}">
+    </head>
+    <body>
+        {% include 'includes/navbar.html' %}
+        {% block body %}{% endblock %}
+        <script src="{{ url_for('static', filename='presentation/js/soen343.js') }}">
+        </script>
+    </body>
+</html>
