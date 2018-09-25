@@ -11,6 +11,12 @@ appdb = db(app)
 
 active_user_registry = []
 
+def validate_admin():
+    for client in active_user_registry:
+        if client.id == session['client_id'] and client.admin == True:
+            return True
+    return False
+
 @app.route('/')
 def index():
     return render_template('home.html')
@@ -79,15 +85,24 @@ def register_admin():
 
 @app.route('/admin_tools')
 def admin_tools_default():
-    return render_template('admin_tools.html')
+    if session['logged_in'] == True:
+        if validate_admin():
+            return render_template('admin_tools.html')
+    flash('You must be logged in as an admin to view this page')
+    return redirect(url_for('login'))
 
 @app.route('/admin_tools/<tool>')
 def admin_tools(tool):
-    if tool == 'view_active_registry':
-        return render_template('admin_tools.html', active_user_registry = active_user_registry)
-    else:
-        flash('invalid tool')
-        return render_template('admin_tools.html')
+    if session['logged_in'] == True:
+        if validate_admin():
+            if tool == 'view_active_registry':
+                return render_template('admin_tools.html', active_user_registry = active_user_registry)
+            # elif tool == 'some_future_tool':
+        else:
+            flash('invalid tool')
+            return render_template('admin_tools.html')
+    flash('You must be logged in as an admin to view this page')
+    return redirect(url_for('login'))
 
 @app.route('/logout')
 def logout():
