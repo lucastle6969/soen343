@@ -1,5 +1,6 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, logging, request
-from domain.db import db
+from model.db import db
+from model.Client import Client
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from model.RegisterForm import RegisterForm
@@ -7,6 +8,8 @@ from model.RegisterForm import RegisterForm
 app = Flask(__name__)
 
 appdb = db(app)
+
+active_user_registry = []
 
 @app.route('/')
 def index():
@@ -28,15 +31,18 @@ def login():
         email = request.form['email']
         password_candidate = request.form['password']
 
-        client = appdb.getClientByEmail(email)
-
-        if client:
+        data = appdb.getClientByEmail(email)
+        if data:
+            client = Client(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7])
+            # add the client to the active user registry
+            active_user_registry.append(client)
 
             #compare passwrods
             if sha256_crypt.verify(password_candidate, client.password):
                 app.logger.info('PASSWORD MATHCED')
                 session['logged_in'] = True
                 session['firstname'] = client.firstname
+                session['client_id'] = client.id
 
                 flash('You are now logged in', 'success')
                 return redirect(url_for('home'))
@@ -57,8 +63,8 @@ def register():
     form = RegisterForm(request.form)
     app.logger.info(form.firstname.data)
     if request.method == 'POST' and form.validate():
-
-        appdb.insertClient(form.firstname.data, form.lastname.data, form.address.data, form.email.data, form.phone.data, sha256_crypt.encrypt(str(form.password.data)))
+        is_admin = 0
+        appdb.insertClient(form.firstname.data, form.lastname.data, form.address.data, form.email.data, form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
 
         flash('You are now registered and can now login', 'success')
 
@@ -66,9 +72,18 @@ def register():
 
     return render_template('login.html', form=form)
 
+app.route('/register_admin', methods=['GET', 'POST'])
+def register_admin():
+    # TODO 
+    return
+
 @app.route('/logout')
 def logout():
+    # Remove client from the active_user_registry
+    # to verify (not sure about the syntax here)
+    active_user_registry[:] = [client for client in active_user_registry if not client.id == session['client_id']]
     session.clear()
+
     flash('You are now logged out', 'success')
     return redirect(url_for('login'))
 
