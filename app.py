@@ -72,10 +72,22 @@ def register():
 
     return render_template('login.html', form=form)
 
-app.route('/register_admin', methods=['GET', 'POST'])
+@app.route('/register_admin', methods=['GET', 'POST'])
 def register_admin():
     # TODO 
     return
+
+@app.route('/admin_tools')
+def admin_tools_default():
+    return render_template('admin_tools.html')
+
+@app.route('/admin_tools/<tool>')
+def admin_tools(tool):
+    if tool == 'view_active_registry':
+        return render_template('admin_tools.html', active_user_registry = active_user_registry)
+    else:
+        flash('invalid tool')
+        return render_template('admin_tools.html')
 
 @app.route('/logout')
 def logout():
