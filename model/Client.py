@@ -1,14 +1,14 @@
 
 
 class Client:
-    def __init__(self, data):
-        self.id = data[0]
-        self.firstname = data[1]
-        self.lastname = data[2]
-        self.address = data[3]
-        self.email = data[4]
-        self.phone = data[5]
-        self.admin = data[6]
-        self.password = data[7]
+    def __init__(self, id, firstname, lastname, address, email, phone, admin, password):
+        self.id = id
+        self.firstname = firstname
+        self.lastname = lastname
+        self.address = address
+        self.email = email
+        self.phone = phone
+        self.admin = admin
+        self.password = password
 
     # Getters and setters (not necessary for now)

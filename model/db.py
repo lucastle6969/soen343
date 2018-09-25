@@ -1,5 +1,5 @@
 from flaskext.mysql import MySQL
-from model.Client import Client
+
 
 class db:
     def __init__(self, app):
@@ -18,11 +18,11 @@ class db:
     # Client SQL Queries
 
     # -- INSERT Queries
-    def insertClient(self, firstName, lastName, address, email, phone, password):
+    def insertClient(self, firstName, lastName, address, email, phone, admin, password):
         connection = self.mysql.connect()
         cur = connection.cursor()
          # Execute query
-        cur.execute("INSERT INTO clientAdmin(id, firstName, lastName, physicalAddress, email, phone, admin, password) VALUES(NULL, %s, %s, %s, %s, %s, 0, %s)", (firstName, lastName, address, email, phone, password))
+        cur.execute("INSERT INTO clientAdmin(id, firstName, lastName, physicalAddress, email, phone, admin, password) VALUES(NULL, %s, %s, %s, %s, %s, %s, %s)", (firstName, lastName, address, email, phone, admin, password))
         # Close connection
         cur.close()
 
@@ -32,10 +32,11 @@ class db:
         cur = connection.cursor()
         result = cur.execute("SELECT * FROM clientAdmin WHERE email = %s", [email])
         data = cur.fetchone()
+        #send data back to the controller
         if result > 0:
-            client = Client(data)
+            return data
         else:
-            client = False
+            data = False
         cur.close()
-        return client
+        return data
 
