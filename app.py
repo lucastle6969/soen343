@@ -4,6 +4,7 @@ from model.Client import Client
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from model.RegisterForm import RegisterForm
+import datetime
 
 app = Flask(__name__)
 
@@ -40,8 +41,9 @@ def login():
         data = appdb.getClientByEmail(email)
         if data:
             client = Client(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7])
-            # add the client to the active user registry
-            active_user_registry.append(client)
+            # add the client to the active user registry in the form of a tuple (id, timestamp)
+            ts = datetime.datetime.now().timestamp
+            active_user_registry.append(data[0],ts)
 
             #compare passwrods
             if sha256_crypt.verify(password_candidate, client.password):
@@ -107,7 +109,7 @@ def admin_tools(tool):
 @app.route('/logout')
 def logout():
     # Remove client from the active_user_registry
-    # to verify (not sure about the syntax here)
+    # to verify (not sure about the syntax here) - will be updated to reflect removal of tuple
     active_user_registry[:] = [client for client in active_user_registry if not client.id == session['client_id']]
     session.clear()
 
