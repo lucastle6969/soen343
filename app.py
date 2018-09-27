@@ -89,8 +89,7 @@ def register():
 
     return render_template('login.html', form=form)
 
-@app.route('/register_admin', methods=['GET', 'POST'])
-def register_admin():
+def register_admin(request):
     form = RegisterForm(request.form)
     app.logger.info(form.firstname.data)
     if request.method == 'POST' and form.validate():
@@ -98,8 +97,8 @@ def register_admin():
         appdb.insertClient(form.firstname.data, form.lastname.data, form.address.data, form.email.data, form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
 
         flash('The new administrator has been registered', 'success')
-        
-        #return to be added
+        return redirect(url_for('index'))
+
         
     return render_template('register_admin.html', form=form)
 
@@ -111,15 +110,15 @@ def admin_tools_default():
     flash('You must be logged in as an admin to view this page')
     return redirect(url_for('home'))
 
-@app.route('/admin_tools/<tool>')
+@app.route('/admin_tools/<tool>',  methods=['GET', 'POST'])
 def admin_tools(tool):
     if session['logged_in'] == True:
         if validate_admin():
             if tool == 'view_active_registry':
                 return render_template('admin_tools.html', active_user_registry = active_user_registry, tool = tool)
             elif tool == 'create_admin':
-                return render_template('register_admin.html') #to be changed according to Kev's part
-                # elif tool == 'some_future_tool':
+                return register_admin(request)
+            # elif tool == 'some_future_tool':
         else:
             flash('invalid tool')
             return render_template('admin_tools.html')
