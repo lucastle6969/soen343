@@ -1,6 +1,6 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, logging, request
-from model.db import db
-from model.Client import Client
+from model.Tdg import Tdg
+from model.User import User, Client, Admin
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from model.RegisterForm import RegisterForm
@@ -8,16 +8,9 @@ import datetime, time
 
 app = Flask(__name__)
 
-appdb = db(app)
+tdg = Tdg(app)
 
 active_user_registry = []
-
-
-def validate_admin():
-    for tup in active_user_registry:
-        if tup[0] == session['client_id'] and session['admin'] == True:
-            return True
-    return False
 
 @app.route('/')
 def index():
@@ -39,7 +32,7 @@ def login():
         email = request.form['email']
         password_candidate = request.form['password']
 
-        data = appdb.getClientByEmail(email)
+        data = tdg.getClientByEmail(email)
         if data:
             client = Client(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7])
             # log user out if they are already logged in
@@ -75,10 +68,10 @@ def register():
     form = RegisterForm(request.form)
     app.logger.info(form.phone.data)
     if request.method == 'POST' and form.validate():
-        if not (appdb.getClientByEmail(form.email.data)):
+        if not (tdg.getClientByEmail(form.email.data)):
 
             is_admin = 0
-            appdb.insertClient(form.firstname.data, form.lastname.data, form.address.data, form.email.data, form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
+            tdg.insertClient(form.firstname.data, form.lastname.data, form.address.data, form.email.data, form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
 
             flash('You are now registered and can now login', 'success')
 
@@ -92,7 +85,7 @@ def register():
 @app.route('/admin_tools')
 def admin_tools_default():
     if session['logged_in'] == True:
-        if validate_admin():
+        if Admin.validate_admin(active_user_registry, session['client_id'], session['admin']):
             return render_template('admin_tools.html')
     flash('You must be logged in as an admin to view this page')
     return redirect(url_for('home'))
@@ -100,7 +93,7 @@ def admin_tools_default():
 @app.route('/admin_tools/<tool>')
 def admin_tools(tool):
     if session['logged_in'] == True:
-        if validate_admin():
+        if Admin.validate_admin(active_user_registry, session['client_id'], session['admin']):
             if tool == 'view_active_registry':
                 return render_template('admin_tools.html', active_user_registry = active_user_registry, tool = tool)
             # elif tool == 'register_admin':

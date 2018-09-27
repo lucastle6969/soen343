@@ -1,6 +1,4 @@
-
-
-class Client:
+class User:
     def __init__(self, id, firstname, lastname, address, email, phone, admin, password):
         self.id = id
         self.firstname = firstname
@@ -11,4 +9,14 @@ class Client:
         self.admin = admin
         self.password = password
 
-    # Getters and setters (not necessary for now)
+class Client(User):
+    pass
+
+class Admin(User):
+    @staticmethod
+    def validate_admin(active_user_registry, id, admin):
+        for tup in active_user_registry:
+            if tup[0] == id and admin == True:
+                return True
+        return False
+
