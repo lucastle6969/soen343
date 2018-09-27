@@ -34,7 +34,16 @@ def login():
 
         data = tdg.getClientByEmail(email)
         if data:
-            client = Client(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7])
+            id = data[0]
+            firstname = data[1]
+            lastname = data[2]
+            address = data[3]
+            email = data[4]
+            phone = data[5]
+            admin = data[6]
+            password = data[7]
+
+            client = Client(id, firstname, lastname, address, email, phone, admin, password)
             # log user out if they are already logged in
             active_user_registry[:] = [tup for tup in active_user_registry if not data[0]==tup[0]]
             # add the client to the active user registry in the form of a tuple (id, timestamp)
