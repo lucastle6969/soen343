@@ -82,8 +82,17 @@ def register():
 
 @app.route('/register_admin', methods=['GET', 'POST'])
 def register_admin():
-    # TODO 
-    return
+    form = RegisterForm(request.form)
+    app.logger.info(form.firstname.data)
+    if request.method == 'POST' and form.validate():
+        is_admin = 1
+        appdb.insertClient(form.firstname.data, form.lastname.data, form.address.data, form.email.data, form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
+
+        flash('The new administrator has been registered', 'success')
+        
+        #return to be added
+        
+    return render_template('register_admin.html', form=form)
 
 @app.route('/admin_tools')
 def admin_tools_default():
@@ -99,7 +108,9 @@ def admin_tools(tool):
         if validate_admin():
             if tool == 'view_active_registry':
                 return render_template('admin_tools.html', active_user_registry = active_user_registry)
-            # elif tool == 'some_future_tool':
+            elif tool == 'create_new_admin': #to be changed according to Mike's part?
+                return render_template('register_admin.html') #to be changed according to Kev's part
+                # elif tool == 'some_future_tool':
         else:
             flash('invalid tool')
             return render_template('admin_tools.html')
