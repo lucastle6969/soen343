@@ -1,7 +1,7 @@
 from flaskext.mysql import MySQL
 
 
-class db:
+class Tdg:
     def __init__(self, app):
         self.mysql = MySQL()
 
