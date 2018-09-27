@@ -46,7 +46,7 @@ def login():
             active_user_registry[:] = [tup for tup in active_user_registry if not data[0]==tup[0]]
             # add the client to the active user registry in the form of a tuple (id, timestamp)
             timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
-            active_user_registry.append((data[0],timestamp,data[1]))
+            active_user_registry.append((data[0],timestamp))
 
             #compare passwrods
             if sha256_crypt.verify(password_candidate, client.password):

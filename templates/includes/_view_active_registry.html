@@ -1,12 +1,13 @@
 {% if active_user_registry %}
     <table>
+        <caption style="caption-side:top">Active User Registry</caption>
         <tr>
-            <th>Account Name</th>
+            <th>ID</th>
             <th>Timestamp</th>
         </tr>
-        {% for id, timestamp, name in active_user_registry %}
+        {% for id, timestamp in active_user_registry %}
         <tr>
-            <td>{{ name }}</th>
+            <td>{{ id }}</td>
             <td>{{ timestamp }}</th>
         </tr>
         {% endfor %}
