@@ -108,7 +108,7 @@ def admin_tools(tool):
         if validate_admin():
             if tool == 'view_active_registry':
                 return render_template('admin_tools.html', active_user_registry = active_user_registry)
-            elif tool == 'create_new_admin': #to be changed according to Mike's part?
+            elif tool == 'create_admin':
                 return render_template('register_admin.html') #to be changed according to Kev's part
                 # elif tool == 'some_future_tool':
         else:
