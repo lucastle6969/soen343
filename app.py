@@ -97,8 +97,6 @@ def register_admin(request):
         appdb.insertClient(form.firstname.data, form.lastname.data, form.address.data, form.email.data, form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
 
         flash('The new administrator has been registered', 'success')
-        return redirect(url_for('index'))
-
         
     return render_template('register_admin.html', form=form)
 
