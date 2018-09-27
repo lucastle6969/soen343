@@ -75,12 +75,17 @@ def register():
     form = RegisterForm(request.form)
     app.logger.info(form.phone.data)
     if request.method == 'POST' and form.validate():
-        is_admin = 0
-        appdb.insertClient(form.firstname.data, form.lastname.data, form.address.data, form.email.data, form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
+        if not (appdb.getClientByEmail(form.email.data)):
 
-        flash('You are now registered and can now login', 'success')
+            is_admin = 0
+            appdb.insertClient(form.firstname.data, form.lastname.data, form.address.data, form.email.data, form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
 
-        return redirect(url_for('index'))
+            flash('You are now registered and can now login', 'success')
+
+            return redirect(url_for('index'))
+
+        flash("This email has already been used.")
+        return render_template('login.html', form=form)
 
     return render_template('login.html', form=form)
 
