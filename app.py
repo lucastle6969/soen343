@@ -1,5 +1,5 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, logging, request
-from model.db import db
+from model.Tdg import Tdg
 from model.Client import Client
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
@@ -8,7 +8,7 @@ import datetime, time
 
 app = Flask(__name__)
 
-appdb = db(app)
+tdg = Tdg(app)
 
 active_user_registry = []
 
@@ -39,7 +39,7 @@ def login():
         email = request.form['email']
         password_candidate = request.form['password']
 
-        data = appdb.getClientByEmail(email)
+        data = tdg.getClientByEmail(email)
         if data:
             client = Client(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7])
             # log user out if they are already logged in
@@ -75,10 +75,10 @@ def register():
     form = RegisterForm(request.form)
     app.logger.info(form.phone.data)
     if request.method == 'POST' and form.validate():
-        if not (appdb.getClientByEmail(form.email.data)):
+        if not (tdg.getClientByEmail(form.email.data)):
 
             is_admin = 0
-            appdb.insertClient(form.firstname.data, form.lastname.data, form.address.data, form.email.data, form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
+            tdg.insertClient(form.firstname.data, form.lastname.data, form.address.data, form.email.data, form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
 
             flash('You are now registered and can now login', 'success')
 
