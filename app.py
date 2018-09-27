@@ -42,8 +42,8 @@ def login():
         if data:
             client = Client(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7])
             # add the client to the active user registry in the form of a tuple (id, timestamp)
-            ts = datetime.datetime.now().timestamp
-            active_user_registry.append(data[0],ts)
+            ts = datetime.datetime.now().timestamp()
+            active_user_registry.append((data[0],ts))
 
             #compare passwrods
             if sha256_crypt.verify(password_candidate, client.password):
@@ -108,9 +108,8 @@ def admin_tools(tool):
 
 @app.route('/logout')
 def logout():
-    # Remove client from the active_user_registry
-    # to verify (not sure about the syntax here) - will be updated to reflect removal of tuple
-    active_user_registry[:] = [client for client in active_user_registry if not client.id == session['client_id']]
+    # Remove client_id, timestamp tuple from the active_user_registry
+    active_user_registry[:] = [tup for tup in active_user_registry if not session['client_id']==tup[0]]
     session.clear()
 
     flash('You are now logged out', 'success')
