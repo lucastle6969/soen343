@@ -4,7 +4,7 @@ from model.Client import Client
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from model.RegisterForm import RegisterForm
-import datetime
+import datetime, time
 
 app = Flask(__name__)
 
@@ -12,9 +12,10 @@ appdb = db(app)
 
 active_user_registry = []
 
+
 def validate_admin():
-    for client in active_user_registry:
-        if client.id == session['client_id'] and client.admin == True:
+    for tup in active_user_registry:
+        if tup[0] == session['client_id'] and session['admin'] == True:
             return True
     return False
 
@@ -41,9 +42,11 @@ def login():
         data = appdb.getClientByEmail(email)
         if data:
             client = Client(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7])
+            # log user out if they are already logged in
+            active_user_registry[:] = [tup for tup in active_user_registry if not data[0]==tup[0]]
             # add the client to the active user registry in the form of a tuple (id, timestamp)
-            ts = datetime.datetime.now().timestamp()
-            active_user_registry.append((data[0],ts))
+            timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+            active_user_registry.append((data[0],timestamp))
 
             #compare passwrods
             if sha256_crypt.verify(password_candidate, client.password):
@@ -51,6 +54,7 @@ def login():
                 session['logged_in'] = True
                 session['firstname'] = client.firstname
                 session['client_id'] = client.id
+                session['admin'] = client.admin
 
                 flash('You are now logged in', 'success')
                 return redirect(url_for('home'))
@@ -69,14 +73,19 @@ def login():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm(request.form)
-    app.logger.info(form.firstname.data)
+    app.logger.info(form.phone.data)
     if request.method == 'POST' and form.validate():
-        is_admin = 0
-        appdb.insertClient(form.firstname.data, form.lastname.data, form.address.data, form.email.data, form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
+        if not (appdb.getClientByEmail(form.email.data)):
 
-        flash('You are now registered and can now login', 'success')
+            is_admin = 0
+            appdb.insertClient(form.firstname.data, form.lastname.data, form.address.data, form.email.data, form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
 
-        return redirect(url_for('index'))
+            flash('You are now registered and can now login', 'success')
+
+            return redirect(url_for('index'))
+
+        flash("This email has already been used.")
+        return render_template('login.html', form=form)
 
     return render_template('login.html', form=form)
 
@@ -100,14 +109,14 @@ def admin_tools_default():
         if validate_admin():
             return render_template('admin_tools.html')
     flash('You must be logged in as an admin to view this page')
-    return redirect(url_for('login'))
+    return redirect(url_for('home'))
 
 @app.route('/admin_tools/<tool>')
 def admin_tools(tool):
     if session['logged_in'] == True:
         if validate_admin():
             if tool == 'view_active_registry':
-                return render_template('admin_tools.html', active_user_registry = active_user_registry)
+                return render_template('admin_tools.html', active_user_registry = active_user_registry, tool = tool)
             elif tool == 'create_admin':
                 return render_template('register_admin.html') #to be changed according to Kev's part
                 # elif tool == 'some_future_tool':
