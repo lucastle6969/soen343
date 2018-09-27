@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    {% if tool %}
+        {% if tool == "view_active_registry" %}
+            {% include 'includes/_view_active_registry.html' %}
+        {% endif %}
+    {% else %}
+        <div class="tool-container container">
+            <span id="tools-title">Admin Tools</span>
+            <hr>
+            <div class="row container tool-container1">
+                <a class="admin-tools rounded" href="/admin_tools/create_admin"><div class="rounded">Create New Admin</div></a>
+                <a class="admin-tools rounded" href="/admin_tools/view_active_registry"><div class="rounded">View Active Users</div></a>
+                <a class="admin-tools rounded" href="#"><div class="rounded">Unimplemented tool</div></a>
+                <a class="admin-tools rounded" href="#"><div class="rounded">Unimplemented tool</div></a>
+                <a class="admin-tools rounded" href="#"><div class="rounded">Unimplemented tool</div></a>
+                <a class="admin-tools rounded" href="#"><div class="rounded">Unimplemented tool</div></a>
+            </div>
+            <div class="row container tool-container1">
+                <a class="admin-tools rounded" href="#"><div class="rounded">Unimplemented tool</div></a>
+                <a class="admin-tools rounded" href="#"><div class="rounded">Unimplemented tool</div></a>
+                <a class="admin-tools rounded" href="#"><div class="rounded">Unimplemented tool</div></a>
+                <a class="admin-tools rounded" href="#"><div class="rounded">Unimplemented tool</div></a>
+                <a class="admin-tools rounded" href="#"><div class="rounded">Unimplemented tool</div></a>
+                <a class="admin-tools rounded" href="#"><div class="rounded">Unimplemented tool</div></a>
+            </div>
+        </div>
+    {% endif %}    
+{% endblock %}
