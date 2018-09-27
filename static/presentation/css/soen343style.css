@@ -56,3 +56,53 @@
     font-weight: 600;
     text-decoration: none;
 }
+
+.row {
+    margin: 80px 0px 80px 0px;
+    }
+
+.admin-tools {
+    margin: 10px 10px 10px 10px;
+    height: 150px;
+    width: 150px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 150px;
+    -webkit-transform: scale(1, 1);
+    -ms-transform: scale(1, 1);
+    transform: scale(1, 1);
+    transition-duration: 0.3s;
+    -webkit-transition-duration: 0.3s; /* Safari */
+    background-color: lightskyblue;
+    }
+
+.admin-tools:hover {
+	cursor: pointer;
+	-webkit-transform: scale(2, 2);
+    -ms-transform: scale(2, 2);
+    transform: scale(2, 2);
+    transition-duration: 0.3s;
+    -webkit-transition-duration: 0.3s; /* Safari */
+    box-shadow: 10px 10px 5px #888888;
+    z-index: 1;
+    }
+
+#tools-title {
+    font-size: 145%;
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
