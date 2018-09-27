@@ -14,8 +14,8 @@ active_user_registry = []
 
 
 def validate_admin():
-    for (id, time, name) in active_user_registry:
-        if id == session['client_id'] and session['admin'] == True:
+    for tup in active_user_registry:
+        if tup[0] == session['client_id'] and session['admin'] == True:
             return True
     return False
 
@@ -42,10 +42,11 @@ def login():
         data = appdb.getClientByEmail(email)
         if data:
             client = Client(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7])
+            # log user out if they are already logged in
+            active_user_registry[:] = [tup for tup in active_user_registry if not data[0]==tup[0]]
             # add the client to the active user registry in the form of a tuple (id, timestamp)
-            ts = time.time()
-            st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-            active_user_registry.append((data[0],st,data[1]))
+            timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+            active_user_registry.append((data[0],timestamp,data[1]))
 
             #compare passwrods
             if sha256_crypt.verify(password_candidate, client.password):
