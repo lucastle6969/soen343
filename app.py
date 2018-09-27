@@ -43,7 +43,7 @@ def login():
 
             #compare passwrods
             if sha256_crypt.verify(password_candidate, client.password):
-                app.logger.info('PASSWORD MATHCED')
+                app.logger.info('PASSWORD MATCHED')
                 session['logged_in'] = True
                 session['firstname'] = client.firstname
                 session['client_id'] = client.id
@@ -82,6 +82,22 @@ def register():
 
     return render_template('login.html', form=form)
 
+def register_admin(request):
+    form = RegisterForm(request.form)
+    app.logger.info(form.phone.data)
+    if request.method == 'POST' and form.validate():
+        if not (appdb.getClientByEmail(form.email.data)):
+            is_admin = 1
+            appdb.insertClient(form.firstname.data, form.lastname.data, form.address.data, form.email.data, form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
+
+            flash('The new administrator has been registered', 'success')
+        
+        else:
+            flash("This email has already been used.")
+        return render_template('create_admin.hmtl', form=form)
+
+    return render_template('register_admin.html', form=form)
+
 @app.route('/admin_tools')
 def admin_tools_default():
     if session['logged_in'] == True:
@@ -90,13 +106,15 @@ def admin_tools_default():
     flash('You must be logged in as an admin to view this page')
     return redirect(url_for('home'))
 
-@app.route('/admin_tools/<tool>')
+@app.route('/admin_tools/<tool>',  methods=['GET', 'POST'])
 def admin_tools(tool):
     if session['logged_in'] == True:
         if Admin.validate_admin(active_user_registry, session['client_id'], session['admin']):
             if tool == 'view_active_registry':
                 return render_template('admin_tools.html', active_user_registry = active_user_registry, tool = tool)
-            # elif tool == 'register_admin':
+            elif tool == 'create_admin':
+                return register_admin(request)
+            # elif tool == 'some_future_tool':
         else:
             flash('invalid tool')
             return render_template('admin_tools.html')
