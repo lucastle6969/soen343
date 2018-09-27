@@ -18,6 +18,11 @@
                     <a class="nav-link" href="/login">Login</a>
                 {% endif %}
             </li>
+            {% if session.admin == True %}
+            <li class="nav-item">
+                <a class="nav-link" href="/admin_tools">Admin Tools</a>
+            </li>
+            {% endif %}
         </ul>
         <span class="navbar-text">
             Search Bar (Not implemented)
