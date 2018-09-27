@@ -50,7 +50,7 @@ def login():
 
             #compare passwrods
             if sha256_crypt.verify(password_candidate, client.password):
-                app.logger.info('PASSWORD MATHCED')
+                app.logger.info('PASSWORD MATCHED')
                 session['logged_in'] = True
                 session['firstname'] = client.firstname
                 session['client_id'] = client.id
@@ -91,15 +91,18 @@ def register():
 
 def register_admin(request):
     form = RegisterForm(request.form)
-    app.logger.info(form.firstname.data)
+    app.logger.info(form.phone.data)
     if request.method == 'POST' and form.validate():
-        is_admin = 1
-        appdb.insertClient(form.firstname.data, form.lastname.data, form.address.data, form.email.data, form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
+        if not (appdb.getClientByEmail(form.email.data)):
+            is_admin = 1
+            appdb.insertClient(form.firstname.data, form.lastname.data, form.address.data, form.email.data, form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
 
-        flash('The new administrator has been registered', 'success')
-        return redirect(url_for('index'))
-
+            flash('The new administrator has been registered', 'success')
         
+        else:
+            flash("This email has already been used.")
+        return render_template('create_admin.hmtl', form=form)
+
     return render_template('register_admin.html', form=form)
 
 @app.route('/admin_tools')
