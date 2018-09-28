@@ -1,6 +1,6 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, logging, request
 from model.Tdg import Tdg
-from model.User import User, Client, Admin
+from model.User import User, Client, Admin, active_user_registry
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from model.RegisterForm import RegisterForm
@@ -9,8 +9,6 @@ import datetime, time
 app = Flask(__name__)
 
 tdg = Tdg(app)
-
-active_user_registry = []
 
 @app.route('/')
 def index():
@@ -95,9 +93,9 @@ def register_admin(request):
     form = RegisterForm(request.form)
     app.logger.info(form.phone.data)
     if request.method == 'POST' and form.validate():
-        if not (appdb.getClientByEmail(form.email.data)):
+        if not (Tdg.getClientByEmail(form.email.data)):
             is_admin = 1
-            appdb.insertClient(form.firstname.data, form.lastname.data, form.address.data, form.email.data, form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
+            Tdg.insertClient(form.firstname.data, form.lastname.data, form.address.data, form.email.data, form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
 
             flash('The new administrator has been registered', 'success')
         
