@@ -1,12 +1,16 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, logging, request
-from domain.db import db
+from model.Tdg import Tdg
+from model.User import User, Client, Admin
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from model.RegisterForm import RegisterForm
+import datetime, time
 
 app = Flask(__name__)
 
-appdb = db(app)
+tdg = Tdg(app)
+
+active_user_registry = []
 
 @app.route('/')
 def index():
@@ -28,15 +32,31 @@ def login():
         email = request.form['email']
         password_candidate = request.form['password']
 
-        client = appdb.getClientByEmail(email)
+        data = tdg.getClientByEmail(email)
+        if data:
+            id = data[0]
+            firstname = data[1]
+            lastname = data[2]
+            address = data[3]
+            email = data[4]
+            phone = data[5]
+            admin = data[6]
+            password = data[7]
 
-        if client:
+            client = Client(id, firstname, lastname, address, email, phone, admin, password)
+            # log user out if they are already logged in
+            active_user_registry[:] = [tup for tup in active_user_registry if not data[0]==tup[0]]
+            # add the client to the active user registry in the form of a tuple (id, timestamp)
+            timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+            active_user_registry.append((data[0],timestamp))
 
             #compare passwrods
             if sha256_crypt.verify(password_candidate, client.password):
-                app.logger.info('PASSWORD MATHCED')
+                app.logger.info('PASSWORD MATCHED')
                 session['logged_in'] = True
                 session['firstname'] = client.firstname
+                session['client_id'] = client.id
+                session['admin'] = client.admin
 
                 flash('You are now logged in', 'success')
                 return redirect(url_for('home'))
@@ -55,20 +75,67 @@ def login():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm(request.form)
-    app.logger.info(form.firstname.data)
+    app.logger.info(form.phone.data)
     if request.method == 'POST' and form.validate():
+        if not (tdg.getClientByEmail(form.email.data)):
 
-        appdb.insertClient(form.firstname.data, form.lastname.data, form.address.data, form.email.data, form.phone.data, sha256_crypt.encrypt(str(form.password.data)))
+            is_admin = 0
+            tdg.insertClient(form.firstname.data, form.lastname.data, form.address.data, form.email.data, form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
 
-        flash('You are now registered and can now login', 'success')
+            flash('You are now registered and can now login', 'success')
 
-        return redirect(url_for('index'))
+            return redirect(url_for('index'))
+
+        flash("This email has already been used.")
+        return render_template('login.html', form=form)
 
     return render_template('login.html', form=form)
 
+def register_admin(request):
+    form = RegisterForm(request.form)
+    app.logger.info(form.phone.data)
+    if request.method == 'POST' and form.validate():
+        if not (appdb.getClientByEmail(form.email.data)):
+            is_admin = 1
+            appdb.insertClient(form.firstname.data, form.lastname.data, form.address.data, form.email.data, form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
+
+            flash('The new administrator has been registered', 'success')
+        
+        else:
+            flash("This email has already been used.")
+        return render_template('create_admin.hmtl', form=form)
+
+    return render_template('register_admin.html', form=form)
+
+@app.route('/admin_tools')
+def admin_tools_default():
+    if session['logged_in'] == True:
+        if Admin.validate_admin(active_user_registry, session['client_id'], session['admin']):
+            return render_template('admin_tools.html')
+    flash('You must be logged in as an admin to view this page')
+    return redirect(url_for('home'))
+
+@app.route('/admin_tools/<tool>',  methods=['GET', 'POST'])
+def admin_tools(tool):
+    if session['logged_in'] == True:
+        if Admin.validate_admin(active_user_registry, session['client_id'], session['admin']):
+            if tool == 'view_active_registry':
+                return render_template('admin_tools.html', active_user_registry = active_user_registry, tool = tool)
+            elif tool == 'create_admin':
+                return register_admin(request)
+            # elif tool == 'some_future_tool':
+        else:
+            flash('invalid tool')
+            return render_template('admin_tools.html')
+    flash('You must be logged in as an admin to view this page')
+    return redirect(url_for('login'))
+
 @app.route('/logout')
 def logout():
+    # Remove client_id, timestamp tuple from the active_user_registry
+    active_user_registry[:] = [tup for tup in active_user_registry if not session['client_id']==tup[0]]
     session.clear()
+
     flash('You are now logged out', 'success')
     return redirect(url_for('login'))
 
