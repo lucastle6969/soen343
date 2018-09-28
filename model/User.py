@@ -1,3 +1,5 @@
+active_user_registry = []
+
 class User:
     def __init__(self, id, firstname, lastname, address, email, phone, admin, password):
         self.id = id
