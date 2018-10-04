@@ -121,6 +121,9 @@ def admin_tools(tool):
                 return render_template('admin_tools.html', active_user_registry = active_user_registry, tool = tool)
             elif tool == 'create_admin':
                 return register_admin(request)
+            elif tool == 'catalog_manager':
+                return render_template('catalog_manager.html')
+
             # elif tool == 'some_future_tool':
         else:
             flash('invalid tool')
