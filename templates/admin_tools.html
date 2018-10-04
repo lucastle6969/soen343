@@ -5,6 +5,10 @@
         {% if tool == "view_active_registry" %}
             {% include 'includes/_view_active_registry.html' %}
         {% endif %}
+        {% if tool == "create_admin" %}
+            {% include 'includes/_register_admin.html' %}
+        {% endif %}
+
     {% else %}
         <div class="tool-container container">
             <span id="tools-title">Admin Tools</span>
