@@ -4,9 +4,10 @@
     {% if tool %}
         {% if tool == "view_active_registry" %}
             {% include 'includes/_view_active_registry.html' %}
-        {% endif %}
-        {% if tool == "create_admin" %}
+        {% elif tool == "create_admin" %}
             {% include 'includes/_register_admin.html' %}
+        {% elif tool == "catalog_manager" %}
+            {% include 'includes/_catalog_manager.html' %}
         {% endif %}
 
     {% else %}

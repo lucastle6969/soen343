@@ -124,7 +124,7 @@ def admin_tools(tool):
             elif tool == 'create_admin':
                 return register_admin(request)
             elif tool == 'catalog_manager':
-                return render_template('catalog_manager.html')
+                return render_template('admin_tools.html', tool = tool)
 
             # elif tool == 'some_future_tool':
         else:
