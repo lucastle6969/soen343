@@ -1,6 +1,8 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, logging, request
 from model.Tdg import Tdg
 from model.User import User, Client, Admin, active_user_registry
+from model.Catalog import Catalog
+from model.Item import Item, Book, Magazine, Movie, Music
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from model.RegisterForm import RegisterForm
@@ -115,6 +117,7 @@ def admin_tools_default():
     flash('You must be logged in as an admin to view this page')
     return redirect(url_for('home'))
 
+
 @app.route('/admin_tools/<tool>',  methods=['GET', 'POST'])
 def admin_tools(tool):
     if session['logged_in'] == True:
@@ -125,6 +128,22 @@ def admin_tools(tool):
                 return register_admin(request)
             elif tool == 'catalog_manager':
                 return render_template('admin_tools.html', tool = tool)
+            elif tool == 'populate_catalog':
+                if catalog in globals():
+                    app.logger.info('Got one already')
+                    return render_template('admin_tools.html', tool = "populate_catalog", catalog = catalog)
+                else:
+                    global catalog
+                    catalog = Catalog()
+                    item1 = Book("Neuromancer", "bb", 1, "avail", "William Gibson", 273, "CD Projekt Red", "English", 1337187420, 1337187420666)
+                    item2 = Magazine("Science", "ma", 2, "torn", "Science people", "Sciencish", 1337187420, 1337187420666)
+                    item3 = Movie("One Flew Over the Cuckoo's Nest", "mo", 3, "watched", "Kubrick?", "Uhh...", "Jack Nicholson!", "English", "none", "nope", 1973, 180)
+                    item4 = Music("Hafanana", "mu", 4, "loaned", "CD", "Valeri Leontiev", "CCCP", 1986, 123456)
+                    catalog.item_catalog = [item1, item2, item3, item4]
+                    return render_template('admin_tools.html', tool = "populate_catalog", catalog = catalog)
+
+
+
 
             # elif tool == 'some_future_tool':
         else:

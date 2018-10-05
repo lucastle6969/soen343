@@ -1,5 +1,4 @@
 class Catalog:
-    
 
     def __init__(self):
         self.item_catalog = []

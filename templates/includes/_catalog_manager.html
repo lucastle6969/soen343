@@ -2,7 +2,14 @@
 
 {% block body %}
 
+{% if catalog %}
+    <table>
+        {% for x in catalog.item_catalog %}
+        <tr>
+             <td>{{ x.id }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endif%}
 
-
-<h1> Catalog Manager </h1>
 {% endblock %}
