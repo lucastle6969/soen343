@@ -129,10 +129,7 @@ def admin_tools(tool):
             elif tool == 'catalog_manager':
                 return render_template('admin_tools.html', tool = tool)
             elif tool == 'populate_catalog':
-                if catalog in globals():
-                    app.logger.info('Got one already')
-                    return render_template('admin_tools.html', tool = "populate_catalog", catalog = catalog)
-                else:
+                if 'catalog' not in globals():
                     global catalog
                     catalog = Catalog()
                     item1 = Book("Neuromancer", "bb", 1, "avail", "William Gibson", 273, "CD Projekt Red", "English", 1337187420, 1337187420666)
@@ -140,6 +137,9 @@ def admin_tools(tool):
                     item3 = Movie("One Flew Over the Cuckoo's Nest", "mo", 3, "watched", "Kubrick?", "Uhh...", "Jack Nicholson!", "English", "none", "nope", 1973, 180)
                     item4 = Music("Hafanana", "mu", 4, "loaned", "CD", "Valeri Leontiev", "CCCP", 1986, 123456)
                     catalog.item_catalog = [item1, item2, item3, item4]
+                    return render_template('admin_tools.html', tool = "populate_catalog", catalog = catalog)
+                else:
+                    app.logger.info('Got one already')
                     return render_template('admin_tools.html', tool = "populate_catalog", catalog = catalog)
 
 
