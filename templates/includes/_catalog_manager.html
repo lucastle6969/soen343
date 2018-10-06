@@ -14,6 +14,7 @@
             <th>ISBN-13</th>
             <th>Status</th>
             <th>Action</th>
+            <th>Action2</th>
         </tr>
         {% for x in catalog.item_catalog %}
             {% if x.prefix == "bb" %}
@@ -28,6 +29,8 @@
                 <td>{{x.status}}</td>
                 <td><form method="POST" action="/admin_tools/edit_entry/{{x.id}}">
                     <input type="submit" value="Edit" /></form></td>
+                <td><form method="POST" action="/admin_tools/delete_entry/{{x.id}}">
+                    <input type="submit" value="Delete" /></form></td>
             </tr>
             {% endif %}
         {% endfor %}

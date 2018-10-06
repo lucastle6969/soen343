@@ -154,6 +154,11 @@ def edit_entry(id):
     catalog.edit_item()
     return render_template('admin_tools.html')
 
+@app.route('/admin_tools/delete_entry/<id>',  methods=['GET', 'POST'])
+def delete_entry(id):
+    catalog.delete_item()
+    return render_template('admin_tools.html')
+
 
 @app.route('/logout')
 def logout():
