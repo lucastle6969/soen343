@@ -141,16 +141,19 @@ def admin_tools(tool):
                 else:
                     app.logger.info('Got one already')
                     return render_template('admin_tools.html', tool = "populate_catalog", catalog = catalog)
-
-
-
-
             # elif tool == 'some_future_tool':
         else:
             flash('invalid tool')
             return render_template('admin_tools.html')
     flash('You must be logged in as an admin to view this page')
     return redirect(url_for('login'))
+
+
+@app.route('/admin_tools/edit_entry/<id>',  methods=['GET', 'POST'])
+def edit_entry(id):
+    catalog.edit_item()
+    return render_template('admin_tools.html')
+
 
 @app.route('/logout')
 def logout():
