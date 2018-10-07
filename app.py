@@ -89,12 +89,15 @@ def register():
 
     return render_template('login.html', form=form)
 
-def register_admin(request):
+def register(request, tool):
     form = RegisterForm(request.form)
-    app.logger.info(form.phone.data)
+    app.logger.info(tool)
     if request.method == 'POST' and form.validate():
         if not (tdg.getClientByEmail(form.email.data)):
-            is_admin = 1
+            if (tool = 'create_admin'):
+                is_admin = 1
+            if (tools = 'create_client'):
+                is_admin = 0
             tdg.insertClient(form.firstname.data, form.lastname.data, form.address.data, form.email.data, form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
 
             flash('The new administrator has been registered', 'success')
@@ -122,7 +125,9 @@ def admin_tools(tool):
             if tool == 'view_active_registry':
                 return render_template('admin_tools.html', active_user_registry = active_user_registry, tool = tool)
             elif tool == 'create_admin':
-                return register_admin(request)
+                return register(request, tool)
+            elif tool == 'create_admin':
+                return register(request, tool)
             elif tool == 'catalog_manager':
                 return render_template('admin_tools.html', tool = tool)
 
