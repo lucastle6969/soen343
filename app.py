@@ -30,7 +30,7 @@ def login():
         email = request.form['email']
         password_candidate = request.form['password']
 
-        data = tdg.getClientByEmail(email)
+        data = tdg.getUserByEmail(email)
         if data:
             id = data[0]
             firstname = data[1]
@@ -70,37 +70,22 @@ def login():
 
     return render_template('login.html', form=form)
 
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    form = RegisterForm(request.form)
-    app.logger.info(form.phone.data)
-    if request.method == 'POST' and form.validate():
-        if not (tdg.getClientByEmail(form.email.data)):
-
-            is_admin = 0
-            tdg.insertClient(form.firstname.data, form.lastname.data, form.address.data, form.email.data, form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
-
-            flash('You are now registered and can now login', 'success')
-
-            return redirect(url_for('index'))
-
-        flash("This email has already been used.")
-        return render_template('login.html', form=form)
-
-    return render_template('login.html', form=form)
-
 def register(request, tool):
     form = RegisterForm(request.form)
     app.logger.info(tool)
     if request.method == 'POST' and form.validate():
-        if not (tdg.getClientByEmail(form.email.data)):
-            if (tool = 'create_admin'):
+        if not (tdg.getUserByEmail(form.email.data)):
+            if (tool == 'create_admin'):
                 is_admin = 1
-            if (tools = 'create_client'):
+            if (tool == 'create_client'):
                 is_admin = 0
-            tdg.insertClient(form.firstname.data, form.lastname.data, form.address.data, form.email.data, form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
-
-            flash('The new administrator has been registered', 'success')
+            
+            tdg.insertUser(form.firstname.data, form.lastname.data, form.address.data, form.email.data, form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
+            
+            if (tool == 'create_admin'):
+                flash('The new administrator has been registered', 'success')
+            if (tool == 'create_client'):
+                flash('The new client has been registered', 'success')
 
             return redirect(url_for('admin_tools_default'))
         
@@ -108,7 +93,7 @@ def register(request, tool):
             flash("This email has already been used.")
             return render_template('admin_tools.html', tool='create_admin', form=form)
 
-    return render_template('admin_tools.html', tool = 'create_admin', form=form)
+    return render_template('admin_tools.html', tool=tool, form=form)
 
 @app.route('/admin_tools')
 def admin_tools_default():
@@ -124,9 +109,7 @@ def admin_tools(tool):
         if Admin.validate_admin(active_user_registry, session['client_id'], session['admin']):
             if tool == 'view_active_registry':
                 return render_template('admin_tools.html', active_user_registry = active_user_registry, tool = tool)
-            elif tool == 'create_admin':
-                return register(request, tool)
-            elif tool == 'create_admin':
+            elif tool == 'create_admin' or tool == 'create_client':
                 return register(request, tool)
             elif tool == 'catalog_manager':
                 return render_template('admin_tools.html', tool = tool)

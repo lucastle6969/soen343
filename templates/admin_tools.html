@@ -6,6 +6,8 @@
             {% include 'includes/_view_active_registry.html' %}
         {% elif tool == "create_admin" %}
             {% include 'includes/_register_admin.html' %}
+        {% elif tool == "create_client" %}
+            {% include 'includes/_register_client.html' %}
         {% elif tool == "catalog_manager" %}
             {% include 'includes/_catalog_manager.html' %}
         {% endif %}
@@ -16,6 +18,7 @@
             <hr>
             <div class="row container tool-container1">
                 <a class="admin-tools rounded" href="/admin_tools/create_admin"><div class="rounded">Create New Admin</div></a>
+                <a class="admin-tools rounded" href="/admin_tools/create_client"><div class="rounded">Create New Client</div></a>
                 <a class="admin-tools rounded" href="/admin_tools/view_active_registry"><div class="rounded">View Active Users</div></a>
                 <a class="admin-tools rounded" href="/admin_tools/catalog_manager"><div class="rounded">Catalog Manager</div></a>
             </div>
