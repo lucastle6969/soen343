@@ -2,6 +2,41 @@
 
 <h1> Catalog Manager </h1>
 
+{% if catalog %}
+<table>
+    <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Pages</th>
+        <th>Publisher</th>
+        <th>Language</th>
+        <th>ISBN-10</th>
+        <th>ISBN-13</th>
+        <th>Status</th>
+        <th>Action</th>
+        <th>Action2</th>
+    </tr>
+    {% for x in catalog.item_catalog %}
+    {% if x.prefix == "bb" %}
+    <tr>
+        <td>{{x.title}}</td>
+        <td>{{x.author}}</td>
+        <td>{{x.pages}}</td>
+        <td>{{x.publisher}}</td>
+        <td>{{x.language}}</td>
+        <td>{{x.isbn10}}</td>
+        <td>{{x.isbn13}}</td>
+        <td>{{x.status}}</td>
+        <td><form method="POST" action="/admin_tools/edit_entry/{{x.id}}">
+            <input type="submit" value="Edit" /></form></td>
+        <td><form method="POST" action="/admin_tools/delete_entry/{{x.id}}">
+            <input type="submit" value="Delete" /></form></td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+</table>
+{% endif%}
+
 {% if item %}
     {% if item == "add_movie" %}
         {% include 'includes/_add_movie.html' %}
@@ -26,38 +61,4 @@
     </div>
 {% endif %}
 
-{% if catalog %}
-    <table>
-        <tr>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Pages</th>
-            <th>Publisher</th>
-            <th>Language</th>
-            <th>ISBN-10</th>
-            <th>ISBN-13</th>
-            <th>Status</th>
-            <th>Action</th>
-            <th>Action2</th>
-        </tr>
-        {% for x in catalog.item_catalog %}
-            {% if x.prefix == "bb" %}
-            <tr>
-                <td>{{x.title}}</td>
-                <td>{{x.author}}</td>
-                <td>{{x.pages}}</td>
-                <td>{{x.publisher}}</td>
-                <td>{{x.language}}</td>
-                <td>{{x.isbn10}}</td>
-                <td>{{x.isbn13}}</td>
-                <td>{{x.status}}</td>
-                <td><form method="POST" action="/admin_tools/edit_entry/{{x.id}}">
-                    <input type="submit" value="Edit" /></form></td>
-                <td><form method="POST" action="/admin_tools/delete_entry/{{x.id}}">
-                    <input type="submit" value="Delete" /></form></td>
-            </tr>
-            {% endif %}
-        {% endfor %}
-    </table>
-{% endif%}
 {% endblock %}

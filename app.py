@@ -14,8 +14,15 @@ from model.AddMusic import MusicForm
 import datetime, time
 
 app = Flask(__name__)
-
 tdg = Tdg(app)
+global catalog
+catalog = Catalog()
+
+item1 = Book("Neuromancer", "bb", 1, "avail", "William Gibson", "paperback", 273, "CD Projekt Red", "English", 1337187420, 1337187420666)
+item2 = Magazine("Science", "ma", 2, "torn", "Science people", "Sciencish", 1337187420, 1337187420666)
+item3 = Movie("One Flew Over the Cuckoo's Nest", "mo", 3, "watched", "Kubrick?", "Uhh...", "Jack Nicholson!", "English", "none", "nope", 1973, 180)
+item4 = Music("Hafanana", "mu", 4, "loaned", "CD", "Valeri Leontiev", "CCCP", 1986, 123456)
+catalog.item_catalog = [item1, item2, item3, item4]
 
 @app.route('/')
 def index():
@@ -149,23 +156,8 @@ def admin_tools(tool):
             elif tool == 'create_admin':
                 return register_admin(request)
             elif tool == 'catalog_manager':
-                return render_template('admin_tools.html', tool = tool)
-            elif tool == 'populate_catalog':
-                if 'catalog' not in globals():
-                    global catalog
-                    catalog = Catalog()
+                return render_template('admin_tools.html', tool = tool, catalog = catalog)
 
-                    # self, title, prefix, id, status, author, format, pages, publisher, language, isbn10, isbn13
-
-                    item1 = Book("Neuromancer", "bb", 1, "avail", "William Gibson", "paperback", 273, "CD Projekt Red", "English", 1337187420, 1337187420666)
-                    item2 = Magazine("Science", "ma", 2, "torn", "Science people", "Sciencish", 1337187420, 1337187420666)
-                    item3 = Movie("One Flew Over the Cuckoo's Nest", "mo", 3, "watched", "Kubrick?", "Uhh...", "Jack Nicholson!", "English", "none", "nope", 1973, 180)
-                    item4 = Music("Hafanana", "mu", 4, "loaned", "CD", "Valeri Leontiev", "CCCP", 1986, 123456)
-                    catalog.item_catalog = [item1, item2, item3, item4]
-                    return render_template('admin_tools.html', tool = "populate_catalog", catalog = catalog)
-                else:
-                    app.logger.info('Got one already')
-                    return render_template('admin_tools.html', tool = "populate_catalog", catalog = catalog)
             # elif tool == 'some_future_tool':
         else:
             flash('invalid tool')
