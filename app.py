@@ -133,6 +133,26 @@ def admin_tools(tool):
     flash('You must be logged in as an admin to view this page')
     return redirect(url_for('login'))
 
+@app.route('/admin_tools/catalog_manager/<item>',  methods=['GET', 'POST'])
+def catalog_manager(item):
+    app.logger.info(item)
+    if session['logged_in'] == True:
+        if Admin.validate_admin(active_user_registry, session['client_id'], session['admin']):
+            app.logger.info(item)
+            if item == 'add_movie':
+                return render_template('admin_tools.html', item = item)
+            elif item == 'add_book':
+                return render_template('admin_tools.html', item = item)
+            elif item == 'add_magazine':
+                return render_template('admin_tools.html', item = item)
+            elif item == 'add_music':
+                return render_template('admin_tools.html', item = item)
+        else:
+            flash('invalid item')
+            return render_template('admin_tools.html')
+    flash('You must be logged in as an admin to view this page')
+    return redirect(url_for('login'))
+
 @app.route('/logout')
 def logout():
     # Remove client_id, timestamp tuple from the active_user_registry

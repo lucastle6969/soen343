@@ -9,7 +9,8 @@
         {% elif tool == "catalog_manager" %}
             {% include 'includes/_catalog_manager.html' %}
         {% endif %}
-
+    {% elif item %}
+        {% include 'includes/_catalog_manager.html' %}
     {% else %}
         <div class="tool-container container">
             <span id="tools-title">Admin Tools</span>
