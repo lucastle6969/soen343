@@ -1,0 +1,31 @@
+
+<div class="container login-container">
+    <div class="col-md-12 login-form-2">
+        <h3>Add Music</h3>
+        {% from "includes/_formhelpers.html" import render_field %}
+        <form method="POST" action="/admin_tools/catalog_manager/add_music">
+            <div class="form-group text-white">
+                {{render_field(form.type, class_="form-control")}}
+            </div>
+            <div class="form-group text-white">
+                {{render_field(form.title, class_="form-control")}}
+            </div>
+            <div class="form-group text-white">
+                {{render_field(form.artist, class_="form-control")}}
+            </div>
+            <div class="form-group text-white">
+                {{render_field(form.label, class_="form-control")}}
+            </div>
+            <div class="form-group text-white">
+                {{render_field(form.releaseDate, class_="form-control")}}
+            </div>
+            <div class="form-group text-white">
+                {{render_field(form.asin, class_="form-control")}}
+            </div>
+            <div class="form-group text-white">
+                <input type="submit" class="btnSubmit" value="Add" />
+            </div>
+        </form>
+    </div>
+</div>
+    
