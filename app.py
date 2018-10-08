@@ -4,6 +4,10 @@ from model.User import User, Client, Admin, active_user_registry
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from model.RegisterForm import RegisterForm
+from model.AddBook import BookForm
+from model.AddMagazine import MagazineForm
+from model.AddMovie import MovieForm
+from model.AddMusic import MusicForm
 import datetime, time
 
 app = Flask(__name__)
@@ -107,6 +111,23 @@ def register_admin(request):
 
     return render_template('admin_tools.html', tool = 'create_admin', form=form)
 
+@app.route('/items', methods=['GET', 'POST'])
+def add_book(request):
+    form = BookForm(request.form)
+    return render_template('admin_tools.html', item = 'add_book', form=form)
+
+def add_magazine(request):
+    form = MagazineForm(request.form)
+    return render_template('admin_tools.html', item = 'add_magazine', form=form)
+
+def add_movie(request):
+    form = MovieForm(request.form)
+    return render_template('admin_tools.html', item = 'add_movie', form=form)
+
+def add_music(request):
+    form = MusicForm(request.form)
+    return render_template('admin_tools.html', item = 'add_music', form=form)
+
 @app.route('/admin_tools')
 def admin_tools_default():
     if session['logged_in'] == True:
@@ -129,6 +150,26 @@ def admin_tools(tool):
             # elif tool == 'some_future_tool':
         else:
             flash('invalid tool')
+            return render_template('admin_tools.html')
+    flash('You must be logged in as an admin to view this page')
+    return redirect(url_for('login'))
+
+@app.route('/admin_tools/catalog_manager/<item>',  methods=['GET', 'POST'])
+def catalog_manager(item):
+    app.logger.info(item)
+    if session['logged_in'] == True:
+        if Admin.validate_admin(active_user_registry, session['client_id'], session['admin']):
+            app.logger.info(item)
+            if item == 'add_movie':
+                return add_movie(request)
+            elif item == 'add_book':
+                return add_book(request)
+            elif item == 'add_magazine':
+                return add_magazine(request)
+            elif item == 'add_music':
+                return add_music(request)
+        else:
+            flash('invalid item')
             return render_template('admin_tools.html')
     flash('You must be logged in as an admin to view this page')
     return redirect(url_for('login'))
