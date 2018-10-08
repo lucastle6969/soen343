@@ -107,6 +107,25 @@ def register_admin(request):
 
     return render_template('admin_tools.html', tool = 'create_admin', form=form)
 
+@app.route('/items', methods=['GET', 'POST'])
+def register_admin(request):
+    form = RegisterForm(request.form)
+    app.logger.info(form.phone.data)
+    if request.method == 'POST' and form.validate():
+        if not (tdg.getClientByEmail(form.email.data)):
+            is_admin = 1
+            tdg.insertClient(form.firstname.data, form.lastname.data, form.address.data, form.email.data, form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
+
+            flash('The new administrator has been registered', 'success')
+
+            return redirect(url_for('admin_tools_default'))
+        
+        else:
+            flash("This email has already been used.")
+            return render_template('admin_tools.html', tool='create_admin', form=form)
+
+    return render_template('admin_tools.html', tool = 'catalog_manager', form=form)
+
 @app.route('/admin_tools')
 def admin_tools_default():
     if session['logged_in'] == True:

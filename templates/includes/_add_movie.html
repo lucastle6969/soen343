@@ -1,1 +1,40 @@
-Add movie
+
+<div class="container login-container">
+        <div class="col-md-12 login-form-2">
+            <h3>Add Movie</h3>
+            {% from "includes/_formhelpers.html" import render_field %}
+            <form method="POST" action="/admin_tools/catalog_manager/add_movie">
+                <div class="form-group text-white">
+                    {{render_field(form.title, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.director, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.producers, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.actors, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.language, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.subtitles, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.dubbed, class_="form-control")}}
+                    </div>
+                <div class="form-group text-white">
+                        {{render_field(form.releaseDate, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                        {{render_field(form.runTime, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    <input type="submit" class="btnSubmit" value="Register" />
+                </div>
+            </form>
+        </div>
+    </div>
+    
