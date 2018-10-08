@@ -4,6 +4,10 @@ from model.User import User, Client, Admin, active_user_registry
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from model.RegisterForm import RegisterForm
+from model.AddBook import BookForm
+from model.AddMagazine import MagazineForm
+from model.AddMovie import MovieForm
+from model.AddMusic import MusicForm
 import datetime, time
 
 app = Flask(__name__)
@@ -108,13 +112,59 @@ def register_admin(request):
     return render_template('admin_tools.html', tool = 'create_admin', form=form)
 
 @app.route('/items', methods=['GET', 'POST'])
-def register_admin(request):
-    form = RegisterForm(request.form)
-    app.logger.info(form.phone.data)
+def add_book(request):
+    form = BookForm(request.form)
     if request.method == 'POST' and form.validate():
         if not (tdg.getClientByEmail(form.email.data)):
-            is_admin = 1
-            tdg.insertClient(form.firstname.data, form.lastname.data, form.address.data, form.email.data, form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
+            tdg.insertClient(form.title.data, form.author.data, form.format.data, form.pages.data, form.publisher.data, form.language.data, form.isbn10.data, form.isbn13.data)
+
+            flash('The new administrator has been registered', 'success')
+
+            return redirect(url_for('admin_tools_default'))
+        
+        else:
+            flash("This email has already been used.")
+            return render_template('admin_tools.html', tool='create_admin', form=form)
+
+    return render_template('admin_tools.html', tool = 'catalog_manager', form=form)
+
+def add_magazine(request):
+    form = MagazineForm(request.form)
+    if request.method == 'POST' and form.validate():
+        if not (tdg.getClientByEmail(form.email.data)):
+            tdg.insertClient(form.title.data, form.publisher.data, form.language.data, form.isbn10.data, form.isbn13.data)
+
+            flash('The new administrator has been registered', 'success')
+
+            return redirect(url_for('admin_tools_default'))
+        
+        else:
+            flash("This email has already been used.")
+            return render_template('admin_tools.html', tool='create_admin', form=form)
+
+    return render_template('admin_tools.html', tool = 'catalog_manager', form=form)
+
+def add_Movie(request):
+    form = MovieForm(request.form)
+    if request.method == 'POST' and form.validate():
+        if not (tdg.getClientByEmail(form.email.data)):
+            tdg.insertClient(form.title.data, form.director.data, form.producers.data, form.actors.data, form.language.data, form.subtitles.data, form.dubbed.data, form.releaseDate.data, form.runTime.data)
+
+            flash('The new administrator has been registered', 'success')
+
+            return redirect(url_for('admin_tools_default'))
+        
+        else:
+            flash("This email has already been used.")
+            return render_template('admin_tools.html', tool='create_admin', form=form)
+
+    return render_template('admin_tools.html', tool = 'catalog_manager', form=form)
+
+def add_music(request):
+    form = MusicForm(request.form)
+    if request.method == 'POST' and form.validate():
+        if not (tdg.getClientByEmail(form.email.data)):
+            tdg.insertClient(form.type.data, form.title.data, form.artist.data, form.label.data, form.releaseDate.data, form.asin.data)
 
             flash('The new administrator has been registered', 'success')
 

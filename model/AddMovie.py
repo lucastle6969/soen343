@@ -2,7 +2,7 @@ from flask import Flask, render_template, flash, redirect, url_for, session, log
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 
-class RegisterForm(Form):
+class MovieForm(Form):
     title = StringField('Title', [validators.Length(min=1, max=100)])
     director = StringField('Director', [validators.Length(min=1, max=30)])
     producers = StringField('Producers', [validators.Length(min=1, max=100)])
