@@ -6,6 +6,7 @@ from model.Item import Item, Book, Magazine, Movie, Music
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from model.RegisterForm import RegisterForm
+from model.ItemForm import ItemForm
 import datetime, time
 
 app = Flask(__name__)
@@ -132,7 +133,10 @@ def admin_tools(tool):
                 if 'catalog' not in globals():
                     global catalog
                     catalog = Catalog()
-                    item1 = Book("Neuromancer", "bb", 1, "avail", "William Gibson", 273, "CD Projekt Red", "English", 1337187420, 1337187420666)
+
+                    # self, title, prefix, id, status, author, format, pages, publisher, language, isbn10, isbn13
+
+                    item1 = Book("Neuromancer", "bb", 1, "avail", "William Gibson", "paperback", 273, "CD Projekt Red", "English", 1337187420, 1337187420666)
                     item2 = Magazine("Science", "ma", 2, "torn", "Science people", "Sciencish", 1337187420, 1337187420666)
                     item3 = Movie("One Flew Over the Cuckoo's Nest", "mo", 3, "watched", "Kubrick?", "Uhh...", "Jack Nicholson!", "English", "none", "nope", 1973, 180)
                     item4 = Music("Hafanana", "mu", 4, "loaned", "CD", "Valeri Leontiev", "CCCP", 1986, 123456)
@@ -151,8 +155,23 @@ def admin_tools(tool):
 
 @app.route('/admin_tools/edit_entry/<id>',  methods=['GET', 'POST'])
 def edit_entry(id):
-    catalog.edit_item()
-    return render_template('admin_tools.html')
+
+    # Todo : Determine which type of item was selected and load the appropriate type of form
+    # The following applies only to the Book item
+
+    itemSelected = catalog.getItemById(id)
+    form = ItemForm(request.form)
+
+    form.title.data = itemSelected.title
+    form.author.data = itemSelected.author
+    form.format.data = itemSelected.format
+    form.pages.data = itemSelected.pages
+    form.publisher.data = itemSelected.publisher
+    form.language.data = itemSelected.language
+    form.isbn10.data = itemSelected.isbn10
+    form.isbn13.data = itemSelected.isbn13
+
+    return render_template('edit_page.html', form=form)
 
 @app.route('/admin_tools/delete_entry/<id>',  methods=['GET', 'POST'])
 def delete_entry(id):

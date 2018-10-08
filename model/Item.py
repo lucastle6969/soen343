@@ -6,9 +6,10 @@ class Item:
         self.status = status
 
 class Book(Item):
-    def __init__(self, title, prefix, id, status, author, pages, publisher, language, isbn10, isbn13):
+    def __init__(self, title, prefix, id, status, author, format, pages, publisher, language, isbn10, isbn13):
         Item.__init__(self, title, prefix, id, status)
         self.author = author
+        self.format = format
         self.pages = pages
         self.publisher = publisher
         self.language = language
