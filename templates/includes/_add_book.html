@@ -5,31 +5,31 @@
         {% from "includes/_formhelpers.html" import render_field %}
         <form method="POST" action="/admin_tools/catalog_manager/add_book">
             <div class="form-group text-white">
-                {{render_field(request.form.title, class_="form-control")}}
+                {{render_field(form.title, class_="form-control")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(request.form.author, class_="form-control")}}
+                {{render_field(form.author, class_="form-control")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(request.form.format, class_="form-control")}}
+                {{render_field(form.format, class_="form-control")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(request.form.pages, class_="form-control")}}
+                {{render_field(form.pages, class_="form-control")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(request.form.publisher, class_="form-control")}}
+                {{render_field(form.publisher, class_="form-control")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(request.form.language, class_="form-control")}}
+                {{render_field(form.language, class_="form-control")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(request.form.isbn10, class_="form-control")}}
+                {{render_field(form.isbn10, class_="form-control")}}
                 </div>
             <div class="form-group text-white">
-                {{render_field(request.form.isbn13, class_="form-control")}}
+                {{render_field(form.isbn13, class_="form-control")}}
             </div>
             <div class="form-group text-white">
-                <input type="submit" class="btnSubmit" value="Register" />
+                <input type="submit" class="btnSubmit" value="Add" />
             </div>
         </form>
     </div>

@@ -114,67 +114,19 @@ def register_admin(request):
 @app.route('/items', methods=['GET', 'POST'])
 def add_book(request):
     form = BookForm(request.form)
-    if request.method == 'POST' and form.validate():
-        if not (tdg.getClientByEmail(form.email.data)):
-            tdg.insertClient(form.title.data, form.author.data, form.format.data, form.pages.data, form.publisher.data, form.language.data, form.isbn10.data, form.isbn13.data)
-
-            flash('The new administrator has been registered', 'success')
-
-            return redirect(url_for('admin_tools_default'))
-        
-        else:
-            flash("This email has already been used.")
-            return render_template('admin_tools.html', tool='create_admin', form=form)
-
-    return render_template('admin_tools.html', tool = 'catalog_manager', form=form)
+    return render_template('admin_tools.html', item = 'add_book', form=form)
 
 def add_magazine(request):
     form = MagazineForm(request.form)
-    if request.method == 'POST' and form.validate():
-        if not (tdg.getClientByEmail(form.email.data)):
-            tdg.insertClient(form.title.data, form.publisher.data, form.language.data, form.isbn10.data, form.isbn13.data)
+    return render_template('admin_tools.html', item = 'add_magazine', form=form)
 
-            flash('The new administrator has been registered', 'success')
-
-            return redirect(url_for('admin_tools_default'))
-        
-        else:
-            flash("This email has already been used.")
-            return render_template('admin_tools.html', tool='create_admin', form=form)
-
-    return render_template('admin_tools.html', tool = 'catalog_manager', form=form)
-
-def add_Movie(request):
+def add_movie(request):
     form = MovieForm(request.form)
-    if request.method == 'POST' and form.validate():
-        if not (tdg.getClientByEmail(form.email.data)):
-            tdg.insertClient(form.title.data, form.director.data, form.producers.data, form.actors.data, form.language.data, form.subtitles.data, form.dubbed.data, form.releaseDate.data, form.runTime.data)
-
-            flash('The new administrator has been registered', 'success')
-
-            return redirect(url_for('admin_tools_default'))
-        
-        else:
-            flash("This email has already been used.")
-            return render_template('admin_tools.html', tool='create_admin', form=form)
-
-    return render_template('admin_tools.html', tool = 'catalog_manager', form=form)
+    return render_template('admin_tools.html', item = 'add_movie', form=form)
 
 def add_music(request):
     form = MusicForm(request.form)
-    if request.method == 'POST' and form.validate():
-        if not (tdg.getClientByEmail(form.email.data)):
-            tdg.insertClient(form.type.data, form.title.data, form.artist.data, form.label.data, form.releaseDate.data, form.asin.data)
-
-            flash('The new administrator has been registered', 'success')
-
-            return redirect(url_for('admin_tools_default'))
-        
-        else:
-            flash("This email has already been used.")
-            return render_template('admin_tools.html', tool='create_admin', form=form)
-
-    return render_template('admin_tools.html', tool = 'catalog_manager', form=form)
+    return render_template('admin_tools.html', item = 'add_music', form=form)
 
 @app.route('/admin_tools')
 def admin_tools_default():
@@ -209,13 +161,13 @@ def catalog_manager(item):
         if Admin.validate_admin(active_user_registry, session['client_id'], session['admin']):
             app.logger.info(item)
             if item == 'add_movie':
-                return render_template('admin_tools.html', item = item)
+                return add_movie(request)
             elif item == 'add_book':
-                return render_template('admin_tools.html', item = item)
+                return add_book(request)
             elif item == 'add_magazine':
-                return render_template('admin_tools.html', item = item)
+                return add_magazine(request)
             elif item == 'add_music':
-                return render_template('admin_tools.html', item = item)
+                return add_music(request)
         else:
             flash('invalid item')
             return render_template('admin_tools.html')
