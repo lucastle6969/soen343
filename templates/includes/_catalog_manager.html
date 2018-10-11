@@ -2,6 +2,30 @@
 
 <h1> Catalog Manager </h1>
 
+{% if item %}
+    {% if item == "add_movie" %}
+        {% include 'includes/_add_movie.html' %}
+    {% elif item == "add_book" %}
+        {% include 'includes/_add_book.html' %}
+    {% elif item == "add_magazine" %}
+        {% include 'includes/_add_magazine.html' %}
+    {% elif item == "add_music" %}
+        {% include 'includes/_add_music.html' %}
+    {% endif %}
+
+{% else %}
+<div class="tool-container container">
+    <hr>
+    <div class="row container tool-container1">
+        <a class="admin-tools rounded" href="/admin_tools/catalog_manager/add_movie"><div class="rounded">Add Movie</div></a>
+        <a class="admin-tools rounded" href="/admin_tools/catalog_manager/add_book"><div class="rounded">Add Book</div></a>
+        <a class="admin-tools rounded" href="/admin_tools/catalog_manager/add_magazine"><div class="rounded">Add Magazine</div></a>
+        <a class="admin-tools rounded" href="/admin_tools/catalog_manager/add_music"><div class="rounded">Add Music</div></a>
+    </div>
+</div>
+{% endif %}
+
+
 {% if catalog %}
 <table>
     <tr>
@@ -35,30 +59,37 @@
     {% endif %}
     {% endfor %}
 </table>
-{% endif%}
-
-{% if item %}
-    {% if item == "add_movie" %}
-        {% include 'includes/_add_movie.html' %}
-    {% elif item == "add_book" %}
-        {% include 'includes/_add_book.html' %}
-    {% elif item == "add_magazine" %}
-        {% include 'includes/_add_magazine.html' %}
-    {% elif item == "add_music" %}
-        {% include 'includes/_add_music.html' %}
+<hr>
+<table>
+    <tr>
+        <th>Title</th>
+        <th>Publisher</th>
+        <th>Language</th>
+        <th>ISBN-10</th>
+        <th>ISBN-13</th>
+        <th>Status</th>
+        <th>Action</th>
+        <th>Action2</th>
+    </tr>
+    {% for x in catalog.item_catalog %}
+    {% if x.prefix == "ma" %}
+    <tr>
+        <td>{{x.title}}</td>
+        <td>{{x.publisher}}</td>
+        <td>{{x.language}}</td>
+        <td>{{x.isbn10}}</td>
+        <td>{{x.isbn13}}</td>
+        <td>{{x.status}}</td>
+        <td><form method="POST" action="/admin_tools/edit_entry/{{x.id}}">
+            <input type="submit" value="Edit" /></form></td>
+        <td><form method="POST" action="/admin_tools/delete_entry/{{x.id}}">
+            <input type="submit" value="Delete" /></form></td>
+    </tr>
     {% endif %}
+    {% endfor %}
+</table>
 
-{% else %}
-    <div class="tool-container container">
-        <span id="tools-title">Admin Tools</span>
-        <hr>
-        <div class="row container tool-container1">
-            <a class="admin-tools rounded" href="/admin_tools/catalog_manager/add_movie"><div class="rounded">Add Movie</div></a>
-            <a class="admin-tools rounded" href="/admin_tools/catalog_manager/add_book"><div class="rounded">Add Book</div></a>
-            <a class="admin-tools rounded" href="/admin_tools/catalog_manager/add_magazine"><div class="rounded">Add Magazine</div></a>
-            <a class="admin-tools rounded" href="/admin_tools/catalog_manager/add_music"><div class="rounded">Add Music</div></a>
-        </div>
-    </div>
-{% endif %}
+
+{% endif%}
 
 {% endblock %}
