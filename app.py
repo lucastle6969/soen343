@@ -189,12 +189,24 @@ def edit_entry(id):
         form.isbn10.data = itemSelected.isbn10
         form.isbn13.data = itemSelected.isbn13
 
-    return render_template('edit_page.html', form=form, prefix = itemSelected.prefix)
+    return render_template('edit_page.html', form=form, prefix = itemSelected.prefix, id = itemSelected.id)
 
 @app.route('/admin_tools/delete_entry/<id>',  methods=['GET', 'POST'])
 def delete_entry(id):
     catalog.delete_item()
     return render_template('admin_tools.html')
+
+@app.route('/admin_tools/modify/<id>',  methods=['GET', 'POST'])
+def modify(id):
+    itemToMod = catalog.getItemById(id)
+    for fieldname, value in request.form.items():
+        for x in dir( itemToMod):
+            if fieldname == x:
+                itemToMod.fieldname = value
+    print (itemToMod.title)
+    catalog.edit_item(itemToMod, itemToMod.id)
+    return render_template('admin_tools.html')
+
 
 @app.route('/admin_tools/catalog_manager/<item>',  methods=['GET', 'POST'])
 def catalog_manager(item):

@@ -4,7 +4,7 @@
     <h3>Modify an item</h3>
     {% from "includes/_formhelpers.html" import render_field %}
         {% if prefix == "bb" %}
-    <form method="POST" action="/">
+    <form method="POST" action="/admin_tools/modify/{{id}}">
         <div class="form-group text-dark">
             {{render_field(form.title, class_="form-control")}}
         </div>
