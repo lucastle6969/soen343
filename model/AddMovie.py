@@ -11,4 +11,4 @@ class MovieForm(Form):
     subtitles = StringField('Subtitles', [validators.Length(min=1, max=30)])
     dubbed = StringField('Dubbed', [validators.Length(min=1, max=30)])
     releaseDate = StringField('Release Date', [validators.Length(min=1, max=30)])
-    runTime = StringField('Run Time ', [validators.Length(min=1, max=30)])
+    runtime = StringField('Run Time ', [validators.Length(min=1, max=30)])

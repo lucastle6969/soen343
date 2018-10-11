@@ -20,7 +20,7 @@ catalog = Catalog()
 
 item1 = Book("Neuromancer", "bb", 1, "avail", "William Gibson", "paperback", 273, "CD Projekt Red", "English", 1337187420, 1337187420666)
 item2 = Magazine("Science", "ma", 2, "torn", "Science people", "Sciencish", 1337187420, 1337187420666)
-item3 = Movie("One Flew Over the Cuckoo's Nest", "mo", 3, "watched", "Kubrick?", "Uhh...", "Jack Nicholson!", "English", "none", "nope", 1973, 180)
+item3 = Movie("One Flew Over the Cuckoo's Nest", "mo", 3, "watched", "Kubrick?", "Uhh...", "Jack Nicholson!", "English", "EN", "EN", 1973, 180)
 item4 = Music("Hafanana", "mu", 4, "loaned", "CD", "Valeri Leontiev", "CCCP", 1986, 123456)
 catalog.item_catalog = [item1, item2, item3, item4]
 
@@ -153,7 +153,6 @@ def admin_tools_default():
     flash('You must be logged in as an admin to view this page')
     return redirect(url_for('home'))
 
-
 @app.route('/admin_tools/<tool>',  methods=['GET', 'POST'])
 def admin_tools(tool):
     if session['logged_in'] == True:
@@ -174,40 +173,30 @@ def admin_tools(tool):
 
 @app.route('/admin_tools/edit_entry/<id>',  methods=['GET', 'POST'])
 def edit_entry(id):
-
-    # Todo : Determine which type of item was selected and load the appropriate type of form
-    # The following applies only to the Book item
-
+    # Obtain selected item from catalog
     itemSelected = catalog.getItemById(id)
-    form = ItemForm(request.form)
-    if itemSelected.prefix == 'bb':
-        form.title.data = itemSelected.title
-        form.author.data = itemSelected.author
-        form.format.data = itemSelected.format
-        form.pages.data = itemSelected.pages
-        form.publisher.data = itemSelected.publisher
-        form.language.data = itemSelected.language
-        form.isbn10.data = itemSelected.isbn10
-        form.isbn13.data = itemSelected.isbn13
-    if itemSelected.prefix == 'ma':
-        form.title.data = itemSelected.title
-        form.publisher.data = itemSelected.publisher
-        form.language.data = itemSelected.language
-        form.isbn10.data = itemSelected.isbn10
-        form.isbn13.data = itemSelected.isbn13
+    seletedItemType = itemSelected.prefix
 
-    return render_template('edit_page.html', form=form, prefix = itemSelected.prefix, id = itemSelected.id)
+    # getFormForItemType() creates a form for the item type selected
+    form = catalog.getFormForItemType(seletedItemType, request.form)
+
+    if request.method == 'POST': # TODO: Add form.validate() before adding to catalog
+        catalog.edit_item(id, form)
+        return redirect('/admin_tools/catalog_manager')
+    else:
+        # getFormData() returns a preloaded form with the data of the selected item
+        form = catalog.getFormData(itemSelected, request)
+        return render_template('edit_page.html', form=form, prefix = seletedItemType, id = itemSelected.id)
 
 @app.route('/admin_tools/delete_entry/<id>',  methods=['GET', 'POST'])
 def delete_entry(id):
     catalog.delete_item()
     return render_template('admin_tools.html')
 
-@app.route('/admin_tools/modify/<id>',  methods=['GET', 'POST'])
-def modify(id):
-    catalog.edit_item(request.form, id)
-    return render_template('admin_tools.html')
-
+# @app.route('/admin_tools/modify/<id>',  methods=['GET', 'POST'])
+# def modify(id):
+#     catalog.edit_item(request.form, id)
+#     return render_template('admin_tools.html')
 
 @app.route('/admin_tools/catalog_manager/<item>',  methods=['GET', 'POST'])
 def catalog_manager(item):
@@ -237,7 +226,6 @@ def logout():
 
     flash('You are now logged out', 'success')
     return redirect(url_for('login'))
-
 
 if __name__ == '__main__':
     app.secret_key='secret123'

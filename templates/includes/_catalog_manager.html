@@ -56,9 +56,9 @@
             <td>{{x.isbn10}}</td>
             <td>{{x.isbn13}}</td>
             <td>{{x.status}}</td>
-            <td><form method="POST" action="/admin_tools/edit_entry/{{x.id}}">
+            <td><form method="GET" action="/admin_tools/edit_entry/{{x.id}}">
                 <input type="submit" value="Edit" /></form></td>
-            <td><form method="POST" action="/admin_tools/delete_entry/{{x.id}}">
+            <td><form method="GET" action="/admin_tools/delete_entry/{{x.id}}">
                 <input type="submit" value="Delete" /></form></td>
         </tr>
         {% endif %}
@@ -91,9 +91,9 @@
             <td>{{x.isbn10}}</td>
             <td>{{x.isbn13}}</td>
             <td>{{x.status}}</td>
-            <td><form method="POST" action="/admin_tools/edit_entry/{{x.id}}">
+            <td><form method="GET" action="/admin_tools/edit_entry/{{x.id}}">
                 <input type="submit" value="Edit" /></form></td>
-            <td><form method="POST" action="/admin_tools/delete_entry/{{x.id}}">
+            <td><form method="GET" action="/admin_tools/delete_entry/{{x.id}}">
                 <input type="submit" value="Delete" /></form></td>
         </tr>
         {% endif %}
@@ -134,9 +134,9 @@
             <td>{{x.release_date}}</td>
             <td>{{x.runtime}}</td>
             <td>{{x.status}}</td>
-            <td><form method="POST" action="/admin_tools/edit_entry/{{x.id}}">
+            <td><form method="GET" action="/admin_tools/edit_entry/{{x.id}}">
                 <input type="submit" value="Edit" /></form></td>
-            <td><form method="POST" action="/admin_tools/delete_entry/{{x.id}}">
+            <td><form method="GET" action="/admin_tools/delete_entry/{{x.id}}">
                 <input type="submit" value="Delete" /></form></td>
         </tr>
         {% endif %}
@@ -171,9 +171,9 @@
             <td>{{x.release_date}}</td>
             <td>{{x.asin}}</td>
             <td>{{x.status}}</td>
-            <td><form method="POST" action="/admin_tools/edit_entry/{{x.id}}">
+            <td><form method="GET" action="/admin_tools/edit_entry/{{x.id}}">
                 <input type="submit" value="Edit" /></form></td>
-            <td><form method="POST" action="/admin_tools/delete_entry/{{x.id}}">
+            <td><form method="GET" action="/admin_tools/delete_entry/{{x.id}}">
                 <input type="submit" value="Delete" /></form></td>
         </tr>
         {% endif %}
