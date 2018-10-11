@@ -128,7 +128,7 @@ def add_book(request):
         flash('Book was successfully added', 'success')
         return redirect('/admin_tools/catalog_manager')
     else:
-        flash('Book was not added')
+        flash('Invalid book item to add')
         return render_template('admin_tools.html', item = 'add_book', form=form)
 
 def add_magazine(request):
@@ -138,7 +138,7 @@ def add_magazine(request):
         flash('Magazine was successfully added', 'success')
         return redirect('/admin_tools/catalog_manager')
     else:
-        flash('Magazine was not added')
+        flash('Invalid magazine item to add')
         return render_template('admin_tools.html', item = 'add_magazine', form=form)
 
 def add_movie(request):
@@ -148,7 +148,7 @@ def add_movie(request):
         flash('Movie was successfully added', 'success')
         return redirect('/admin_tools/catalog_manager')
     else:
-        flash('Movie was not added')
+        flash('Invalid movie item to add')
         return render_template('admin_tools.html', item = 'add_movie', form=form)
 
 def add_music(request):
@@ -158,7 +158,7 @@ def add_music(request):
         flash('Music was successfully added', 'success')
         return redirect('/admin_tools/catalog_manager')
     else:
-        flash('Music was not added')
+        flash('Invalid music item to add')
         return render_template('admin_tools.html', item = 'add_music', form=form)
 
 @app.route('/admin_tools')
