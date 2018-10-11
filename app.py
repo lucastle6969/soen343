@@ -198,13 +198,7 @@ def delete_entry(id):
 
 @app.route('/admin_tools/modify/<id>',  methods=['GET', 'POST'])
 def modify(id):
-    itemToMod = catalog.getItemById(id)
-    for fieldname, value in request.form.items():
-        for x in dir( itemToMod):
-            if fieldname == x:
-                itemToMod.fieldname = value
-    print (itemToMod.title)
-    catalog.edit_item(itemToMod, itemToMod.id)
+    catalog.edit_item(request.form, id)
     return render_template('admin_tools.html')
 
 

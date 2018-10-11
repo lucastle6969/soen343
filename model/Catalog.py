@@ -17,10 +17,11 @@ class Catalog:
         pass
     
     def edit_item(self, item, id):
-        for entry in self.item_catalog:
-            if entry.id == id:
-                self.item_catalog.remove(entry)
-        self.item_catalog.append(item)
+        itemToMod = self.getItemById(id)
+        for fieldname, value in item.items():
+            for x in dir(itemToMod):
+                if fieldname == x:
+                    setattr(itemToMod, fieldname, value)
 
 
 
