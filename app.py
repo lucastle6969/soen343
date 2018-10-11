@@ -173,17 +173,23 @@ def edit_entry(id):
 
     itemSelected = catalog.getItemById(id)
     form = ItemForm(request.form)
+    if itemSelected.prefix == 'bb':
+        form.title.data = itemSelected.title
+        form.author.data = itemSelected.author
+        form.format.data = itemSelected.format
+        form.pages.data = itemSelected.pages
+        form.publisher.data = itemSelected.publisher
+        form.language.data = itemSelected.language
+        form.isbn10.data = itemSelected.isbn10
+        form.isbn13.data = itemSelected.isbn13
+    if itemSelected.prefix == 'ma':
+        form.title.data = itemSelected.title
+        form.publisher.data = itemSelected.publisher
+        form.language.data = itemSelected.language
+        form.isbn10.data = itemSelected.isbn10
+        form.isbn13.data = itemSelected.isbn13
 
-    form.title.data = itemSelected.title
-    form.author.data = itemSelected.author
-    form.format.data = itemSelected.format
-    form.pages.data = itemSelected.pages
-    form.publisher.data = itemSelected.publisher
-    form.language.data = itemSelected.language
-    form.isbn10.data = itemSelected.isbn10
-    form.isbn13.data = itemSelected.isbn13
-
-    return render_template('edit_page.html', form=form)
+    return render_template('edit_page.html', form=form, prefix = itemSelected.prefix)
 
 @app.route('/admin_tools/delete_entry/<id>',  methods=['GET', 'POST'])
 def delete_entry(id):
