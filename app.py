@@ -137,13 +137,22 @@ def add_magazine(request):
     else:
         return render_template('admin_tools.html', item = 'add_magazine', form=form)
 
-def add_movie():
-    form = MovieForm()
-    return render_template('admin_tools.html', item = 'add_movie', form=form)
+def add_movie(request):
+    form = MovieForm(request.form)
+    if request.method == 'POST' and form.validate():
+        catalog.add_item("Movie", form)
+        return redirect('/admin_tools/catalog_manager')
+    else:
+        return render_template('admin_tools.html', item = 'add_movie', form=form)
 
-def add_music():
-    form = MusicForm()
-    return render_template('admin_tools.html', item = 'add_music', form=form)
+def add_music(request):
+    form = MusicForm(request.form)
+    if request.method == 'POST' and form.validate():
+        catalog.add_item("Music", form)
+        app.logger.info(catalog.item_catalog[-1].title)
+        return redirect('/admin_tools/catalog_manager')
+    else:
+        return render_template('admin_tools.html', item = 'add_music', form=form)
 
 @app.route('/admin_tools')
 def admin_tools_default():
@@ -195,6 +204,23 @@ def edit_entry(id):
         form.language.data = itemSelected.language
         form.isbn10.data = itemSelected.isbn10
         form.isbn13.data = itemSelected.isbn13
+    if itemSelected.prefix == 'mo':
+        form.title.data = itemSelected.title
+        form.director.data = itemSelected.director
+        form.producers.data = itemSelected.producers
+        form.actors.data = itemSelected.actors
+        form.language.data = itemSelected.language
+        form.subtitles.data = itemSelected.subtitles
+        form.dubbed.data = itemSelected.dubbed
+        form.releaseDate.data = itemSelected.releaseDate
+        form.runTime.data = itemSelected.runTime
+    if itemSelected.prefix == 'mu':
+        form.musicType.data = itemSelected.musicType
+        form.title.data = itemSelected.title
+        form.artist.data = itemSelected.artist
+        form.label.data = itemSelected.label
+        form.releaseDate.data = itemSelected.releaseDate
+        form.asin.data = itemSelected.asin
 
     return render_template('edit_page.html', form=form, prefix = itemSelected.prefix, id = itemSelected.id)
 
@@ -216,13 +242,13 @@ def catalog_manager(item):
         if Admin.validate_admin(active_user_registry, session['client_id'], session['admin']):
             app.logger.info(item)
             if item == 'add_movie':
-                return add_movie()
+                return add_movie(request)
             elif item == 'add_book':
                 return add_book(request)
             elif item == 'add_magazine':
                 return add_magazine(request)
             elif item == 'add_music':
-                return add_music()
+                return add_music(request)
         else:
             flash('invalid item')
             return render_template('admin_tools.html')
