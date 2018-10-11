@@ -6,9 +6,7 @@ class Catalog:
     def getItemById(self, id):
         intId = int(id)
         for item in self.item_catalog:
-            print(item.id)
             if item.id == intId:
-                print("Returning an item")
                 return item
         return None
 
@@ -18,8 +16,14 @@ class Catalog:
     def add_item(self):
         pass
     
-    def edit_item(self):
-        pass
+    def edit_item(self, item, id):
+        itemToMod = self.getItemById(id)
+        for fieldname, value in item.items():
+            for x in dir(itemToMod):
+                if fieldname == x:
+                    setattr(itemToMod, fieldname, value)
+
+
 
     def delete_item(self):
         pass

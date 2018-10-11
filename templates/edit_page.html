@@ -3,7 +3,8 @@
 {% block body %}
     <h3>Modify an item</h3>
     {% from "includes/_formhelpers.html" import render_field %}
-    <form method="POST" action="/">
+        {% if prefix == "bb" %}
+    <form method="POST" action="/admin_tools/modify/{{id}}">
         <div class="form-group text-dark">
             {{render_field(form.title, class_="form-control")}}
         </div>
@@ -32,5 +33,27 @@
             <input type="submit" class="btnSubmit" value="Modify" />
         </div>
     </form>
+        {% elif prefix == "ma" %}
+    <form method="POST" action="/">
+        <div class="form-group text-dark">
+            {{render_field(form.title, class_="form-control")}}
+        </div>
+        <div class="form-group text-dark">
+            {{render_field(form.publisher, class_="form-control")}}
+        </div>
+        <div class="form-group text-dark">
+            {{render_field(form.language, class_="form-control")}}
+        </div>
+        <div class="form-group text-dark">
+            {{render_field(form.isbn10, class_="form-control")}}
+        </div>
+        <div class="form-group text-dark">
+            {{render_field(form.isbn13, class_="form-control")}}
+        </div>
+        <div class="form-group text-dark">
+            <input type="submit" class="btnSubmit" value="Modify" />
+        </div>
+    </form>
+        {% endif %}
 
 {% endblock %}
