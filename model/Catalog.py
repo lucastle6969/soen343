@@ -1,3 +1,5 @@
+from model.Item import Item, Book, Magazine, Movie, Music
+
 class Catalog:
 
     def __init__(self):
@@ -13,17 +15,37 @@ class Catalog:
     def get_all_items(self):
         pass
     
-    def add_item(self):
-        pass
-    
+    def add_item(self, type, form):
+        if type == "Book":
+            title = form.title.data
+            prefix = "bb"
+            status = "new"
+            author = form.author.data
+            format = form.format.data
+            pages = form.pages.data
+            publisher = form.publisher.data
+            language = form.language.data
+            isbn10 = form.isbn10.data
+            isbn13 = form.isbn13.data
+            book = Book(title, prefix, 5, status, author, format, pages, publisher, language, isbn10, isbn13)
+            self.item_catalog.append(book)
+        elif type == "Magazine":
+            title = form.title.data
+            publisher = form.publisher.data
+            prefix = "ma"
+            status = "avail"
+            language = form.language.data
+            isbn10 = form.isbn10.data
+            isbn13 = form.isbn13.data
+            magazine = Magazine(title, prefix, 6, status, publisher, language, isbn10, isbn13)
+            self.item_catalog.append(magazine)
+
     def edit_item(self, item, id):
         itemToMod = self.getItemById(id)
         for fieldname, value in item.items():
             for x in dir(itemToMod):
                 if fieldname == x:
                     setattr(itemToMod, fieldname, value)
-
-
 
     def delete_item(self):
         pass

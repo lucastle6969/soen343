@@ -19,7 +19,7 @@
             </div>
             <div class="col-md-6 login-form-2">
                 <h3>Register</h3>
-                {% from "includes/_formhelpers.html" import render_field %}
+                {% from "includes/_form_helpers.html" import render_field %}
                 <form method="POST" action="/register">
                     <div class="form-group text-white">
                         {{render_field(form.firstname, class_="form-control")}}

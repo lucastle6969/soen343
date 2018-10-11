@@ -121,21 +121,28 @@ def register_admin(request):
 
     return render_template('admin_tools.html', tool = 'create_admin', form=form)
 
-@app.route('/items', methods=['GET', 'POST'])
 def add_book(request):
     form = BookForm(request.form)
-    return render_template('admin_tools.html', item = 'add_book', form=form)
+    if request.method == 'POST' and form.validate():
+        catalog.add_item("Book", form)
+        return redirect('/admin_tools/catalog_manager')
+    else:
+        return render_template('admin_tools.html', item = 'add_book', form=form)
 
 def add_magazine(request):
     form = MagazineForm(request.form)
-    return render_template('admin_tools.html', item = 'add_magazine', form=form)
+    if request.method == 'POST' and form.validate():
+        catalog.add_item("Magazine", form)
+        return redirect('/admin_tools/catalog_manager')
+    else:
+        return render_template('admin_tools.html', item = 'add_magazine', form=form)
 
-def add_movie(request):
-    form = MovieForm(request.form)
+def add_movie():
+    form = MovieForm()
     return render_template('admin_tools.html', item = 'add_movie', form=form)
 
-def add_music(request):
-    form = MusicForm(request.form)
+def add_music():
+    form = MusicForm()
     return render_template('admin_tools.html', item = 'add_music', form=form)
 
 @app.route('/admin_tools')
@@ -209,13 +216,13 @@ def catalog_manager(item):
         if Admin.validate_admin(active_user_registry, session['client_id'], session['admin']):
             app.logger.info(item)
             if item == 'add_movie':
-                return add_movie(request)
+                return add_movie()
             elif item == 'add_book':
                 return add_book(request)
             elif item == 'add_magazine':
                 return add_magazine(request)
             elif item == 'add_music':
-                return add_music(request)
+                return add_music()
         else:
             flash('invalid item')
             return render_template('admin_tools.html')
