@@ -23,5 +23,3 @@ class Catalog:
 
     def delete_item(self):
         pass
-
-
