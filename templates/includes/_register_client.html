@@ -1,9 +1,9 @@
 
 <div class="container login-container">
     <div class="col-md-12 login-form-2">
-        <h3>Register Admin</h3>
+        <h3>Register Client</h3>
         {% from "includes/_form_helpers.html" import render_field %}
-        <form method="POST" action="/admin_tools/create_admin">
+        <form method="POST" action="/admin_tools/create_client">
             <div class="form-group text-white">
                 {{render_field(form.firstname, class_="form-control")}}
             </div>

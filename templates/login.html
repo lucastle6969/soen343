@@ -2,52 +2,20 @@
 
 {% block body %}
 <div class="container login-container">
-        <div class="row">
-            <div class="col-md-6 login-form-1">
-                <h3>Login</h3>
-                <form method="POST" action="/login">
-                    <div class="form-group">
-                        <input type="text" name="email" class="form-control" placeholder="Your Username *" value="{{request.form.email}}" />
-                    </div>
-                    <div class="form-group">
-                        <input type="password" name="password" class="form-control" placeholder="Your Password *" value="{{request.form.password}}" />
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" class="btnSubmit" value="Login" />
-                    </div>
-                </form>
+    <div class="login-form-1">
+        <h3>Login</h3>
+        <form method="POST" action="/login">
+            <div class="form-group">
+                <input type="text" name="email" class="form-control" placeholder="Your Username *" value="{{request.form.email}}" />
             </div>
-            <div class="col-md-6 login-form-2">
-                <h3>Register</h3>
-                {% from "includes/_formhelpers.html" import render_field %}
-                <form method="POST" action="/register">
-                    <div class="form-group text-white">
-                        {{render_field(form.firstname, class_="form-control")}}
-                    </div>
-                    <div class="form-group text-white">
-                        {{render_field(form.lastname, class_="form-control")}}
-                    </div>
-                    <div class="form-group text-white">
-                        {{render_field(form.email, class_="form-control")}}
-                    </div>
-                    <div class="form-group text-white">
-                        {{render_field(form.address, class_="form-control")}}
-                    </div>
-                    <div class="form-group text-white">
-                        {{render_field(form.phone, class_="form-control")}}
-                    </div>
-                    <div class="form-group text-white">
-                        {{render_field(form.password, class_="form-control")}}
-                    </div>
-                    <div class="form-group text-white">
-                        {{render_field(form.confirm, class_="form-control")}}
-                     </div>
-                    <div class="form-group text-white">
-                        <input type="submit" class="btnSubmit" value="Register" />
-                    </div>
-                </form>
+            <div class="form-group">
+                <input type="password" name="password" class="form-control" placeholder="Your Password *" value="{{request.form.password}}" />
             </div>
-        </div>
+            <div class="form-group">
+                <input type="submit" class="btnSubmit" value="Login" />
+            </div>
+        </form>
     </div>
+</div>
     
 {% endblock %}
