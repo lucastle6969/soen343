@@ -125,33 +125,40 @@ def add_book(request):
     form = BookForm(request.form)
     if request.method == 'POST' and form.validate():
         catalog.add_item("Book", form)
+        flash('Book was successfully added', 'success')
         return redirect('/admin_tools/catalog_manager')
     else:
+        flash('Book was not added')
         return render_template('admin_tools.html', item = 'add_book', form=form)
 
 def add_magazine(request):
     form = MagazineForm(request.form)
     if request.method == 'POST' and form.validate():
         catalog.add_item("Magazine", form)
+        flash('Magazine was successfully added', 'success')
         return redirect('/admin_tools/catalog_manager')
     else:
+        flash('Magazine was not added')
         return render_template('admin_tools.html', item = 'add_magazine', form=form)
 
 def add_movie(request):
     form = MovieForm(request.form)
     if request.method == 'POST' and form.validate():
         catalog.add_item("Movie", form)
+        flash('Movie was successfully added', 'success')
         return redirect('/admin_tools/catalog_manager')
     else:
+        flash('Movie was not added')
         return render_template('admin_tools.html', item = 'add_movie', form=form)
 
 def add_music(request):
     form = MusicForm(request.form)
     if request.method == 'POST' and form.validate():
         catalog.add_item("Music", form)
-        app.logger.info(catalog.item_catalog[-1].title)
+        flash('Music was successfully added', 'success')
         return redirect('/admin_tools/catalog_manager')
     else:
+        flash('Music was not added')
         return render_template('admin_tools.html', item = 'add_music', form=form)
 
 @app.route('/admin_tools')
