@@ -166,7 +166,7 @@ def admin_tools_default():
     if session['logged_in'] == True:
         if Admin.validate_admin(active_user_registry, session['client_id'], session['admin']):
             return render_template('admin_tools.html')
-    flash('You must be logged in as an admin to view this page')
+    flash('You must be logged in as an admin to view this page.')
     return redirect(url_for('home'))
 
 
@@ -185,7 +185,7 @@ def admin_tools(tool):
         else:
             flash('invalid tool')
             return render_template('admin_tools.html')
-    flash('You must be logged in as an admin to view this page')
+    flash('You must be logged in as an admin to view this page.')
     return redirect(url_for('login'))
 
 @app.route('/admin_tools/edit_entry/<id>',  methods=['GET', 'POST'])
@@ -231,10 +231,17 @@ def edit_entry(id):
 
     return render_template('edit_page.html', form=form, prefix = itemSelected.prefix, id = itemSelected.id)
 
-@app.route('/admin_tools/delete_entry/<id>',  methods=['GET', 'POST'])
-def delete_entry(id):
-    catalog.delete_item()
-    return render_template('admin_tools.html')
+@app.route('/admin_tools/delete_entry/<id>',  methods=['POST'])
+def delete_item(id):
+    delete_success = catalog.delete_item(id)
+    if(delete_success):
+        flash(f'Item (id {id}) deleted.', 'success')
+        return redirect(url_for('admin_tools', tool='catalog_manager'))
+    else:
+        flash('Item not found.')
+        return redirect(url_for('admin_tools', tool='catalog_manager'))
+
+    
 
 @app.route('/admin_tools/modify/<id>',  methods=['GET', 'POST'])
 def modify(id):

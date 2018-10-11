@@ -72,5 +72,10 @@ class Catalog:
                 if fieldname == x:
                     setattr(itemToMod, fieldname, value)
 
-    def delete_item(self):
-        pass
+    def delete_item(self, id):
+        item = self.getItemById(id)
+        if item is not None:
+            self.item_catalog.remove(item)
+            return True
+        else:
+            return False
