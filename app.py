@@ -4,11 +4,7 @@ from model.User import User, Client, Admin, active_user_registry
 from model.Catalog import Catalog
 from model.Item import Item, Book, Magazine, Movie, Music
 from passlib.hash import sha256_crypt
-from model.RegisterForm import RegisterForm
-from model.AddBook import BookForm
-from model.AddMagazine import MagazineForm
-from model.AddMovie import MovieForm
-from model.AddMusic import MusicForm
+from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm
 import datetime, time
 
 app = Flask(__name__)
@@ -173,7 +169,7 @@ def edit_entry(id):
     # getFormForItemType() creates a form for the item type selected
     form = catalog.getFormForItemType(seletedItemType, request.form)
 
-    if request.method == 'POST': # TODO: Add form.validate() before adding to catalog
+    if request.method == 'POST': 
         catalog.edit_item(id, form)
         return redirect('/admin_tools/catalog_manager')
     else:

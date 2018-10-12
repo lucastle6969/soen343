@@ -1,8 +1,5 @@
 from model.Item import Item, Book, Magazine, Movie, Music
-from model.AddBook import BookForm
-from model.AddMagazine import MagazineForm
-from model.AddMovie import MovieForm
-from model.AddMusic import MusicForm
+from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm
 
 class Catalog:
 
