@@ -1,5 +1,3 @@
-
-
 {% block body %}
 
 <h1> Catalog Manager </h1>
@@ -16,16 +14,172 @@
     {% endif %}
 
 {% else %}
-    <div class="tool-container container">
-        <span id="tools-title">Admin Tools</span>
-        <hr>
-        <div class="row container tool-container1">
-            <a class="admin-tools rounded" href="/admin_tools/catalog_manager/add_movie"><div class="rounded">Add Movie</div></a>
-            <a class="admin-tools rounded" href="/admin_tools/catalog_manager/add_book"><div class="rounded">Add Book</div></a>
-            <a class="admin-tools rounded" href="/admin_tools/catalog_manager/add_magazine"><div class="rounded">Add Magazine</div></a>
-            <a class="admin-tools rounded" href="/admin_tools/catalog_manager/add_music"><div class="rounded">Add Music</div></a>
-        </div>
+<div class="tool-container container">
+    <hr>
+    <div class="row container tool-container1">
+        <a class="admin-tools rounded" href="/admin_tools/catalog_manager/add_book"><div class="rounded">Add Book</div></a>
+        <a class="admin-tools rounded" href="/admin_tools/catalog_manager/add_magazine"><div class="rounded">Add Magazine</div></a>
+        <a class="admin-tools rounded" href="/admin_tools/catalog_manager/add_movie"><div class="rounded">Add Movie</div></a>
+        <a class="admin-tools rounded" href="/admin_tools/catalog_manager/add_music"><div class="rounded">Add Music</div></a>
     </div>
-{% endif %}    
+</div>
+{% endif %}
+
+{% if catalog %}
+<h3>Books</h3>
+<table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Format</th>
+            <th>Pages</th>
+            <th>Publisher</th>
+            <th>Language</th>
+            <th>ISBN-10</th>
+            <th>ISBN-13</th>
+            <th>Status</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for x in catalog.item_catalog %}
+        {% if x.prefix == "bb" %}
+        <tr>
+            <td>{{x.title}}</td>
+            <td>{{x.author}}</td>
+            <td>{{x.format}}</td>
+            <td>{{x.pages}}</td>
+            <td>{{x.publisher}}</td>
+            <td>{{x.language}}</td>
+            <td>{{x.isbn10}}</td>
+            <td>{{x.isbn13}}</td>
+            <td>{{x.status}}</td>
+            <td><form method="GET" action="/admin_tools/edit_entry/{{x.id}}">
+                <input type="submit" value="Edit" /></form></td>
+            <td><form method="GET" action="/admin_tools/delete_entry/{{x.id}}">
+                <input type="submit" value="Delete" /></form></td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+<br />
+
+<h3>Magazines</h3>
+<table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Publisher</th>
+            <th>Language</th>
+            <th>ISBN-10</th>
+            <th>ISBN-13</th>
+            <th>Status</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for x in catalog.item_catalog %}
+        {% if x.prefix == "ma" %}
+        <tr>
+            <td>{{x.title}}</td>
+            <td>{{x.publisher}}</td>
+            <td>{{x.language}}</td>
+            <td>{{x.isbn10}}</td>
+            <td>{{x.isbn13}}</td>
+            <td>{{x.status}}</td>
+            <td><form method="GET" action="/admin_tools/edit_entry/{{x.id}}">
+                <input type="submit" value="Edit" /></form></td>
+            <td><form method="GET" action="/admin_tools/delete_entry/{{x.id}}">
+                <input type="submit" value="Delete" /></form></td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+<br />
+
+<h3>Movies</h3>
+<table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Director</th>
+            <th>Producers</th>
+            <th>Actors</th>
+            <th>Language</th>
+            <th>Subtitles</th>
+            <th>Dubbed</th>
+            <th>Release Date</th>
+            <th>Run Time</th>
+            <th>Status</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for x in catalog.item_catalog %}
+        {% if x.prefix == "mo" %}
+        <tr>
+            <td>{{x.title}}</td>
+            <td>{{x.director}}</td>
+            <td>{{x.producers}}</td>
+            <td>{{x.actors}}</td>
+            <td>{{x.language}}</td>
+            <td>{{x.subs}}</td>
+            <td>{{x.dubbed}}</td>
+            <td>{{x.release_date}}</td>
+            <td>{{x.runtime}}</td>
+            <td>{{x.status}}</td>
+            <td><form method="GET" action="/admin_tools/edit_entry/{{x.id}}">
+                <input type="submit" value="Edit" /></form></td>
+            <td><form method="GET" action="/admin_tools/delete_entry/{{x.id}}">
+                <input type="submit" value="Delete" /></form></td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+<br />
+
+<h3>Music</h3>
+<table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>Type</th>
+            <th>Title</th>
+            <th>Artist</th>
+            <th>Label</th>
+            <th>Release Date</th>
+            <th>ASIN</th>
+            <th>Status</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for x in catalog.item_catalog %}
+        {% if x.prefix == "mu" %}
+        <tr>
+            <td>{{x.media_type}}</td>
+            <td>{{x.title}}</td>
+            <td>{{x.artist}}</td>
+            <td>{{x.label}}</td>
+            <td>{{x.release_date}}</td>
+            <td>{{x.asin}}</td>
+            <td>{{x.status}}</td>
+            <td><form method="GET" action="/admin_tools/edit_entry/{{x.id}}">
+                <input type="submit" value="Edit" /></form></td>
+            <td><form method="GET" action="/admin_tools/delete_entry/{{x.id}}">
+                <input type="submit" value="Delete" /></form></td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+{% endif%}
 
 {% endblock %}

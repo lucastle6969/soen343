@@ -1,7 +1,8 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, logging, request
 from model.Tdg import Tdg
 from model.User import User, Client, Admin, active_user_registry
-from wtforms import Form, StringField, TextAreaField, PasswordField, validators
+from model.Catalog import Catalog
+from model.Item import Item, Book, Magazine, Movie, Music
 from passlib.hash import sha256_crypt
 from model.RegisterForm import RegisterForm
 from model.AddBook import BookForm
@@ -11,8 +12,15 @@ from model.AddMusic import MusicForm
 import datetime, time
 
 app = Flask(__name__)
-
 tdg = Tdg(app)
+global catalog
+catalog = Catalog()
+
+item1 = Book("Neuromancer", "bb", 1, "avail", "William Gibson", "paperback", 273, "CD Projekt Red", "English", 1337187420, 1337187420666)
+item2 = Magazine("Science", "ma", 2, "torn", "Science people", "Sciencish", 1337187420, 1337187420666)
+item3 = Movie("One Flew Over the Cuckoo's Nest", "mo", 3, "watched", "Kubrick?", "Uhh...", "Jack Nicholson!", "English", "EN", "EN", 1973, 180)
+item4 = Music("Hafanana", "mu", 4, "loaned", "CD", "Valeri Leontiev", "CCCP", 1986, 123456)
+catalog.item_catalog = [item1, item2, item3, item4]
 
 @app.route('/')
 def index():
@@ -99,29 +107,48 @@ def register(request, tool):
 
     return render_template('admin_tools.html', tool=tool, form=form)
 
-@app.route('/items', methods=['GET', 'POST'])
 def add_book(request):
     form = BookForm(request.form)
-    return render_template('admin_tools.html', item = 'add_book', form=form)
+    if request.method == 'POST' and form.validate():
+        catalog.add_item("Book", form)
+        flash('Book was successfully added', 'success')
+        return redirect('/admin_tools/catalog_manager')
+    else:
+        return render_template('admin_tools.html', item = 'add_book', form=form)
 
 def add_magazine(request):
     form = MagazineForm(request.form)
-    return render_template('admin_tools.html', item = 'add_magazine', form=form)
+    if request.method == 'POST' and form.validate():
+        catalog.add_item("Magazine", form)
+        flash('Magazine was successfully added', 'success')
+        return redirect('/admin_tools/catalog_manager')
+    else:
+        return render_template('admin_tools.html', item = 'add_magazine', form=form)
 
 def add_movie(request):
     form = MovieForm(request.form)
-    return render_template('admin_tools.html', item = 'add_movie', form=form)
+    if request.method == 'POST' and form.validate():
+        catalog.add_item("Movie", form)
+        flash('Movie was successfully added', 'success')
+        return redirect('/admin_tools/catalog_manager')
+    else:
+        return render_template('admin_tools.html', item = 'add_movie', form=form)
 
 def add_music(request):
     form = MusicForm(request.form)
-    return render_template('admin_tools.html', item = 'add_music', form=form)
+    if request.method == 'POST' and form.validate():
+        catalog.add_item("Music", form)
+        flash('Music was successfully added', 'success')
+        return redirect('/admin_tools/catalog_manager')
+    else:
+        return render_template('admin_tools.html', item = 'add_music', form=form)
 
 @app.route('/admin_tools')
 def admin_tools_default():
     if session['logged_in'] == True:
         if Admin.validate_admin(active_user_registry, session['client_id'], session['admin']):
             return render_template('admin_tools.html')
-    flash('You must be logged in as an admin to view this page')
+    flash('You must be logged in as an admin to view this page.')
     return redirect(url_for('home'))
 
 @app.route('/admin_tools/<tool>',  methods=['GET', 'POST'])
@@ -133,14 +160,39 @@ def admin_tools(tool):
             elif tool == 'create_admin' or tool == 'create_client':
                 return register(request, tool)
             elif tool == 'catalog_manager':
-                return render_template('admin_tools.html', tool = tool)
-
-            # elif tool == 'some_future_tool':
+                return render_template('admin_tools.html', tool = tool, catalog = catalog)
         else:
             flash('invalid tool')
             return render_template('admin_tools.html')
-    flash('You must be logged in as an admin to view this page')
+    flash('You must be logged in as an admin to view this page.')
     return redirect(url_for('login'))
+
+@app.route('/admin_tools/edit_entry/<id>',  methods=['GET', 'POST'])
+def edit_entry(id):
+    # Obtain selected item from catalog
+    itemSelected = catalog.getItemById(id)
+    seletedItemType = itemSelected.prefix
+
+    # getFormForItemType() creates a form for the item type selected
+    form = catalog.getFormForItemType(seletedItemType, request.form)
+
+    if request.method == 'POST': # TODO: Add form.validate() before adding to catalog
+        catalog.edit_item(id, form)
+        return redirect('/admin_tools/catalog_manager')
+    else:
+        # getFormData() returns a preloaded form with the data of the selected item
+        form = catalog.getFormData(itemSelected, request)
+        return render_template('edit_page.html', form=form, prefix = seletedItemType, id = itemSelected.id)
+
+@app.route('/admin_tools/delete_entry/<id>',  methods=['POST'])
+def delete_item(id):
+    delete_success = catalog.delete_item(id)
+    if(delete_success):
+        flash(f'Item (id {id}) deleted.', 'success')
+        return redirect(url_for('admin_tools', tool='catalog_manager'))
+    else:
+        flash('Item not found.')
+        return redirect(url_for('admin_tools', tool='catalog_manager'))
 
 @app.route('/admin_tools/catalog_manager/<item>',  methods=['GET', 'POST'])
 def catalog_manager(item):
@@ -170,7 +222,6 @@ def logout():
 
     flash('You are now logged out', 'success')
     return redirect(url_for('login'))
-
 
 if __name__ == '__main__':
     app.secret_key='secret123'

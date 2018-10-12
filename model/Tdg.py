@@ -40,3 +40,13 @@ class Tdg:
         cur.close()
         return data
 
+    def getItemById(self, id):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        result = cur.execute("SELECT * FROM clientAdmin WHERE id = %s", [id])
+        data = cur.fetchone()
+        cur.close()
+        if result is None:
+            return False
+        else:
+            return data

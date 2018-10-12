@@ -9,5 +9,5 @@ class BookForm(Form):
     pages = IntegerField('Pages', [validators.NumberRange(min=1, max=255)])
     publisher = StringField('Publisher', [validators.Length(min=1, max=50)])
     language = StringField('Language', [validators.Length(min=1, max=30)])
-    isbn10 = IntegerField('ISBN10', [validators.NumberRange(min=1, max=10)])
-    isbn13 = IntegerField('ISBN13', [validators.NumberRange(min=1, max=13)])
+    isbn10 = IntegerField('ISBN10', [validators.NumberRange(min=1000000000, max=9999999999)])
+    isbn13 = IntegerField('ISBN13', [validators.NumberRange(min=1000000000000, max=9999999999999)])
