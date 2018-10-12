@@ -5,4 +5,3 @@
 *.iml
 __pycache__/
 sketch.py
-.vs/*
