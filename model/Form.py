@@ -43,7 +43,7 @@ class MovieForm(Form):
     runtime = StringField('Run Time ', [validators.Length(min=1, max=30)])
 
 class MusicForm(Form):
-    musicType = StringField('Type', [validators.Length(min=1, max=10)])
+    media_type = StringField('Type', [validators.Length(min=1, max=10)])
     title = StringField('Title', [validators.Length(min=1, max=100)])
     artist = StringField('Artist', [validators.Length(min=1, max=30)])
     label = StringField('Label', [validators.Length(min=1, max=30)])
