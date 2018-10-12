@@ -6,7 +6,7 @@ class BookForm(Form):
     title = StringField('Title', [validators.Length(min=1, max=100)])
     author = StringField('Author', [validators.Length(min=1, max=30)])
     format = StringField('Format', [validators.Length(min=1, max=20)])
-    pages = IntegerField('Pages', [validators.NumberRange(min=1, max=255)])
+    pages = IntegerField('Pages', [validators.NumberRange(min=1, max=999999)])
     publisher = StringField('Publisher', [validators.Length(min=1, max=50)])
     language = StringField('Language', [validators.Length(min=1, max=30)])
     isbn10 = IntegerField('ISBN10', [validators.NumberRange(min=1000000000, max=9999999999)])
