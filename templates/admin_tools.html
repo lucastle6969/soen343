@@ -10,8 +10,8 @@
             {% include 'includes/_register_client.html' %}
         {% elif tool == "catalog_manager" %}
             {% include 'includes/_catalog_manager.html' %}
-		<!-{% elif tool == "view_users" %}
-			{% include 'includes/_view_users.html'}->
+		{% elif tool == "view_users" %}
+            {% include 'includes/_view_users.html' %}
 
         {% endif %}
     {% elif item %}

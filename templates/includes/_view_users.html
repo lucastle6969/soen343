@@ -1,0 +1,22 @@
+﻿{% if list_of_users %}
+<table>
+        <caption style="caption-side:top">List of Users</caption>
+        <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Address</th>
+            <th>Email</th>
+            <th>Phone</th>
+        </tr>
+        {% for entry in list_of_users %}
+        <tr>
+            <td>{{ entry[0] }}</td>
+            <td>{{ entry[1] }}</td>
+            <td>{{ entry[2] }}</td>
+            <td>{{ entry[3] }}</td>
+            <td>{{ entry[4] }}</td>
+            <td>{{ entry[5] }}</td>
+        {% endfor %}
+    </table>
+{% endif %}
