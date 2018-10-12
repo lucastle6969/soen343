@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\model",
+    "\\static",
+    "\\static\\presentation",
+    "\\templates",
+    "\\templates\\includes",
+    "\\tests\\functional",
+    "\\tests\\unit"
+  ],
+  "SelectedNode": "\\templates\\home.html",
+  "PreviewInSolutionExplorer": false
+}

@@ -161,6 +161,8 @@ def admin_tools(tool):
                 return register(request, tool)
             elif tool == 'catalog_manager':
                 return render_template('admin_tools.html', tool = tool, catalog = catalog)
+            #elif tool == 'view_users':
+                #return render_template('admin_tools.html', )
         else:
             flash('invalid tool')
             return render_template('admin_tools.html')
