@@ -65,7 +65,7 @@ class Catalog:
         elif seletedItemType == 'mu':
             form = MusicForm(request.form)
             form.title.data = itemSelected.title
-            form.type.data = itemSelected.media_type
+            form.media_type.data = itemSelected.media_type
             form.artist.data = itemSelected.artist
             form.label.data = itemSelected.label
             form.releaseDate.data = itemSelected.release_date
@@ -80,7 +80,7 @@ class Catalog:
         if type == "Book":
             title = form.title.data
             prefix = "bb"
-            status = "new"
+            status = "avail"
             author = form.author.data
             format = form.format.data
             pages = form.pages.data
@@ -103,7 +103,7 @@ class Catalog:
         elif type == "Movie":
             title = form.title.data
             prefix = "mo"
-            status = "watched"
+            status = "avail"
             director = form.director.data
             producers = form.producers.data
             actors = form.actors.data
@@ -115,15 +115,15 @@ class Catalog:
             movie = Movie(title,prefix,7, status, director, producers, actors, language, subtitles, dubbed, releaseDate, runTime)
             self.item_catalog.append(movie)
         elif type == "Music":
-            musicType = form.musicType.data
+            media_type = form.media_type.data
             title = form.title.data
             prefix = "mu"
-            status = "loaned"
+            status = "avail"
             artist = form.artist.data
             label = form.label.data
             releaseDate = form.releaseDate.data
             asin = form.asin.data
-            music = Music(title, prefix, 8, status, musicType, artist, label, releaseDate, asin)
+            music = Music(title, prefix, 8, status, media_type, artist, label, releaseDate, asin)
             self.item_catalog.append(music)
 
     def edit_item(self, id, form):
@@ -160,7 +160,7 @@ class Catalog:
             item.runtime = form.runtime.data
         elif selectedItemPrefix == "mu":
             item.title = form.title.data
-            item.media_type = form.type.data
+            item.media_type = form.media_type.data
             item.artist = form.artist.data
             item.label = form.label.data
             item.release_date = form.releaseDate.data
