@@ -10,6 +10,8 @@
             {% include 'includes/_register_client.html' %}
         {% elif tool == "catalog_manager" %}
             {% include 'includes/_catalog_manager.html' %}
+        {% elif tool == "view_users" %}
+            {% include 'includes/_view_users.html' %}
 
         {% endif %}
     {% elif item %}
@@ -22,6 +24,7 @@
                 <a class="admin-tools rounded" href="/admin_tools/create_admin"><div class="rounded">Create New Admin</div></a>
                 <a class="admin-tools rounded" href="/admin_tools/create_client"><div class="rounded">Create New Client</div></a>
                 <a class="admin-tools rounded" href="/admin_tools/view_active_registry"><div class="rounded">View Active Users</div></a>
+                <a class="admin-tools rounded" href="/admin_tools/view_users"><div class="rounded">View List of Users</div></a>
                 <a class="admin-tools rounded" href="/admin_tools/catalog_manager"><div class="rounded">Catalog Manager</div></a>
             </div>
         </div>
