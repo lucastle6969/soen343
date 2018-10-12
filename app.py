@@ -16,12 +16,6 @@ tdg = Tdg(app)
 global catalog
 catalog = Catalog()
 
-item1 = Book("Neuromancer", "bb", 1, "avail", "William Gibson", "paperback", 273, "CD Projekt Red", "English", 1337187420, 1337187420666)
-item2 = Magazine("Science", "ma", 2, "torn", "Science people", "Sciencish", 1337187420, 1337187420666)
-item3 = Movie("One Flew Over the Cuckoo's Nest", "mo", 3, "watched", "Kubrick?", "Uhh...", "Jack Nicholson!", "English", "EN", "EN", 1973, 180)
-item4 = Music("Hafanana", "mu", 4, "loaned", "CD", "Valeri Leontiev", "CCCP", 1986, 123456)
-catalog.item_catalog = [item1, item2, item3, item4]
-
 @app.route('/')
 def index():
     return render_template('home.html')
