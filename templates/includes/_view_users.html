@@ -8,6 +8,7 @@
             <th>Address</th>
             <th>Email</th>
             <th>Phone</th>
+            <th>Administrator</th>
         </tr>
         {% for entry in list_of_users %}
         <tr>
@@ -17,6 +18,7 @@
             <td>{{ entry[3] }}</td>
             <td>{{ entry[4] }}</td>
             <td>{{ entry[5] }}</td>
+            <td>{{ 'Yes' if entry[6] == 1 else 'No' }}</td>
         {% endfor %}
     </table>
 {% endif %}
