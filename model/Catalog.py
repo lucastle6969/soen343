@@ -103,6 +103,31 @@ class Catalog:
             isbn13 = form.isbn13.data
             magazine = Magazine(title, prefix, 6, status, publisher, language, isbn10, isbn13)
             self.item_catalog.append(magazine)
+        elif type == "Movie":
+            title = form.title.data
+            prefix = "mo"
+            status = "watched"
+            director = form.director.data
+            producers = form.producers.data
+            actors = form.actors.data
+            language = form.language.data
+            subtitles = form.subtitles.data
+            dubbed = form.dubbed.data
+            releaseDate = form.releaseDate.data
+            runTime = form.runtime.data
+            movie = Movie(title,prefix,7, status, director, producers, actors, language, subtitles, dubbed, releaseDate, runTime)
+            self.item_catalog.append(movie)
+        elif type == "Music":
+            musicType = form.musicType.data
+            title = form.title.data
+            prefix = "mu"
+            status = "loaned"
+            artist = form.artist.data
+            label = form.label.data
+            releaseDate = form.releaseDate.data
+            asin = form.asin.data
+            music = Music(title, prefix, 8, status, musicType, artist, label, releaseDate, asin)
+            self.item_catalog.append(music)
 
     def edit_item(self, id, form):
         item = self.getItemById(id)
@@ -144,5 +169,10 @@ class Catalog:
             item.release_date = form.releaseDate.data
             item.asin = form.asin.data
 
-    def delete_item(self):
-        pass
+    def delete_item(self, id):
+        item = self.getItemById(id)
+        if item is not None:
+            self.item_catalog.remove(item)
+            return True
+        else:
+            return False
