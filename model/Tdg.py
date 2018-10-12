@@ -15,10 +15,10 @@ class Tdg:
         # init MYSQL
         self.mysql.init_app(app)
 
-    # Client SQL Queries
+    # User SQL Queries
 
     # -- INSERT Queries
-    def insertClient(self, firstName, lastName, address, email, phone, admin, password):
+    def insertUser(self, firstName, lastName, address, email, phone, admin, password):
         connection = self.mysql.connect()
         cur = connection.cursor()
          # Execute query
@@ -27,7 +27,7 @@ class Tdg:
         cur.close()
 
     # -- SELECT Queries
-    def getClientByEmail(self, email):
+    def getUserByEmail(self, email):
         connection = self.mysql.connect()
         cur = connection.cursor()
         result = cur.execute("SELECT * FROM clientAdmin WHERE email = %s", [email])
