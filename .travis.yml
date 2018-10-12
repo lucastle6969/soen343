@@ -1,0 +1,15 @@
+language: python
+sudo: required
+dist: xenial
+python: "3.7"
+env:
+  - FLASK=1.0.2
+
+# command to install dependencies
+install:
+  - pip install -q Flask==$FLASK
+  - pip install -r requirements.txt
+
+# command to run tests
+script: 
+   - py.test
