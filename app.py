@@ -4,7 +4,7 @@ from model.User import User, Client, Admin, active_user_registry
 from model.Catalog import Catalog
 from model.Item import Item, Book, Magazine, Movie, Music
 from passlib.hash import sha256_crypt
-from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm
+from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, Forms
 import datetime, time
 
 app = Flask(__name__)
@@ -166,15 +166,15 @@ def edit_entry(id):
     itemSelected = catalog.getItemById(id)
     seletedItemType = itemSelected.prefix
 
-    # getFormForItemType() creates a form for the item type selected
-    form = catalog.getFormForItemType(seletedItemType, request.form)
+    # the Forms class has a getFormForItemType() which creates a form for the item type selected
+    form = Forms.getFormForItemType(seletedItemType, request.form)
 
     if request.method == 'POST': 
         catalog.edit_item(id, form)
         return redirect('/admin_tools/catalog_manager')
     else:
-        # getFormData() returns a preloaded form with the data of the selected item
-        form = catalog.getFormData(itemSelected, request)
+        # Forms class has a getFormData() which returns a preloaded form with the data of the selected item
+        form = Forms.getFormData(itemSelected, request)
         return render_template('edit_page.html', form=form, prefix = seletedItemType, id = itemSelected.id)
 
 @app.route('/admin_tools/delete_entry/<id>',  methods=['POST'])
