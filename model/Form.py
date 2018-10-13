@@ -62,3 +62,63 @@ class ItemForm(Form):
     isbn10 = IntegerField('ISBN-10', [validators.Length(min=1, max=10)])
     isbn13 = IntegerField('ISBN-13', [validators.Length(min=1, max=10)])
 
+class Forms(Form):
+    
+    @staticmethod
+    def getFormForItemType(type, form):
+        if type == 'bb':
+            return BookForm(form)
+        elif type == 'ma':
+            return MagazineForm(form)
+        elif type == 'mo':
+            return MovieForm(form)
+        elif type == "mu":
+            return MusicForm(form)
+        else:
+            return None
+
+    @staticmethod
+    def getFormData(itemSelected, request):
+        seletedItemType = itemSelected.prefix
+        form = None
+        if seletedItemType == 'bb':
+            form = BookForm(request.form)
+            form.title.data = itemSelected.title
+            form.author.data = itemSelected.author
+            form.format.data = itemSelected.format
+            form.pages.data = itemSelected.pages
+            form.publisher.data = itemSelected.publisher
+            form.language.data = itemSelected.language
+            form.isbn10.data = itemSelected.isbn10
+            form.isbn13.data = itemSelected.isbn13
+
+        elif seletedItemType == 'ma':
+            form = MagazineForm(request.form)
+            form.title.data = itemSelected.title
+            form.publisher.data = itemSelected.publisher
+            form.language.data = itemSelected.language
+            form.isbn10.data = itemSelected.isbn10
+            form.isbn13.data = itemSelected.isbn13
+
+        elif seletedItemType == 'mo':
+            form = MovieForm(request.form)
+            form.title.data = itemSelected.title
+            form.director.data = itemSelected.director
+            form.producers.data = itemSelected.producers
+            form.actors.data = itemSelected.actors
+            form.language.data = itemSelected.language
+            form.subtitles.data = itemSelected.subs
+            form.dubbed.data = itemSelected.dubbed
+            form.releaseDate.data = itemSelected.release_date
+            form.runtime.data = itemSelected.runtime
+
+        elif seletedItemType == 'mu':
+            form = MusicForm(request.form)
+            form.title.data = itemSelected.title
+            form.media_type.data = itemSelected.media_type
+            form.artist.data = itemSelected.artist
+            form.label.data = itemSelected.label
+            form.releaseDate.data = itemSelected.release_date
+            form.asin.data = itemSelected.asin
+
+        return form
