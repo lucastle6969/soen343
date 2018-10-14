@@ -1,14 +1,16 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, logging, request
 from model.Tdg import Tdg
 from model.User import User, Client, Admin, active_user_registry
-from wtforms import Form, StringField, TextAreaField, PasswordField, validators
+from model.Catalog import Catalog
+from model.Item import Item, Book, Magazine, Movie, Music
 from passlib.hash import sha256_crypt
-from model.RegisterForm import RegisterForm
+from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, Forms
 import datetime, time
 
 app = Flask(__name__)
-
 tdg = Tdg(app)
+global catalog
+catalog = Catalog()
 
 @app.route('/')
 def index():
@@ -30,7 +32,7 @@ def login():
         email = request.form['email']
         password_candidate = request.form['password']
 
-        data = tdg.getClientByEmail(email)
+        data = tdg.getUserByEmail(email)
         if data:
             id = data[0]
             firstname = data[1]
@@ -70,34 +72,22 @@ def login():
 
     return render_template('login.html', form=form)
 
-@app.route('/register', methods=['GET', 'POST'])
-def register():
+def register(request, tool):
     form = RegisterForm(request.form)
-    app.logger.info(form.phone.data)
+    app.logger.info(tool)
     if request.method == 'POST' and form.validate():
-        if not (tdg.getClientByEmail(form.email.data)):
-
-            is_admin = 0
-            tdg.insertClient(form.firstname.data, form.lastname.data, form.address.data, form.email.data, form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
-
-            flash('You are now registered and can now login', 'success')
-
-            return redirect(url_for('index'))
-
-        flash("This email has already been used.")
-        return render_template('login.html', form=form)
-
-    return render_template('login.html', form=form)
-
-def register_admin(request):
-    form = RegisterForm(request.form)
-    app.logger.info(form.phone.data)
-    if request.method == 'POST' and form.validate():
-        if not (tdg.getClientByEmail(form.email.data)):
-            is_admin = 1
-            tdg.insertClient(form.firstname.data, form.lastname.data, form.address.data, form.email.data, form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
-
-            flash('The new administrator has been registered', 'success')
+        if not (tdg.getUserByEmail(form.email.data)):
+            if (tool == 'create_admin'):
+                is_admin = 1
+            if (tool == 'create_client'):
+                is_admin = 0
+            
+            tdg.insertUser(form.firstname.data, form.lastname.data, form.address.data, form.email.data, form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
+            
+            if (tool == 'create_admin'):
+                flash('The new administrator has been registered', 'success')
+            if (tool == 'create_client'):
+                flash('The new client has been registered', 'success')
 
             return redirect(url_for('admin_tools_default'))
         
@@ -105,14 +95,50 @@ def register_admin(request):
             flash("This email has already been used.")
             return render_template('admin_tools.html', tool='create_admin', form=form)
 
-    return render_template('admin_tools.html', tool = 'create_admin', form=form)
+    return render_template('admin_tools.html', tool=tool, form=form)
+
+def add_book(request):
+    form = BookForm(request.form)
+    if request.method == 'POST' and form.validate():
+        catalog.add_item("Book", form)
+        flash('Book was successfully added', 'success')
+        return redirect('/admin_tools/catalog_manager')
+    else:
+        return render_template('admin_tools.html', item = 'add_book', form=form)
+
+def add_magazine(request):
+    form = MagazineForm(request.form)
+    if request.method == 'POST' and form.validate():
+        catalog.add_item("Magazine", form)
+        flash('Magazine was successfully added', 'success')
+        return redirect('/admin_tools/catalog_manager')
+    else:
+        return render_template('admin_tools.html', item = 'add_magazine', form=form)
+
+def add_movie(request):
+    form = MovieForm(request.form)
+    if request.method == 'POST' and form.validate():
+        catalog.add_item("Movie", form)
+        flash('Movie was successfully added', 'success')
+        return redirect('/admin_tools/catalog_manager')
+    else:
+        return render_template('admin_tools.html', item = 'add_movie', form=form)
+
+def add_music(request):
+    form = MusicForm(request.form)
+    if request.method == 'POST' and form.validate():
+        catalog.add_item("Music", form)
+        flash('Music was successfully added', 'success')
+        return redirect('/admin_tools/catalog_manager')
+    else:
+        return render_template('admin_tools.html', item = 'add_music', form=form)
 
 @app.route('/admin_tools')
 def admin_tools_default():
     if session['logged_in'] == True:
         if Admin.validate_admin(active_user_registry, session['client_id'], session['admin']):
             return render_template('admin_tools.html')
-    flash('You must be logged in as an admin to view this page')
+    flash('You must be logged in as an admin to view this page.')
     return redirect(url_for('home'))
 
 @app.route('/admin_tools/<tool>',  methods=['GET', 'POST'])
@@ -121,14 +147,62 @@ def admin_tools(tool):
         if Admin.validate_admin(active_user_registry, session['client_id'], session['admin']):
             if tool == 'view_active_registry':
                 return render_template('admin_tools.html', active_user_registry = active_user_registry, tool = tool)
-            elif tool == 'create_admin':
-                return register_admin(request)
+            elif tool == 'create_admin' or tool == 'create_client':
+                return register(request, tool)
             elif tool == 'catalog_manager':
-                return render_template('admin_tools.html', tool = tool)
-
-            # elif tool == 'some_future_tool':
+                return render_template('admin_tools.html', tool = tool, catalog = catalog)
+            elif tool == 'view_users':
+                list_of_users = tdg.getAllUsers()
+                return render_template('admin_tools.html', tool = tool, list_of_users = list_of_users)
         else:
             flash('invalid tool')
+            return render_template('admin_tools.html')
+    flash('You must be logged in as an admin to view this page.')
+    return redirect(url_for('login'))
+
+@app.route('/admin_tools/edit_entry/<id>',  methods=['GET', 'POST'])
+def edit_entry(id):
+    # Obtain selected item from catalog
+    itemSelected = catalog.getItemById(id)
+    seletedItemType = itemSelected.prefix
+
+    # the Forms class has a getFormForItemType() which creates a form for the item type selected
+    form = Forms.getFormForItemType(seletedItemType, request.form)
+
+    if request.method == 'POST': 
+        catalog.edit_item(id, form)
+        return redirect('/admin_tools/catalog_manager')
+    else:
+        # Forms class has a getFormData() which returns a preloaded form with the data of the selected item
+        form = Forms.getFormData(itemSelected, request)
+        return render_template('edit_page.html', form=form, prefix = seletedItemType, id = itemSelected.id)
+
+@app.route('/admin_tools/delete_entry/<id>',  methods=['POST'])
+def delete_item(id):
+    delete_success = catalog.delete_item(id)
+    if(delete_success):
+        flash(f'Item (id {id}) deleted.', 'success')
+        return redirect(url_for('admin_tools', tool='catalog_manager'))
+    else:
+        flash('Item not found.')
+        return redirect(url_for('admin_tools', tool='catalog_manager'))
+
+@app.route('/admin_tools/catalog_manager/<item>',  methods=['GET', 'POST'])
+def catalog_manager(item):
+    app.logger.info(item)
+    if session['logged_in'] == True:
+        if Admin.validate_admin(active_user_registry, session['client_id'], session['admin']):
+            app.logger.info(item)
+            if item == 'add_movie':
+                return add_movie(request)
+            elif item == 'add_book':
+                return add_book(request)
+            elif item == 'add_magazine':
+                return add_magazine(request)
+            elif item == 'add_music':
+                return add_music(request)
+        else:
+            flash('invalid item')
             return render_template('admin_tools.html')
     flash('You must be logged in as an admin to view this page')
     return redirect(url_for('login'))
@@ -141,7 +215,6 @@ def logout():
 
     flash('You are now logged out', 'success')
     return redirect(url_for('login'))
-
 
 if __name__ == '__main__':
     app.secret_key='secret123'

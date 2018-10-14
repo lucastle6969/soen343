@@ -1,0 +1,122 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="container login-container">
+    <div class="col-md-12 login-form-2">
+        {% from "includes/_form_helpers.html" import render_field %}
+        {% if prefix == "bb" %}
+            <h3>Modify a book</h3>
+            <form method="POST" action="/admin_tools/edit_entry/{{id}}">
+                <div class="form-group text-white">
+                    {{render_field(form.title, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.author, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.format, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.pages, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.publisher, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.language, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.isbn10, class_="form-control")}}
+                 </div>
+                <div class="form-group text-white">
+                    {{render_field(form.isbn13, class_="form-control")}}
+                 </div>
+                <div class="form-group text-white">
+                    <input type="submit" class="btnSubmit" value="Modify" />
+                </div>
+            </form>
+        {% elif prefix == "ma" %}
+            <h3>Modify a magazine</h3>
+            <form method="POST" action="/admin_tools/edit_entry/{{id}}">
+                <div class="form-group text-white">
+                    {{render_field(form.title, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.publisher, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.language, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.isbn10, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.isbn13, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    <input type="submit" class="btnSubmit" value="Modify" />
+                </div>
+            </form>
+        {% elif prefix == "mu" %}
+            <h3>Modify a music</h3>
+            <form method="POST" action="/admin_tools/edit_entry/{{id}}">
+                <div class="form-group text-white">
+                    {{render_field(form.title, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.media_type, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.artist, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.label, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.releaseDate, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.asin, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    <input type="submit" class="btnSubmit" value="Modify" />
+                </div>
+            </form>
+        {% elif prefix == "mo" %}
+            <h3>Modify a movie</h3>
+            <form method="POST" action="/admin_tools/edit_entry/{{id}}">
+                <div class="form-group text-white">
+                    {{render_field(form.title, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.director, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.producers, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.actors, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.language, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.subtitles, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.dubbed, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.releaseDate, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.runtime, class_="form-control")}}
+                </div>
+                <div class="form-group text-white">
+                    <input type="submit" class="btnSubmit" value="Modify" />
+                </div>
+            </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
