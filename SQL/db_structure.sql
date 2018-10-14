@@ -7,8 +7,8 @@ CREATE TABLE book (
     pages INT(255), 
     publisher VARCHAR(50), 
     language VARCHAR(30), 
-    isbn10 INT(10), 
-    isbn13 INT(13)
+    isbn10 BIGINT(10), 
+    isbn13 BIGINT(13)
 );
 
 
@@ -18,8 +18,8 @@ CREATE TABLE magazine (
     title VARCHAR(100), 
     publisher VARCHAR(50), 
     language VARCHAR(30), 
-    isbn10 INT(10), 
-    isbn13 INT(13)
+    isbn10 BIGINT(10), 
+    isbn13 BIGINT(13)
 );
 
 
