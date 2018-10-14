@@ -1,6 +1,5 @@
-from flask import Flask, render_template, flash, redirect, url_for, session, logging, request
-from wtforms import Form, StringField, TextAreaField, PasswordField, validators, IntegerField
-from passlib.hash import sha256_crypt
+from wtforms import Form, StringField, PasswordField, validators, IntegerField
+
 
 class RegisterForm(Form):
     firstname = StringField('First Name', [validators.Length(min=1, max=50)])
@@ -14,6 +13,7 @@ class RegisterForm(Form):
     ])
     confirm = PasswordField('Confirmed Password')
 
+
 class BookForm(Form):
     title = StringField('Title', [validators.Length(min=1, max=100)])
     author = StringField('Author', [validators.Length(min=1, max=30)])
@@ -24,12 +24,14 @@ class BookForm(Form):
     isbn10 = IntegerField('ISBN10', [validators.NumberRange(min=1000000000, max=9999999999)])
     isbn13 = IntegerField('ISBN13', [validators.NumberRange(min=1000000000000, max=9999999999999)])
 
+
 class MagazineForm(Form):
     title = StringField('Title', [validators.Length(min=1, max=100)])
     publisher = StringField('Publisher', [validators.Length(min=1, max=50)])
     language = StringField('Language', [validators.Length(min=1, max=30)])
     isbn10 = IntegerField('ISBN10', [validators.NumberRange(min=1000000000, max=9999999999)])
     isbn13 = IntegerField('ISBN13', [validators.NumberRange(min=1000000000000, max=9999999999999)])
+
 
 class MovieForm(Form):
     title = StringField('Title', [validators.Length(min=1, max=100)])
@@ -42,6 +44,7 @@ class MovieForm(Form):
     releaseDate = StringField('Release Date', [validators.Length(min=1, max=30)])
     runtime = StringField('Run Time ', [validators.Length(min=1, max=30)])
 
+
 class MusicForm(Form):
     media_type = StringField('Type', [validators.Length(min=1, max=10)])
     title = StringField('Title', [validators.Length(min=1, max=100)])
@@ -49,6 +52,7 @@ class MusicForm(Form):
     label = StringField('Label', [validators.Length(min=1, max=30)])
     releaseDate = StringField('Release Date', [validators.Length(min=1, max=30)])
     asin = StringField('ASIN', [validators.Length(min=1, max=20)])
+
 
 class ItemForm(Form):
    
@@ -62,63 +66,64 @@ class ItemForm(Form):
     isbn10 = IntegerField('ISBN-10', [validators.Length(min=1, max=10)])
     isbn13 = IntegerField('ISBN-13', [validators.Length(min=1, max=10)])
 
+
 class Forms(Form):
     
     @staticmethod
-    def getFormForItemType(type, form):
-        if type == 'bb':
+    def get_form_for_item_type(item_type, form):
+        if item_type == 'bb':
             return BookForm(form)
-        elif type == 'ma':
+        elif item_type == 'ma':
             return MagazineForm(form)
-        elif type == 'mo':
+        elif item_type == 'mo':
             return MovieForm(form)
-        elif type == "mu":
+        elif item_type == "mu":
             return MusicForm(form)
         else:
             return None
 
     @staticmethod
-    def getFormData(itemSelected, request):
-        seletedItemType = itemSelected.prefix
+    def get_form_data(item_selected, request):
+        selected_item_type = item_selected.prefix
         form = None
-        if seletedItemType == 'bb':
+        if selected_item_type == 'bb':
             form = BookForm(request.form)
-            form.title.data = itemSelected.title
-            form.author.data = itemSelected.author
-            form.format.data = itemSelected.format
-            form.pages.data = itemSelected.pages
-            form.publisher.data = itemSelected.publisher
-            form.language.data = itemSelected.language
-            form.isbn10.data = itemSelected.isbn10
-            form.isbn13.data = itemSelected.isbn13
+            form.title.data = item_selected.title
+            form.author.data = item_selected.author
+            form.format.data = item_selected.format
+            form.pages.data = item_selected.pages
+            form.publisher.data = item_selected.publisher
+            form.language.data = item_selected.language
+            form.isbn10.data = item_selected.isbn10
+            form.isbn13.data = item_selected.isbn13
 
-        elif seletedItemType == 'ma':
+        elif selected_item_type == 'ma':
             form = MagazineForm(request.form)
-            form.title.data = itemSelected.title
-            form.publisher.data = itemSelected.publisher
-            form.language.data = itemSelected.language
-            form.isbn10.data = itemSelected.isbn10
-            form.isbn13.data = itemSelected.isbn13
+            form.title.data = item_selected.title
+            form.publisher.data = item_selected.publisher
+            form.language.data = item_selected.language
+            form.isbn10.data = item_selected.isbn10
+            form.isbn13.data = item_selected.isbn13
 
-        elif seletedItemType == 'mo':
+        elif selected_item_type == 'mo':
             form = MovieForm(request.form)
-            form.title.data = itemSelected.title
-            form.director.data = itemSelected.director
-            form.producers.data = itemSelected.producers
-            form.actors.data = itemSelected.actors
-            form.language.data = itemSelected.language
-            form.subtitles.data = itemSelected.subs
-            form.dubbed.data = itemSelected.dubbed
-            form.releaseDate.data = itemSelected.release_date
-            form.runtime.data = itemSelected.runtime
+            form.title.data = item_selected.title
+            form.director.data = item_selected.director
+            form.producers.data = item_selected.producers
+            form.actors.data = item_selected.actors
+            form.language.data = item_selected.language
+            form.subtitles.data = item_selected.subs
+            form.dubbed.data = item_selected.dubbed
+            form.releaseDate.data = item_selected.release_date
+            form.runtime.data = item_selected.runtime
 
-        elif seletedItemType == 'mu':
+        elif selected_item_type == 'mu':
             form = MusicForm(request.form)
-            form.title.data = itemSelected.title
-            form.media_type.data = itemSelected.media_type
-            form.artist.data = itemSelected.artist
-            form.label.data = itemSelected.label
-            form.releaseDate.data = itemSelected.release_date
-            form.asin.data = itemSelected.asin
+            form.title.data = item_selected.title
+            form.media_type.data = item_selected.media_type
+            form.artist.data = item_selected.artist
+            form.label.data = item_selected.label
+            form.releaseDate.data = item_selected.release_date
+            form.asin.data = item_selected.asin
 
         return form
