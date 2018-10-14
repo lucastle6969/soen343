@@ -11,22 +11,39 @@ mysql.init_app(app)
 connection = mysql.connect()
 c = connection.cursor()
 
-fd = open('../SQL/db_data.sql', 'r')
+fd = open('../SQL/db_structure.sql', 'r')
 sqlFile = fd.read()
 fd.close()
 
+fl = open('../SQL/db_data.sql', 'r')
+sqlFile2 = fl.read()
+fl.close()
+
 # all SQL commands (split on ';')
 sqlCommands = sqlFile.split(';')
+sqlCommands2 = sqlFile2.split(';')
 
 # Execute every command from the input file
+print('Reseting table structures...')
 for command in sqlCommands:
-    print(command)
+    # This will skip and report errors
+    try:
+        c.execute(command)
+    except:
+        if command != '':
+            print(command)
+            print('Command skipped')
+
+print('Repopulating tables...')
+for command in sqlCommands2:
     # This will skip and report errors
     try:
         c.execute(command)
     except:
         if command == '':
+            print(command)
             print('Command skipped')
 
 c.close()
+print('All tables reset and repopulated')
         
