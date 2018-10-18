@@ -8,7 +8,6 @@ def test_remove_book_working_memory(new_book):
     result = catalog.delete_item(new_book.id)
     assert result == True
 
-
 # Tests whether a new magazine was successfully removed from the working memory
 def test_remove_magazine_working_memory(new_magazine):
     catalog.insert_item(new_magazine)

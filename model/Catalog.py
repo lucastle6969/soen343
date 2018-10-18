@@ -99,12 +99,14 @@ class Catalog:
             item.language = form.language.data
             item.isbn10 = form.isbn10.data
             item.isbn13 = form.isbn13.data
+            return True
         elif selected_item_prefix == "ma":
             item.title = form.title.data
             item.publisher = form.publisher.data
             item.language = form.language.data
             item.isbn10 = form.isbn10.data
             item.isbn13 = form.isbn13.data
+            return True
         elif selected_item_prefix == "mo":
             item.title = form.title.data
             item.director = form.director.data
@@ -115,6 +117,7 @@ class Catalog:
             item.dubbed = form.dubbed.data
             item.release_date = form.releaseDate.data
             item.runtime = form.runtime.data
+            return True
         elif selected_item_prefix == "mu":
             item.title = form.title.data
             item.media_type = form.media_type.data
@@ -122,6 +125,9 @@ class Catalog:
             item.label = form.label.data
             item.release_date = form.releaseDate.data
             item.asin = form.asin.data
+            return True
+
+        return False
 
     def delete_item(self, item_id):
         item = self.get_item_by_id(item_id)
