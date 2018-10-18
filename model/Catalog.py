@@ -18,7 +18,15 @@ class Catalog:
 
     def get_all_items(self):
         pass
-    
+
+    # [Testing] This function is required for testing add/remove/edit
+    def insert_item(self, item):
+        if item is None:
+            return False
+
+        self.item_catalog.append(item)
+        return True
+
     def add_item(self, item_type, form):
         if item_type == "Book":
             title = form.title.data
@@ -32,7 +40,8 @@ class Catalog:
             isbn10 = form.isbn10.data
             isbn13 = form.isbn13.data
             book = Book(title, prefix, 5, status, author, book_format, pages, publisher, language, isbn10, isbn13)
-            self.item_catalog.append(book)
+            self.insert_item(book)
+            return True
         elif item_type == "Magazine":
             title = form.title.data
             publisher = form.publisher.data
@@ -42,7 +51,8 @@ class Catalog:
             isbn10 = form.isbn10.data
             isbn13 = form.isbn13.data
             magazine = Magazine(title, prefix, 6, status, publisher, language, isbn10, isbn13)
-            self.item_catalog.append(magazine)
+            self.insert_item(magazine)
+            return True
         elif item_type == "Movie":
             title = form.title.data
             prefix = "mo"
@@ -57,7 +67,8 @@ class Catalog:
             run_time = form.runtime.data
             movie = Movie(title, prefix, 7, status, director, producers, actors, language, subtitles, dubbed,
                           release_date, run_time)
-            self.item_catalog.append(movie)
+            self.insert_item(movie)
+            return True
         elif item_type == "Music":
             media_type = form.media_type.data
             title = form.title.data
@@ -68,7 +79,9 @@ class Catalog:
             release_date = form.releaseDate.data
             asin = form.asin.data
             music = Music(title, prefix, 8, status, media_type, artist, label, release_date, asin)
-            self.item_catalog.append(music)
+            self.insert_item(music)
+            return True
+        return False
 
     def edit_item(self, item_id, form):
         item = self.get_item_by_id(item_id)
@@ -86,12 +99,14 @@ class Catalog:
             item.language = form.language.data
             item.isbn10 = form.isbn10.data
             item.isbn13 = form.isbn13.data
+            return True
         elif selected_item_prefix == "ma":
             item.title = form.title.data
             item.publisher = form.publisher.data
             item.language = form.language.data
             item.isbn10 = form.isbn10.data
             item.isbn13 = form.isbn13.data
+            return True
         elif selected_item_prefix == "mo":
             item.title = form.title.data
             item.director = form.director.data
@@ -102,6 +117,7 @@ class Catalog:
             item.dubbed = form.dubbed.data
             item.release_date = form.releaseDate.data
             item.runtime = form.runtime.data
+            return True
         elif selected_item_prefix == "mu":
             item.title = form.title.data
             item.media_type = form.media_type.data
@@ -109,6 +125,9 @@ class Catalog:
             item.label = form.label.data
             item.release_date = form.releaseDate.data
             item.asin = form.asin.data
+            return True
+
+        return False
 
     def delete_item(self, item_id):
         item = self.get_item_by_id(item_id)
@@ -117,3 +136,9 @@ class Catalog:
             return True
         else:
             return False
+
+    # [Testing] Used to remove objects added to catalog while testing
+    def delete_last_item(self):
+        if len(self.item_catalog) == 0:
+            return None
+        self.item_catalog = self.item_catalog[:-1]
