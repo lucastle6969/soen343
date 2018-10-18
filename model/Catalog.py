@@ -33,6 +33,7 @@ class Catalog:
             isbn13 = form.isbn13.data
             book = Book(title, prefix, 5, status, author, book_format, pages, publisher, language, isbn10, isbn13)
             self.item_catalog.append(book)
+            return True
         elif item_type == "Magazine":
             title = form.title.data
             publisher = form.publisher.data
@@ -43,6 +44,7 @@ class Catalog:
             isbn13 = form.isbn13.data
             magazine = Magazine(title, prefix, 6, status, publisher, language, isbn10, isbn13)
             self.item_catalog.append(magazine)
+            return True
         elif item_type == "Movie":
             title = form.title.data
             prefix = "mo"
@@ -58,6 +60,7 @@ class Catalog:
             movie = Movie(title, prefix, 7, status, director, producers, actors, language, subtitles, dubbed,
                           release_date, run_time)
             self.item_catalog.append(movie)
+            return True
         elif item_type == "Music":
             media_type = form.media_type.data
             title = form.title.data
@@ -69,6 +72,8 @@ class Catalog:
             asin = form.asin.data
             music = Music(title, prefix, 8, status, media_type, artist, label, release_date, asin)
             self.item_catalog.append(music)
+            return True
+        return False
 
     def edit_item(self, item_id, form):
         item = self.get_item_by_id(item_id)

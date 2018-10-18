@@ -2,7 +2,6 @@
 from model.User import Client
 from model.User import Admin
 
-
 #Note: Functions need to start with test_
 def test_new_user(new_client):
     assert new_client.id == '23452'
@@ -23,5 +22,3 @@ def test_new_admin(new_admin):
     assert new_admin.phone == '51422643634'
     assert new_admin.admin == 1
     assert new_admin.password == 'isaacAsimov'
-
-
