@@ -18,7 +18,15 @@ class Catalog:
 
     def get_all_items(self):
         pass
-    
+
+    # This function is required for testing add/remove/edit
+    def insert_item(self, item):
+        if item is None:
+            return False
+
+        self.item_catalog.append(item)
+        return True
+
     def add_item(self, item_type, form):
         if item_type == "Book":
             title = form.title.data
@@ -32,7 +40,8 @@ class Catalog:
             isbn10 = form.isbn10.data
             isbn13 = form.isbn13.data
             book = Book(title, prefix, 5, status, author, book_format, pages, publisher, language, isbn10, isbn13)
-            self.item_catalog.append(book)
+            # self.item_catalog.append(book)
+            self.insert_item(book)
             return True
         elif item_type == "Magazine":
             title = form.title.data
@@ -43,7 +52,8 @@ class Catalog:
             isbn10 = form.isbn10.data
             isbn13 = form.isbn13.data
             magazine = Magazine(title, prefix, 6, status, publisher, language, isbn10, isbn13)
-            self.item_catalog.append(magazine)
+            # self.item_catalog.append(magazine)
+            self.insert_item(magazine)
             return True
         elif item_type == "Movie":
             title = form.title.data
@@ -59,7 +69,8 @@ class Catalog:
             run_time = form.runtime.data
             movie = Movie(title, prefix, 7, status, director, producers, actors, language, subtitles, dubbed,
                           release_date, run_time)
-            self.item_catalog.append(movie)
+            # self.item_catalog.append(movie)
+            self.insert_item(movie)
             return True
         elif item_type == "Music":
             media_type = form.media_type.data
@@ -71,7 +82,8 @@ class Catalog:
             release_date = form.releaseDate.data
             asin = form.asin.data
             music = Music(title, prefix, 8, status, media_type, artist, label, release_date, asin)
-            self.item_catalog.append(music)
+            # self.item_catalog.append(music)
+            self.insert_item(music)
             return True
         return False
 

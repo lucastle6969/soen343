@@ -41,7 +41,7 @@ def new_movie():
 # Music created for testing insertion, deletion and modification
 @pytest.fixture(scope='module')
 def new_music():
-    music = Music("Boiling Point", "mu", 331, "avail", "CD", "Dianna Argo", "19/01/1976", "B008FOB124")
+    music = Music("Boiling Point", "mu", 331, "avail", "CD", "Dianna Argo", "Sony Music", "19/01/1976", "B008FOB124")
     return music
 
 # Book form represents form sent with POST request from front-end
