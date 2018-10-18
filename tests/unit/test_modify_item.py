@@ -2,6 +2,7 @@ from model.Catalog import Catalog
 
 catalog = Catalog()
 
+
 # Tests whether a new book was successfully modified from the working memory
 def test_modify_book_working_memory(new_book, new_book_form):
     catalog.insert_item(new_book)
@@ -14,6 +15,7 @@ def test_modify_book_working_memory(new_book, new_book_form):
 
     assert book.title == new_title
     catalog.delete_last_item()
+
 
 # Tests whether a new magazine was successfully modified from the working memory
 def test_modify_magazine_working_memory(new_magazine, new_magazine_form):
@@ -28,6 +30,7 @@ def test_modify_magazine_working_memory(new_magazine, new_magazine_form):
     assert magazine.title == new_title
     catalog.delete_last_item()
 
+
 # Tests whether a new movie was successfully modified from the working memory
 def test_modify_movie_working_memory(new_movie, new_movie_form):
     catalog.insert_item(new_movie)
@@ -40,6 +43,7 @@ def test_modify_movie_working_memory(new_movie, new_movie_form):
 
     assert movie.title == new_title
     catalog.delete_last_item()
+
 
 # Tests whether a new music was successfully modified from the working memory
 def test_modify_music_working_memory(new_music, new_music_form):
