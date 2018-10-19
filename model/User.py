@@ -9,15 +9,3 @@ class User:
         self.phone = phone
         self.admin = admin
         self.password = password
-
-class Client(User):
-    pass
-
-
-class Admin(User):
-    @staticmethod
-    def validate_admin(user_registry, user_id, admin):
-        for tup in user_registry:
-            if tup[0] == user_id and admin:
-                return True
-        return False

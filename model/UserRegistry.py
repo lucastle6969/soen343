@@ -1,4 +1,4 @@
-from model.User import User, Client, Admin
+from model.User import User
 
 class UserRegistry:
     
