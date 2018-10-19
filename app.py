@@ -48,7 +48,7 @@ def login():
         password_candidate = request.form['password']
 
         user = user_registry.get_user_by_email(email)
-        if user:            
+        if user:
             # log user out if they are already logged in
             user_registry.ensure_not_already_logged(user.id)
             # add the user to the active user registry in the form of a tuple (user_id, timestamp)
@@ -87,22 +87,18 @@ def register(request_, tool):
                 is_admin = 1
             if tool == 'create_client':
                 is_admin = 0
-            
-
+                
             new_user_id = tdg.insert_user(form.firstname.data, form.lastname.data, form.address.data, form.email.data,
                             form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
             if new_user_id:
                 user_registry.insert_user(new_user_id, form.firstname.data, form.lastname.data, form.address.data, form.email.data,
                             form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
-           
-            
             if tool == 'create_admin':
                 flash('The new administrator has been registered', 'success')
             if tool == 'create_client':
                 flash('The new client has been registered', 'success')
 
             return redirect(url_for('admin_tools_default'))
-        
         else:
             flash("This email has already been used.")
             return render_template('admin_tools.html', tool='create_admin', form=form)

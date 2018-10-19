@@ -21,7 +21,7 @@ class Tdg:
         connection = self.mysql.connect()
         cur = connection.cursor()
         # Execute query
-        cur.execute("""INSERT INTO clientAdmin(id, firstName, lastName, physicalAddress, email, phone, admin, password) 
+        cur.execute("""INSERT INTO clientAdmin(id, firstName, lastName, physicalAddress, email, phone, admin, password)
                     VALUES(NULL, %s, %s, %s, %s, %s, %s, %s)""",
                     (first_name, last_name, address, email, phone, admin, password))
         # get the new user id

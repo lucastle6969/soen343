@@ -1,7 +1,8 @@
 from model.User import User
 
+
 class UserRegistry:
-    
+
     def __init__(self):
         self.active_user_registry = []
         self.list_of_users = []
@@ -9,7 +10,7 @@ class UserRegistry:
     def populate(self, all_users):
         for entry in all_users:
             self.list_of_users.append(User(entry[0], entry[1], entry[2], entry[3], entry[4], entry[5], entry[6], entry[7]))
-    
+
     def enlist_active_user(self, data, timestamp):
         self.active_user_registry.append((data, timestamp))
 
@@ -29,12 +30,12 @@ class UserRegistry:
         return cleared
 
     def ensure_not_already_logged(self, user_id):
-         # log user out if they are already logged in
+        # log user out if they are already logged in
         self.active_user_registry[:] = [tup for tup in self.active_user_registry if not user_id == tup[0]]
 
     def insert_user(self, user_id, firstname, lastname, address, email, phone, admin, password):
         self.list_of_users.append(User(user_id, firstname, lastname, address, email, phone, admin, password))
-        
+
     def get_user_by_email(self, email):
         for user in self.list_of_users:
             if email == user.email:
