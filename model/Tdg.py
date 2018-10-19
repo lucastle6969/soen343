@@ -21,11 +21,19 @@ class Tdg:
         connection = self.mysql.connect()
         cur = connection.cursor()
         # Execute query
-        cur.execute("""INSERT INTO clientAdmin(id, firstName, lastName, physicalAddress, email, phone, admin, password) 
+        cur.execute("""INSERT INTO clientAdmin(id, firstName, lastName, physicalAddress, email, phone, admin, password)
                     VALUES(NULL, %s, %s, %s, %s, %s, %s, %s)""",
                     (first_name, last_name, address, email, phone, admin, password))
-        # Close connection
+        # get the new user id
+        result = cur.execute("SELECT * FROM clientAdmin WHERE email = %s", [email])
+        new_user_id = cur.fetchone()
+        # send data back to the controller
+        if result > 0:
+            return new_user_id[0]
+        else:
+            new_user_id = False
         cur.close()
+        return new_user_id
 
     # -- SELECT Queries
     def get_user_by_email(self, email):

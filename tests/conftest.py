@@ -2,25 +2,16 @@
 
 import pytest
 
-from model.User import Client
-from model.User import Admin
+from model.User import User
 from model.Item import Book, Magazine, Movie, Music
 from model.Form import BookForm, MagazineForm, MovieForm, MusicForm
 
 
 # user created to be used for testing that are in the module scope
 @pytest.fixture(scope='module')
-def new_client():
-    client = Client('23452','John','Doe','Sunset Avenue', 'johndoe@gmail.com','5142235523', 0, 'FoundationSeries')
-    return client
-
-
-# user created to be used for testing that are in the module scope
-@pytest.fixture(scope='module')
-def new_admin():
-    admin = Admin('235','Jane','Doe','End of Eternity', 'janedoe@gmail.com','51422643634', 1, 'isaacAsimov')
-    return admin
-
+def new_user():
+    user = User('23452','John','Doe','Sunset Avenue', 'johndoe@gmail.com','5142235523', 0, 'FoundationSeries')
+    return user
 
 # Book created for testing insertion, deletion and modification
 @pytest.fixture(scope='module')

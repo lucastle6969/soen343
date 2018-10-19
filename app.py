@@ -1,16 +1,27 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, request
 from model.Tdg import Tdg
-from model.User import Client, Admin, active_user_registry
 from model.Catalog import Catalog
+from model.UserRegistry import UserRegistry
 from passlib.hash import sha256_crypt
 from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, Forms
 import datetime
 import time
 
+
 app = Flask(__name__)
 tdg = Tdg(app)
 global catalog
 catalog = Catalog()
+user_registry = UserRegistry()
+user_registry.populate(tdg.get_all_users())
+
+
+@app.before_request
+def before_request():
+    cleared = user_registry.check_restart_session(session)
+    if cleared:
+        flash('Automatically logged out due to a disconnect', 'warning')
+        return redirect(url_for('home'))
 
 
 @app.route('/')
@@ -36,31 +47,21 @@ def login():
         email = request.form['email']
         password_candidate = request.form['password']
 
-        data = tdg.get_user_by_email(email)
-        if data:
-            user_id = data[0]
-            firstname = data[1]
-            lastname = data[2]
-            address = data[3]
-            email = data[4]
-            phone = data[5]
-            admin = data[6]
-            password = data[7]
-
-            client = Client(user_id, firstname, lastname, address, email, phone, admin, password)
+        user = user_registry.get_user_by_email(email)
+        if user:
             # log user out if they are already logged in
-            active_user_registry[:] = [tup for tup in active_user_registry if not data[0] == tup[0]]
-            # add the client to the active user registry in the form of a tuple (user_id, timestamp)
+            user_registry.ensure_not_already_logged(user.id)
+            # add the user to the active user registry in the form of a tuple (user_id, timestamp)
             timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
-            active_user_registry.append((data[0], timestamp))
+            user_registry.enlist_active_user(user.id, timestamp)
 
             # compare passwords
-            if sha256_crypt.verify(password_candidate, client.password):
+            if sha256_crypt.verify(password_candidate, user.password):
                 app.logger.info('PASSWORD MATCHED')
                 session['logged_in'] = True
-                session['firstname'] = client.firstname
-                session['client_id'] = client.id
-                session['admin'] = client.admin
+                session['firstname'] = user.firstname
+                session['user_id'] = user.id
+                session['admin'] = user.admin
 
                 flash('You are now logged in', 'success')
                 return redirect(url_for('home'))
@@ -86,17 +87,18 @@ def register(request_, tool):
                 is_admin = 1
             if tool == 'create_client':
                 is_admin = 0
-            
-            tdg.insert_user(form.firstname.data, form.lastname.data, form.address.data, form.email.data,
+                
+            new_user_id = tdg.insert_user(form.firstname.data, form.lastname.data, form.address.data, form.email.data,
                             form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
-            
+            if new_user_id:
+                user_registry.insert_user(new_user_id, form.firstname.data, form.lastname.data, form.address.data, form.email.data,
+                            form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
             if tool == 'create_admin':
                 flash('The new administrator has been registered', 'success')
             if tool == 'create_client':
                 flash('The new client has been registered', 'success')
 
             return redirect(url_for('admin_tools_default'))
-        
         else:
             flash("This email has already been used.")
             return render_template('admin_tools.html', tool='create_admin', form=form)
@@ -147,7 +149,7 @@ def add_music(request_):
 @app.route('/admin_tools')
 def admin_tools_default():
     if session['logged_in']:
-        if Admin.validate_admin(active_user_registry, session['client_id'], session['admin']):
+        if user_registry.validate_admin(session['user_id'], session['admin']):
             return render_template('admin_tools.html')
     flash('You must be logged in as an admin to view this page.')
     return redirect(url_for('home'))
@@ -156,15 +158,15 @@ def admin_tools_default():
 @app.route('/admin_tools/<tool>',  methods=['GET', 'POST'])
 def admin_tools(tool):
     if session['logged_in']:
-        if Admin.validate_admin(active_user_registry, session['client_id'], session['admin']):
+        if user_registry.validate_admin(session['user_id'], session['admin']):
             if tool == 'view_active_registry':
-                return render_template('admin_tools.html', active_user_registry=active_user_registry, tool=tool)
+                return render_template('admin_tools.html', active_user_registry=user_registry.get_active_users(), tool=tool)
             elif tool == 'create_admin' or tool == 'create_client':
                 return register(request, tool)
             elif tool == 'catalog_manager':
                 return render_template('admin_tools.html', tool=tool, catalog=catalog)
             elif tool == 'view_users':
-                list_of_users = tdg.get_all_users()
+                list_of_users = user_registry.get_all_users()
                 return render_template('admin_tools.html', tool=tool, list_of_users=list_of_users)
         else:
             flash('invalid tool')
@@ -207,7 +209,7 @@ def delete_item(id):
 def catalog_manager(item):
     app.logger.info(item)
     if session['logged_in']:
-        if Admin.validate_admin(active_user_registry, session['client_id'], session['admin']):
+        if user_registry.validate_admin(session['user_id'], session['admin']):
             app.logger.info(item)
             if item == 'add_movie':
                 return add_movie(request)
@@ -226,8 +228,7 @@ def catalog_manager(item):
 
 @app.route('/logout')
 def logout():
-    # Remove client_id, timestamp tuple from the active_user_registry
-    active_user_registry[:] = [tup for tup in active_user_registry if not session['client_id'] == tup[0]]
+    user_registry.remove_from_active(session['user_id'])
     session.clear()
 
     flash('You are now logged out', 'success')

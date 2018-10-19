@@ -10,15 +10,15 @@
             <th>Phone</th>
             <th>Administrator</th>
         </tr>
-        {% for entry in list_of_users %}
+        {% for user in list_of_users %}
         <tr>
-            <td>{{ entry[0] }}</td>
-            <td>{{ entry[1] }}</td>
-            <td>{{ entry[2] }}</td>
-            <td>{{ entry[3] }}</td>
-            <td>{{ entry[4] }}</td>
-            <td>{{ entry[5] }}</td>
-            <td>{{ 'Yes' if entry[6] == 1 else 'No' }}</td>
+            <td>{{ user.id }}</td>
+            <td>{{ user.firstname }}</td>
+            <td>{{ user.lastname }}</td>
+            <td>{{ user.address }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.phone }}</td>
+            <td>{{ 'Yes' if user.admin == 1 else 'No' }}</td>
         {% endfor %}
     </table>
 {% endif %}
