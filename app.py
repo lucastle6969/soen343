@@ -188,7 +188,8 @@ def edit_entry(item_id):
     else:
         # Forms class has a getFormData() which returns a preloaded form with the data of the selected item
         form = Forms.get_form_data(item_selected, request)
-        return render_template('edit_page.html', form=form, prefix=selected_item_type, id=item_selected.id)
+        return render_template('admin_tools.html', form=form, prefix=selected_item_type, id=item_selected.id,
+                               item="edit")
 
 
 @app.route('/admin_tools/delete_entry/<id>',  methods=['POST'])
