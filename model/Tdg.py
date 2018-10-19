@@ -29,14 +29,11 @@ class Tdg:
         new_user_id = cur.fetchone()
         # send data back to the controller
         if result > 0:
-            return new_user_id
+            return new_user_id[0]
         else:
             new_user_id = False
         cur.close()
         return new_user_id
-
-        # Close connection
-        cur.close()
 
     # -- SELECT Queries
     def get_user_by_email(self, email):
