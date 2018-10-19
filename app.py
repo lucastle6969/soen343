@@ -50,10 +50,10 @@ def login():
         user = user_registry.get_user_by_email(email)
         if user:            
             # log user out if they are already logged in
-            user_registry.ensure_not_already_logged(user.user_id)
+            user_registry.ensure_not_already_logged(user.id)
             # add the user to the active user registry in the form of a tuple (user_id, timestamp)
             timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
-            user_registry.enlist_active_user(user.user_id, timestamp)
+            user_registry.enlist_active_user(user.id, timestamp)
 
             # compare passwords
             if sha256_crypt.verify(password_candidate, user.password):
