@@ -2,6 +2,7 @@ from flask import Flask, render_template, flash, redirect, url_for, session, req
 from model.Tdg import Tdg
 from model.User import User, Client, Admin, active_user_registry
 from model.Catalog import Catalog
+from model.UserRegistry import UserRegistry
 from passlib.hash import sha256_crypt
 from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, Forms
 import datetime
@@ -12,6 +13,7 @@ app = Flask(__name__)
 tdg = Tdg(app)
 global catalog
 catalog = Catalog()
+user_registry = UserRegistry()
 
 
 @app.before_request
@@ -61,6 +63,7 @@ def login():
             active_user_registry[:] = [tup for tup in active_user_registry if not data[0] == tup[0]]
             # add the user to the active user registry in the form of a tuple (user_id, timestamp)
             timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+            # user_registry.enlist_active_user(data[0], timestamp)
             active_user_registry.append((data[0], timestamp))
 
             # compare passwords
@@ -96,6 +99,7 @@ def register(request_, tool):
             if tool == 'create_client':
                 is_admin = 0
             
+            #user_registry.insert_user()
             tdg.insert_user(form.firstname.data, form.lastname.data, form.address.data, form.email.data,
                             form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
             
