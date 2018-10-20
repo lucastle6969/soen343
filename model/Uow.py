@@ -41,8 +41,7 @@ class Uow():
             if item_found:
                 self.modified_items.append(i.id)
             else:
-                raise Exception(f'UoW: Tried to register dirty item(id {i.id})'
-                                ',but item was not found.')
+                raise Exception(f'UoW: Tried to register dirty item(id {i.id}), but item was not found.')
 
     def register_deleted(self, item_id):
         self.deleted_items.append(item_id)
