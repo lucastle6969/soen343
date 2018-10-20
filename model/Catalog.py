@@ -26,15 +26,15 @@ class Catalog:
 
         if magazines is not None:
             for magazine in magazines:
-                self.item_catalog.append(Magazine(magazine[0], "ma", magazine[1], magazine[2], magazine[3], magazine[4], magazine[5], magazine[6], magazine[7]))
+                self.item_catalog.append(Magazine(magazine[0], "ma", magazine[1], magazine[2], magazine[3], magazine[4], magazine[5], magazine[6]))
 
         if movies is not None:
             for movie in movies:
-                self.item_catalog.append(Movie(movie[0], "mo", movie[1], movie[2], movie[3], movie[4], movie[5], movie[6], movie[7], movie[8], movie[9], movie[10], movie[11], movie[12]))
+                self.item_catalog.append(Movie(movie[0], "mo", movie[1], movie[2], movie[3], movie[4], movie[5], movie[6], movie[7], movie[8], movie[9], movie[10]))
 
         if music is not None:
             for item in music:
-                self.item_catalog.appen(Music(music[0], "mu", music[1], music[2], music[3], music[4], music[5], music[6], music[7], music[8]))
+                self.item_catalog.appen(Music(item[0], "mu", item[1], item[2], item[3], item[4], item[5], item[6], item[7]))
 
     # [Testing] This function is required for testing add/remove/edit
     def insert_item(self, item):
@@ -45,7 +45,7 @@ class Catalog:
         return True
 
     def add_item(self, item):
-        if item not None:
+        if item is not None:
             self.item_catalog.append(item)
 
     def add_item2(self, item_type, form):
