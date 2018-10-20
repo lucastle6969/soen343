@@ -1,6 +1,6 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, request
 from model.Tdg import Tdg
-from model.Catalog import Catalog
+from model.ItemMapper import ItemMapper
 from model.UserRegistry import UserRegistry
 from passlib.hash import sha256_crypt
 from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, Forms
@@ -10,10 +10,9 @@ import time
 
 app = Flask(__name__)
 tdg = Tdg(app)
-global catalog
-catalog = Catalog()
 user_registry = UserRegistry()
 user_registry.populate(tdg.get_all_users())
+item_mapper = ItemMapper(app)
 
 
 @app.before_request
@@ -109,8 +108,8 @@ def register(request_, tool):
 def add_book(request_):
     form = BookForm(request_.form)
     if request_.method == 'POST' and form.validate():
-        catalog.add_item("Book", form)
-        flash('Book was successfully added', 'success')
+        item_mapper.add_book(form)
+        # flash('Book was successfully added', 'success')
         return redirect('/admin_tools/catalog_manager')
     else:
         return render_template('admin_tools.html', item='add_book', form=form)

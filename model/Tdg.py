@@ -74,3 +74,22 @@ class Tdg:
             return False
         else:
             return data
+
+    def add_book(self, book):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        # Execute query
+        cur.execute("""INSERT INTO book(title, author, format, pages, publisher, language, isbn10, isbn13)
+                    VALUES(%s, %s, %s, %s, %s, %s, %s, %s)""",
+                    (book.title, book.author, book.format, book.pages, book.publisher, book.language, book.isbn10, book.isbn13))
+        # get the new user id
+        result = cur.execute("SELECT * FROM book ORDER BY id DESC LIMIT 1")
+        new_book_id = cur.fetchone()
+        # send data back to the controller
+        if result > 0:
+            return new_book_id[0]
+        else:
+            new_book_id = False
+        cur.close()
+        return new_book_id
+
