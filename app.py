@@ -165,8 +165,7 @@ def admin_tools(tool):
             elif tool == 'catalog_manager':
                 return render_template('admin_tools.html', tool=tool, catalog=item_mapper.get_catalog(), saved_changes=item_mapper.get_saved_changes())
             elif tool == 'view_users':
-                list_of_users = user_registry.get_all_users()
-                return render_template('admin_tools.html', tool=tool, list_of_users=list_of_users)
+                return render_template('admin_tools.html', tool=tool, list_of_users=user_registry.get_all_users())
         else:
             flash('invalid tool')
             return render_template('admin_tools.html')
@@ -177,13 +176,13 @@ def admin_tools(tool):
 @app.route('/admin_tools/edit_entry/<item_id>', methods=['GET', 'POST'])
 def edit_entry(item_id):
     # Obtain selected item from catalog
-    item_selected = catalog.get_item_by_id(item_id)
+    item_selected = item_mapper.find(item_id)
     selected_item_type = item_selected.prefix
 
     # the Forms class has a getFormForItemType() which creates a form for the item type selected
     form = Forms.get_form_for_item_type(selected_item_type, request.form)
 
-    if request.method == 'POST': 
+    if request.method == 'POST':
         catalog.edit_item(item_id, form)
         return redirect('/admin_tools/catalog_manager')
     else:
