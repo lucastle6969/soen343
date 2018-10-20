@@ -66,7 +66,7 @@ class ItemMapper:
         dubbed = form.dubbed.data
         release_date = form.releaseDate.data
         run_time = form.runtime.data
-        movie = Movie(None, title, prefix, status, director, producers, actors
+        movie = Movie(None, title, prefix, status, director, producers, actors,
                       language, subtitles, dubbed, release_date, run_time)
         if self.uow is None:
             self.uow = Uow()
