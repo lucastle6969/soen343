@@ -48,59 +48,58 @@ class Catalog:
         if item is not None:
             self.item_catalog.append(item)
 
-    def edit_item(self, item_id, form):
-        item = self.get_item_by_id(item_id)
-        if item is None:
-            return None
+    def edit_items(self, items):
+        for mod_item in items:
+            item = self.get_item_by_id(mod_item.id)
+            if item is None:
+                pass
 
-        selected_item_prefix = item.prefix
+            selected_item_prefix = mod_item.prefix
 
-        if selected_item_prefix == "bb":
-            item.title = form.title.data
-            item.author = form.author.data
-            item.format = form.format.data
-            item.pages = form.pages.data
-            item.publisher = form.publisher.data
-            item.language = form.language.data
-            item.isbn10 = form.isbn10.data
-            item.isbn13 = form.isbn13.data
-            return True
-        elif selected_item_prefix == "ma":
-            item.title = form.title.data
-            item.publisher = form.publisher.data
-            item.language = form.language.data
-            item.isbn10 = form.isbn10.data
-            item.isbn13 = form.isbn13.data
-            return True
-        elif selected_item_prefix == "mo":
-            item.title = form.title.data
-            item.director = form.director.data
-            item.producers = form.producers.data
-            item.actors = form.actors.data
-            item.language = form.language.data
-            item.subs = form.subtitles.data
-            item.dubbed = form.dubbed.data
-            item.release_date = form.releaseDate.data
-            item.runtime = form.runtime.data
-            return True
-        elif selected_item_prefix == "mu":
-            item.title = form.title.data
-            item.media_type = form.media_type.data
-            item.artist = form.artist.data
-            item.label = form.label.data
-            item.release_date = form.releaseDate.data
-            item.asin = form.asin.data
-            return True
+            if selected_item_prefix == "bb":
+                item.title = mod_item.title
+                item.author = mod_item.author
+                item.format = mod_item.format
+                item.pages = mod_item.pages
+                item.publisher = mod_item.publisher
+                item.language = mod_item.language
+                item.isbn10 = mod_item.isbn10
+                item.isbn13 = mod_item.isbn13
 
-        return False
+            elif selected_item_prefix == "ma":
+                item.title = mod_item.title
+                item.publisher = mod_item.publishe
+                item.language = mod_item.language
+                item.isbn10 = mod_item.isbn1
+                item.isbn13 = mod_item.isbn13
 
-    def delete_item(self, item_id):
-        item = self.get_item_by_id(item_id)
-        if item is not None:
-            self.item_catalog.remove(item)
-            return True
-        else:
-            return False
+            elif selected_item_prefix == "mo":
+                item.title = mod_item.title
+                item.director = mod_item.director
+                item.producers = mod_item.producers
+                item.actors = mod_item.actors
+                item.language = mod_item.language
+                item.subs = mod_item.subtitles
+                item.dubbed = mod_item.dubbed
+                item.release_date = mod_item.releaseDate
+                item.runtime = mod_item.runtime
+
+            elif selected_item_prefix == "mu":
+                item.title = mod_item.title
+                item.media_type = mod_item.media_type
+                item.artist = mod_item.artist
+                item.label = mod_item.label
+                item.release_date = mod_item.releaseDate
+                item.asin = mod_item.asin
+
+    def delete_items(self, items):
+        for del_item in items:
+            item = self.get_item_by_id(del_item.id)
+            if item is not None:
+                self.item_catalog.remove(item)
+                return True
+            else:
+                return False
 
     # [Testing] Used to remove objects added to catalog while testing
     def delete_last_item(self):
