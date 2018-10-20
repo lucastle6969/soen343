@@ -17,7 +17,7 @@ class ItemMapper:
     def get_saved_changes(self):
         if self.uow is None:
             return None
-        else
+        else:
             return self.uow.saved_changes()
 
     def add_book(self, form):
