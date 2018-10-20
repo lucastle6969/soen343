@@ -4,14 +4,21 @@ from model.Catalog import Catalog
 from model.Tdg import Tdg
 
 
-class Mapper:
+class ItemMapper:
     def __init__(self, app):
-        if self.uow is None:
-            self.uow = UoW()
-            
+        self.uow = None
         self.catalog = Catalog()
         self.tdg = Tdg(app)
-        self.catalog.populate(tdg.getBooks(), tdg.getMagazines(), tdg.getMovies(), tdg.getMusic())
+        self.catalog.populate(tdg.get_books(), tdg.get_magazines(), tdg.get_movies(), tdg.get_music())
+    
+    def get_catalog(self):
+        return self.catalog
+
+    def get_saved_changes(self):
+        if self.uow is None:
+            return None
+        else
+            return self.uow.saved_changes()
 
     def add_book(self, form):
         title = form.title.data
@@ -80,6 +87,7 @@ class Mapper:
 
     def end(self):
         items_to_commit = self.uow.commit()
+        self.uow = None
 
         # Add
         if items_to_commit[0] is not None:
