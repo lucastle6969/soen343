@@ -1,5 +1,5 @@
 from model.Item import Book, Magazine, Movie, Music
-from model.UoW import Uow
+from model.Uow import Uow
 from model.Catalog import Catalog
 from model.Tdg import Tdg
 
