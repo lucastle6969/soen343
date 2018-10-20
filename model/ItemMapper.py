@@ -4,7 +4,7 @@ from model.Catalog import Catalog
 from model.Tdg import Tdg
 
 
-class Mapper:
+class ItemMapper:
     def __init__(self, app):
         if self.uow is None:
             self.uow = UoW()
@@ -12,6 +12,9 @@ class Mapper:
         self.catalog = Catalog()
         self.tdg = Tdg(app)
         self.catalog.populate(tdg.get_books(), tdg.get_magazines(), tdg.get_movies(), tdg.get_music())
+    
+    def get_catalog(self):
+        return self.catalog
 
     def add_book(self, form):
         title = form.title.data
