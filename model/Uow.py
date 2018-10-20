@@ -12,24 +12,44 @@ class Uow():
     def add(self, i):
         self.mapped_items.append((i.id, i))
 
-    def registerNew(self, i):
+    def register_new(self, i):
         self.created_items.append(i.id)
 
-    def registerDirty(self, i):
-        for item in self.modified_items:
+    def register_dirty(self, i):
+        item_found = False
+        for item in self.created_items:
             if item.id == i.id:
-                self.modified_items.remove(item)
-        self.modified_items.append(i.id)
+                self.created_items.remove(item)
+                item_found = True
+                break
 
-    def registerDeleted(self, item_id):
+        if item_found:
+            self.created_items.append(i.id)
+
+        else:
+            for item in self.modified_items:
+                if item.id == i.id:
+                    self.modified_items.remove(item)
+                    item_found = True
+                    break
+
+            if item_found:
+                self.modified_items.append(i.id)
+            else:
+                raise Exception(f'UoW: Tried to register dirty item(id {id}),
+                                but item was not found.')
+
+    def register_deleted(self, item_id):
         self.deleted_items.append(item_id)
-        if i in self.created_items:
-            self.created_items.remove(i)
-        if i in self.modified_items:
-            self.modified_items.remove(i)
+        if item_id in self.created_items:
+            self.created_items.remove(item_id)
+        if item_id in self.modified_items:
+            self.modified_items.remove(item_id)
 
-# Retrieve the lists of updates (create, modify, delete) and clear this UoW.
-    def commit(self):
+# Retrieve the lists of updates (create, modify, delete)
+    def get_saved_changes(self):
+        """Create lists of objects (unlike the similarly named
+        instance variables, which contains lists of IDs)"""
         created_items = []
         modified_items = []
         deleted_items = []
@@ -39,22 +59,23 @@ class Uow():
                 item = pair[item_id]
                 if item is not None:
                     created_items.append(item)
-            
+
             for item_id in self.modified_items:
                 item = pair[item_id]
                 if item is not None:
                     modified_items.append(item)
-            
+
             for item_id in self.deleted_items:
                 item = pair[item_id]
                 if item is not None:
                     deleted_items.append(item)
-        
+
         # If a list is empty, set it to None (easier checking in mapper.)
-        if len(self.created_items) == 0:
-            self.created_items = None
-        if len(self.modified_items) == 0:
-            self.modified_items = None
-        if len(self.deleted_items) == 0:
-            self.deleted_items = None
+        if len(created_items) == 0:
+            created_items = None
+        if len(modified_items) == 0:
+            modified_items = None
+        if len(deleted_items) == 0:
+            deleted_items = None
+
         return [created_items, modified_items, deleted_items]
