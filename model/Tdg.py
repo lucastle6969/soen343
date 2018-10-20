@@ -93,3 +93,26 @@ class Tdg:
         cur.close()
         return new_book_id
 
+    def get_books(self):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        result = cur.execute("SELECT * FROM book")
+        data = []
+        i = 0
+        for row in cur.fetchall():
+            data.append(row)
+            i += 1
+        cur.close()
+        if result is None:
+            return False
+        else:
+            return data
+
+    def get_movies(self):
+        return None
+
+    def get_magazines(self):
+        return None
+
+    def get_music(self):
+        return None

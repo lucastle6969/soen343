@@ -163,7 +163,7 @@ def admin_tools(tool):
             elif tool == 'create_admin' or tool == 'create_client':
                 return register(request, tool)
             elif tool == 'catalog_manager':
-                return render_template('admin_tools.html', tool=tool, catalog=catalog)
+                return render_template('admin_tools.html', tool=tool, catalog=item_mapper.get_catalog(), saved_changes=item_mapper.get_saved_changes())
             elif tool == 'view_users':
                 list_of_users = user_registry.get_all_users()
                 return render_template('admin_tools.html', tool=tool, list_of_users=list_of_users)
