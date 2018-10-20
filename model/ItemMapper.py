@@ -3,6 +3,7 @@ from model.UoW import UoW
 from model.Catalog import Catalog
 from model.Tdg import Tdg
 
+
 class Mapper:
     def __init__(self, app):
         if self.uow is None:
@@ -10,7 +11,7 @@ class Mapper:
             
         self.catalog = Catalog()
         self.tdg = Tdg(app)
-        catalog.populate(tdg.getBooks(), tdg.getMagazines(), tdg.getMovies(), tdg.getMusic())
+        self.catalog.populate(tdg.getBooks(), tdg.getMagazines(), tdg.getMovies(), tdg.getMusic())
 
     def add_book(self, form):
         title = form.title.data
@@ -77,66 +78,7 @@ class Mapper:
         self.uow.add(music)
         self.uow.registerNew(music)
 
-    def delete_item(self, item_id):
-        if self.uow is None:
-            self.uow = UoW()
-        item = self.catalog.get_item_by_id(item_id)
-        if item is not None:
-            self.uow.registerDeleted(item)
-            self.catalog.remove(item)
-
-    def edit_item(self, item_id, form):
-        item = self.get_item_by_id(item_id)
-        if item is None:
-            return None
-
-        selected_item_prefix = item.prefix
-
-        if selected_item_prefix == "bb":
-            item.title = form.title.data
-            item.author = form.author.data
-            item.format = form.format.data
-            item.pages = form.pages.data
-            item.publisher = form.publisher.data
-            item.language = form.language.data
-            item.isbn10 = form.isbn10.data
-            item.isbn13 = form.isbn13.data
-            if self.uow is None:
-                self.uow.registerDirty(item_id, form)
-
-        elif selected_item_prefix == "ma":
-            item.title = form.title.data
-            item.publisher = form.publisher.data
-            item.language = form.language.data
-            item.isbn10 = form.isbn10.data
-            item.isbn13 = form.isbn13.data
-            if self.uow is None:
-                self.uow.registerDirty(item_id, form)
-
-        elif selected_item_prefix == "mo":
-            item.title = form.title.data
-            item.director = form.director.data
-            item.producers = form.producers.data
-            item.actors = form.actors.data
-            item.language = form.language.data
-            item.subs = form.subtitles.data
-            item.dubbed = form.dubbed.data
-            item.release_date = form.releaseDate.data
-            item.runtime = form.runtime.data
-            if self.uow is None:
-                self.uow.registerDirty(item_id, form)
-
-        elif selected_item_prefix == "mu":
-            item.title = form.title.data
-            item.media_type = form.media_type.data
-            item.artist = form.artist.data
-            item.label = form.label.data
-            item.release_date = form.releaseDate.data
-            item.asin = form.asin.data
-            if self.uow is None:
-                self.uow.registerDirty(item_id, form)
-
-    def end():
+    def end(self):
         items_to_commit = self.uow.commit()
 
         # Add
