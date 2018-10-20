@@ -2,6 +2,7 @@ from model.Item import Book, Magazine, Movie, Music
 from model.Uow import Uow
 from model.Catalog import Catalog
 from model.Tdg import Tdg
+from copy import deepcopy
 
 
 class ItemMapper:
@@ -25,7 +26,7 @@ class ItemMapper:
         item = self.uow.get(item_id)
         if item is None:
             item = self.catalog.get_item_by_id(item_id)
-        clone = deepclone(item)
+        clone = deepcopy(item)
         self.uow.add(clone)
         return clone
 
