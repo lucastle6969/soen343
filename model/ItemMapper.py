@@ -135,10 +135,14 @@ class ItemMapper:
                 elif item.prefix == "mu":
                     modified_music.append(item)
             self.catalog.edit_items(items_to_commit[1])
-            self.tdg.modify_books(modified_books)
-            self.tdg.modify_magazines(modified_magazines)
-            self.tdg.modify_movies(modified_movies)
-            self.tdg.modify_music(modified_music)
+            if modified_books is not None:
+                self.tdg.modify_books(modified_books)
+            if modified_magazines is not None:
+                self.tdg.modify_magazines(modified_magazines)
+            if modified_movies is not None:
+                self.tdg.modify_movies(modified_movies)
+            if modified_music is not None:
+                self.tdg.modify_music(modified_music)
 
         # Delete
         if items_to_commit[2] is not None:
@@ -152,7 +156,11 @@ class ItemMapper:
                 elif item.prefix == "mu":
                     deleted_music.append(item)
             self.catalog.delete_items(items_to_commit[2])
-            self.tdg.delete_books(deleted_books)
-            self.tdg.delete_magazines(deleted_magazines)
-            self.tdg.delete_movies(deleted_movies)
-            self.tdg.delete_music(deleted_music)
+            if deleted_books is not None:
+                self.tdg.delete_books(deleted_books)
+            if deleted_magazines is not None:
+                self.tdg.delete_magazines(deleted_magazines)
+            if deleted_movies is not None:
+                self.tdg.delete_movies(deleted_movies)
+            if deleted_music is not None:
+                self.tdg.delete_music(deleted_music)
