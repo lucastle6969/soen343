@@ -21,6 +21,55 @@ class ItemMapper:
         else:
             return self.uow.get_saved_changes()
 
+    def find(self, item_id):
+        item = self.uow.get(item_id)
+        if item is None:
+            item = self.catalog.get_item_by_id(item_id)
+        clone = deepclone(item)
+        self.uow.add(clone)
+        return clone
+
+    def set_item(self, item_id, form):
+        item = self.uow.get(item_id)
+        item_prefix = item.prefix
+        if item_prefix == "bb":
+            item.title = form.title
+            item.author = form.author
+            item.format = form.format
+            item.pages = form.pages
+            item.publisher = form.publisher
+            item.language = form.language
+            item.isbn10 = form.isbn10
+            item.isbn13 = form.isbn13
+
+        elif item_prefix == "ma":
+            item.title = form.title
+            item.publisher = form.publishe
+            item.language = form.language
+            item.isbn10 = form.isbn1
+            item.isbn13 = form.isbn13
+
+        elif item_prefix == "mo":
+            item.title = form.title
+            item.director = form.director
+            item.producers = form.producers
+            item.actors = form.actors
+            item.language = form.language
+            item.subs = form.subtitles
+            item.dubbed = form.dubbed
+            item.release_date = form.releaseDate
+            item.runtime = form.runtime
+
+        elif item_prefix == "mu":
+            item.title = form.title
+            item.media_type = form.media_type
+            item.artist = form.artist
+            item.label = form.label
+            item.release_date = form.releaseDate
+            item.asin = form.asin
+
+        self.uow.register_dirty(item)
+
     def add_book(self, form):
         title = form.title.data
         prefix = "bb"
