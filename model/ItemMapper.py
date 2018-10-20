@@ -11,7 +11,7 @@ class Mapper:
             
         self.catalog = Catalog()
         self.tdg = Tdg(app)
-        self.catalog.populate(tdg.getBooks(), tdg.getMagazines(), tdg.getMovies(), tdg.getMusic())
+        self.catalog.populate(tdg.get_books(), tdg.get_magazines(), tdg.get_movies(), tdg.get_music())
 
     def add_book(self, form):
         title = form.title.data
