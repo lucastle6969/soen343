@@ -64,7 +64,7 @@ def login():
 
                 flash('You are now logged in', 'success')
                 return redirect(url_for('home'))
-                
+
             else:
                 error = 'Invalid login'
                 app.logger.info('NOT MATCHED')
@@ -109,7 +109,7 @@ def add_book(request_):
     form = BookForm(request_.form)
     if request_.method == 'POST' and form.validate():
         item_mapper.add_book(form)
-        # flash('Book was successfully added', 'success')
+        flash('Book is ready to be added - save changes', 'success')
         return redirect('/admin_tools/catalog_manager')
     else:
         return render_template('admin_tools.html', item='add_book', form=form)
