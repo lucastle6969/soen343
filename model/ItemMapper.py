@@ -114,3 +114,57 @@ class Mapper:
             item.label = form.label.data
             item.release_date = form.releaseDate.data
             item.asin = form.asin.data
+
+    def end():
+        items_to_commit = self.uow.commit()
+
+        # Add
+        if items_to_commit[0] is not None:
+            for item in items_to_commit[0]:
+                if item.prefix == "bb":
+                    itemId = self.tdg.add_book(item)
+                    self.catalog.add_item(item)
+                elif item.prefix == "ma":
+                    itemId = self.tdg.add_magazine(item)
+                    self.catalog.add_item(item)
+                elif item.prefix == "mo":
+                    itemId = self.tdg.add_movie(item)
+                    self.catalog.add_item(item)
+                elif item.prefix == "mu":
+                    itemId = self.tdg.add_music(item)
+                    self.catalog.add_item(item)
+                    
+        # Modify
+        elif items_to_commit[1] is not None:
+            for item in items_to_commit[0]:
+                if item.prefix == "bb":
+                    itemId = self.tdg.modify_book(item)
+                    self.catalog.edit_item(itemId, form)
+                elif item.prefix == "ma":
+                    itemId = self.tdg.modify_magazine(item)
+                    self.catalog.edit_item(itemId, form)
+                elif item.prefix == "mo":
+                    itemId = self.tdg.modify_movie(item)
+                    self.catalog.edit_item(itemId, form)
+                elif item.prefix == "mu":
+                    itemId = self.tdg.modify_music(item)
+                    self.catalog.edit_item(itemId, form)
+
+        # Delete
+        elif items_to_commit[2] is not None:
+            for item in items_to_commit[0]:
+                if item.prefix == "bb":
+                    itemId = self.tdg.delete_book(item)
+                    self.catalog.delete_item(itemId)
+                elif item.prefix == "ma":
+                    itemId = self.tdg.delete_magazine(item)
+                    self.catalog.delete_item(itemId)
+                elif item.prefix == "mo":
+                    itemId = self.tdg.delete_movie(item)
+                    self.catalog.delete_item(itemId)
+                elif item.prefix == "mu":
+                    itemId = self.tdg.delete_music(item)
+                    self.catalog.delete_item(itemId)
+
+        # self.catalog.update(itemsToCommit)
+        # self.tdg.update(itemsToCommit)
