@@ -1,5 +1,5 @@
 from model.Item import Book, Magazine, Movie, Music
-from model.UoW import UoW
+from model.Uow import Uow
 from model.Catalog import Catalog
 from model.Tdg import Tdg
 
@@ -17,7 +17,7 @@ class ItemMapper:
     def get_saved_changes(self):
         if self.uow is None:
             return None
-        else
+        else:
             return self.uow.saved_changes()
 
     def add_book(self, form):
