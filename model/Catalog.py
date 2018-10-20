@@ -48,62 +48,6 @@ class Catalog:
         if item is not None:
             self.item_catalog.append(item)
 
-    def add_item2(self, item_type, form):
-        if item_type == "Book":
-            title = form.title.data
-            prefix = "bb"
-            status = "avail"
-            author = form.author.data
-            book_format = form.format.data
-            pages = form.pages.data
-            publisher = form.publisher.data
-            language = form.language.data
-            isbn10 = form.isbn10.data
-            isbn13 = form.isbn13.data
-            book = Book(title, prefix, 5, status, author, book_format, pages, publisher, language, isbn10, isbn13)
-            self.insert_item(book)
-            return True
-        elif item_type == "Magazine":
-            title = form.title.data
-            publisher = form.publisher.data
-            prefix = "ma"
-            status = "avail"
-            language = form.language.data
-            isbn10 = form.isbn10.data
-            isbn13 = form.isbn13.data
-            magazine = Magazine(title, prefix, 6, status, publisher, language, isbn10, isbn13)
-            self.insert_item(magazine)
-            return True
-        elif item_type == "Movie":
-            title = form.title.data
-            prefix = "mo"
-            status = "avail"
-            director = form.director.data
-            producers = form.producers.data
-            actors = form.actors.data
-            language = form.language.data
-            subtitles = form.subtitles.data
-            dubbed = form.dubbed.data
-            release_date = form.releaseDate.data
-            run_time = form.runtime.data
-            movie = Movie(title, prefix, 7, status, director, producers, actors, language, subtitles, dubbed,
-                          release_date, run_time)
-            self.insert_item(movie)
-            return True
-        elif item_type == "Music":
-            media_type = form.media_type.data
-            title = form.title.data
-            prefix = "mu"
-            status = "avail"
-            artist = form.artist.data
-            label = form.label.data
-            release_date = form.releaseDate.data
-            asin = form.asin.data
-            music = Music(title, prefix, 8, status, media_type, artist, label, release_date, asin)
-            self.insert_item(music)
-            return True
-        return False
-
     def edit_item(self, item_id, form):
         item = self.get_item_by_id(item_id)
         if item is None:

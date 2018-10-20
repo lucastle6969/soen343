@@ -9,7 +9,7 @@ class ItemMapper:
         self.uow = None
         self.catalog = Catalog()
         self.tdg = Tdg(app)
-        self.catalog.populate(tdg.get_books(), tdg.get_magazines(), tdg.get_movies(), tdg.get_music())
+        self.catalog.populate(self.tdg.get_books(), self.tdg.get_magazines(), self.tdg.get_movies(), self.tdg.get_music())
     
     def get_catalog(self):
         return self.catalog
@@ -31,9 +31,9 @@ class ItemMapper:
         language = form.language.data
         isbn10 = form.isbn10.data
         isbn13 = form.isbn13.data
-        book = Book(title, prefix, None, status, author, book_format, pages, publisher, language, isbn10, isbn13)
+        book = Book(None, title, prefix, status, author, book_format, pages, publisher, language, isbn10, isbn13)
         if self.uow is None:
-            self.uow = UoW()
+            self.uow = Uow()
         self.uow.add(book)
         self.uow.registerNew(book)
 
@@ -45,9 +45,9 @@ class ItemMapper:
         language = form.language.data
         isbn10 = form.isbn10.data
         isbn13 = form.isbn13.data
-        magazine = Magazine(title, prefix, None, status, publisher, language, isbn10, isbn13)
+        magazine = Magazine(None, title, prefix, status, publisher, language, isbn10, isbn13)
         if self.uow is None:
-            self.uow = UoW()
+            self.uow = Uow()
         self.uow.add(magazine)
         self.uow.registerNew(magazine)
 
@@ -63,10 +63,10 @@ class ItemMapper:
         dubbed = form.dubbed.data
         release_date = form.releaseDate.data
         run_time = form.runtime.data
-        movie = Movie(title, prefix, None, status, director, producers, actors, language, subtitles, dubbed,
+        movie = Movie(None, title, prefix, status, director, producers, actors, language, subtitles, dubbed,
                         release_date, run_time)
         if self.uow is None:
-            self.uow = UoW()
+            self.uow = Uow()
         self.uow.add(movie)
         self.uow.registerNew(movie)
 
@@ -79,9 +79,9 @@ class ItemMapper:
         label = form.label.data
         release_date = form.releaseDate.data
         asin = form.asin.data
-        music = Music(title, prefix, None, status, media_type, artist, label, release_date, asin)
+        music = Music(None, title, prefix, status, media_type, artist, label, release_date, asin)
         if self.uow is None:
-            self.uow = UoW()
+            self.uow = Uow()
         self.uow.add(music)
         self.uow.registerNew(music)
 

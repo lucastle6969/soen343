@@ -27,12 +27,12 @@ class Tdg:
         # get the new user id
         result = cur.execute("SELECT * FROM clientAdmin WHERE email = %s", [email])
         new_user_id = cur.fetchone()
+        cur.close()
         # send data back to the controller
         if result > 0:
             return new_user_id[0]
         else:
             new_user_id = False
-        cur.close()
         return new_user_id
 
     # -- SELECT Queries
@@ -41,12 +41,13 @@ class Tdg:
         cur = connection.cursor()
         result = cur.execute("SELECT * FROM clientAdmin WHERE email = %s", [email])
         data = cur.fetchone()
+        cur.close()
         # send data back to the controller
         if result > 0:
             return data
         else:
             data = False
-        cur.close()
+        
         return data
 
     def get_item_by_id(self, id):
@@ -85,13 +86,22 @@ class Tdg:
         # get the new user id
         result = cur.execute("SELECT * FROM book ORDER BY id DESC LIMIT 1")
         new_book_id = cur.fetchone()
-        # send data back to the controller
+        # send new id back to the controller
+        cur.close()
         if result > 0:
             return new_book_id[0]
         else:
             new_book_id = False
-        cur.close()
         return new_book_id
+
+    def add_magazine(self, magazine):
+        return new_magazine_id
+
+    def add_movie(self, movie):
+        return new_movie_id
+
+    def add_music(self, music):
+        return new_music_id
 
     def get_books(self):
         connection = self.mysql.connect()

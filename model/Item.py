@@ -1,5 +1,5 @@
 class Item:
-    def __init__(self, title, prefix, item_id, status):
+    def __init__(self, item_id, title, prefix, status):
         self.title = title
         self.prefix = prefix
         self.id = item_id
@@ -7,8 +7,8 @@ class Item:
 
 
 class Book(Item):
-    def __init__(self, title, prefix, item_id, status, author, item_format, pages, publisher, language, isbn10, isbn13):
-        Item.__init__(self, title, prefix, item_id, status)
+    def __init__(self, item_id, title, prefix, status, author, item_format, pages, publisher, language, isbn10, isbn13):
+        Item.__init__(self, item_id, title, prefix, status)
         self.author = author
         self.format = item_format
         self.pages = pages
@@ -19,8 +19,8 @@ class Book(Item):
 
 
 class Magazine(Item):
-    def __init__(self, title, prefix, item_id, status, publisher, language, isbn10, isbn13):
-        Item.__init__(self, title, prefix, item_id, status)
+    def __init__(self, item_id, title, prefix, status, publisher, language, isbn10, isbn13):
+        Item.__init__(self, item_id, title, prefix, status)
         self.publisher = publisher
         self.language = language
         self.isbn10 = isbn10
@@ -28,9 +28,9 @@ class Magazine(Item):
 
 
 class Movie(Item):
-    def __init__(self, title, prefix, item_id, status, director, producers, actors, language, subs, dubbed,
+    def __init__(self, item_id, title, prefix, status, director, producers, actors, language, subs, dubbed,
                  release_date, runtime):
-        Item.__init__(self, title, prefix, item_id, status)
+        Item.__init__(self, item_id, title, prefix, status)
         self.director = director
         self.producers = producers
         self.actors = actors
@@ -42,8 +42,8 @@ class Movie(Item):
 
 
 class Music(Item):
-    def __init__(self, title, prefix, item_id, status, media_type, artist, label, release_date, asin):
-        Item.__init__(self, title, prefix, item_id, status)
+    def __init__(self, item_id, title, prefix, status, media_type, artist, label, release_date, asin):
+        Item.__init__(self, item_id, title, prefix, status)
         self.media_type = media_type
         self.artist = artist
         self.label = label
