@@ -4,11 +4,11 @@ from model.Catalog import Catalog
 from model.Tdg import Tdg
 
 class Mapper:
-    def __init__(self):
+    def __init__(self, app):
         self.uow = UoW() 
         self.catalog = Catalog()
-        self.tdg = Tdg()
-        catalog.populate(tdg.getCatalog)
+        self.tdg = Tdg(app)
+        catalog.populate(tdg.getBooks(), tdg.getMagazines(), tdg.getMovies(), tdg.getMusic())
 
     def add_book(self, form):
         title = form.title.data
