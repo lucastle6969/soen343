@@ -3,18 +3,18 @@ INSERT INTO clientAdmin VALUES (1, 'John', 'Doe', '125 Ave Du Parc', 'johndoe@gm
 
 
 TRUNCATE TABLE book;
-INSERT INTO book VALUES (NULL, 'A Feast For Crows', 'George RR Martin', 'Physical', 250, 'Scholastic', 'English', 1234567890, 1234567890123);
+INSERT INTO book VALUES (NULL, 'A Feast For Crows', 'Available', 'George RR Martin', 'Physical', 250, 'Scholastic', 'English', 1234567890, 1234567890123);
 
 
 TRUNCATE TABLE magazine;
-INSERT INTO magazine VALUES (NULL, 'The New York Times Magazine', 'Arthurr Ochs Sulzberger Jr.', 'English', 1439401890, 8461968342412);
+INSERT INTO magazine VALUES (NULL, 'The New York Times Magazine', 'Available', 'Arthurr Ochs Sulzberger Jr.', 'English', 1439401890, 8461968342412);
 
 
 TRUNCATE TABLE movie;
-INSERT INTO movie VALUES (NULL, 'The Last Jedi', 'Rian Johnson', 'Kathleen Kennedy', 'Mark Hamil, Carrie Fisher, Adam Driver and Daisy Ridley', 'English', 'None', 'None', 'Dec. 15 2017', '152 minutes');
+INSERT INTO movie VALUES (NULL, 'The Last Jedi', 'Available', 'Rian Johnson', 'Kathleen Kennedy', 'Mark Hamil, Carrie Fisher, Adam Driver and Daisy Ridley', 'English', 'None', 'None', 'Dec. 15 2017', '152 minutes');
 
 
 TRUNCATE TABLE music;
-INSERT INTO music VALUES (NULL, 'CD', 'Thriller', 'Michael Jackson', 'Epic Records', 'Nov. 30 1982', ' B008FOB124');
+INSERT INTO music VALUES (NULL, 'Thriller', 'Available', 'Pop', 'Michael Jackson', 'Epic Records', 'Nov. 30 1982', 'B008FOB124');
 
 

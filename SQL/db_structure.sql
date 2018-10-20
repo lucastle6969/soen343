@@ -1,7 +1,8 @@
 DROP TABLE IF EXISTS book;
 CREATE TABLE book (
     id INT(20) AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(100), 
+    title VARCHAR(100),
+    status VARCHAR(20), 
     author VARCHAR(30), 
     format VARCHAR(20), 
     pages INT(255), 
@@ -15,7 +16,8 @@ CREATE TABLE book (
 DROP TABLE IF EXISTS magazine;
 CREATE TABLE magazine (
     id INT(20) AUTO_INCREMENT PRIMARY KEY, 
-    title VARCHAR(100), 
+    title VARCHAR(100),
+    status VARCHAR(20), 
     publisher VARCHAR(50), 
     language VARCHAR(30), 
     isbn10 BIGINT(10), 
@@ -26,26 +28,28 @@ CREATE TABLE magazine (
 DROP TABLE IF EXISTS movie;
 CREATE TABLE movie (
     id INT(20) AUTO_INCREMENT PRIMARY KEY, 
-    title VARCHAR(100), 
+    title VARCHAR(100),
+    status VARCHAR(20), 
     director VARCHAR(30), 
     producers VARCHAR(100), 
     actors VARCHAR(100), 
     language VARCHAR(30), 
-    subtitles VARCHAR(30), 
+    subs VARCHAR(30), 
     dubbed VARCHAR(30), 
-    releaseDate VARCHAR(30), 
-    runTime VARCHAR(20)
+    release_date VARCHAR(30), 
+    runtime VARCHAR(20)
 );
 
 
 DROP TABLE IF EXISTS music;
 CREATE TABLE music (
     id INT(20) AUTO_INCREMENT PRIMARY KEY,
-    type VARCHAR(10), 
-    title VARCHAR(100), 
+    title VARCHAR(100),
+    status VARCHAR(20),
+    type VARCHAR(30), 
     artist VARCHAR(30), 
     label VARCHAR(30),
-    releaseDate VARCHAR(30), 
+    release_date VARCHAR(30), 
     asin VARCHAR(20)
 );
 
