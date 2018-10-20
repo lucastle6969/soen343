@@ -23,12 +23,24 @@ class ItemMapper:
             return self.uow.get_saved_changes()
 
     def find(self, item_id):
+        if self.uow is None:
+            self.uow = Uow()
         item = self.uow.get(item_id)
         if item is None:
             item = self.catalog.get_item_by_id(item_id)
         clone = deepcopy(item)
         self.uow.add(clone)
         return clone
+
+    def delete_item(self, item_id):
+        if self.uow is None:
+            self.uow = Uow()
+        item = self.uow.get(item_id)
+        if item is None:
+            item = self.catalog.get_item_by_id(item_id)
+        clone = deepcopy(item)
+        self.uow.add(clone)
+        self.uow.register_deleted(item)
 
     def set_item(self, item_id, form):
         item = self.uow.get(item_id)
