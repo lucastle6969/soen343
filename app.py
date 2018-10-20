@@ -183,7 +183,7 @@ def edit_entry(item_id):
     form = Forms.get_form_for_item_type(selected_item_type, request.form)
 
     if request.method == 'POST':
-        catalog.edit_item(item_id, form)
+        item_mapper.set_item(item_id, form)
         return redirect('/admin_tools/catalog_manager')
     else:
         # Forms class has a getFormData() which returns a preloaded form with the data of the selected item
