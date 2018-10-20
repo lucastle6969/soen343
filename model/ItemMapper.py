@@ -37,7 +37,7 @@ class ItemMapper:
         if self.uow is None:
             self.uow = Uow()
         self.uow.add(book)
-        self.uow.registerNew(book)
+        self.uow.register_new(book)
 
     def add_magazine(self, form):
         title = form.title.data
@@ -52,7 +52,7 @@ class ItemMapper:
         if self.uow is None:
             self.uow = Uow()
         self.uow.add(magazine)
-        self.uow.registerNew(magazine)
+        self.uow.register_new(magazine)
 
     def add_movie(self, form):
         title = form.title.data
@@ -71,7 +71,7 @@ class ItemMapper:
         if self.uow is None:
             self.uow = Uow()
         self.uow.add(movie)
-        self.uow.registerNew(movie)
+        self.uow.register_new(movie)
 
     def add_music(self, form):
         media_type = form.media_type.data
@@ -87,7 +87,7 @@ class ItemMapper:
         if self.uow is None:
             self.uow = Uow()
         self.uow.add(music)
-        self.uow.registerNew(music)
+        self.uow.register_new(music)
 
     def end(self):
         items_to_commit = self.uow.get_saved_changes()
@@ -135,13 +135,13 @@ class ItemMapper:
                 elif item.prefix == "mu":
                     modified_music.append(item)
             self.catalog.edit_items(items_to_commit[1])
-            if modified_books is not None:
+            if len(modified_books) != 0:
                 self.tdg.modify_books(modified_books)
-            if modified_magazines is not None:
+            if len(modified_magazines) != 0:
                 self.tdg.modify_magazines(modified_magazines)
-            if modified_movies is not None:
+            if len(modified_movies) != 0:
                 self.tdg.modify_movies(modified_movies)
-            if modified_music is not None:
+            if len(modified_music) != 0:
                 self.tdg.modify_music(modified_music)
 
         # Delete
@@ -156,11 +156,11 @@ class ItemMapper:
                 elif item.prefix == "mu":
                     deleted_music.append(item)
             self.catalog.delete_items(items_to_commit[2])
-            if deleted_books is not None:
+            if len(deleted_books) != 0:
                 self.tdg.delete_books(deleted_books)
-            if deleted_magazines is not None:
+            if len(deleted_magazines) != 0:
                 self.tdg.delete_magazines(deleted_magazines)
-            if deleted_movies is not None:
+            if len(deleted_movies) != 0:
                 self.tdg.delete_movies(deleted_movies)
-            if deleted_music is not None:
+            if len(deleted_music) != 0:
                 self.tdg.delete_music(deleted_music)
