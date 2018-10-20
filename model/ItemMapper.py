@@ -24,7 +24,7 @@ class Mapper:
         language = form.language.data
         isbn10 = form.isbn10.data
         isbn13 = form.isbn13.data
-        book = Book(title, prefix, 5, status, author, book_format, pages, publisher, language, isbn10, isbn13)
+        book = Book(title, prefix, None, status, author, book_format, pages, publisher, language, isbn10, isbn13)
         if self.uow is None:
             self.uow = UoW()
         self.uow.add(book)
@@ -38,7 +38,7 @@ class Mapper:
         language = form.language.data
         isbn10 = form.isbn10.data
         isbn13 = form.isbn13.data
-        magazine = Magazine(title, prefix, 6, status, publisher, language, isbn10, isbn13)
+        magazine = Magazine(title, prefix, None, status, publisher, language, isbn10, isbn13)
         if self.uow is None:
             self.uow = UoW()
         self.uow.add(magazine)
@@ -56,7 +56,7 @@ class Mapper:
         dubbed = form.dubbed.data
         release_date = form.releaseDate.data
         run_time = form.runtime.data
-        movie = Movie(title, prefix, 7, status, director, producers, actors, language, subtitles, dubbed,
+        movie = Movie(title, prefix, None, status, director, producers, actors, language, subtitles, dubbed,
                         release_date, run_time)
         if self.uow is None:
             self.uow = UoW()
@@ -72,7 +72,7 @@ class Mapper:
         label = form.label.data
         release_date = form.releaseDate.data
         asin = form.asin.data
-        music = Music(title, prefix, 8, status, media_type, artist, label, release_date, asin)
+        music = Music(title, prefix, None, status, media_type, artist, label, release_date, asin)
         if self.uow is None:
             self.uow = UoW()
         self.uow.add(music)
