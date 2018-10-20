@@ -110,3 +110,7 @@ tr:nth-child(even) {
     background-color: #dddddd;
 }
 
+.uow-added {
+    background-color: green
+}
+

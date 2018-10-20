@@ -28,10 +28,7 @@
 </div>
 {% endif %}
 
-{% if catalog %}
-    {% if saved_changes %}
-    <h2>YES!!!!</h2>
-    {% endif %}
+
 <h3>Books</h3>
 <table class="table table-hover table-bordered">
     <thead>
@@ -51,24 +48,45 @@
     </thead>
     <tbody>
         {% for x in catalog.item_catalog %}
-        {% if x.prefix == "bb" %}
-        <tr>
-            <td>{{x.title}}</td>
-            <td>{{x.author}}</td>
-            <td>{{x.format}}</td>
-            <td>{{x.pages}}</td>
-            <td>{{x.publisher}}</td>
-            <td>{{x.language}}</td>
-            <td>{{x.isbn10}}</td>
-            <td>{{x.isbn13}}</td>
-            <td>{{x.status}}</td>
-            <td><form method="GET" action="/admin_tools/edit_entry/{{x.id}}">
-                <input type="submit" value="Edit" /></form></td>
-            <td><form method="POST" action="/admin_tools/delete_entry/{{x.id}}">
-                <input type="submit" value="Delete" /></form></td>
-        </tr>
-        {% endif %}
+            {% if x.prefix == "bb" %}
+                <tr>
+                    <td>{{x.title}}</td>
+                    <td>{{x.author}}</td>
+                    <td>{{x.format}}</td>
+                    <td>{{x.pages}}</td>
+                    <td>{{x.publisher}}</td>
+                    <td>{{x.language}}</td>
+                    <td>{{x.isbn10}}</td>
+                    <td>{{x.isbn13}}</td>
+                    <td>{{x.status}}</td>
+                    <td><form method="GET" action="/admin_tools/edit_entry/{{x.id}}">
+                        <input type="submit" value="Edit" /></form></td>
+                    <td><form method="POST" action="/admin_tools/delete_entry/{{x.id}}">
+                        <input type="submit" value="Delete" /></form></td>
+                </tr>
+            {% endif %}
         {% endfor %}
+        {% if saved_changes %}
+            {% for y in saved_changes[0] %}
+                {% if y.prefix == "bb" %}
+                    <tr class = "uow-added">
+                        <td>{{y.title}}</td>
+                        <td>{{y.author}}</td>
+                        <td>{{y.format}}</td>
+                        <td>{{y.pages}}</td>
+                        <td>{{y.publisher}}</td>
+                        <td>{{y.language}}</td>
+                        <td>{{y.isbn10}}</td>
+                        <td>{{y.isbn13}}</td>
+                        <td>{{y.status}}</td>
+                        <td><form method="GET" action="/admin_tools/edit_entry/{{y.id}}">
+                            <input type="submit" value="Edit" /></form></td>
+                        <td><form method="POST" action="/admin_tools/delete_entry/{{y.id}}">
+                            <input type="submit" value="Delete" /></form></td>
+                    </tr>
+                    {% endif %}
+            {% endfor%}    
+        {% endif %}
     </tbody>
 </table>
 <br />
@@ -89,21 +107,39 @@
     </thead>
     <tbody>
         {% for x in catalog.item_catalog %}
-        {% if x.prefix == "ma" %}
-        <tr>
-            <td>{{x.title}}</td>
-            <td>{{x.publisher}}</td>
-            <td>{{x.language}}</td>
-            <td>{{x.isbn10}}</td>
-            <td>{{x.isbn13}}</td>
-            <td>{{x.status}}</td>
-            <td><form method="GET" action="/admin_tools/edit_entry/{{x.id}}">
-                <input type="submit" value="Edit" /></form></td>
-            <td><form method="POST" action="/admin_tools/delete_entry/{{x.id}}">
-                <input type="submit" value="Delete" /></form></td>
-        </tr>
-        {% endif %}
+            {% if x.prefix == "ma" %}
+                <tr>
+                    <td>{{x.title}}</td>
+                    <td>{{x.publisher}}</td>
+                    <td>{{x.language}}</td>
+                    <td>{{x.isbn10}}</td>
+                    <td>{{x.isbn13}}</td>
+                    <td>{{x.status}}</td>
+                    <td><form method="GET" action="/admin_tools/edit_entry/{{x.id}}">
+                        <input type="submit" value="Edit" /></form></td>
+                    <td><form method="POST" action="/admin_tools/delete_entry/{{x.id}}">
+                        <input type="submit" value="Delete" /></form></td>
+                </tr>
+            {% endif %}
         {% endfor %}
+        {% if saved_changes %}
+            {% for y in saved_changes[0] %}
+                {% if y.prefix == "ma" %}
+                    <tr class = "uow-added">
+                        <td>{{y.title}}</td>
+                        <td>{{y.publisher}}</td>
+                        <td>{{y.language}}</td>
+                        <td>{{y.isbn10}}</td>
+                        <td>{{y.isbn13}}</td>
+                        <td>{{y.status}}</td>
+                        <td><form method="GET" action="/admin_tools/edit_entry/{{y.id}}">
+                            <input type="submit" value="Edit" /></form></td>
+                        <td><form method="POST" action="/admin_tools/delete_entry/{{y.id}}">
+                            <input type="submit" value="Delete" /></form></td>
+                    </tr>
+                    {% endif %}
+            {% endfor%}    
+        {% endif %}
     </tbody>
 </table>
 <br />
@@ -128,25 +164,47 @@
     </thead>
     <tbody>
         {% for x in catalog.item_catalog %}
-        {% if x.prefix == "mo" %}
-        <tr>
-            <td>{{x.title}}</td>
-            <td>{{x.director}}</td>
-            <td>{{x.producers}}</td>
-            <td>{{x.actors}}</td>
-            <td>{{x.language}}</td>
-            <td>{{x.subs}}</td>
-            <td>{{x.dubbed}}</td>
-            <td>{{x.release_date}}</td>
-            <td>{{x.runtime}}</td>
-            <td>{{x.status}}</td>
-            <td><form method="GET" action="/admin_tools/edit_entry/{{x.id}}">
-                <input type="submit" value="Edit" /></form></td>
-            <td><form method="POST" action="/admin_tools/delete_entry/{{x.id}}">
-                <input type="submit" value="Delete" /></form></td>
-        </tr>
-        {% endif %}
+            {% if x.prefix == "mo" %}
+                <tr>
+                    <td>{{x.title}}</td>
+                    <td>{{x.director}}</td>
+                    <td>{{x.producers}}</td>
+                    <td>{{x.actors}}</td>
+                    <td>{{x.language}}</td>
+                    <td>{{x.subs}}</td>
+                    <td>{{x.dubbed}}</td>
+                    <td>{{x.release_date}}</td>
+                    <td>{{x.runtime}}</td>
+                    <td>{{x.status}}</td>
+                    <td><form method="GET" action="/admin_tools/edit_entry/{{x.id}}">
+                        <input type="submit" value="Edit" /></form></td>
+                    <td><form method="POST" action="/admin_tools/delete_entry/{{x.id}}">
+                        <input type="submit" value="Delete" /></form></td>
+                </tr>
+            {% endif %}
         {% endfor %}
+        {% if saved_changes %}
+            {% for y in saved_changes[0] %}
+                {% if y.prefix == "mo" %}
+                    <tr class = "uow-added">
+                        <td>{{y.title}}</td>
+                        <td>{{y.director}}</td>
+                        <td>{{y.producers}}</td>
+                        <td>{{y.actors}}</td>
+                        <td>{{y.language}}</td>
+                        <td>{{y.subs}}</td>
+                        <td>{{y.dubbed}}</td>
+                        <td>{{y.release_date}}</td>
+                        <td>{{y.runtime}}</td>
+                        <td>{{y.status}}</td>
+                        <td><form method="GET" action="/admin_tools/edit_entry/{{y.id}}">
+                            <input type="submit" value="Edit" /></form></td>
+                        <td><form method="POST" action="/admin_tools/delete_entry/{{y.id}}">
+                            <input type="submit" value="Delete" /></form></td>
+                    </tr>
+                    {% endif %}
+            {% endfor%}    
+        {% endif %}
     </tbody>
 </table>
 <br />
@@ -168,22 +226,41 @@
     </thead>
     <tbody>
         {% for x in catalog.item_catalog %}
-        {% if x.prefix == "mu" %}
-        <tr>
-            <td>{{x.media_type}}</td>
-            <td>{{x.title}}</td>
-            <td>{{x.artist}}</td>
-            <td>{{x.label}}</td>
-            <td>{{x.release_date}}</td>
-            <td>{{x.asin}}</td>
-            <td>{{x.status}}</td>
-            <td><form method="GET" action="/admin_tools/edit_entry/{{x.id}}">
-                <input type="submit" value="Edit" /></form></td>
-            <td><form method="POST" action="/admin_tools/delete_entry/{{x.id}}">
-                <input type="submit" value="Delete" /></form></td>
-        </tr>
-        {% endif %}
+            {% if x.prefix == "mu" %}
+                <tr>
+                    <td>{{x.media_type}}</td>
+                    <td>{{x.title}}</td>
+                    <td>{{x.artist}}</td>
+                    <td>{{x.label}}</td>
+                    <td>{{x.release_date}}</td>
+                    <td>{{x.asin}}</td>
+                    <td>{{x.status}}</td>
+                    <td><form method="GET" action="/admin_tools/edit_entry/{{x.id}}">
+                        <input type="submit" value="Edit" /></form></td>
+                    <td><form method="POST" action="/admin_tools/delete_entry/{{x.id}}">
+                        <input type="submit" value="Delete" /></form></td>
+                </tr>
+            {% endif %}
         {% endfor %}
+        {% if saved_changes %}
+            {% for y in saved_changes[0] %}
+                {% if y.prefix == "mu" %}
+                    <tr class = "uow-added">
+                            <td>{{y.media_type}}</td>
+                            <td>{{y.title}}</td>
+                            <td>{{y.artist}}</td>
+                            <td>{{y.label}}</td>
+                            <td>{{y.release_date}}</td>
+                            <td>{{y.asin}}</td>
+                            <td>{{y.status}}</td>
+                        <td><form method="GET" action="/admin_tools/edit_entry/{{y.id}}">
+                            <input type="submit" value="Edit" /></form></td>
+                        <td><form method="POST" action="/admin_tools/delete_entry/{{y.id}}">
+                            <input type="submit" value="Delete" /></form></td>
+                    </tr>
+                    {% endif %}
+            {% endfor%}    
+        {% endif %}
     </tbody>
 </table>
 {% endif%}
