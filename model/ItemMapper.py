@@ -21,6 +21,18 @@ class ItemMapper:
         else:
             return self.uow.get_saved_changes()
 
+    def find(self, item_id):
+        item = self.uow.get(item_id)
+        if item is None:
+            item = self.catalog.get_item_by_id(item_id)
+        clone = deepclone(item)
+        self.uow.add(clone)
+        return clone
+
+    def set_item(self, item_id, form):
+        clone = self.find(item_id)
+        self.uow.register_dirty(clone)
+
     def add_book(self, form):
         title = form.title.data
         prefix = "bb"
