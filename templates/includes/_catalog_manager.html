@@ -28,11 +28,13 @@
 </div>
 {% endif %}
 
+{% if catalog %}
 
 <h3>Books</h3>
-<table class="table table-hover table-bordered">
+<table id="book-table" class="table table-hover table-bordered">
     <thead>
         <tr>
+            <th class="hidden">ID</th>
             <th>Title</th>
             <th>Author</th>
             <th>Format</th>
@@ -48,28 +50,80 @@
     </thead>
     <tbody>
         {% for x in catalog.item_catalog %}
+            {% set modified = {'foo': False} %}
+            {% set deleted = {'foo': False} %}
             {% if x.prefix == "bb" %}
-                <tr>
-                    <td>{{x.title}}</td>
-                    <td>{{x.author}}</td>
-                    <td>{{x.format}}</td>
-                    <td>{{x.pages}}</td>
-                    <td>{{x.publisher}}</td>
-                    <td>{{x.language}}</td>
-                    <td>{{x.isbn10}}</td>
-                    <td>{{x.isbn13}}</td>
-                    <td>{{x.status}}</td>
-                    <td><form method="GET" action="/admin_tools/edit_entry/{{x.id}}">
-                        <input type="submit" value="Edit" /></form></td>
-                    <td><form method="POST" action="/admin_tools/delete_entry/{{x.id}}">
-                        <input type="submit" value="Delete" /></form></td>
-                </tr>
+            <!-- THIS WILL DEAL WITH MODIFIED ITEMS -->
+                {% if saved_changes[1] %}
+                    {% for q in saved_changes[1] %}
+                        {% if x.item_id == q.item_id %}
+                            {% if modified.update({'foo': True}) %}{% endif %}
+                            <tr class="uow-modify">
+                                <td class="hidden">{{q.item_id}}</td>
+                                <td>{{q.title}}</td>
+                                <td>{{q.author}}</td>
+                                <td>{{q.format}}</td>
+                                <td>{{q.pages}}</td>
+                                <td>{{q.publisher}}</td>
+                                <td>{{q.language}}</td>
+                                <td>{{q.isbn10}}</td>
+                                <td>{{q.isbn13}}</td>
+                                <td>{{q.status}}</td>
+                                <td><form method="GET" action="/admin_tools/edit_entry/{{q.id}}">
+                                    <input type="submit" value="Edit" /></form></td>
+                                <td><form method="POST" action="/admin_tools/delete_entry/{{q.id}}">
+                                    <input type="submit" value="Delete" /></form></td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                {% if saved_changes[2] %}
+                    {% for d in saved_changes[2] %}
+                        {% if d.item_id == x.item_id %}
+                            {% if deleted.update({'foo': True}) %}{% endif %}
+                            <tr class= "uow-delete">
+                                <td class="hidden">{{x.item_id}}</td>
+                                <td>{{x.title}}</td>
+                                <td>{{x.author}}</td>
+                                <td>{{x.format}}</td>
+                                <td>{{x.pages}}</td>
+                                <td>{{x.publisher}}</td>
+                                <td>{{x.language}}</td>
+                                <td>{{x.isbn10}}</td>
+                                <td>{{x.isbn13}}</td>
+                                <td>{{x.status}}</td>
+                                <td><form method="GET" action="/admin_tools/edit_entry/{{x.id}}">
+                                    <input type="submit" value="Edit" /></form></td>
+                                <td><form method="POST" action="/admin_tools/delete_entry/{{x.id}}">
+                                    <input type="submit" value="Delete" /></form></td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                {% if (not saved_changes[1] and not saved_changes[2]) or (not modified.foo and not deleted.foo) %}
+                    <tr>
+                        <td class="hidden">{{x.item_id}}</td>
+                        <td>{{x.title}}</td>
+                        <td>{{x.author}}</td>
+                        <td>{{x.format}}</td>
+                        <td>{{x.pages}}</td>
+                        <td>{{x.publisher}}</td>
+                        <td>{{x.language}}</td>
+                        <td>{{x.isbn10}}</td>
+                        <td>{{x.isbn13}}</td>
+                        <td>{{x.status}}</td>
+                        <td><form method="GET" action="/admin_tools/edit_entry/{{x.id}}">
+                            <input type="submit" value="Edit" /></form></td>
+                        <td><form method="POST" action="/admin_tools/delete_entry/{{x.id}}">
+                            <input type="submit" value="Delete" /></form></td>
+                    </tr>
+                {% endif %}
             {% endif %}
         {% endfor %}
-        {% if saved_changes %}
+        {% if saved_changes[0] %}
             {% for y in saved_changes[0] %}
                 {% if y.prefix == "bb" %}
-                    <tr class = "uow-added">
+                    <tr class="uow-added">
                         <td>{{y.title}}</td>
                         <td>{{y.author}}</td>
                         <td>{{y.format}}</td>
@@ -125,7 +179,7 @@
         {% if saved_changes %}
             {% for y in saved_changes[0] %}
                 {% if y.prefix == "ma" %}
-                    <tr class = "uow-added">
+                    <tr class="uow-added">
                         <td>{{y.title}}</td>
                         <td>{{y.publisher}}</td>
                         <td>{{y.language}}</td>
@@ -186,7 +240,7 @@
         {% if saved_changes %}
             {% for y in saved_changes[0] %}
                 {% if y.prefix == "mo" %}
-                    <tr class = "uow-added">
+                    <tr class="uow-added">
                         <td>{{y.title}}</td>
                         <td>{{y.director}}</td>
                         <td>{{y.producers}}</td>
@@ -245,7 +299,7 @@
         {% if saved_changes %}
             {% for y in saved_changes[0] %}
                 {% if y.prefix == "mu" %}
-                    <tr class = "uow-added">
+                    <tr class="uow-added">
                             <td>{{y.media_type}}</td>
                             <td>{{y.title}}</td>
                             <td>{{y.artist}}</td>
