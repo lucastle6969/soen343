@@ -51,10 +51,10 @@ class Uow():
                     deleted_items.append(item)
         
         # If a list is empty, set it to None (easier checking in mapper.)
-        if(len(self.created_items) == 0):
+        if len(self.created_items) == 0:
             self.created_items = None
-        if(len(self.modified_items) == 0):
+        if len(self.modified_items) == 0:
             self.modified_items = None
-        if(len(self.deleted_items) == 0):
+        if len(self.deleted_items) == 0:
             self.deleted_items = None
         return [created_items, modified_items, deleted_items]
