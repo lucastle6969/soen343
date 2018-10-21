@@ -46,7 +46,7 @@ CREATE TABLE music (
     id INT(20) AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(100),
     status VARCHAR(20),
-    type VARCHAR(30), 
+    media_type VARCHAR(30), 
     artist VARCHAR(30), 
     label VARCHAR(30),
     release_date VARCHAR(30), 

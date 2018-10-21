@@ -15,6 +15,6 @@ INSERT INTO movie VALUES (NULL, 'The Last Jedi', 'Available', 'Rian Johnson', 'K
 
 
 TRUNCATE TABLE music;
-INSERT INTO music VALUES (NULL, 'Thriller', 'Available', 'Pop', 'Michael Jackson', 'Epic Records', 'Nov. 30 1982', 'B008FOB124');
+INSERT INTO music VALUES (NULL, 'Thriller', 'Available', 'CD', 'Michael Jackson', 'Epic Records', 'Nov. 30 1982', 'B008FOB124');
 
 
