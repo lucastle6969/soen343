@@ -12,7 +12,7 @@ app = Flask(__name__)
 tdg = Tdg(app)
 user_registry = UserRegistry()
 user_registry.populate(tdg.get_all_users())
-item_mapper = ItemMapper(app)
+item_mapper = ItemMapper(tdg)
 
 
 @app.before_request
@@ -118,8 +118,8 @@ def add_book(request_):
 def add_magazine(request_):
     form = MagazineForm(request_.form)
     if request_.method == 'POST' and form.validate():
-        catalog.add_item("Magazine", form)
-        flash('Magazine was successfully added', 'success')
+        item_mapper.add_magazine(form)
+        flash('Magazine is ready to be added - save changes', 'success')
         return redirect('/admin_tools/catalog_manager')
     else:
         return render_template('admin_tools.html', item='add_magazine', form=form)
@@ -128,8 +128,8 @@ def add_magazine(request_):
 def add_movie(request_):
     form = MovieForm(request_.form)
     if request_.method == 'POST' and form.validate():
-        catalog.add_item("Movie", form)
-        flash('Movie was successfully added', 'success')
+        item_mapper.add_movie(form)
+        flash('Movie is ready to be added - save changes', 'success')
         return redirect('/admin_tools/catalog_manager')
     else:
         return render_template('admin_tools.html', item='add_movie', form=form)
@@ -138,8 +138,8 @@ def add_movie(request_):
 def add_music(request_):
     form = MusicForm(request_.form)
     if request_.method == 'POST' and form.validate():
-        catalog.add_item("Music", form)
-        flash('Music was successfully added', 'success')
+        item_mapper.add_music(form)
+        flash('Music is ready to be added - save changes', 'success')
         return redirect('/admin_tools/catalog_manager')
     else:
         return render_template('admin_tools.html', item='add_music', form=form)
@@ -183,7 +183,7 @@ def edit_entry(item_id):
     form = Forms.get_form_for_item_type(selected_item_type, request.form)
 
     if request.method == 'POST':
-        catalog.edit_item(item_id, form)
+        item_mapper.set_item(item_id, form)
         return redirect('/admin_tools/catalog_manager')
     else:
         # Forms class has a getFormData() which returns a preloaded form with the data of the selected item
@@ -194,9 +194,9 @@ def edit_entry(item_id):
 
 @app.route('/admin_tools/delete_entry/<id>',  methods=['POST'])
 def delete_item(id):
-    delete_success = catalog.delete_item(id)
+    delete_success = item_mapper.delete_item(id)
     if delete_success:
-        flash(f'Item (id {id}) deleted.', 'success')
+        flash(f'Item (id {id}) is ready to be deleted. - save changes', 'success')
         return redirect(url_for('admin_tools', tool='catalog_manager'))
     else:
         flash('Item not found.')

@@ -5,6 +5,7 @@ class Tdg:
     def __init__(self, app):
         self.mysql = MySQL()
 
+
         # Config MySQL
         app.config['MYSQL_DATABASE_USER'] = 'pomoroad_soen09'
         app.config['MYSQL_DATABASE_PASSWORD'] = 'discordApp343'
@@ -13,6 +14,7 @@ class Tdg:
 
         # init MYSQL
         self.mysql.init_app(app)
+        
 
     # User SQL Queries
 
@@ -66,10 +68,8 @@ class Tdg:
         cur = connection.cursor()
         result = cur.execute("SELECT * FROM clientAdmin WHERE 1")
         data = []
-        i = 0
         for row in cur.fetchall():
             data.append(row)
-            i += 1
         cur.close()
         if result is None:
             return False
@@ -95,23 +95,21 @@ class Tdg:
         return new_book_id
 
     def add_magazine(self, magazine):
-        return new_magazine_id
+        pass
 
     def add_movie(self, movie):
-        return new_movie_id
+        pass
 
     def add_music(self, music):
-        return new_music_id
+        pass
 
     def get_books(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT * FROM book")
+        result = cur.execute("SELECT * FROM book WHERE 1")
         data = []
-        i = 0
         for row in cur.fetchall():
             data.append(row)
-            i += 1
         cur.close()
         if result is None:
             return False

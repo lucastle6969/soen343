@@ -9,42 +9,57 @@ class Uow():
         self.modified_items = []
         self.deleted_items = []
 
+        self.temp_id_counter = 0
+
+    def get(self, item_id):
+        for pair in self.mapped_items:
+            if pair[0] == int(item_id):
+                return pair[1]
+        return None
+
     def add(self, i):
-        self.mapped_items.append((i.id, i))
+        if i.id is None:
+            self.temp_id_counter -= 1
+            i.id = self.temp_id_counter
+        self.mapped_items.append((int(i.id), i))
 
     def register_new(self, i):
-        self.created_items.append(i.id)
+        self.created_items.append(int(i.id))
 
     def register_dirty(self, i):
+        # replace the item in the mapped_items
+        self.mapped_items[:] = [tup for tup in self.mapped_items if not int(i.id) == tup[0]]
+        self.mapped_items.append((int(i.id), i))
+
+        # check if it was already registered
         item_found = False
         for item in self.created_items:
-            if item.id == i.id:
+            if item == int(i.id):
                 self.created_items.remove(item)
                 item_found = True
                 break
 
         if item_found:
-            self.created_items.append(i.id)
+            self.created_items.append(int(i.id))
 
         else:
             for item in self.modified_items:
-                if item.id == i.id:
+                if item == i.id:
                     self.modified_items.remove(item)
                     item_found = True
                     break
 
             if item_found:
-                self.modified_items.append(i.id)
+                self.modified_items.append(int(i.id))
             else:
-                raise Exception(f'UoW: Tried to register dirty item(id {id}),
-                                but item was not found.')
+                self.modified_items.append(int(i.id))
 
     def register_deleted(self, item_id):
-        self.deleted_items.append(item_id)
+        self.deleted_items.append(int(item_id))
         if item_id in self.created_items:
-            self.created_items.remove(item_id)
+            self.created_items.remove(int(item_id))
         if item_id in self.modified_items:
-            self.modified_items.remove(item_id)
+            self.modified_items.remove(int(item_id))
 
 # Retrieve the lists of updates (create, modify, delete)
     def get_saved_changes(self):
@@ -54,21 +69,20 @@ class Uow():
         modified_items = []
         deleted_items = []
 
-        for pair in self.mapped_items:
-            for item_id in self.created_items:
-                item = pair[item_id]
-                if item is not None:
-                    created_items.append(item)
+        for item_id in self.created_items:
+            for pair in self.mapped_items:
+                if item_id == pair[0]:
+                    created_items.append(pair[1])
 
-            for item_id in self.modified_items:
-                item = pair[item_id]
-                if item is not None:
-                    modified_items.append(item)
+        for item_id in self.modified_items:
+            for pair in self.mapped_items:
+                if item_id == pair[0]:
+                    modified_items.append(pair[1])
 
-            for item_id in self.deleted_items:
-                item = pair[item_id]
-                if item is not None:
-                    deleted_items.append(item)
+        for item_id in self.deleted_items:
+            for pair in self.mapped_items:
+                if item_id == pair[0]:
+                    deleted_items.append(pair[1])
 
         # If a list is empty, set it to None (easier checking in mapper.)
         if len(created_items) == 0:
