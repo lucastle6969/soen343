@@ -84,12 +84,4 @@ class Uow():
                 if item_id == pair[0]:
                     deleted_items.append(pair[1])
 
-        # If a list is empty, set it to None (easier checking in mapper.)
-        if len(created_items) == 0:
-            created_items = None
-        if len(modified_items) == 0:
-            modified_items = None
-        if len(deleted_items) == 0:
-            deleted_items = None
-
         return [created_items, modified_items, deleted_items]
