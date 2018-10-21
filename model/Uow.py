@@ -54,12 +54,12 @@ class Uow():
             else:
                 self.modified_items.append(int(i.id))
 
-    def register_deleted(self, item_id):
-        self.deleted_items.append(int(item_id))
-        if item_id in self.created_items:
-            self.created_items.remove(int(item_id))
-        if item_id in self.modified_items:
-            self.modified_items.remove(int(item_id))
+    def register_deleted(self, i):
+        self.deleted_items.append(int(i.id))
+        if int(i.id) in self.created_items:
+            self.created_items.remove(int(i.id))
+        if int(i.id) in self.modified_items:
+            self.modified_items.remove(int(i.id))
 
 # Retrieve the lists of updates (create, modify, delete)
     def get_saved_changes(self):
