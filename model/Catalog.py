@@ -7,12 +7,11 @@ class Catalog:
         self.item_catalog = []
 
     def get_item_by_id(self, item_id):
-        int_id = item_id
-        if item_id is not int:
-            int_id = int(item_id)
+        int_id = int(item_id[2:])
+        prefix = item_id[0:2]
 
         for item in self.item_catalog:
-            if item.id == int_id:
+            if item.id == int_id and item.prefix == prefix:
                 return item
         return None
 
@@ -50,7 +49,8 @@ class Catalog:
 
     def edit_items(self, items):
         for mod_item in items:
-            item = self.get_item_by_id(mod_item.id)
+            item_id = mod_item.prefix + str(mod_item.id)
+            item = self.get_item_by_id(item_id)
             if item is None:
                 pass
 
@@ -94,12 +94,10 @@ class Catalog:
 
     def delete_items(self, items):
         for del_item in items:
-            item = self.get_item_by_id(del_item.id)
+            item_id = del_item.prefix + str(del_item.id)
+            item = self.get_item_by_id(item_id)
             if item is not None:
                 self.item_catalog.remove(item)
-                return True
-            else:
-                return False
 
     # [Testing] Used to remove objects added to catalog while testing
     def delete_last_item(self):

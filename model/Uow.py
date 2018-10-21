@@ -3,7 +3,10 @@ from model.Item import Item
 
 class Uow():
     def __init__(self):
-        self.mapped_items = []  # Identity map
+        self.mapped_book_items = []  # Identity map
+        self.mapped_magazine_items = []
+        self.mapped_music_items = []
+        self.mapped_movie_items = []
 
         self.created_items = []
         self.modified_items = []
@@ -12,54 +15,84 @@ class Uow():
         self.temp_id_counter = 0
 
     def get(self, item_id):
-        for pair in self.mapped_items:
-            if pair[0] == int(item_id):
-                return pair[1]
+        prefix = item_id[0:2]
+        int_id = int(item_id[2:])
+        if prefix == "bb":
+            for pair in self.mapped_book_items:
+                if pair[0] == int_id:
+                    return pair[1]
+
+        elif prefix == "ma":
+            for pair in self.mapped_magazine_items:
+                if pair[0] == int_id:
+                    return pair[1]
+
+        elif prefix == "mo":
+            for pair in self.mapped_movie_items:
+                if pair[0] == int_id:
+                    return pair[1]
+
+        elif prefix == "mu":
+            for pair in self.mapped_music_items:
+                if pair[0] == int_id:
+                    return pair[1]
+
         return None
 
     def add(self, i):
         if i.id is None:
             self.temp_id_counter -= 1
             i.id = self.temp_id_counter
-        self.mapped_items.append((int(i.id), i))
+        if i.prefix == "bb":
+            self.mapped_book_items.append((int(i.id), i))
+        elif i.prefix == "ma":
+            self.mapped_magazine_items.append((int(i.id), i))
+        elif i.prefix == "mu":
+            self.mapped_music_items.append((int(i.id), i))
+        elif i.prefix == "mo":
+            self.mapped_movie_items.append((int(i.id), i))
 
     def register_new(self, i):
-        self.created_items.append(int(i.id))
+        self.created_items.append((i.prefix, int(i.id)))
 
     def register_dirty(self, i):
         # replace the item in the mapped_items
-        self.mapped_items[:] = [tup for tup in self.mapped_items if not int(i.id) == tup[0]]
-        self.mapped_items.append((int(i.id), i))
+        if i.prefix == "bb":
+            self.mapped_book_items[:] = [tup for tup in self.mapped_book_items if not int(i.id) == tup[0]]
+            self.mapped_book_items.append((int(i.id), i))
+
+        elif i.prefix == "ma":
+            self.mapped_magazine_items[:] = [tup for tup in self.mapped_magazine_items if not int(i.id) == tup[0]]
+            self.mapped_magazine_items.append((int(i.id), i))
+
+        elif i.prefix == "mo":
+            self.mapped_movie_items[:] = [tup for tup in self.mapped_movie_items if not int(i.id) == tup[0]]
+            self.mapped_movie_items.append((int(i.id), i))
+
+        elif i.prefix == "mu":
+            self.mapped_music_items[:] = [tup for tup in self.mapped_music_items if not int(i.id) == tup[0]]
+            self.mapped_music_items.append((int(i.id), i))
 
         # check if it was already registered
         item_found = False
         for item in self.created_items:
-            if item == int(i.id):
-                self.created_items.remove(item)
+            if item[0] == i.prefix and item[1] == int(i.id):
                 item_found = True
                 break
 
-        if item_found:
-            self.created_items.append(int(i.id))
-
-        else:
+        if not item_found:
             for item in self.modified_items:
-                if item == i.id:
-                    self.modified_items.remove(item)
+                if item[0] == i.prefix and item[1] == int(i.id):
                     item_found = True
                     break
 
-            if item_found:
-                self.modified_items.append(int(i.id))
-            else:
-                self.modified_items.append(int(i.id))
+        if not item_found:
+            self.modified_items.append((i.prefix, int(i.id)))
 
     def register_deleted(self, i):
-        self.deleted_items.append(int(i.id))
-        if int(i.id) in self.created_items:
-            self.created_items.remove(int(i.id))
-        if int(i.id) in self.modified_items:
-            self.modified_items.remove(int(i.id))
+        self.deleted_items.append((i.prefix, int(i.id)))
+        self.created_items[:] = [tup for tup in self.created_items if not int(i.id) == tup[1] and not i.prefix == tup[0]]
+        self.modified_items[:] = [tup for tup in self.modified_items if not int(i.id) == tup[1] and not i.prefix == tup[0]]
 
 # Retrieve the lists of updates (create, modify, delete)
     def get_saved_changes(self):
@@ -69,19 +102,66 @@ class Uow():
         modified_items = []
         deleted_items = []
 
-        for item_id in self.created_items:
-            for pair in self.mapped_items:
-                if item_id == pair[0]:
-                    created_items.append(pair[1])
+        for created_pair in self.created_items:
+            if created_pair[0] == "bb":
+                for mapped_pair in self.mapped_book_items:
+                    if created_pair[1] == mapped_pair[0]:
+                        created_items.append(mapped_pair[1])
+            elif created_pair[0] == "ma":
+                for mapped_pair in self.mapped_magazine_items:
+                    if created_pair[1] == mapped_pair[0]:
+                        created_items.append(mapped_pair[1])
 
-        for item_id in self.modified_items:
-            for pair in self.mapped_items:
-                if item_id == pair[0]:
-                    modified_items.append(pair[1])
+            elif created_pair[0] == "mo":
+                for mapped_pair in self.mapped_movie_items:
+                    if created_pair[1] == mapped_pair[0]:
+                        created_items.append(mapped_pair[1])
 
-        for item_id in self.deleted_items:
-            for pair in self.mapped_items:
-                if item_id == pair[0]:
-                    deleted_items.append(pair[1])
+            elif created_pair[0] == "mu":
+                for mapped_pair in self.mapped_music_items:
+                    if created_pair[1] == mapped_pair[0]:
+                        created_items.append(mapped_pair[1])
+
+        for modified_pair in self.modified_items:
+            if modified_pair[0] == "bb":
+                for mapped_pair in self.mapped_book_items:
+                    if modified_pair[1] == mapped_pair[0]:
+                        modified_items.append(mapped_pair[1])
+
+            elif modified_pair[0] == "ma":
+                for mapped_pair in self.mapped_magazine_items:
+                    if modified_pair[1] == mapped_pair[0]:
+                        modified_items.append(mapped_pair[1])
+            
+            elif modified_pair[0] == "mo":
+                for mapped_pair in self.mapped_movie_items:
+                    if modified_pair[1] == mapped_pair[0]:
+                        modified_items.append(mapped_pair[1])
+
+            elif modified_pair[0] == "mu":
+                for mapped_pair in self.mapped_movie_items:
+                    if modified_pair[1] == mapped_pair[0]:
+                        modified_items.append(mapped_pair[1])
+
+        for deleted_pair in self.deleted_items:
+            if deleted_pair[0] == "bb":
+                for mapped_pair in self.mapped_book_items:
+                    if deleted_pair[1] == mapped_pair[0]:
+                        deleted_items.append(mapped_pair[1])
+
+            elif deleted_pair[0] == "ma":
+                for mapped_pair in self.mapped_magazine_items:
+                    if deleted_pair[1] == mapped_pair[0]:
+                        deleted_items.append(mapped_pair[1])
+
+            elif deleted_pair[0] == "mo":
+                for mapped_pair in self.mapped_movie_items:
+                    if deleted_pair[1] == mapped_pair[0]:
+                        deleted_items.append(mapped_pair[1])
+
+            elif deleted_pair[0] == "mu":
+                for mapped_pair in self.mapped_music_items:
+                    if deleted_pair[1] == mapped_pair[0]:
+                        deleted_items.append(mapped_pair[1])
 
         return [created_items, modified_items, deleted_items]

@@ -23,6 +23,7 @@ class ItemMapper:
             return self.uow.get_saved_changes()
 
     def find(self, item_id):
+        print("find item_id: ", item_id)
         if self.uow is None:
             self.uow = Uow()
         item = self.uow.get(item_id)
