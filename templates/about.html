@@ -20,7 +20,7 @@
         <tr>
             <td><img src="/static/presentation/img/Bob Says Hi.png" alt="Bob Says Hi"/></td>
             <td><img src="/static/presentation/img/Bob is Lost.png" alt="Bob Is Lost"/></td>
-            <td>Before his first visit to Booker LMS, Bob chose an email and password he would use to gain access to the system. After receiving confirmation of his account activation, he arrived here, on this web application but has no clue how to navigate the system. Follow the steps below to find that out!</td>
+            <td>Bob visited the Booker Library yesterday and chose an email and password he would use to gain access to the on-line system. After his account being setup, he decided to visit, for the first time, the Booker LMS web application to choose an item to borrow. However, he has no clue how to navigate the system! Follow the steps below to find out how!</td>
         </tr>
         <tr>
             <th>Step 1: Go to the login page</th>
@@ -38,17 +38,20 @@
         </tr>
         <tr>
             <th>Step 3: Determine Scope of Access</th>
-            <td class="instruction">Are you like Alice and have an administrator account? Follow Alice and log in as explained above to view further instructions.</td>
+            <td class="instruction">Are you like Alice and have an administrator account? Log in as explained above and follow Alice to view further instructions.</td>
         </tr>
         <tr>
-            <th><button class="alice"><img src="static/presentation/img/Alice Says Follow Me.png"/></button></th>
-            <th>Hi, I am Alice! Follow me to get more instructions about how to navigate as an administrator.</th>  
+            <!--{% if session.admin == True %}
+                <th><a href="/about/admin_help"><button class="alice"><img src="static/presentation/img/Alice Says Follow Me.png"/></button></a></th>
+            {% else %}
+                <th><button class="alice"><img src="static/presentation/img/Alice Says Follow Me.png"/></button></th>
+            {% endif %}-->
+            <th>Hi, I am Alice! Log in, come back on this page and follow me to get more instructions about how to navigate as an administrator.</th>  
             <td></td>  
         </tr>
         <tr>
-            <td></td>
             <th>Step 4: [...] More instructions to follow once implementation is complete</th>
-            <td>Information to be added</td>
+            <td class="instuction">Information to be added</td>
         </tr>
         <tr>
             <td>Images to be added for explanations</td>
