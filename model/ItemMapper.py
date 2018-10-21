@@ -47,40 +47,40 @@ class ItemMapper:
         item = self.uow.get(item_id)
         item_prefix = item.prefix
         if item_prefix == "bb":
-            item.title = form.title
-            item.author = form.author
-            item.format = form.format
-            item.pages = form.pages
-            item.publisher = form.publisher
-            item.language = form.language
-            item.isbn10 = form.isbn10
-            item.isbn13 = form.isbn13
+            item.title = form.title.data
+            item.author = form.author.data
+            item.format = form.format.data
+            item.pages = form.pages.data
+            item.publisher = form.publisher.data
+            item.language = form.language.data
+            item.isbn10 = form.isbn10.data
+            item.isbn13 = form.isbn13.data
 
         elif item_prefix == "ma":
-            item.title = form.title
-            item.publisher = form.publishe
-            item.language = form.language
-            item.isbn10 = form.isbn1
-            item.isbn13 = form.isbn13
+            item.title = form.title.data
+            item.publisher = form.publisher.data
+            item.language = form.language.data
+            item.isbn10 = form.isbn1.data
+            item.isbn13 = form.isbn13.data
 
         elif item_prefix == "mo":
-            item.title = form.title
-            item.director = form.director
-            item.producers = form.producers
-            item.actors = form.actors
-            item.language = form.language
-            item.subs = form.subtitles
-            item.dubbed = form.dubbed
-            item.release_date = form.releaseDate
-            item.runtime = form.runtime
+            item.title = form.title.data
+            item.director = form.director.data
+            item.producers = form.producers.data
+            item.actors = form.actors.data
+            item.language = form.language.data
+            item.subs = form.subtitles.data
+            item.dubbed = form.dubbed.data
+            item.release_date = form.releaseDate.data
+            item.runtime = form.runtime.data
 
         elif item_prefix == "mu":
-            item.title = form.title
-            item.media_type = form.media_type
-            item.artist = form.artist
-            item.label = form.label
-            item.release_date = form.releaseDate
-            item.asin = form.asin
+            item.title = form.title.data
+            item.media_type = form.media_type.data
+            item.artist = form.artist.data
+            item.label = form.label.data
+            item.release_date = form.releaseDate.data
+            item.asin = form.asin.data
 
         self.uow.register_dirty(item)
 
