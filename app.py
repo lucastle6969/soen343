@@ -224,6 +224,13 @@ def catalog_manager(item):
     return redirect(url_for('login'))
 
 
+@app.route('/admin_tools/catalog_manager/commit', methods=['POST'])
+def save_changes():
+    item_mapper.end()
+    flash('All changes have been saved')
+    return redirect(url_for('admin_tools', tool='catalog_manager'))
+
+
 @app.route('/logout')
 def logout():
     user_registry.remove_from_active(session['user_id'])
