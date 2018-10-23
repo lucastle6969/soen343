@@ -79,7 +79,7 @@ class Catalog:
                 item.producers = mod_item.producers
                 item.actors = mod_item.actors
                 item.language = mod_item.language
-                item.subs = mod_item.subtitles
+                item.subs = mod_item.subs
                 item.dubbed = mod_item.dubbed
                 item.release_date = mod_item.releaseDate
                 item.runtime = mod_item.runtime
