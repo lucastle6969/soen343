@@ -81,7 +81,7 @@ class Catalog:
                 item.language = mod_item.language
                 item.subs = mod_item.subs
                 item.dubbed = mod_item.dubbed
-                item.release_date = mod_item.releaseDate
+                item.release_date = mod_item.release_date
                 item.runtime = mod_item.runtime
 
             elif selected_item_prefix == "mu":
@@ -89,7 +89,7 @@ class Catalog:
                 item.media_type = mod_item.media_type
                 item.artist = mod_item.artist
                 item.label = mod_item.label
-                item.release_date = mod_item.releaseDate
+                item.release_date = mod_item.release_date
                 item.asin = mod_item.asin
 
     def delete_items(self, items):
