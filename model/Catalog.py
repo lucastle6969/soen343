@@ -19,7 +19,7 @@ class Catalog:
         pass
 
     def populate(self, books, magazines, movies, music):
-        
+
         if books is not None:
             for book in books:
                 self.item_catalog.append(Book(book[0], book[1], "bb", book[2], book[3], book[4], book[5], book[6], book[7], book[8], book[9]))

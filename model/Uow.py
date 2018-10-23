@@ -60,7 +60,6 @@ class Uow():
         if i.prefix == "bb":
             self.mapped_book_items[:] = [tup for tup in self.mapped_book_items if not int(i.id) == tup[0]]
             self.mapped_book_items.append((int(i.id), i))
-                
 
         elif i.prefix == "ma":
             self.mapped_magazine_items[:] = [tup for tup in self.mapped_magazine_items if not int(i.id) == tup[0]]
@@ -91,7 +90,14 @@ class Uow():
             self.modified_items.append((i.prefix, int(i.id)))
 
     def register_deleted(self, i):
-        self.deleted_items.append((i.prefix, int(i.id)))
+        item_found = False
+        for item in self.deleted_items:
+            if item.prefix == i.prefix and int(i.id) == int(item.id):
+                item_found = True
+
+        if not item_found:
+            self.deleted_items.append((i.prefix, int(i.id)))
+
         self.created_items[:] = [tup for tup in self.created_items if not int(i.id) == tup[1] and not i.prefix == tup[0]]
         self.modified_items[:] = [tup for tup in self.modified_items if not int(i.id) == tup[1] and not i.prefix == tup[0]]
 
@@ -140,7 +146,7 @@ class Uow():
                         modified_items.append(mapped_pair[1])
 
             elif modified_pair[0] == "mu":
-                for mapped_pair in self.mapped_movie_items:
+                for mapped_pair in self.mapped_music_items:
                     if modified_pair[1] == mapped_pair[0]:
                         modified_items.append(mapped_pair[1])
 
