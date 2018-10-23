@@ -202,11 +202,12 @@ def delete_item(id):
         flash('Item not found.')
         return redirect(url_for('admin_tools', tool='catalog_manager'))
 
+
 @app.route('/admin_tools/delete_entry/cancel/<item_id>', methods=['POST'])
 def cancel_deletion(item_id):
     cancel_success = item_mapper.cancel_deletion(item_id)
     if cancel_success:
-        flash(f'Item (id {id}) will not be deleted.', 'success')
+        flash(f'Item (id {item_id}) will not be deleted.', 'success')
         return redirect(url_for('admin_tools', tool='catalog_manager'))
     else:
         flash('Item not found.')
