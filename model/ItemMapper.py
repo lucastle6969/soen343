@@ -47,6 +47,10 @@ class ItemMapper:
         self.uow.register_deleted(item)
         return True
 
+    def cancel_deletion(self, item_id):
+        item_to_cancel = self.uow.get(item_id)
+        self.uow.cancel_deletion(item_to_cancel)
+
     def set_item(self, item_id, form):
         item = self.uow.get(item_id)
         item_prefix = item.prefix

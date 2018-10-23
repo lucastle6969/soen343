@@ -101,6 +101,9 @@ class Uow():
         self.created_items[:] = [tup for tup in self.created_items if not int(i.id) == tup[1] and not i.prefix == tup[0]]
         self.modified_items[:] = [tup for tup in self.modified_items if not int(i.id) == tup[1] and not i.prefix == tup[0]]
 
+    def cancel_deletion(self, item_to_cancel):
+        self.deleted_items[:] = [tup for tup in self.deleted_items if not int(item_to_cancel.id) == tup[1] and not item_to_cancel.prefix == tup[0]]
+
 # Retrieve the lists of updates (create, modify, delete)
     def get_saved_changes(self):
         """Create lists of objects (unlike the similarly named
@@ -139,7 +142,7 @@ class Uow():
                 for mapped_pair in self.mapped_magazine_items:
                     if modified_pair[1] == mapped_pair[0]:
                         modified_items.append(mapped_pair[1])
-            
+
             elif modified_pair[0] == "mo":
                 for mapped_pair in self.mapped_movie_items:
                     if modified_pair[1] == mapped_pair[0]:

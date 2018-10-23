@@ -93,10 +93,9 @@
                                 <td>{{x.isbn10}}</td>
                                 <td>{{x.isbn13}}</td>
                                 <td>{{x.status}}</td>
-                                <td><form method="GET" action="/admin_tools/edit_entry/bb{{x.id}}">
-                                    <input type="submit" value="Edit" /></form></td>
-                                <td><form method="POST" action="/admin_tools/delete_entry/bb{{x.id}}">
-                                    <input type="submit" value="Delete" /></form></td>
+                                <td><form method="POST" action="/admin_tools/delete_entry/cancel/bb{{x.id}}">
+                                    <input type="submit" value="Cancel" /></form></td>
+                                <td></td>
                             </tr>
                         {% endif %}
                     {% endfor %}
@@ -199,10 +198,9 @@
                                 <td>{{x.isbn10}}</td>
                                 <td>{{x.isbn13}}</td>
                                 <td>{{x.status}}</td>
-                                <td><form method="GET" action="/admin_tools/edit_entry/ma{{x.id}}">
-                                    <input type="submit" value="Edit" /></form></td>
-                                <td><form method="POST" action="/admin_tools/delete_entry/ma{{x.id}}">
-                                    <input type="submit" value="Delete" /></form></td>
+                                <td><form method="POST" action="/admin_tools/delete_entry/cancel/ma{{x.id}}">
+                                    <input type="submit" value="Cancel" /></form></td>
+                                <td></td>
                             </tr>
                         {% endif %}
                     {% endfor %}
@@ -311,10 +309,9 @@
                                 <td>{{x.release_date}}</td>
                                 <td>{{x.runtime}}</td>
                                 <td>{{x.status}}</td>
-                                <td><form method="GET" action="/admin_tools/edit_entry/mo{{x.id}}">
-                                    <input type="submit" value="Edit" /></form></td>
-                                <td><form method="POST" action="/admin_tools/delete_entry/mo{{x.id}}">
-                                    <input type="submit" value="Delete" /></form></td>
+                                <td><form method="POST" action="/admin_tools/delete_entry/cancel/mo{{x.id}}">
+                                    <input type="submit" value="Cancel" /></form></td>
+                                <td></td>
                             </tr>
                         {% endif %}
                     {% endfor %}
@@ -422,10 +419,9 @@
                                 <td>{{x.release_date}}</td>
                                 <td>{{x.asin}}</td>
                                 <td>{{x.status}}</td>
-                                <td><form method="GET" action="/admin_tools/edit_entry/mu{{x.id}}">
-                                    <input type="submit" value="Edit" /></form></td>
-                                <td><form method="POST" action="/admin_tools/delete_entry/mu{{x.id}}">
-                                    <input type="submit" value="Delete" /></form></td>
+                                <td><form method="POST" action="/admin_tools/delete_entry/cancel/mu{{x.id}}">
+                                    <input type="submit" value="Cancel" /></form></td>
+                                <td></td>
                             </tr>
                         {% endif %}
                     {% endfor %}
