@@ -18,9 +18,13 @@ class Uow():
         prefix = item_id[0:2]
         int_id = int(item_id[2:])
         if prefix == "bb":
+            print("made it in the prefix of get UOW")
             for pair in self.mapped_book_items:
                 if pair[0] == int_id:
+                    print("found what you were looking for")
                     return pair[1]
+                else:
+                    print("couldn't find what you were looking for")
 
         elif prefix == "ma":
             for pair in self.mapped_magazine_items:
@@ -45,6 +49,7 @@ class Uow():
             i.id = self.temp_id_counter
         if i.prefix == "bb":
             self.mapped_book_items.append((int(i.id), i))
+            print("added a book to mapped_book_items: ", i.id)
         elif i.prefix == "ma":
             self.mapped_magazine_items.append((int(i.id), i))
         elif i.prefix == "mu":

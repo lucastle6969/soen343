@@ -23,15 +23,19 @@ class ItemMapper:
             return self.uow.get_saved_changes()
 
     def find(self, item_id):
-        print("find item_id: ", item_id)
         if self.uow is None:
             self.uow = Uow()
         item = self.uow.get(item_id)
-        if item is None:
+        if item is not None:
+            print("in item mapper find: Item was NOT none")
+            clone = deepcopy(item)
+            return clone
+        else:
             item = self.catalog.get_item_by_id(item_id)
-        clone = deepcopy(item)
-        self.uow.add(clone)
-        return clone
+            print("in item mapper find: Item was none")
+            clone = deepcopy(item)
+            self.uow.add(clone)
+            return clone
 
     def delete_item(self, item_id):
         if self.uow is None:
@@ -39,8 +43,9 @@ class ItemMapper:
         item = self.uow.get(item_id)
         if item is None:
             item = self.catalog.get_item_by_id(item_id)
-        clone = deepcopy(item)
-        self.uow.add(clone)
+            clone = deepcopy(item)
+            self.uow.add(clone)
+
         self.uow.register_deleted(item)
         return True
 
