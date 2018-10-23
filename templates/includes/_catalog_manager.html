@@ -57,10 +57,10 @@
             <!-- THIS WILL DEAL WITH MODIFIED ITEMS -->
                 {% if saved_changes[1] %}
                     {% for q in saved_changes[1] %}
-                        {% if x.item_id == q.item_id and q.prefix == 'bb' %}
+                        {% if x.id == q.id and q.prefix == 'bb' %}
                             {% if modified.update({'foo': True}) %}{% endif %}
                             <tr class="uow-modify">
-                                <td class="hidden">{{q.item_id}}</td>
+                                <td class="hidden">{{q.id}}</td>
                                 <td>{{q.title}}</td>
                                 <td>{{q.author}}</td>
                                 <td>{{q.format}}</td>
@@ -80,10 +80,10 @@
                 {% endif %}
                 {% if saved_changes[2] %}
                     {% for d in saved_changes[2] %}
-                        {% if d.item_id == x.item_id and d.prefix == 'bb' %}
+                        {% if d.id == x.id and d.prefix == 'bb' %}
                             {% if deleted.update({'foo': True}) %}{% endif %}
                             <tr class= "uow-delete">
-                                <td class="hidden">{{x.item_id}}</td>
+                                <td class="hidden">{{x.id}}</td>
                                 <td>{{x.title}}</td>
                                 <td>{{x.author}}</td>
                                 <td>{{x.format}}</td>
@@ -103,7 +103,7 @@
                 {% endif %}
                 {% if not modified.foo and not deleted.foo %}
                     <tr>
-                        <td class="hidden">{{x.item_id}}</td>
+                        <td class="hidden">{{x.id}}</td>
                         <td>{{x.title}}</td>
                         <td>{{x.author}}</td>
                         <td>{{x.format}}</td>
@@ -169,10 +169,10 @@
             <!-- THIS WILL DEAL WITH MODIFIED ITEMS -->
                 {% if saved_changes[1] %}
                     {% for q in saved_changes[1] %}
-                        {% if x.item_id == q.item_id and q.prefix == 'ma' %}
+                        {% if x.id == q.id and q.prefix == 'ma' %}
                             {% if modified.update({'foo': True}) %}{% endif %}
                             <tr class="uow-modify">
-                                <td class="hidden">{{q.item_id}}</td>
+                                <td class="hidden">{{q.id}}</td>
                                 <td>{{q.title}}</td>
                                 <td>{{q.publisher}}</td>
                                 <td>{{q.language}}</td>
@@ -189,10 +189,10 @@
                 {% endif %}
                 {% if saved_changes[2] %}
                     {% for d in saved_changes[2] %}
-                        {% if d.item_id == x.item_id and d.prefix == 'ma' %}
+                        {% if d.id == x.id and d.prefix == 'ma' %}
                             {% if deleted.update({'foo': True}) %}{% endif %}
                             <tr class= "uow-delete">
-                                <td class="hidden">{{x.item_id}}</td>
+                                <td class="hidden">{{x.id}}</td>
                                 <td>{{x.title}}</td>
                                 <td>{{x.publisher}}</td>
                                 <td>{{x.language}}</td>
@@ -209,7 +209,7 @@
                 {% endif %}
                 {% if (not saved_changes[1] and not saved_changes[2]) or (not modified.foo and not deleted.foo) %}
                     <tr>
-                        <td class="hidden">{{x.item_id}}</td>
+                        <td class="hidden">{{x.id}}</td>
                         <td>{{x.title}}</td>
                         <td>{{x.publisher}}</td>
                         <td>{{x.language}}</td>
@@ -273,10 +273,10 @@
             <!-- THIS WILL DEAL WITH MODIFIED ITEMS -->
                 {% if saved_changes[1] %}
                     {% for q in saved_changes[1] %}
-                        {% if x.item_id == q.item_id and q.prefix == 'mo' %}
+                        {% if x.id == q.id and q.prefix == 'mo' %}
                             {% if modified.update({'foo': True}) %}{% endif %}
                             <tr class="uow-modify">
-                                <td class="hidden">{{q.item_id}}</td>
+                                <td class="hidden">{{q.id}}</td>
                                 <td>{{q.title}}</td>
                                 <td>{{q.director}}</td>
                                 <td>{{q.producers}}</td>
@@ -297,10 +297,10 @@
                 {% endif %}
                 {% if saved_changes[2] %}
                     {% for d in saved_changes[2] %}
-                        {% if d.item_id == x.item_id and d.prefix == 'mo' %}
+                        {% if d.id == x.id and d.prefix == 'mo' %}
                             {% if deleted.update({'foo': True}) %}{% endif %}
                             <tr class= "uow-delete">
-                                <td class="hidden">{{x.item_id}}</td>
+                                <td class="hidden">{{x.id}}</td>
                                 <td>{{x.title}}</td>
                                 <td>{{x.director}}</td>
                                 <td>{{x.producers}}</td>
@@ -321,7 +321,7 @@
                 {% endif %}
                 {% if (not saved_changes[1] and not saved_changes[2]) or (not modified.foo and not deleted.foo) %}
                     <tr>
-                        <td class="hidden">{{x.item_id}}</td>
+                        <td class="hidden">{{x.id}}</td>
                         <td>{{x.title}}</td>
                         <td>{{x.director}}</td>
                         <td>{{x.producers}}</td>
@@ -390,10 +390,10 @@
             <!-- THIS WILL DEAL WITH MODIFIED ITEMS -->
                 {% if saved_changes[1] %}
                     {% for q in saved_changes[1] %}
-                        {% if x.item_id == q.item_id and q.prefix == 'mu' %}
+                        {% if x.id == q.id and q.prefix == 'mu' %}
                             {% if modified.update({'foo': True}) %}{% endif %}
                             <tr class="uow-modify">
-                                <td class="hidden">{{q.item_id}}</td>
+                                <td class="hidden">{{q.id}}</td>
                                 <td>{{q.media_type}}</td>
                                 <td>{{q.title}}</td>
                                 <td>{{q.artist}}</td>
@@ -411,10 +411,10 @@
                 {% endif %}
                 {% if saved_changes[2] %}
                     {% for d in saved_changes[2] %}
-                        {% if d.item_id == x.item_id and d.prefix == 'mu' %}
+                        {% if d.id == x.id and d.prefix == 'mu' %}
                             {% if deleted.update({'foo': True}) %}{% endif %}
                             <tr class= "uow-delete">
-                                <td class="hidden">{{x.item_id}}</td>
+                                <td class="hidden">{{x.id}}</td>
                                 <td>{{x.media_type}}</td>
                                 <td>{{x.title}}</td>
                                 <td>{{x.artist}}</td>
@@ -432,7 +432,7 @@
                 {% endif %}
                 {% if (not saved_changes[1] and not saved_changes[2]) or (not modified.foo and not deleted.foo) %}
                     <tr>
-                        <td class="hidden">{{x.item_id}}</td>
+                        <td class="hidden">{{x.id}}</td>
                         <td>{{x.media_type}}</td>
                         <td>{{x.title}}</td>
                         <td>{{x.artist}}</td>
