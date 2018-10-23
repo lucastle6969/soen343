@@ -246,3 +246,18 @@ class Tdg:
         for music in modified_music:
             cur.execute("UPDATE music SET title = %s, media_type = %s, artist = %s, label = %s, release_date = %s, asin = %s WHERE id = %s", (music.title, music.media_type, music.artist, music.label, music.release_date, music.asin, music.id))
         cur.close()
+
+    # [Testing] Used to verify add/remove/modify test objects
+    def get_last_inserted_id(self, table_name):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+
+        result = cur.execute("SELECT * FROM " + table_name + " ORDER BY id DESC LIMIT 1")
+        item_id = cur.fetchone()
+        cur.close()
+
+        if result > 0:
+            return item_id[0]
+        else:
+            item_id = False
+        return item_id
