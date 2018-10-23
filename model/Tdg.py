@@ -5,7 +5,6 @@ class Tdg:
     def __init__(self, app):
         self.mysql = MySQL()
 
-
         # Config MySQL
         app.config['MYSQL_DATABASE_USER'] = 'pomoroad_soen09'
         app.config['MYSQL_DATABASE_PASSWORD'] = 'discordApp343'
@@ -14,7 +13,6 @@ class Tdg:
 
         # init MYSQL
         self.mysql.init_app(app)
-        
 
     # User SQL Queries
 
@@ -49,7 +47,7 @@ class Tdg:
             return data
         else:
             data = False
-        
+
         return data
 
     def get_item_by_id(self, id):
@@ -194,18 +192,10 @@ class Tdg:
     def delete_books(self, deleted_books):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        # Delete first item (index 0) in the array from the database
-        cur.execute("DELETE * FROM book WHERE id = %s", (deleted_books[0].id))
-        # Remove first item from the array
-        deleted_books.pop(0)
-        # Tentative for/while loop to continuously remove first item from the database and then the array
-        """for row in deleted_books:
-            OR while deleted_books[0] is not None:
-            cur.execute("DELETE * FROM book WHERE id = %s", (row.id))
-            deleted_books.pop(0)"""
+        for book in deleted_books:
+            cur.execute("DELETE * FROM book WHERE id = %s", book.id)
+        # ideally a check if there were errors here and return a boolean to be handled by the mapper
         cur.close()
-        # Return updated array to controller (either with one less item or completely empty)
-        return deleted_books
 
     def delete_magazines(self, deleted_magazines):
         pass
@@ -220,19 +210,10 @@ class Tdg:
         connection = self.mysql.connect()
         cur = connection.cursor()
         # Update all columns for a specified item (the first in the array)
-        cur.execute("UPDATE book SET title = %s, author = %s, format = %s, pages = %s, publisher = %s, language = %s, isbn10 = %s, isbn13 = %s WHERE id = %s",
-                    (modified_books[0].title, modified_books[0].author, modified_books[0].format, modified_books[0].publisher, modified_books[0].language, modified_books[0].isbn10, modified_books[0].isbn13, modified_books[0].id))
-        # Remove first item from the array
-        modified_books.pop(0)
-        # Tentative for/while loop to continuously update first item from the database and then remove from the array
-        """for row in modified_books:
-            OR while modified_books[0] is not None:
-            cur.execute("UPDATE book SET title = %s, author = %s, format = %s, pages = %s, publisher = %s, language = %s, isbn10 = %s, isbn13 = %s WHERE id = %s",
-                        (modified_books[0].title, modified_books[0].author, modified_books[0].format, modified_books[0].publisher, modified_books[0].language, modified_books[0].isbn10, modified_books[0].isbn13, modified_books[0].id))
-            modified_books.pop(0)"""
+        for book in modified_books:
+            cur.execute("UPDATE book SET title = %s, author = %s, format = %s, pages = %s, publisher = %s, language = %s, isbn10 = %s, isbn13 = %s WHERE id = %s", (book.title, book.author, book.format, book.publisher, book.language, book.isbn10, book.isbn13, book.id))
+        # ideally a check if there were errors here and return a boolean to be handled by the mapper
         cur.close()
-        # Return updated array to controller (either with one less item or completely empty)
-        return modified_books
 
     def modify_magazines(self, modified_magazines):
         pass
