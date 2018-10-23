@@ -5,7 +5,7 @@ catalog = Catalog()
 
 # Tests whether a new book was successfully modified from the working memory
 def test_modify_book_working_memory(new_book):
-    catalog.insert_item(new_book)
+    catalog.add_item(new_book)
 
     new_title = "Till Human Voices Wake Us"
     new_book.title = new_title
@@ -19,7 +19,7 @@ def test_modify_book_working_memory(new_book):
 
 # Tests whether a new magazine was successfully modified from the working memory
 def test_modify_magazine_working_memory(new_magazine):
-    catalog.insert_item(new_magazine)
+    catalog.add_item(new_magazine)
 
     new_title = "Night Flight"
     new_magazine.title = new_title
@@ -33,7 +33,7 @@ def test_modify_magazine_working_memory(new_magazine):
 
 # Tests whether a new movie was successfully modified from the working memory
 def test_modify_movie_working_memory(new_movie):
-    catalog.insert_item(new_movie)
+    catalog.add_item(new_movie)
 
     new_title = "Rosewood Lane"
     new_movie.title = new_title
@@ -47,7 +47,7 @@ def test_modify_movie_working_memory(new_movie):
 
 # Tests whether a new music was successfully modified from the working memory
 def test_modify_music_working_memory(new_music):
-    catalog.insert_item(new_music)
+    catalog.add_item(new_music)
 
     new_title = "Marathon Man"
     new_music.title = new_title
