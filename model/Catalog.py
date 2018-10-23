@@ -98,9 +98,3 @@ class Catalog:
             item = self.get_item_by_id(item_id)
             if item is not None:
                 self.item_catalog.remove(item)
-
-    # [Testing] Used to remove objects added to catalog while testing
-    def delete_last_item(self):
-        if len(self.item_catalog) == 0:
-            return None
-        self.item_catalog = self.item_catalog[:-1]

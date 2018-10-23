@@ -107,6 +107,7 @@ class ItemMapper:
             self.uow = Uow()
         self.uow.add(book)
         self.uow.register_new(book)
+        return True
 
     def add_magazine(self, form):
         title = form.title.data
@@ -122,6 +123,7 @@ class ItemMapper:
             self.uow = Uow()
         self.uow.add(magazine)
         self.uow.register_new(magazine)
+        return True
 
     def add_movie(self, form):
         title = form.title.data
@@ -141,6 +143,7 @@ class ItemMapper:
             self.uow = Uow()
         self.uow.add(movie)
         self.uow.register_new(movie)
+        return True
 
     def add_music(self, form):
         media_type = form.media_type.data
@@ -157,6 +160,7 @@ class ItemMapper:
             self.uow = Uow()
         self.uow.add(music)
         self.uow.register_new(music)
+        return True
 
     def end(self):
         items_to_commit = self.uow.get_saved_changes()
