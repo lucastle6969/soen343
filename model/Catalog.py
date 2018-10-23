@@ -35,14 +35,6 @@ class Catalog:
             for item in music:
                 self.item_catalog.append(Music(item[0], item[1], "mu", item[2], item[3], item[4], item[5], item[6], item[7]))
 
-    # [Testing] This function is required for testing add/remove/edit
-    def insert_item(self, item):
-        if item is None:
-            return False
-
-        self.item_catalog.append(item)
-        return True
-
     # [Testing] Used to remove objects added to catalog while testing
     def delete_last_item(self):
         if len(self.item_catalog) == 0:
