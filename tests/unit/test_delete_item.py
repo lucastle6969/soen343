@@ -39,10 +39,3 @@ def test_remove_music_working_memory(new_music):
     catalog.delete_items([new_music])
     music = catalog.get_item_by_id(new_music.prefix + str(new_music.id))
     assert music is None
-
-
-def test_remove_book_persistence(new_book_form):
-    item_mapper.add_book(new_book_form)
-
-
-
