@@ -10,13 +10,14 @@ from model.Form import BookForm, MagazineForm, MovieForm, MusicForm
 # user created to be used for testing that are in the module scope
 @pytest.fixture(scope='module')
 def new_user():
-    user = User('23452','John','Doe','Sunset Avenue', 'johndoe@gmail.com','5142235523', 0, 'FoundationSeries')
+    user = User('23452', 'John', 'Doe', 'Sunset Avenue', 'johndoe@gmail.com', '5142235523', 0, 'FoundationSeries')
     return user
+
 
 # Book created for testing insertion, deletion and modification
 @pytest.fixture(scope='module')
 def new_book():
-    book = Book(324, "DARK MATTER", "bb", "Available", "Blake Crouch", "Hardcover", 300, "Penguin Books", "EN", 5914602904, 5914602904123)
+    book = Book(324, "DARK MATTER", "bb", "Available", "Blake Crouch", "Hardcover", 300, "VonRueden-Swaniawski", "EN", 5914602904, 5914602904123)
     return book
 
 
