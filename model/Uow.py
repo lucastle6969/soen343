@@ -91,8 +91,8 @@ class Uow():
 
     def register_deleted(self, i):
         item_found = False
-        for item in self.deleted_items:
-            if item.prefix == i.prefix and int(i.id) == int(item.id):
+        for pair in self.deleted_items:
+            if pair[0] == i.prefix and int(i.id) == pair[1]:
                 item_found = True
 
         if not item_found:
