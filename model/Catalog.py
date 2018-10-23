@@ -43,6 +43,12 @@ class Catalog:
         self.item_catalog.append(item)
         return True
 
+    # [Testing] Used to remove objects added to catalog while testing
+    def delete_last_item(self):
+        if len(self.item_catalog) == 0:
+            return None
+        self.item_catalog = self.item_catalog[:-1]
+
     def add_item(self, item):
         if item is not None:
             self.item_catalog.append(item)
@@ -92,9 +98,12 @@ class Catalog:
                 item.release_date = mod_item.release_date
                 item.asin = mod_item.asin
 
+        return True
+
     def delete_items(self, items):
         for del_item in items:
             item_id = del_item.prefix + str(del_item.id)
             item = self.get_item_by_id(item_id)
             if item is not None:
                 self.item_catalog.remove(item)
+        return True
