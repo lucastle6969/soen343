@@ -47,7 +47,7 @@ def new_music():
 def new_book_form():
     form = BookForm()
     form.title.data = "DARK MATTER"
-    form.author.data = "bb"
+    form.author.data = "Blake Crouch"
     form.format.data = "Hardcover"
     form.pages.data = 300
     form.publisher.data = "VonRueden-Swaniawski"
@@ -92,7 +92,7 @@ def new_music_form():
     form.title.data = "Man Is Not a Bird"
     form.media_type.data = "CD"
     form.artist.data = "Dianna Argo"
-    form.label.data = "Eleen Leavesley"
+    form.label.data = "Sony Music"
     form.releaseDate.data = "19/01/1976"
     form.asin.data = "B008FOB124"
     return form
