@@ -27,12 +27,10 @@ class ItemMapper:
             self.uow = Uow()
         item = self.uow.get(item_id)
         if item is not None:
-            print("in item mapper find: Item was NOT none")
             clone = deepcopy(item)
             return clone
         else:
             item = self.catalog.get_item_by_id(item_id)
-            print("in item mapper find: Item was none")
             clone = deepcopy(item)
             self.uow.add(clone)
             return clone

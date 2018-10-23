@@ -16,28 +16,28 @@ def new_user():
 # Book created for testing insertion, deletion and modification
 @pytest.fixture(scope='module')
 def new_book():
-    book = Book("DARK MATTER", "bb", 324, "avail", "Blake Crouch", "Hardcover", "300", "EN", "VonRueden-Swaniawski", 5914602904, "5914602904123")
+    book = Book(324, "DARK MATTER", "bb", "Available", "Blake Crouch", "Hardcover", 300, "Penguin Books", "EN", 5914602904, 5914602904123)
     return book
 
 
 # Magazine created for testing insertion, deletion and modification
 @pytest.fixture(scope='module')
 def new_magazine():
-    magazine = Magazine("The UFO Incident", "ma", 333, "avail", "Kuhic Ferry", "EN", 7464072294, 7464072294123)
+    magazine = Magazine(333, "The UFO Incident", "ma", "avail", "Kuhic Ferry", "EN", 7464072294, 7464072294123)
     return magazine
 
 
 # Movie created for testing insertion, deletion and modification
 @pytest.fixture(scope='module')
 def new_movie():
-    movie = Movie("Man Is Not a Bird", "mo", 434, "avail", "Gorden Kermon", "Skiles Swaniawski", "Eleen Leavesley", "EN", "None", "None", "18/10/2018", "2h30")
+    movie = Movie(434, "Man Is Not a Bird", "mo", "avail", "Gorden Kermon", "Skiles Swaniawski", "Eleen Leavesley", "EN", "None", "None", "18/10/2018", "2h30")
     return movie
 
 
 # Music created for testing insertion, deletion and modification
 @pytest.fixture(scope='module')
 def new_music():
-    music = Music("Boiling Point", "mu", 331, "avail", "CD", "Dianna Argo", "Sony Music", "19/01/1976", "B008FOB124")
+    music = Music(331, "Boiling Point", "mu", "avail", "CD", "Dianna Argo", "Sony Music", "19/01/1976", "B008FOB124")
     return music
 
 

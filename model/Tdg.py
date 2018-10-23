@@ -193,7 +193,7 @@ class Tdg:
         connection = self.mysql.connect()
         cur = connection.cursor()
         for book in deleted_books:
-            cur.execute("DELETE * FROM book WHERE id = %s", book.id)
+            cur.execute("DELETE FROM book WHERE id = %s", book.id)
         # ideally a check if there were errors here and return a boolean to be handled by the mapper
         cur.close()
 
@@ -211,7 +211,7 @@ class Tdg:
         cur = connection.cursor()
         # Update all columns for a specified item (the first in the array)
         for book in modified_books:
-            cur.execute("UPDATE book SET title = %s, author = %s, format = %s, pages = %s, publisher = %s, language = %s, isbn10 = %s, isbn13 = %s WHERE id = %s", (book.title, book.author, book.format, book.publisher, book.language, book.isbn10, book.isbn13, book.id))
+            cur.execute("UPDATE book SET title = %s, author = %s, format = %s, pages = %s, publisher = %s, language = %s, isbn10 = %s, isbn13 = %s WHERE id = %s", (book.title, book.author, book.format, book.pages, book.publisher, book.language, book.isbn10, book.isbn13, book.id))
         # ideally a check if there were errors here and return a boolean to be handled by the mapper
         cur.close()
 
