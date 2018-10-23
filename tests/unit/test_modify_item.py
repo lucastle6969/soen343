@@ -4,12 +4,12 @@ catalog = Catalog()
 
 
 # Tests whether a new book was successfully modified from the working memory
-def test_modify_book_working_memory(new_book, new_book_form):
+def test_modify_book_working_memory(new_book):
     catalog.insert_item(new_book)
 
     new_title = "Till Human Voices Wake Us"
-    new_book_form.title.data = new_title
-    catalog.edit_items([new_book_form])
+    new_book.title = new_title
+    catalog.edit_items([new_book])
 
     book = catalog.get_item_by_id(new_book.prefix + str(new_book.id))
 
@@ -18,12 +18,12 @@ def test_modify_book_working_memory(new_book, new_book_form):
 
 
 # Tests whether a new magazine was successfully modified from the working memory
-def test_modify_magazine_working_memory(new_magazine, new_magazine_form):
+def test_modify_magazine_working_memory(new_magazine):
     catalog.insert_item(new_magazine)
 
     new_title = "Night Flight"
-    new_magazine_form.title.data = new_title
-    catalog.edit_items([new_magazine_form])
+    new_magazine.title = new_title
+    catalog.edit_items([new_magazine])
 
     magazine = catalog.get_item_by_id(new_magazine.prefix + str(new_magazine.id))
 
@@ -32,12 +32,12 @@ def test_modify_magazine_working_memory(new_magazine, new_magazine_form):
 
 
 # Tests whether a new movie was successfully modified from the working memory
-def test_modify_movie_working_memory(new_movie, new_movie_form):
+def test_modify_movie_working_memory(new_movie):
     catalog.insert_item(new_movie)
 
     new_title = "Rosewood Lane"
-    new_movie_form.title.data = new_title
-    catalog.edit_items([new_movie_form])
+    new_movie.title = new_title
+    catalog.edit_items([new_movie])
 
     movie = catalog.get_item_by_id(new_movie.prefix + str(new_movie.id))
 
@@ -46,12 +46,12 @@ def test_modify_movie_working_memory(new_movie, new_movie_form):
 
 
 # Tests whether a new music was successfully modified from the working memory
-def test_modify_music_working_memory(new_music, new_music_form):
+def test_modify_music_working_memory(new_music):
     catalog.insert_item(new_music)
 
     new_title = "Marathon Man"
-    new_music_form.title.data = new_title
-    catalog.edit_items([new_music_form])
+    new_music.title = new_title
+    catalog.edit_items([new_music])
 
     music = catalog.get_item_by_id(new_music.prefix + str(new_music.id))
 
