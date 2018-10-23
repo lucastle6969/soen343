@@ -227,10 +227,22 @@ class Tdg:
         cur.close()
 
     def modify_magazines(self, modified_magazines):
-        pass
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        for magazine in modified_magazines:
+            cur.execute("UPDATE magazine SET title = %s, publisher = %s, language = %s, isbn10 = %s, isbn13 = %s WHERE id = %s", (magazine.title, magazine.publisher, magazine.language, magazine.isbn10, magazine.isbn13, magazine.id))
+        cur.close()
 
     def modify_movies(self, modified_movies):
-        pass
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        for movie in modified_movies:
+            cur.execute("UPDATE movie SET title = %s, director = %s, producers = %s, actors = %s, language = %s, subs = %s, dubbed = %s, release_date = %s, runtime = %s WHERE id = %s", (movie.title, movie.director, movie.producers, movie.actors, movie.language, movie.subs, movie.dubbed, movie.release_date, movie.runtime, movie.id))
+        cur.close()
 
     def modify_music(self, modified_music):
-        pass
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        for music in modified_music:
+            cur.execute("UPDATE music SET title = %s, media_type = %s, artist = %s, label = %s, release_date = %s, asin = %s WHERE id = %s", (music.title, music.media_type, music.artist, music.label, music.release_date, music.asin, music.id))
+        cur.close()

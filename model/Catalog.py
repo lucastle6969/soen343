@@ -68,9 +68,9 @@ class Catalog:
 
             elif selected_item_prefix == "ma":
                 item.title = mod_item.title
-                item.publisher = mod_item.publishe
+                item.publisher = mod_item.publisher
                 item.language = mod_item.language
-                item.isbn10 = mod_item.isbn1
+                item.isbn10 = mod_item.isbn10
                 item.isbn13 = mod_item.isbn13
 
             elif selected_item_prefix == "mo":

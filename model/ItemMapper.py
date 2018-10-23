@@ -64,7 +64,7 @@ class ItemMapper:
             item.title = form.title.data
             item.publisher = form.publisher.data
             item.language = form.language.data
-            item.isbn10 = form.isbn1.data
+            item.isbn10 = form.isbn10.data
             item.isbn13 = form.isbn13.data
 
         elif item_prefix == "mo":
@@ -91,7 +91,7 @@ class ItemMapper:
     def add_book(self, form):
         title = form.title.data
         prefix = "bb"
-        status = "avail"
+        status = "Available"
         author = form.author.data
         book_format = form.format.data
         pages = form.pages.data
@@ -111,7 +111,7 @@ class ItemMapper:
         title = form.title.data
         publisher = form.publisher.data
         prefix = "ma"
-        status = "avail"
+        status = "Available"
         language = form.language.data
         isbn10 = form.isbn10.data
         isbn13 = form.isbn13.data
@@ -126,7 +126,7 @@ class ItemMapper:
     def add_movie(self, form):
         title = form.title.data
         prefix = "mo"
-        status = "avail"
+        status = "Available"
         director = form.director.data
         producers = form.producers.data
         actors = form.actors.data
@@ -147,7 +147,7 @@ class ItemMapper:
         media_type = form.media_type.data
         title = form.title.data
         prefix = "mu"
-        status = "avail"
+        status = "Available"
         artist = form.artist.data
         label = form.label.data
         release_date = form.releaseDate.data
