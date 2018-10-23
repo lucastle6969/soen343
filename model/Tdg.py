@@ -193,25 +193,36 @@ class Tdg:
         connection = self.mysql.connect()
         cur = connection.cursor()
         for book in deleted_books:
-            cur.execute("DELETE * FROM book WHERE id = %s", book.id)
+            cur.execute("DELETE FROM book WHERE id = %s", book.id)
         # ideally a check if there were errors here and return a boolean to be handled by the mapper
         cur.close()
 
     def delete_magazines(self, deleted_magazines):
-        pass
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        for magazine in deleted_magazines:
+            cur.execute("DELETE FROM magazine WHERE id = %s", magazine.id)
+        cur.close()
 
     def delete_movies(self, deleted_movies):
-        pass
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        for movie in deleted_movies:
+            cur.execute("DELETE FROM movie WHERE id = %s", movie.id)
+        cur.close()
 
     def delete_music(self, deleted_music):
-        pass
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        for music in deleted_music:
+            cur.execute("DELETE FROM music WHERE id = %s", music.id)
+        cur.close()
 
     def modify_books(self, modified_books):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        # Update all columns for a specified item (the first in the array)
         for book in modified_books:
-            cur.execute("UPDATE book SET title = %s, author = %s, format = %s, pages = %s, publisher = %s, language = %s, isbn10 = %s, isbn13 = %s WHERE id = %s", (book.title, book.author, book.format, book.publisher, book.language, book.isbn10, book.isbn13, book.id))
+            cur.execute("UPDATE book SET title = %s, author = %s, format = %s, pages = %s, publisher = %s, language = %s, isbn10 = %s, isbn13 = %s WHERE id = %s", (book.title, book.author, book.format, book.pages, book.publisher, book.language, book.isbn10, book.isbn13, book.id))
         # ideally a check if there were errors here and return a boolean to be handled by the mapper
         cur.close()
 
