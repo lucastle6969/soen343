@@ -98,11 +98,11 @@ class Uow():
         if not item_found:
             self.deleted_items.append((i.prefix, int(i.id)))
 
-        self.created_items[:] = [tup for tup in self.created_items if not int(i.id) == tup[1] and not i.prefix == tup[0]]
-        self.modified_items[:] = [tup for tup in self.modified_items if not int(i.id) == tup[1] and not i.prefix == tup[0]]
+        self.created_items[:] = [tup for tup in self.created_items if not (int(i.id) == tup[1] and i.prefix == tup[0])]
+        self.modified_items[:] = [tup for tup in self.modified_items if not (int(i.id) == tup[1] and i.prefix == tup[0])]
 
     def cancel_deletion(self, item_to_cancel):
-        self.deleted_items[:] = [tup for tup in self.deleted_items if not int(item_to_cancel.id) == tup[1] and not item_to_cancel.prefix == tup[0]]
+        self.deleted_items[:] = [tup for tup in self.deleted_items if not (int(item_to_cancel.id) == tup[1] and item_to_cancel.prefix == tup[0])]
 
 # Retrieve the lists of updates (create, modify, delete)
     def get_saved_changes(self):
