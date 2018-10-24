@@ -106,7 +106,28 @@ td, th {
     padding: 8px;
 }
 
-tr:nth-child(even) {
-    background-color: #dddddd;
+.uow-added {
+    background-color: green;
 }
 
+.uow-modify {
+    background-color: yellow;
+}
+
+.uow-delete {
+    background-color: red;
+}
+
+.hidden {
+    display: none;
+}
+
+.btnSubmit2 {
+    width: 100%;
+    border-radius: 1rem;
+    padding: 1.5%;
+    border: none;
+    cursor: pointer;
+    background-color: #0062cc;
+    color: white;
+}

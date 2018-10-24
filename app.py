@@ -1,6 +1,6 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, request
 from model.Tdg import Tdg
-from model.Catalog import Catalog
+from model.ItemMapper import ItemMapper
 from model.UserRegistry import UserRegistry
 from passlib.hash import sha256_crypt
 from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, Forms
@@ -10,10 +10,9 @@ import time
 
 app = Flask(__name__)
 tdg = Tdg(app)
-global catalog
-catalog = Catalog()
 user_registry = UserRegistry()
 user_registry.populate(tdg.get_all_users())
+item_mapper = ItemMapper(tdg)
 
 
 @app.before_request
@@ -65,7 +64,7 @@ def login():
 
                 flash('You are now logged in', 'success')
                 return redirect(url_for('home'))
-                
+
             else:
                 error = 'Invalid login'
                 app.logger.info('NOT MATCHED')
@@ -109,8 +108,8 @@ def register(request_, tool):
 def add_book(request_):
     form = BookForm(request_.form)
     if request_.method == 'POST' and form.validate():
-        catalog.add_item("Book", form)
-        flash('Book was successfully added', 'success')
+        item_mapper.add_book(form)
+        flash('Book is ready to be added - save changes', 'success')
         return redirect('/admin_tools/catalog_manager')
     else:
         return render_template('admin_tools.html', item='add_book', form=form)
@@ -119,8 +118,8 @@ def add_book(request_):
 def add_magazine(request_):
     form = MagazineForm(request_.form)
     if request_.method == 'POST' and form.validate():
-        catalog.add_item("Magazine", form)
-        flash('Magazine was successfully added', 'success')
+        item_mapper.add_magazine(form)
+        flash('Magazine is ready to be added - save changes', 'success')
         return redirect('/admin_tools/catalog_manager')
     else:
         return render_template('admin_tools.html', item='add_magazine', form=form)
@@ -129,8 +128,8 @@ def add_magazine(request_):
 def add_movie(request_):
     form = MovieForm(request_.form)
     if request_.method == 'POST' and form.validate():
-        catalog.add_item("Movie", form)
-        flash('Movie was successfully added', 'success')
+        item_mapper.add_movie(form)
+        flash('Movie is ready to be added - save changes', 'success')
         return redirect('/admin_tools/catalog_manager')
     else:
         return render_template('admin_tools.html', item='add_movie', form=form)
@@ -139,8 +138,8 @@ def add_movie(request_):
 def add_music(request_):
     form = MusicForm(request_.form)
     if request_.method == 'POST' and form.validate():
-        catalog.add_item("Music", form)
-        flash('Music was successfully added', 'success')
+        item_mapper.add_music(form)
+        flash('Music is ready to be added - save changes', 'success')
         return redirect('/admin_tools/catalog_manager')
     else:
         return render_template('admin_tools.html', item='add_music', form=form)
@@ -164,10 +163,9 @@ def admin_tools(tool):
             elif tool == 'create_admin' or tool == 'create_client':
                 return register(request, tool)
             elif tool == 'catalog_manager':
-                return render_template('admin_tools.html', tool=tool, catalog=catalog)
+                return render_template('admin_tools.html', tool=tool, catalog=item_mapper.get_catalog(), saved_changes=item_mapper.get_saved_changes())
             elif tool == 'view_users':
-                list_of_users = user_registry.get_all_users()
-                return render_template('admin_tools.html', tool=tool, list_of_users=list_of_users)
+                return render_template('admin_tools.html', tool=tool, list_of_users=user_registry.get_all_users())
         else:
             flash('invalid tool')
             return render_template('admin_tools.html')
@@ -178,14 +176,14 @@ def admin_tools(tool):
 @app.route('/admin_tools/edit_entry/<item_id>', methods=['GET', 'POST'])
 def edit_entry(item_id):
     # Obtain selected item from catalog
-    item_selected = catalog.get_item_by_id(item_id)
+    item_selected = item_mapper.find(item_id)
     selected_item_type = item_selected.prefix
 
     # the Forms class has a getFormForItemType() which creates a form for the item type selected
     form = Forms.get_form_for_item_type(selected_item_type, request.form)
 
-    if request.method == 'POST': 
-        catalog.edit_item(item_id, form)
+    if request.method == 'POST':
+        item_mapper.set_item(item_id, form)
         return redirect('/admin_tools/catalog_manager')
     else:
         # Forms class has a getFormData() which returns a preloaded form with the data of the selected item
@@ -196,9 +194,20 @@ def edit_entry(item_id):
 
 @app.route('/admin_tools/delete_entry/<id>',  methods=['POST'])
 def delete_item(id):
-    delete_success = catalog.delete_item(id)
+    delete_success = item_mapper.delete_item(id)
     if delete_success:
-        flash(f'Item (id {id}) deleted.', 'success')
+        flash(f'Item (id {id}) is ready to be deleted. - save changes', 'success')
+        return redirect(url_for('admin_tools', tool='catalog_manager'))
+    else:
+        flash('Item not found.')
+        return redirect(url_for('admin_tools', tool='catalog_manager'))
+
+
+@app.route('/admin_tools/delete_entry/cancel/<item_id>', methods=['POST'])
+def cancel_deletion(item_id):
+    cancel_success = item_mapper.cancel_deletion(item_id)
+    if cancel_success:
+        flash(f'Item (id {item_id}) will not be deleted.', 'success')
         return redirect(url_for('admin_tools', tool='catalog_manager'))
     else:
         flash('Item not found.')
@@ -224,6 +233,13 @@ def catalog_manager(item):
             return render_template('admin_tools.html')
     flash('You must be logged in as an admin to view this page')
     return redirect(url_for('login'))
+
+
+@app.route('/admin_tools/catalog_manager/commit', methods=['POST'])
+def save_changes():
+    item_mapper.end()
+    flash('All changes have been saved')
+    return redirect(url_for('admin_tools', tool='catalog_manager'))
 
 
 @app.route('/logout')
