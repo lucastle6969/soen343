@@ -14,25 +14,24 @@ class Uow():
 
         self.temp_id_counter = 0
 
-    def get(self, item_id):
-        prefix = item_id[0:2]
-        int_id = int(item_id[2:])
-        if prefix == "bb":
+    def get(self, item_prefix, item_id):
+        int_id = int(item_id)
+        if item_prefix == "bb":
             for pair in self.mapped_book_items:
                 if pair[0] == int_id:
                     return pair[1]
 
-        elif prefix == "ma":
+        elif item_prefix == "ma":
             for pair in self.mapped_magazine_items:
                 if pair[0] == int_id:
                     return pair[1]
 
-        elif prefix == "mo":
+        elif item_prefix == "mo":
             for pair in self.mapped_movie_items:
                 if pair[0] == int_id:
                     return pair[1]
 
-        elif prefix == "mu":
+        elif item_prefix == "mu":
             for pair in self.mapped_music_items:
                 if pair[0] == int_id:
                     return pair[1]

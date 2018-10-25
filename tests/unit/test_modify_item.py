@@ -11,7 +11,7 @@ def test_modify_book_working_memory(new_book):
     new_book.title = new_title
     catalog.edit_items([new_book])
 
-    book = catalog.get_item_by_id(new_book.prefix + str(new_book.id))
+    book = catalog.get_item_by_id(new_book.prefix, new_book.id)
 
     assert book.title == new_title
     catalog.delete_last_item()
@@ -25,7 +25,7 @@ def test_modify_magazine_working_memory(new_magazine):
     new_magazine.title = new_title
     catalog.edit_items([new_magazine])
 
-    magazine = catalog.get_item_by_id(new_magazine.prefix + str(new_magazine.id))
+    magazine = catalog.get_item_by_id(new_magazine.prefix, new_magazine.id)
 
     assert magazine.title == new_title
     catalog.delete_last_item()
@@ -39,7 +39,7 @@ def test_modify_movie_working_memory(new_movie):
     new_movie.title = new_title
     catalog.edit_items([new_movie])
 
-    movie = catalog.get_item_by_id(new_movie.prefix + str(new_movie.id))
+    movie = catalog.get_item_by_id(new_movie.prefix, new_movie.id)
 
     assert movie.title == new_title
     catalog.delete_last_item()
@@ -53,7 +53,7 @@ def test_modify_music_working_memory(new_music):
     new_music.title = new_title
     catalog.edit_items([new_music])
 
-    music = catalog.get_item_by_id(new_music.prefix + str(new_music.id))
+    music = catalog.get_item_by_id(new_music.prefix, new_music.id)
 
     assert music.title == new_title
     catalog.delete_last_item()

@@ -6,17 +6,13 @@ class Catalog:
     def __init__(self):
         self.item_catalog = []
 
-    def get_item_by_id(self, item_id):
-        int_id = int(item_id[2:])
-        prefix = item_id[0:2]
+    def get_item_by_id(self, item_prefix, item_id):
+        int_id = int(item_id)
 
         for item in self.item_catalog:
-            if item.id == int_id and item.prefix == prefix:
+            if item.id == int_id and item.prefix == item_prefix:
                 return item
         return None
-
-    def get_all_items(self):
-        pass
 
     def populate(self, books, magazines, movies, music):
 
@@ -47,14 +43,11 @@ class Catalog:
 
     def edit_items(self, items):
         for mod_item in items:
-            item_id = mod_item.prefix + str(mod_item.id)
-            item = self.get_item_by_id(item_id)
+            item = self.get_item_by_id(mod_item.prefix, mod_item.id)
             if item is None:
                 pass
 
-            selected_item_prefix = mod_item.prefix
-
-            if selected_item_prefix == "bb":
+            if mod_item.prefix == "bb":
                 item.title = mod_item.title
                 item.author = mod_item.author
                 item.format = mod_item.format
@@ -64,14 +57,14 @@ class Catalog:
                 item.isbn10 = mod_item.isbn10
                 item.isbn13 = mod_item.isbn13
 
-            elif selected_item_prefix == "ma":
+            elif mod_item.prefix == "ma":
                 item.title = mod_item.title
                 item.publisher = mod_item.publisher
                 item.language = mod_item.language
                 item.isbn10 = mod_item.isbn10
                 item.isbn13 = mod_item.isbn13
 
-            elif selected_item_prefix == "mo":
+            elif mod_item.prefix == "mo":
                 item.title = mod_item.title
                 item.director = mod_item.director
                 item.producers = mod_item.producers
@@ -82,7 +75,7 @@ class Catalog:
                 item.release_date = mod_item.release_date
                 item.runtime = mod_item.runtime
 
-            elif selected_item_prefix == "mu":
+            elif mod_item.prefix == "mu":
                 item.title = mod_item.title
                 item.media_type = mod_item.media_type
                 item.artist = mod_item.artist
@@ -94,8 +87,7 @@ class Catalog:
 
     def delete_items(self, items):
         for del_item in items:
-            item_id = del_item.prefix + str(del_item.id)
-            item = self.get_item_by_id(item_id)
+            item = self.get_item_by_id(del_item.prefix, del_item.id)
             if item is not None:
                 self.item_catalog.remove(item)
         return True

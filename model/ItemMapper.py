@@ -22,39 +22,39 @@ class ItemMapper:
         else:
             return self.uow.get_saved_changes()
 
-    def find(self, item_id):
+    def find(self, item_prefix, item_id):
         if self.uow is None:
             self.uow = Uow()
-        item = self.uow.get(item_id)
+        item = self.uow.get(item_prefix, item_id)
         if item is not None:
             clone = deepcopy(item)
             return clone
         else:
-            item = self.catalog.get_item_by_id(item_id)
+            item = self.catalog.get_item_by_id(item_prefix, item_id)
             clone = deepcopy(item)
             self.uow.add(clone)
             return clone
 
-    def delete_item(self, item_id):
+    def delete_item(self, item_prefix, item_id):
         if self.uow is None:
             self.uow = Uow()
-        item = self.uow.get(item_id)
+        item = self.uow.get(item_prefix, item_id)
         if item is None:
-            item = self.catalog.get_item_by_id(item_id)
+            item = self.catalog.get_item_by_id(item_prefix, item_id)
             clone = deepcopy(item)
             self.uow.add(clone)
 
         self.uow.register_deleted(item)
         return True
 
-    def cancel_deletion(self, item_id):
-        item_to_cancel = self.uow.get(item_id)
+    def cancel_deletion(self, item_prefix, item_id):
+        item_to_cancel = self.uow.get(item_prefix, item_id)
         self.uow.cancel_deletion(item_to_cancel)
         return True
 
-    def set_item(self, item_id, form):
-        item = self.uow.get(item_id)
-        item_prefix = item.prefix
+    def set_item(self, item_prefix, item_id, form):
+        item = self.uow.get(item_prefix, item_id)
+
         if item_prefix == "bb":
             item.title = form.title.data
             item.author = form.author.data
@@ -183,20 +183,16 @@ class ItemMapper:
         if items_to_commit[0] is not None:
             for item in items_to_commit[0]:
                 if item.prefix == "bb":
-                    item_id = self.tdg.add_book(item)
-                    item.id = item_id
+                    item.id = self.tdg.add_book(item)
                     self.catalog.add_item(item)
                 elif item.prefix == "ma":
-                    item_id = self.tdg.add_magazine(item)
-                    item.id = item_id
+                    item.id = self.tdg.add_magazine(item)
                     self.catalog.add_item(item)
                 elif item.prefix == "mo":
-                    item_id = self.tdg.add_movie(item)
-                    item.id = item_id
+                    item.id = self.tdg.add_movie(item)
                     self.catalog.add_item(item)
                 elif item.prefix == "mu":
-                    item_id = self.tdg.add_music(item)
-                    item.id = item_id
+                    item.id = self.tdg.add_music(item)
                     self.catalog.add_item(item)
 
         # Modify
