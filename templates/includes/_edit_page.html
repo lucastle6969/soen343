@@ -28,8 +28,10 @@
                 <div class="form-group text-white">
                     {{render_field(form.isbn13, class_="form-control")}}
                  </div>
-                <div class="form-group text-white">
-                    <input type="submit" class="btnSubmit" value="Modify" />
+                <div class="row form-group text-white">
+                    <input type="submit" class="col-md-5 btnSubmit" value="Modify" />
+                    <div class="col-md-2"></div>
+                    <a class="col-md-5 btnSubmit" id="cancel" href="/admin_tools/catalog_manager">Cancel</a>
                 </div>
             </form>
         {% elif prefix == "ma" %}
@@ -50,8 +52,10 @@
                 <div class="form-group text-white">
                     {{render_field(form.isbn13, class_="form-control")}}
                 </div>
-                <div class="form-group text-white">
-                    <input type="submit" class="btnSubmit" value="Modify" />
+                <div class="row form-group text-white">
+                    <input type="submit" class="col-md-5 btnSubmit" value="Modify" />
+                    <div class="col-md-2"></div>
+                    <a class="col-md-5 btnSubmit" id="cancel" href="/admin_tools/catalog_manager">Cancel</a>
                 </div>
             </form>
         {% elif prefix == "mu" %}
@@ -75,8 +79,10 @@
                 <div class="form-group text-white">
                     {{render_field(form.asin, class_="form-control")}}
                 </div>
-                <div class="form-group text-white">
-                    <input type="submit" class="btnSubmit" value="Modify" />
+                <div class="row form-group text-white">
+                    <input type="submit" class="col-md-5 btnSubmit" value="Modify" />
+                    <div class="col-md-2"></div>
+                    <a class="col-md-5 btnSubmit" id="cancel" href="/admin_tools/catalog_manager">Cancel</a>
                 </div>
             </form>
         {% elif prefix == "mo" %}
@@ -109,8 +115,10 @@
                 <div class="form-group text-white">
                     {{render_field(form.runtime, class_="form-control")}}
                 </div>
-                <div class="form-group text-white">
-                    <input type="submit" class="btnSubmit" value="Modify" />
+                <div class="row form-group text-white">
+                    <input type="submit" class="col-md-5 btnSubmit" value="Modify" />
+                    <div class="col-md-2"></div>
+                    <a class="col-md-5 btnSubmit" id="cancel" href="/admin_tools/catalog_manager">Cancel</a>
                 </div>
             </form>
         {% endif %}
