@@ -36,6 +36,7 @@
     border: none;
     cursor: pointer;
 }
+
 .login-form-1 .btnSubmit {
     font-weight: 600;
     color: #fff;
@@ -88,6 +89,11 @@
     -webkit-transition-duration: 0.3s; /* Safari */
     box-shadow: 10px 10px 5px #888888;
     z-index: 1;
+}
+
+#cancel {
+    color:red;
+    text-decoration:none;
 }
 
 #tools-title {
