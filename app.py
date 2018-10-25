@@ -45,23 +45,26 @@ def login():
         # Get Form Fields
         email = request.form['email']
         password_candidate = request.form['password']
-
         user = user_registry.get_user_by_email(email)
         if user:
-            # log user out if they are already logged in
-            user_registry.ensure_not_already_logged(user.id)
-            # add the user to the active user registry in the form of a tuple (user_id, timestamp)
-            timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
-            user_registry.enlist_active_user(user.id, timestamp)
-
-            # compare passwords
             if sha256_crypt.verify(password_candidate, user.password):
+                # log user out if they are already logged in
+                user_registry.ensure_not_already_logged(user.id)
                 app.logger.info('PASSWORD MATCHED')
                 session['logged_in'] = True
                 session['firstname'] = user.firstname
                 session['user_id'] = user.id
                 session['admin'] = user.admin
 
+            # add the user to the active user registry in the form of a tuple (user_id, timestamp)
+                timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+
+                if user_registry.check_another_admin():
+                    user_registry.enlist_active_user(user.id, timestamp)
+                    flash('Limited functionality', 'warning')
+                    return redirect(url_for('home'))
+
+                user_registry.enlist_active_user(user.id, timestamp)
                 flash('You are now logged in', 'success')
                 return redirect(url_for('home'))
 
