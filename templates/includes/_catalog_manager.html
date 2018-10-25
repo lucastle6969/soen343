@@ -70,9 +70,9 @@
                                 <td>{{q.isbn10}}</td>
                                 <td>{{q.isbn13}}</td>
                                 <td>{{q.status}}</td>
-                                <td><form method="GET" action="/admin_tools/edit_entry/bb{{q.id}}">
+                                <td><form method="GET" action="/admin_tools/edit_entry/{{q.prefix}}/{{q.id}}">
                                     <input type="submit" value="Edit" /></form></td>
-                                <td><form method="POST" action="/admin_tools/delete_entry/bb{{q.id}}">
+                                <td><form method="POST" action="/admin_tools/delete_entry/{{q.prefix}}/{{q.id}}">
                                     <input type="submit" value="Delete" /></form></td>
                             </tr>
                         {% endif %}
@@ -93,7 +93,7 @@
                                 <td>{{x.isbn10}}</td>
                                 <td>{{x.isbn13}}</td>
                                 <td>{{x.status}}</td>
-                                <td><form method="POST" action="/admin_tools/delete_entry/cancel/bb{{x.id}}">
+                                <td><form method="POST" action="/admin_tools/delete_entry/cancel/{{x.prefix}}/{{x.id}}">
                                     <input type="submit" value="Cancel" /></form></td>
                                 <td></td>
                             </tr>
@@ -112,9 +112,9 @@
                         <td>{{x.isbn10}}</td>
                         <td>{{x.isbn13}}</td>
                         <td>{{x.status}}</td>
-                        <td><form method="GET" action="/admin_tools/edit_entry/bb{{x.id}}">
+                        <td><form method="GET" action="/admin_tools/edit_entry/{{x.prefix}}/{{x.id}}">
                             <input type="submit" value="Edit" /></form></td>
-                        <td><form method="POST" action="/admin_tools/delete_entry/bb{{x.id}}">
+                        <td><form method="POST" action="/admin_tools/delete_entry/{{x.prefix}}/{{x.id}}">
                             <input type="submit" value="Delete" /></form></td>
                     </tr>
                 {% endif %}
@@ -134,9 +134,9 @@
                         <td>{{y.isbn10}}</td>
                         <td>{{y.isbn13}}</td>
                         <td>{{y.status}}</td>
-                        <td><form method="GET" action="/admin_tools/edit_entry/bb{{y.id}}">
+                        <td><form method="GET" action="/admin_tools/edit_entry/{{y.prefix}}/{{y.id}}">
                             <input type="submit" value="Edit" /></form></td>
-                        <td><form method="POST" action="/admin_tools/delete_entry/bb{{y.id}}">
+                        <td><form method="POST" action="/admin_tools/delete_entry/{{y.prefix}}/{{y.id}}">
                             <input type="submit" value="Delete" /></form></td>
                     </tr>
                     {% endif %}
@@ -178,9 +178,9 @@
                                 <td>{{q.isbn10}}</td>
                                 <td>{{q.isbn13}}</td>
                                 <td>{{q.status}}</td>
-                                <td><form method="GET" action="/admin_tools/edit_entry/ma{{q.id}}">
+                                <td><form method="GET" action="/admin_tools/edit_entry/{{q.prefix}}/{{q.id}}">
                                     <input type="submit" value="Edit" /></form></td>
-                                <td><form method="POST" action="/admin_tools/delete_entry/ma{{q.id}}">
+                                <td><form method="POST" action="/admin_tools/delete_entry/{{q.prefix}}/{{q.id}}">
                                     <input type="submit" value="Delete" /></form></td>
                             </tr>
                         {% endif %}
@@ -198,7 +198,7 @@
                                 <td>{{x.isbn10}}</td>
                                 <td>{{x.isbn13}}</td>
                                 <td>{{x.status}}</td>
-                                <td><form method="POST" action="/admin_tools/delete_entry/cancel/ma{{x.id}}">
+                                <td><form method="POST" action="/admin_tools/delete_entry/cancel/{{x.prefix}}/{{x.id}}">
                                     <input type="submit" value="Cancel" /></form></td>
                                 <td></td>
                             </tr>
@@ -214,9 +214,9 @@
                         <td>{{x.isbn10}}</td>
                         <td>{{x.isbn13}}</td>
                         <td>{{x.status}}</td>
-                        <td><form method="GET" action="/admin_tools/edit_entry/ma{{x.id}}">
+                        <td><form method="GET" action="/admin_tools/edit_entry/{{x.prefix}}/{{x.id}}">
                             <input type="submit" value="Edit" /></form></td>
-                        <td><form method="POST" action="/admin_tools/delete_entry/ma{{x.id}}">
+                        <td><form method="POST" action="/admin_tools/delete_entry/{{x.prefix}}/{{x.id}}">
                             <input type="submit" value="Delete" /></form></td>
                     </tr>
                 {% endif %}
@@ -233,9 +233,9 @@
                         <td>{{y.isbn10}}</td>
                         <td>{{y.isbn13}}</td>
                         <td>{{y.status}}</td>
-                        <td><form method="GET" action="/admin_tools/edit_entry/ma{{y.id}}">
+                        <td><form method="GET" action="/admin_tools/edit_entry/{{y.prefix}}/{{y.id}}">
                             <input type="submit" value="Edit" /></form></td>
-                        <td><form method="POST" action="/admin_tools/delete_entry/ma{{y.id}}">
+                        <td><form method="POST" action="/admin_tools/delete_entry/{{y.prefix}}/{{y.id}}">
                             <input type="submit" value="Delete" /></form></td>
                     </tr>
                     {% endif %}
@@ -285,9 +285,9 @@
                                 <td>{{q.release_date}}</td>
                                 <td>{{q.runtime}}</td>
                                 <td>{{q.status}}</td>
-                                <td><form method="GET" action="/admin_tools/edit_entry/mo{{q.id}}">
+                                <td><form method="GET" action="/admin_tools/edit_entry/{{q.prefix}}/{{q.id}}">
                                     <input type="submit" value="Edit" /></form></td>
-                                <td><form method="POST" action="/admin_tools/delete_entry/mo{{q.id}}">
+                                <td><form method="POST" action="/admin_tools/delete_entry/{{q.prefix}}/{{q.id}}">
                                     <input type="submit" value="Delete" /></form></td>
                             </tr>
                         {% endif %}
@@ -309,7 +309,7 @@
                                 <td>{{x.release_date}}</td>
                                 <td>{{x.runtime}}</td>
                                 <td>{{x.status}}</td>
-                                <td><form method="POST" action="/admin_tools/delete_entry/cancel/mo{{x.id}}">
+                                <td><form method="POST" action="/admin_tools/delete_entry/cancel/{{x.prefix}}/{{x.id}}">
                                     <input type="submit" value="Cancel" /></form></td>
                                 <td></td>
                             </tr>
@@ -329,9 +329,9 @@
                         <td>{{x.release_date}}</td>
                         <td>{{x.runtime}}</td>
                         <td>{{x.status}}</td>
-                        <td><form method="GET" action="/admin_tools/edit_entry/mo{{x.id}}">
+                        <td><form method="GET" action="/admin_tools/edit_entry/{{x.prefix}}/{{x.id}}">
                             <input type="submit" value="Edit" /></form></td>
-                        <td><form method="POST" action="/admin_tools/delete_entry/mo{{x.id}}">
+                        <td><form method="POST" action="/admin_tools/delete_entry/{{x.prefix}}/{{x.id}}">
                             <input type="submit" value="Delete" /></form></td>
                     </tr>
                 {% endif %}
@@ -352,9 +352,9 @@
                         <td>{{y.release_date}}</td>
                         <td>{{y.runtime}}</td>
                         <td>{{y.status}}</td>
-                        <td><form method="GET" action="/admin_tools/edit_entry/mo{{y.id}}">
+                        <td><form method="GET" action="/admin_tools/edit_entry/{{y.prefix}}/{{y.id}}">
                             <input type="submit" value="Edit" /></form></td>
-                        <td><form method="POST" action="/admin_tools/delete_entry/mo{{y.id}}">
+                        <td><form method="POST" action="/admin_tools/delete_entry/{{y.prefix}}/{{y.id}}">
                             <input type="submit" value="Delete" /></form></td>
                     </tr>
                     {% endif %}
@@ -398,9 +398,9 @@
                                 <td>{{q.release_date}}</td>
                                 <td>{{q.asin}}</td>
                                 <td>{{q.status}}</td>
-                                <td><form method="GET" action="/admin_tools/edit_entry/mu{{q.id}}">
+                                <td><form method="GET" action="/admin_tools/edit_entry/{{q.prefix}}/{{q.id}}">
                                     <input type="submit" value="Edit" /></form></td>
-                                <td><form method="POST" action="/admin_tools/delete_entry/mu{{q.id}}">
+                                <td><form method="POST" action="/admin_tools/delete_entry/{{q.prefix}}/{{q.id}}">
                                     <input type="submit" value="Delete" /></form></td>
                             </tr>
                         {% endif %}
@@ -419,7 +419,7 @@
                                 <td>{{x.release_date}}</td>
                                 <td>{{x.asin}}</td>
                                 <td>{{x.status}}</td>
-                                <td><form method="POST" action="/admin_tools/delete_entry/cancel/mu{{x.id}}">
+                                <td><form method="POST" action="/admin_tools/delete_entry/cancel/{{x.prefix}}/{{x.id}}">
                                     <input type="submit" value="Cancel" /></form></td>
                                 <td></td>
                             </tr>
@@ -436,9 +436,9 @@
                         <td>{{x.release_date}}</td>
                         <td>{{x.asin}}</td>
                         <td>{{x.status}}</td>
-                        <td><form method="GET" action="/admin_tools/edit_entry/mu{{x.id}}">
+                        <td><form method="GET" action="/admin_tools/edit_entry/{{x.prefix}}/{{x.id}}">
                             <input type="submit" value="Edit" /></form></td>
-                        <td><form method="POST" action="/admin_tools/delete_entry/mu{{x.id}}">
+                        <td><form method="POST" action="/admin_tools/delete_entry/{{x.prefix}}/{{x.id}}">
                             <input type="submit" value="Delete" /></form></td>
                     </tr>
                 {% endif %}
@@ -456,9 +456,9 @@
                             <td>{{y.release_date}}</td>
                             <td>{{y.asin}}</td>
                             <td>{{y.status}}</td>
-                        <td><form method="GET" action="/admin_tools/edit_entry/mu{{y.id}}">
+                        <td><form method="GET" action="/admin_tools/edit_entry/{{y.prefix}}/{{y.id}}">
                             <input type="submit" value="Edit" /></form></td>
-                        <td><form method="POST" action="/admin_tools/delete_entry/mu{{y.id}}">
+                        <td><form method="POST" action="/admin_tools/delete_entry/{{y.prefix}}/{{y.id}}">
                             <input type="submit" value="Delete" /></form></td>
                     </tr>
                     {% endif %}

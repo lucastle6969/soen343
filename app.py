@@ -173,41 +173,40 @@ def admin_tools(tool):
     return redirect(url_for('login'))
 
 
-@app.route('/admin_tools/edit_entry/<item_id>', methods=['GET', 'POST'])
-def edit_entry(item_id):
+@app.route('/admin_tools/edit_entry/<item_prefix>/<item_id>', methods=['GET', 'POST'])
+def edit_entry(item_prefix, item_id):
     # Obtain selected item from catalog
-    item_selected = item_mapper.find(item_id)
-    selected_item_type = item_selected.prefix
+    item_selected = item_mapper.find(item_prefix, item_id)
 
     # the Forms class has a getFormForItemType() which creates a form for the item type selected
-    form = Forms.get_form_for_item_type(selected_item_type, request.form)
+    form = Forms.get_form_for_item_type(item_selected.prefix, request.form)
 
     if request.method == 'POST':
-        item_mapper.set_item(item_id, form)
+        item_mapper.set_item(item_prefix, item_id, form)
         return redirect('/admin_tools/catalog_manager')
     else:
         # Forms class has a getFormData() which returns a preloaded form with the data of the selected item
         form = Forms.get_form_data(item_selected, request)
-        return render_template('admin_tools.html', form=form, prefix=selected_item_type, id=item_selected.id,
+        return render_template('admin_tools.html', form=form, prefix=item_selected.prefix, id=item_selected.id,
                                item="edit")
 
 
-@app.route('/admin_tools/delete_entry/<item_id>', methods=['POST'])
-def delete_item(item_id):
-    delete_success = item_mapper.delete_item(item_id)
+@app.route('/admin_tools/delete_entry/<item_prefix>/<item_id>', methods=['POST'])
+def delete_item(item_prefix, item_id):
+    delete_success = item_mapper.delete_item(item_prefix, item_id)
     if delete_success:
-        flash(f'Item (id {item_id}) is ready to be deleted. - save changes', 'success')
+        flash(f'Item (id {item_prefix} {item_id}) is ready to be deleted. - save changes', 'success')
         return redirect(url_for('admin_tools', tool='catalog_manager'))
     else:
         flash('Item not found.')
         return redirect(url_for('admin_tools', tool='catalog_manager'))
 
 
-@app.route('/admin_tools/delete_entry/cancel/<item_id>', methods=['POST'])
-def cancel_deletion(item_id):
-    cancel_success = item_mapper.cancel_deletion(item_id)
+@app.route('/admin_tools/delete_entry/cancel/<item_prefix>/<item_id>', methods=['POST'])
+def cancel_deletion(item_prefix, item_id):
+    cancel_success = item_mapper.cancel_deletion(item_prefix, item_id)
     if cancel_success:
-        flash(f'Item (id {item_id}) will not be deleted.', 'success')
+        flash(f'Item (id {item_prefix} {item_id}) will not be deleted.', 'success')
         return redirect(url_for('admin_tools', tool='catalog_manager'))
     else:
         flash('Item not found.')

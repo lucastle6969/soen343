@@ -13,7 +13,7 @@ catalog = item_mapper.get_catalog()
 def test_remove_book_working_memory(new_book):
     catalog.add_item(new_book)
     catalog.delete_items([new_book])
-    book = catalog.get_item_by_id(new_book.prefix + str(new_book.id))
+    book = catalog.get_item_by_id(new_book.prefix, new_book.id)
     assert book is None
 
 
@@ -21,7 +21,7 @@ def test_remove_book_working_memory(new_book):
 def test_remove_magazine_working_memory(new_magazine):
     catalog.add_item(new_magazine)
     catalog.delete_items([new_magazine])
-    magazine = catalog.get_item_by_id(new_magazine.prefix + str(new_magazine.id))
+    magazine = catalog.get_item_by_id(new_magazine.prefix, new_magazine.id)
     assert magazine is None
 
 
@@ -29,7 +29,7 @@ def test_remove_magazine_working_memory(new_magazine):
 def test_remove_movie_working_memory(new_movie):
     catalog.add_item(new_movie)
     catalog.delete_items([new_movie])
-    movie = catalog.get_item_by_id(new_movie.prefix + str(new_movie.id))
+    movie = catalog.get_item_by_id(new_movie.prefix, new_movie.id)
     assert movie is None
 
 
@@ -37,5 +37,5 @@ def test_remove_movie_working_memory(new_movie):
 def test_remove_music_working_memory(new_music):
     catalog.add_item(new_music)
     catalog.delete_items([new_music])
-    music = catalog.get_item_by_id(new_music.prefix + str(new_music.id))
+    music = catalog.get_item_by_id(new_music.prefix, new_music.id)
     assert music is None
