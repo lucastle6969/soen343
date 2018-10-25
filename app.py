@@ -192,11 +192,11 @@ def edit_entry(item_id):
                                item="edit")
 
 
-@app.route('/admin_tools/delete_entry/<id>',  methods=['POST'])
-def delete_item(id):
-    delete_success = item_mapper.delete_item(id)
+@app.route('/admin_tools/delete_entry/<item_id>', methods=['POST'])
+def delete_item(item_id):
+    delete_success = item_mapper.delete_item(item_id)
     if delete_success:
-        flash(f'Item (id {id}) is ready to be deleted. - save changes', 'success')
+        flash(f'Item (id {item_id}) is ready to be deleted. - save changes', 'success')
         return redirect(url_for('admin_tools', tool='catalog_manager'))
     else:
         flash('Item not found.')
