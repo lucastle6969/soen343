@@ -60,7 +60,7 @@ def login():
                 timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
 
                 user_registry.enlist_active_user(user.id, timestamp)
-                if user_registry.check_another_admin(user.id, timestamp):
+                if user_registry.check_another_admin(user.id):
                     flash('Limited functionality', 'warning')
                     return redirect(url_for('home'))
 
@@ -150,9 +150,8 @@ def add_music(request_):
 
 @app.route('/admin_tools')
 def admin_tools_default():
-    timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
     if session['logged_in']:
-        if user_registry.validate_admin(session['user_id'], session['admin']) and not user_registry.check_another_admin(session['user_id'], timestamp):
+        if user_registry.validate_admin(session['user_id'], session['admin']) and not user_registry.check_another_admin(int(session['user_id'])):
             return render_template('admin_tools.html')
         flash("Limited functionality, cannot modify catalog.", "warning")
         return render_template('admin_tools.html', limited='limited')
