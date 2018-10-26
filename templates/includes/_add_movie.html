@@ -3,7 +3,9 @@
     <div class="col-md-12 login-form-2">
         <h3>Add Movie</h3>
         {% from "includes/_form_helpers.html" import render_field %}
+        
         <form method="POST" action="/admin_tools/catalog_manager/add_movie">
+            <h4>Please fill each required fields</h4>
             <div class="form-group text-white">
                 {{render_field(form.title, class_="form-control")}}
             </div>
@@ -24,12 +26,13 @@
             </div>
             <div class="form-group text-white">
                 {{render_field(form.dubbed, class_="form-control")}}
+                <p>* optional</p>
             </div>
             <div class="form-group text-white">
-                {{render_field(form.releaseDate, class_="form-control")}}
+                {{render_field(form.releaseDate, class_="form-control", placeholder="DD-MM-YYYY")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(form.runtime, class_="form-control")}}
+                {{render_field(form.runtime, class_="form-control", placeholder="In minutes")}}
             </div>
             <div class="row form-group text-white">
                 <input type="submit" class="col-md-5 btnSubmit" value="Add" />

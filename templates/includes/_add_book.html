@@ -3,7 +3,9 @@
     <div class="col-md-12 login-form-2">
         <h3>Add Book</h3>
         {% from "includes/_form_helpers.html" import render_field %}
+        
         <form method="POST" action="/admin_tools/catalog_manager/add_book">
+            <h4>Please fill each required fields</h4>
             <div class="form-group text-white">
                 {{render_field(form.title, class_="form-control")}}
             </div>
@@ -23,10 +25,10 @@
                 {{render_field(form.language, class_="form-control")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(form.isbn10, class_="form-control")}}
+                {{render_field(form.isbn10, class_="form-control", placeholder="10-digit number")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(form.isbn13, class_="form-control")}}
+                {{render_field(form.isbn13, class_="form-control", placeholder="13-digit number")}}
             </div>
             <div class="row form-group text-white">
                 <input type="submit" class="col-md-5 btnSubmit" value="Add" />
