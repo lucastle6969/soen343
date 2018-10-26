@@ -33,7 +33,6 @@ class UserRegistry:
         # log user out if they are already logged in
         self.active_user_registry[:] = [tup for tup in self.active_user_registry if not user_id == tup[0]]
 
-    # ADDED
     def check_another_admin(self, user_id, login_time):
         for active_user in self.active_user_registry:
             if active_user[0] != user_id:
