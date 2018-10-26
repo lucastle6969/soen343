@@ -3,7 +3,7 @@
         {% from "includes/_form_helpers.html" import render_field %}
         {% if prefix == "bb" %}
             <h3>Modify a book</h3>
-            <form method="POST" action="/admin_tools/edit_entry/{{id}}">
+            <form method="POST" action="/admin_tools/edit_entry/{{prefix}}/{{id}}">
                 <div class="form-group text-white">
                     {{render_field(form.title, class_="form-control")}}
                 </div>
@@ -28,13 +28,15 @@
                 <div class="form-group text-white">
                     {{render_field(form.isbn13, class_="form-control")}}
                  </div>
-                <div class="form-group text-white">
-                    <input type="submit" class="btnSubmit" value="Modify" />
+                <div class="row form-group text-white">
+                    <input type="submit" class="col-md-5 btnSubmit" value="Modify" />
+                    <div class="col-md-2"></div>
+                    <a class="col-md-5 btnSubmit" id="cancel" href="/admin_tools/catalog_manager">Cancel</a>
                 </div>
             </form>
         {% elif prefix == "ma" %}
             <h3>Modify a magazine</h3>
-            <form method="POST" action="/admin_tools/edit_entry/{{id}}">
+            <form method="POST" action="/admin_tools/edit_entry/{{prefix}}/{{id}}">
                 <div class="form-group text-white">
                     {{render_field(form.title, class_="form-control")}}
                 </div>
@@ -50,13 +52,15 @@
                 <div class="form-group text-white">
                     {{render_field(form.isbn13, class_="form-control")}}
                 </div>
-                <div class="form-group text-white">
-                    <input type="submit" class="btnSubmit" value="Modify" />
+                <div class="row form-group text-white">
+                    <input type="submit" class="col-md-5 btnSubmit" value="Modify" />
+                    <div class="col-md-2"></div>
+                    <a class="col-md-5 btnSubmit" id="cancel" href="/admin_tools/catalog_manager">Cancel</a>
                 </div>
             </form>
         {% elif prefix == "mu" %}
             <h3>Modify a music</h3>
-            <form method="POST" action="/admin_tools/edit_entry/{{id}}">
+            <form method="POST" action="/admin_tools/edit_entry/{{prefix}}/{{id}}">
                 <div class="form-group text-white">
                     {{render_field(form.title, class_="form-control")}}
                 </div>
@@ -75,13 +79,15 @@
                 <div class="form-group text-white">
                     {{render_field(form.asin, class_="form-control")}}
                 </div>
-                <div class="form-group text-white">
-                    <input type="submit" class="btnSubmit" value="Modify" />
+                <div class="row form-group text-white">
+                    <input type="submit" class="col-md-5 btnSubmit" value="Modify" />
+                    <div class="col-md-2"></div>
+                    <a class="col-md-5 btnSubmit" id="cancel" href="/admin_tools/catalog_manager">Cancel</a>
                 </div>
             </form>
         {% elif prefix == "mo" %}
             <h3>Modify a movie</h3>
-            <form method="POST" action="/admin_tools/edit_entry/{{id}}">
+            <form method="POST" action="/admin_tools/edit_entry/{{prefix}}/{{id}}">
                 <div class="form-group text-white">
                     {{render_field(form.title, class_="form-control")}}
                 </div>
@@ -109,8 +115,10 @@
                 <div class="form-group text-white">
                     {{render_field(form.runtime, class_="form-control")}}
                 </div>
-                <div class="form-group text-white">
-                    <input type="submit" class="btnSubmit" value="Modify" />
+                <div class="row form-group text-white">
+                    <input type="submit" class="col-md-5 btnSubmit" value="Modify" />
+                    <div class="col-md-2"></div>
+                    <a class="col-md-5 btnSubmit" id="cancel" href="/admin_tools/catalog_manager">Cancel</a>
                 </div>
             </form>
         {% endif %}

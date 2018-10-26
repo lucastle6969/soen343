@@ -10,34 +10,35 @@ from model.Form import BookForm, MagazineForm, MovieForm, MusicForm
 # user created to be used for testing that are in the module scope
 @pytest.fixture(scope='module')
 def new_user():
-    user = User('23452','John','Doe','Sunset Avenue', 'johndoe@gmail.com','5142235523', 0, 'FoundationSeries')
+    user = User('23452', 'John', 'Doe', 'Sunset Avenue', 'johndoe@gmail.com', '5142235523', 0, 'FoundationSeries')
     return user
+
 
 # Book created for testing insertion, deletion and modification
 @pytest.fixture(scope='module')
 def new_book():
-    book = Book("DARK MATTER", "bb", 324, "avail", "Blake Crouch", "Hardcover", "300", "EN", "VonRueden-Swaniawski", 5914602904, "5914602904123")
+    book = Book(324, "DARK MATTER", "bb", "Available", "Blake Crouch", "Hardcover", 300, "VonRueden-Swaniawski", "EN", 5914602904, 5914602904123)
     return book
 
 
 # Magazine created for testing insertion, deletion and modification
 @pytest.fixture(scope='module')
 def new_magazine():
-    magazine = Magazine("The UFO Incident", "ma", 333, "avail", "Kuhic Ferry", "EN", 7464072294, 7464072294123)
+    magazine = Magazine(333, "The UFO Incident", "ma", "avail", "Kuhic Ferry", "EN", 7464072294, 7464072294123)
     return magazine
 
 
 # Movie created for testing insertion, deletion and modification
 @pytest.fixture(scope='module')
 def new_movie():
-    movie = Movie("Man Is Not a Bird", "mo", 434, "avail", "Gorden Kermon", "Skiles Swaniawski", "Eleen Leavesley", "EN", "None", "None", "18/10/2018", "2h30")
+    movie = Movie(434, "Man Is Not a Bird", "mo", "avail", "Gorden Kermon", "Skiles Swaniawski", "Eleen Leavesley", "EN", "None", "None", "18/10/2018", "2h30")
     return movie
 
 
 # Music created for testing insertion, deletion and modification
 @pytest.fixture(scope='module')
 def new_music():
-    music = Music("Boiling Point", "mu", 331, "avail", "CD", "Dianna Argo", "Sony Music", "19/01/1976", "B008FOB124")
+    music = Music(331, "Boiling Point", "mu", "avail", "CD", "Dianna Argo", "Sony Music", "19/01/1976", "B008FOB124")
     return music
 
 
@@ -46,7 +47,7 @@ def new_music():
 def new_book_form():
     form = BookForm()
     form.title.data = "DARK MATTER"
-    form.author.data = "bb"
+    form.author.data = "Blake Crouch"
     form.format.data = "Hardcover"
     form.pages.data = 300
     form.publisher.data = "VonRueden-Swaniawski"
@@ -91,7 +92,7 @@ def new_music_form():
     form.title.data = "Man Is Not a Bird"
     form.media_type.data = "CD"
     form.artist.data = "Dianna Argo"
-    form.label.data = "Eleen Leavesley"
+    form.label.data = "Sony Music"
     form.releaseDate.data = "19/01/1976"
     form.asin.data = "B008FOB124"
     return form

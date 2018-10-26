@@ -36,6 +36,7 @@
     border: none;
     cursor: pointer;
 }
+
 .login-form-1 .btnSubmit {
     font-weight: 600;
     color: #fff;
@@ -90,6 +91,12 @@
     z-index: 1;
 }
 
+#cancel {
+    color:red;
+    text-align:center;
+    text-decoration:none;
+}
+
 #tools-title {
     font-size: 145%;
 }
@@ -106,8 +113,31 @@ td, th {
     padding: 8px;
 }
 
-tr:nth-child(even) {
-    background-color: #dddddd;
+.uow-added {
+    background-color: green;
+}
+
+.uow-modify {
+    background-color: yellow;
+}
+
+.uow-delete {
+    background-color: red;
+}
+
+.hidden {
+    display: none;
+}
+
+.btnSubmit2 {
+    width: 100%;
+    border-radius: 1rem;
+    padding: 1.5%;
+    border: none;
+    cursor: pointer;
+    background-color: #0062cc;
+    color: white;
+
 }
 
 .actors {
@@ -196,4 +226,4 @@ tr:nth-child(even) {
     transition-duration: 0.3s;
     -webkit-transition-duration: 0.3s; /* Safari */
     z-index: 1;
-}
+
