@@ -45,22 +45,25 @@ def login():
         # Get Form Fields
         email = request.form['email']
         password_candidate = request.form['password']
-
         user = user_registry.get_user_by_email(email)
         if user:
-            # log user out if they are already logged in
-            user_registry.ensure_not_already_logged(user.id)
-            # add the user to the active user registry in the form of a tuple (user_id, timestamp)
-            timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
-            user_registry.enlist_active_user(user.id, timestamp)
-
-            # compare passwords
             if sha256_crypt.verify(password_candidate, user.password):
+                # log user out if they are already logged in
+                user_registry.ensure_not_already_logged(user.id)
                 app.logger.info('PASSWORD MATCHED')
                 session['logged_in'] = True
                 session['firstname'] = user.firstname
                 session['user_id'] = user.id
                 session['admin'] = user.admin
+
+            # add the user to the active user registry in the form of a tuple (user_id, timestamp)
+                timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+
+                user_registry.enlist_active_user(user.id, timestamp)
+                if user_registry.check_another_admin(user.id):
+                    flash('Limited functionality', 'warning')
+                    return redirect(url_for('home'))
+
 
                 flash('You are now logged in', 'success')
                 return redirect(url_for('home'))
@@ -148,8 +151,10 @@ def add_music(request_):
 @app.route('/admin_tools')
 def admin_tools_default():
     if session['logged_in']:
-        if user_registry.validate_admin(session['user_id'], session['admin']):
+        if user_registry.validate_admin(session['user_id'], session['admin']) and not user_registry.check_another_admin(int(session['user_id'])):
             return render_template('admin_tools.html')
+        flash("Limited functionality, cannot modify catalog.", "warning")
+        return render_template('admin_tools.html', limited='limited')
     flash('You must be logged in as an admin to view this page.')
     return redirect(url_for('home'))
 
@@ -164,6 +169,8 @@ def admin_tools(tool):
                 return register(request, tool)
             elif tool == 'catalog_manager':
                 return render_template('admin_tools.html', tool=tool, catalog=item_mapper.get_catalog(), saved_changes=item_mapper.get_saved_changes())
+            elif tool == 'catalog_manager_limited':
+                return render_template('admin_tools.html', tool=tool, catalog=item_mapper.get_catalog())
             elif tool == 'view_users':
                 return render_template('admin_tools.html', tool=tool, list_of_users=user_registry.get_all_users())
         else:

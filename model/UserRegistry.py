@@ -33,6 +33,18 @@ class UserRegistry:
         # log user out if they are already logged in
         self.active_user_registry[:] = [tup for tup in self.active_user_registry if not user_id == tup[0]]
 
+    def check_another_admin(self, user_id):
+        login_time = None
+        for active_user in self.active_user_registry:
+            if active_user[0] == user_id:
+                login_time = active_user[1]
+        for active_user in self.active_user_registry:
+            if active_user[0] != user_id:
+                for registered_user in self.list_of_users:
+                    if active_user[0] == registered_user.id and login_time > active_user[1] and registered_user.admin:
+                        return True
+        return False
+
     def insert_user(self, user_id, firstname, lastname, address, email, phone, admin, password):
         self.list_of_users.append(User(user_id, firstname, lastname, address, email, phone, admin, password))
 
@@ -40,8 +52,7 @@ class UserRegistry:
         for user in self.list_of_users:
             if email == user.email:
                 return user
-            else:
-                return None
+        return None
 
     def validate_admin(self, user_id, admin):
         for tup in self.active_user_registry:
