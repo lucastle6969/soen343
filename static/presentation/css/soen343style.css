@@ -136,34 +136,46 @@ tr:nth-child(even) {
     border: transparent;
 }
 
-#what_is_booker_lms{
-    font-size: 145%;
-    font-weight: bold;
-}
-
-#what_do_i_do{
-    font-size: 145%;
-    font-weight: bold;
-}
-
-#who_made_this{
-    font-size: 145%;
-    font-weight: bold;
-}
-
-#about{
+.about_header{
     font-size: 145%;
     font-weight: bold;
 }
 
 .imgInstruction{
-    -webkit-column-span: all; /* Chrome, Safari, Opera */
-    column-span: all;
+    -webkit-column-span: 3; /* Chrome, Safari, Opera */
+    column-span: 3;
 }
 
 .instruction{
     -webkit-column-span: 2;
     column-span: 2;
+}
+
+
+.borderless table {
+    -webkit-column-span: 2;
+    column-span: 2;
+    border: 0;
+    border-bottom: 0;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+}
+
+.borderless td {
+    border: 0;
+    border-bottom: 0;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+}
+
+.borderless th{
+    border: 0;
+    border-bottom: 0;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
 }
 
 .alice {
