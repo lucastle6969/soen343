@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-    <span id="about">About</span>
+    <span class="about_header" id="about">About</span>
     <hr>
     <br>
     <a href="#what_is_booker_lms"><button class="actors"><img src="/static/presentation/img/Actor1trsp.png" alt="What Is Booker LMS?"/></button></a>
@@ -9,14 +9,14 @@
     <a href="#who_made_this"><button class="actors"><img src="/static/presentation/img/Actor3trsp.png" alt="Who Made This?"/></button></a>
     <br>
     <br>
-    <span id="what_is_booker_lms">What is Booker LMS?</span>
+    <span class="about_header" id="what_is_booker_lms">What is Booker LMS?</span>
     <hr>
     <p>Booker LMS, a Library Management System, provides on-line access to a Library catalog that any logged-in user may explore. The catalog is filled with wonders such as printed and media items, namely, books, magazines, music and movies. Pick and choose from the large selection of items of all genres and loan it to enjoy it. All items are loanable if available, at the exception of magazines.</p>
-    <span id="what_do_i_do">What do I do?</span>
+    <span class="about_header" id="what_do_i_do">What do I do?</span>
     <hr>
     <p>Welcome to Booker LMS, first time here? It is Bob's first time as well, so let us figure it out together.</p>
     <br>
-    <table class="intructions">
+    <table class="borderless">
         <tr>
             <td><img src="/static/presentation/img/Bob Says Hi.png" alt="Bob Says Hi"/></td>
             <td><img src="/static/presentation/img/Bob is Lost.png" alt="Bob Is Lost"/></td>
@@ -24,44 +24,56 @@
         </tr>
         <tr>
             <th>Step 1: Go to the login page</th>
-            <td class="instruction">To get to the login page, Bob must click on the Login button located, at the top of the page, on the navigation bar.</td>
+            <td class="borderless">To get to the login page, Bob must click on the Login button located, at the top of the page, on the navigation bar.</td>
         </tr>
         <tr>
-            <td class="imgInstruction">Image for Step 1</td>
+            <td class="borderless" colspan="3"><img src="/static/presentation/img/login_instruction.png" alt="Image for step 1"/></td>
         </tr>
         <tr>
             <th>Step 2: Log in</th>
             <td class="instruction">To gain access to the functionalities of the system, Bob must enter his email address and password in the appropriate fields and click the Login button right below.</td>
         </tr>
         <tr>
-            <td class="imgInstruction">Image for Step 2</td>
+            <td class="borderless" colspan="3"><img src="/static/presentation/img/email_pw_instruction.png" alt="Image for step 2"/></td>
         </tr>
         <tr>
             <th>Step 3: Determine Scope of Access</th>
             <td class="instruction">Are you like Alice and have an administrator account? Log in as explained above and follow Alice to view further instructions.</td>
         </tr>
         <tr>
-            <!--{% if session.admin == True %}
-                <th><a href="/about/admin_help"><button class="alice"><img src="static/presentation/img/Alice Says Follow Me.png"/></button></a></th>
-            {% else %}
-                <th><button class="alice"><img src="static/presentation/img/Alice Says Follow Me.png"/></button></th>
-            {% endif %}-->
-            <th>Hi, I am Alice! Log in, come back on this page and follow me to get more instructions about how to navigate as an administrator.</th>  
-            <td></td>  
+            <th class="borderless"> Hi, I am Alice! Log in, come back on this page and follow me to get more instructions about how to navigate as an administrator.</th>  
+            <td class="instruction">Coming soon !</td>  
         </tr>
-        <tr>
-            <th>Step 4: [...] More instructions to follow once implementation is complete</th>
-            <td class="instuction">Information to be added</td>
-        </tr>
-        <tr>
-            <td>Images to be added for explanations</td>
-            <td></td>
-            <td></td>
-        </tr>
-
     </table>
-    <span id="who_made_this">Who made this?</span>
+    <br>
+    <span class="about_header" id="who_made_this">Who made this?</span>
     <hr>
-    <p>Explain the project and who made it.</p>
+    <p>The Booker LMS System was designed, documented and implemented as part of a team project in Software Architecture and Design.
+        In the department of Computer Science and Software Engineering at Concordia University, Montreal, Canada. Fall 2018.
+    </p>
+    <br>
+    <h1 class="about_header">The Team:</h1>
+        <br>
+        Dmitry Feoktistov
+        <br>
+        Michael Gagnon
+        <br>
+        Carlo Gentile
+        <br>
+        Kevin Janeiro
+        <br>
+        Vineet Koppalkar
+        <br>
+        Petia Pavlova
+        <br>
+        Patrick Pin
+        <br>
+        Min Jun Suzanne Trieu Chao
+        <br>
+        Pierre Watine
+        <br>
+        <br>
+
+    
 
 {% endblock %}
