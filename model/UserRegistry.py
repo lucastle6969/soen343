@@ -34,11 +34,12 @@ class UserRegistry:
         self.active_user_registry[:] = [tup for tup in self.active_user_registry if not user_id == tup[0]]
 
     # ADDED
-    def check_another_admin(self):
+    def check_another_admin(self, user_id, login_time):
         for active_user in self.active_user_registry:
-            for registered_user in self.list_of_users:
-                if active_user[0] == registered_user.id and registered_user.admin:
-                    return True
+            if active_user[0] != user_id:
+                for registered_user in self.list_of_users:
+                    if active_user[0] == registered_user.id and login_time > active_user[1] and registered_user.admin:
+                        return True
         return False
 
     def insert_user(self, user_id, firstname, lastname, address, email, phone, admin, password):

@@ -59,12 +59,12 @@ def login():
             # add the user to the active user registry in the form of a tuple (user_id, timestamp)
                 timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
 
-                if user_registry.check_another_admin():
-                    user_registry.enlist_active_user(user.id, timestamp)
+                user_registry.enlist_active_user(user.id, timestamp)
+                if user_registry.check_another_admin(user.id, timestamp):
                     flash('Limited functionality', 'warning')
                     return redirect(url_for('home'))
 
-                user_registry.enlist_active_user(user.id, timestamp)
+
                 flash('You are now logged in', 'success')
                 return redirect(url_for('home'))
 
@@ -150,9 +150,12 @@ def add_music(request_):
 
 @app.route('/admin_tools')
 def admin_tools_default():
+    timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
     if session['logged_in']:
-        if user_registry.validate_admin(session['user_id'], session['admin']):
+        if user_registry.validate_admin(session['user_id'], session['admin']) and not user_registry.check_another_admin(session['user_id'], timestamp):
             return render_template('admin_tools.html')
+        flash("Limited functionality, cannot modify catalog.", "warning")
+        return render_template('admin_tools.html', limited='limited')
     flash('You must be logged in as an admin to view this page.')
     return redirect(url_for('home'))
 
@@ -167,6 +170,8 @@ def admin_tools(tool):
                 return register(request, tool)
             elif tool == 'catalog_manager':
                 return render_template('admin_tools.html', tool=tool, catalog=item_mapper.get_catalog(), saved_changes=item_mapper.get_saved_changes())
+            elif tool == 'catalog_manager_limited':
+                return render_template('admin_tools.html', tool=tool, catalog=item_mapper.get_catalog())
             elif tool == 'view_users':
                 return render_template('admin_tools.html', tool=tool, list_of_users=user_registry.get_all_users())
         else:

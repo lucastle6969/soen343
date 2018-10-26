@@ -1,0 +1,139 @@
+{% block body %}
+
+<h1> Catalog Manager </h1>
+
+
+{% if catalog %}
+<h3>Books</h3>
+<table class="table table-hover table-bordered">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Format</th>
+        <th>Pages</th>
+        <th>Publisher</th>
+        <th>Language</th>
+        <th>ISBN-10</th>
+        <th>ISBN-13</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for x in catalog.item_catalog %}
+    {% if x.prefix == "bb" %}
+    <tr>
+        <td>{{x.title}}</td>
+        <td>{{x.author}}</td>
+        <td>{{x.format}}</td>
+        <td>{{x.pages}}</td>
+        <td>{{x.publisher}}</td>
+        <td>{{x.language}}</td>
+        <td>{{x.isbn10}}</td>
+        <td>{{x.isbn13}}</td>
+        <td>{{x.status}}</td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+    </tbody>
+</table>
+<br />
+
+<h3>Magazines</h3>
+<table class="table table-hover table-bordered">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Publisher</th>
+        <th>Language</th>
+        <th>ISBN-10</th>
+        <th>ISBN-13</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for x in catalog.item_catalog %}
+    {% if x.prefix == "ma" %}
+    <tr>
+        <td>{{x.title}}</td>
+        <td>{{x.publisher}}</td>
+        <td>{{x.language}}</td>
+        <td>{{x.isbn10}}</td>
+        <td>{{x.isbn13}}</td>
+        <td>{{x.status}}</td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+    </tbody>
+</table>
+<br />
+
+<h3>Movies</h3>
+<table class="table table-hover table-bordered">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Director</th>
+        <th>Producers</th>
+        <th>Actors</th>
+        <th>Language</th>
+        <th>Subtitles</th>
+        <th>Dubbed</th>
+        <th>Release Date</th>
+        <th>Run Time</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for x in catalog.item_catalog %}
+    {% if x.prefix == "mo" %}
+    <tr>
+        <td>{{x.title}}</td>
+        <td>{{x.director}}</td>
+        <td>{{x.producers}}</td>
+        <td>{{x.actors}}</td>
+        <td>{{x.language}}</td>
+        <td>{{x.subs}}</td>
+        <td>{{x.dubbed}}</td>
+        <td>{{x.release_date}}</td>
+        <td>{{x.runtime}}</td>
+        <td>{{x.status}}</td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+    </tbody>
+</table>
+<br />
+
+<h3>Music</h3>
+<table class="table table-hover table-bordered">
+    <thead>
+    <tr>
+        <th>Type</th>
+        <th>Title</th>
+        <th>Artist</th>
+        <th>Label</th>
+        <th>Release Date</th>
+        <th>ASIN</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for x in catalog.item_catalog %}
+    {% if x.prefix == "mu" %}
+    <tr>
+        <td>{{x.media_type}}</td>
+        <td>{{x.title}}</td>
+        <td>{{x.artist}}</td>
+        <td>{{x.label}}</td>
+        <td>{{x.release_date}}</td>
+        <td>{{x.asin}}</td>
+        <td>{{x.status}}</td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+    </tbody>
+</table>
+{% endif%}
+
+{% endblock %}
