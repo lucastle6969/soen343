@@ -137,4 +137,96 @@ td, th {
     cursor: pointer;
     background-color: #0062cc;
     color: white;
+
 }
+
+.actors {
+    height: 380px;
+    width: 320px;
+    text-align: center;
+    vertical-align: middle;
+    -webkit-transform: scale(1, 1);
+    -ms-transform: scale(1, 1);
+    transform: scale(1, 1);
+    transition-duration: 0.3s;
+    -webkit-transition-duration: 0.3s; /* Safari */
+    background-color: white;
+    border: transparent;
+    margin: 20px 20px 20px 20px;
+}
+
+.actors:hover {
+	cursor: pointer;
+	-webkit-transform: scale(1.2, 1.2);
+    -ms-transform: scale(1.2, 1.2);
+    transform: scale(1.2, 1.2);
+    transition-duration: 0.3s;
+    -webkit-transition-duration: 0.3s; /* Safari */
+    z-index: 1;
+    border: transparent;
+}
+
+.about_header{
+    font-size: 145%;
+    font-weight: bold;
+}
+
+.imgInstruction{
+    -webkit-column-span: 3; /* Chrome, Safari, Opera */
+    column-span: 3;
+}
+
+.instruction{
+    -webkit-column-span: 2;
+    column-span: 2;
+}
+
+
+.borderless table {
+    -webkit-column-span: 2;
+    column-span: 2;
+    border: 0;
+    border-bottom: 0;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+}
+
+.borderless td {
+    border: 0;
+    border-bottom: 0;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+}
+
+.borderless th{
+    border: 0;
+    border-bottom: 0;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+}
+
+.borderless tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+.alice {
+    text-align: center;
+    vertical-align: middle;
+    -webkit-transform: scale(1, 1);
+    -ms-transform: scale(1, 1);
+    transform: scale(1, 1);
+    transition-duration: 0.3s;
+    -webkit-transition-duration: 0.3s; /* Safari */
+}
+
+.alice:hover {
+	cursor: pointer;
+	-webkit-transform: scale(1.2, 1.2);
+    -ms-transform: scale(1.2, 1.2);
+    transform: scale(1.2, 1.2);
+    transition-duration: 0.3s;
+    -webkit-transition-duration: 0.3s; /* Safari */
+    z-index: 1;
