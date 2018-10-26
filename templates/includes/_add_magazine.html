@@ -5,7 +5,6 @@
         {% from "includes/_form_helpers.html" import render_field %}
         
         <form method="POST" action="/admin_tools/catalog_manager/add_magazine">
-            <h4>Please fill each required fields</h4>
             <div class="form-group text-white">
                 {{render_field(form.title, class_="form-control")}}
             </div>

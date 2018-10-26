@@ -4,7 +4,6 @@
         <h3>Register Client</h3>
         {% from "includes/_form_helpers.html" import render_field %}
         <form method="POST" action="/admin_tools/create_client">
-            <h4>Please fill each required fields</h4>
             <div class="form-group text-white">
                 {{render_field(form.firstname, class_="form-control")}}
             </div>

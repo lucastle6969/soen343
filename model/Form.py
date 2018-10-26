@@ -2,7 +2,7 @@ from wtforms import ValidationError, Form, StringField, PasswordField, validator
 import datetime
 
 
-def _personName(form, field):
+def personName_(form, field):
     if any(char.isdigit() for char in field.data):
         raise ValidationError('Must not contain any numerical digit')
     if len(field.data)==0:
@@ -11,7 +11,7 @@ def _personName(form, field):
         raise ValidationError('This name is too long to be real')
 
 # Verifies if password does contain at least a letter and a digit
-def _password(form, field):
+def password_(form, field):
     num:int = 6
     if not any(char.isdigit() for char in field.data):
         raise ValidationError('Must contain at least 1 digit')
@@ -21,7 +21,7 @@ def _password(form, field):
         raise ValidationError('The password needs to be at least '+num+' characters')
 
 # Verifies phone number does not contain any letter
-def _phone_number(form, field):
+def phone_number_(form, field):
     if any(char.isalpha() for char in field.data):
         raise ValidationError('Phone numbers do not contain any alphabetic character')
 
@@ -44,14 +44,14 @@ def noDigit(form, field):
 
 
 class RegisterForm(Form):
-    firstname = StringField('First Name', [validators.DataRequired(), _personName])
-    lastname = StringField('Last Name', [validators.DataRequired(), _personName])
+    firstname = StringField('First Name', [validators.DataRequired(), personName_])
+    lastname = StringField('Last Name', [validators.DataRequired(), personName_])
     email = StringField('Email', [validators.DataRequired(), validators.Email()])
-    phone = StringField('Phone', [validators.DataRequired(), _phone_number,validators.Length(min=1, max=12)])
+    phone = StringField('Phone', [validators.DataRequired(), phone_number_,validators.Length(min=1, max=12)])
     address = StringField('Address', [validators.DataRequired(), validators.Length(min=6, max=50)])
     password = PasswordField('Password', [
         validators.DataRequired(), 
-        _password,
+        password_,
         validators.EqualTo('confirm', message='Passwords do not match')
     ])
     confirm = PasswordField('Confirmed Password')
@@ -59,7 +59,7 @@ class RegisterForm(Form):
 
 class BookForm(Form):
     title = StringField('Title', [validators.DataRequired(), validators.Length(min=1, max=300)])
-    author = StringField('Author', [validators.DataRequired(), _personName, noDigit, validators.Length(min=1, max=30)])
+    author = StringField('Author', [validators.DataRequired(), personName_, noDigit, validators.Length(min=1, max=30)])
     format = StringField('Format', [validators.DataRequired(), validators.Length(min=1, max=20)])
     pages = IntegerField('Pages', [validators.DataRequired(), number, validators.NumberRange(min=1, max=999999)])
     publisher = StringField('Publisher', [validators.DataRequired(), validators.Length(min=1, max=50)])
