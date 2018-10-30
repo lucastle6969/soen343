@@ -22,7 +22,7 @@ def password(form, field):
         if not any(char.isalpha() for char in field.data):
             raise ValidationError('Must contain at least 1 letter')
     if (len(field.data) < mininum_password_length):
-        raise ValidationError('The password needs to be at least ' + mininum_password_length + ' characters')
+        raise ValidationError('The password needs to be at least ' + str(mininum_password_length) + ' characters')
 
 
 # Verifies phone number does not contain any letter
@@ -61,6 +61,12 @@ def no_digit(form, field):
 def alpha_numeric(form, field):
     if type(field.data) is int:
         raise ValidationError('This field cannot contain only digits')
+    elif type(field.data) is str:
+        char_count = 0
+        if any(char.isalpha() for char in field.data):
+            char_count += 1
+        if char_count == 0:
+            raise ValidationError('This field cannot contain only digits')
 
 
 class RegisterForm(Form):
