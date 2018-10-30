@@ -6,10 +6,10 @@ from copy import deepcopy
 
 
 class ItemMapper:
-    def __init__(self, tdg):
+    def __init__(self, app):
         self.uow = None
         self.catalog = Catalog()
-        self.tdg = tdg
+        self.tdg = Tdg(app)
         self.catalog.populate(self.tdg.get_books(), self.tdg.get_magazines(),
                               self.tdg.get_movies(), self.tdg.get_music())
 

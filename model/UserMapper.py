@@ -1,11 +1,15 @@
 from flask import render_template, flash, redirect, url_for
 from passlib.hash import sha256_crypt
 from model.Form import RegisterForm
+from model.UserRegistry import UserRegistry
+from model.Tdg import Tdg
 
 
 class UserMapper:
-    def __init__(self, tdg):
-        self.tdg = tdg
+    def __init__(self, app):
+        self.tdg = Tdg(app)
+        self.user_registry = UserRegistry()
+        self.user_registry.populate(self.tdg.get_all_users())
 
     def register(self, request_, tool, user_registry):
         form = RegisterForm(request_.form)
@@ -32,3 +36,30 @@ class UserMapper:
                 return render_template('admin_tools.html', tool='create_admin', form=form)
 
         return render_template('admin_tools.html', tool=tool, form=form)
+
+    def check_restart_session(self, session):
+        return self.user_registry.check_restart_session(session)
+
+    def get_user_by_email(self, email):
+        return self.user_registry.get_user_by_email(email)
+
+    def ensure_not_already_logged(self, user_id):
+        self.user_registry.ensure_not_already_logged(user_id)
+
+    def enlist_active_user(self, user_id, timestamp):
+        self.user_registry.enlist_active_user(user_id, timestamp)
+
+    def check_another_admin(self, user_id):
+        return self.user_registry.check_another_admin(user_id)
+
+    def validate_admin(self, user_id, admin):
+        return self.user_registry.validate_admin(user_id, admin)
+
+    def get_active_users(self):
+        return self.user_registry.get_active_users()
+
+    def get_all_users(self):
+        return self.user_registry.get_all_users()
+
+    def remove_from_active(self, user_id):
+        self.user_registry.remove_from_active(user_id)
