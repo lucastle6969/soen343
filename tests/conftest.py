@@ -80,7 +80,7 @@ def new_movie_form():
     form.language.data = "EN"
     form.subtitles.data = "None"
     form.dubbed.data = "None"
-    form.releaseDate.data = "18/10/2018"
+    form.release_date.data = "18/10/2018"
     form.runtime.data = "2h30"
     return form
 
@@ -93,6 +93,6 @@ def new_music_form():
     form.media_type.data = "CD"
     form.artist.data = "Dianna Argo"
     form.label.data = "Sony Music"
-    form.releaseDate.data = "19/01/1976"
+    form.release_date.data = "19/01/1976"
     form.asin.data = "B008FOB124"
     return form
