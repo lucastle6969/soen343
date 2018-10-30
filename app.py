@@ -1,6 +1,7 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, request
 from model.Tdg import Tdg
 from model.ItemMapper import ItemMapper
+from model.UserMapper import UserMapper
 from model.UserRegistry import UserRegistry
 from passlib.hash import sha256_crypt
 from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, Forms
@@ -13,6 +14,7 @@ tdg = Tdg(app)
 user_registry = UserRegistry()
 user_registry.populate(tdg.get_all_users())
 item_mapper = ItemMapper(tdg)
+user_mapper = UserMapper(tdg)
 
 
 @app.before_request
@@ -80,34 +82,6 @@ def login():
     return render_template('login.html', form=form)
 
 
-def register(request_, tool):
-    form = RegisterForm(request_.form)
-    app.logger.info(tool)
-    if request_.method == 'POST' and form.validate():
-        if not (tdg.get_user_by_email(form.email.data)):
-            if tool == 'create_admin':
-                is_admin = 1
-            if tool == 'create_client':
-                is_admin = 0
-                
-            new_user_id = tdg.insert_user(form.firstname.data, form.lastname.data, form.address.data, form.email.data,
-                            form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
-            if new_user_id:
-                user_registry.insert_user(new_user_id, form.firstname.data, form.lastname.data, form.address.data, form.email.data,
-                            form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
-            if tool == 'create_admin':
-                flash('The new administrator has been registered', 'success')
-            if tool == 'create_client':
-                flash('The new client has been registered', 'success')
-
-            return redirect(url_for('admin_tools_default'))
-        else:
-            flash("This email has already been used.")
-            return render_template('admin_tools.html', tool='create_admin', form=form)
-
-    return render_template('admin_tools.html', tool=tool, form=form)
-
-
 def add_book(request_):
     form = BookForm(request_.form)
     if request_.method == 'POST' and form.validate():
@@ -166,7 +140,7 @@ def admin_tools(tool):
             if tool == 'view_active_registry':
                 return render_template('admin_tools.html', active_user_registry=user_registry.get_active_users(), tool=tool)
             elif tool == 'create_admin' or tool == 'create_client':
-                return register(request, tool)
+                return user_mapper.register(request, tool, user_registry)
             elif tool == 'catalog_manager':
                 return render_template('admin_tools.html', tool=tool, catalog=item_mapper.get_catalog(), saved_changes=item_mapper.get_saved_changes())
             elif tool == 'catalog_manager_limited':
