@@ -21,11 +21,11 @@ class Tdg:
         connection = self.mysql.connect()
         cur = connection.cursor()
         # Execute query
-        cur.execute("""INSERT INTO clientAdmin(id, firstName, lastName, physicalAddress, email, phone, admin, password)
+        cur.execute("""INSERT INTO user(id, first_name, last_name, address, email, phone, admin, password)
                     VALUES(NULL, %s, %s, %s, %s, %s, %s, %s)""",
                     (first_name, last_name, address, email, phone, admin, password))
         # get the new user id
-        result = cur.execute("SELECT * FROM clientAdmin WHERE email = %s", [email])
+        result = cur.execute("SELECT * FROM user WHERE email = %s", [email])
         new_user_id = cur.fetchone()
         cur.close()
         # send data back to the controller
@@ -39,7 +39,7 @@ class Tdg:
     def get_user_by_email(self, email):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT * FROM clientAdmin WHERE email = %s", [email])
+        result = cur.execute("SELECT * FROM user WHERE email = %s", [email])
         data = cur.fetchone()
         cur.close()
         # send data back to the controller
@@ -53,7 +53,7 @@ class Tdg:
     def get_item_by_id(self, id):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT * FROM clientAdmin WHERE id = %s", [id])
+        result = cur.execute("SELECT * FROM user WHERE id = %s", [id])
         data = cur.fetchone()
         cur.close()
         if result is None:
@@ -64,7 +64,7 @@ class Tdg:
     def get_all_users(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT * FROM clientAdmin WHERE 1")
+        result = cur.execute("SELECT * FROM user WHERE 1")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -110,9 +110,9 @@ class Tdg:
     def add_movie(self, movie):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        cur.execute("""INSERT INTO movie(title, director, producers, actors, language, subs, dubbed, release_date, runtime)
+        cur.execute("""INSERT INTO movie(title, director, producers, actors, language, subtitles, dubbed, release_date, runtime)
                     VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)""",
-                    (movie.title, movie.director, movie.producers, movie.actors, movie.language, movie.subs, movie.dubbed, movie.release_date, movie.runtime))
+                    (movie.title, movie.director, movie.producers, movie.actors, movie.language, movie.subtitles, movie.dubbed, movie.release_date, movie.runtime))
         result = cur.execute("SELECT * FROM movie ORDER BY id DESC LIMIT 1")
         new_movie_id = cur.fetchone()
         cur.close()
@@ -237,7 +237,7 @@ class Tdg:
         connection = self.mysql.connect()
         cur = connection.cursor()
         for movie in modified_movies:
-            cur.execute("UPDATE movie SET title = %s, director = %s, producers = %s, actors = %s, language = %s, subs = %s, dubbed = %s, release_date = %s, runtime = %s WHERE id = %s", (movie.title, movie.director, movie.producers, movie.actors, movie.language, movie.subs, movie.dubbed, movie.release_date, movie.runtime, movie.id))
+            cur.execute("UPDATE movie SET title = %s, director = %s, producers = %s, actors = %s, language = %s, subtitles = %s, dubbed = %s, release_date = %s, runtime = %s WHERE id = %s", (movie.title, movie.director, movie.producers, movie.actors, movie.language, movie.subtitles, movie.dubbed, movie.release_date, movie.runtime, movie.id))
         cur.close()
 
     def modify_music(self, modified_music):

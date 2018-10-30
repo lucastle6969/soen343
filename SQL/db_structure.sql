@@ -34,7 +34,7 @@ CREATE TABLE movie (
     producers VARCHAR(100), 
     actors VARCHAR(100), 
     language VARCHAR(30), 
-    subs VARCHAR(30), 
+    subtitles VARCHAR(30), 
     dubbed VARCHAR(30), 
     release_date VARCHAR(30), 
     runtime VARCHAR(20)
@@ -54,12 +54,12 @@ CREATE TABLE music (
 );
 
 
-DROP TABLE IF EXISTS clientAdmin;
-CREATE TABLE clientAdmin(
+DROP TABLE IF EXISTS user;
+CREATE TABLE user(
     id INT(20) AUTO_INCREMENT PRIMARY KEY, 
-    firstName VARCHAR(50), 
-    lastName VARCHAR(50), 
-    physicalAddress VARCHAR(50), 
+    first_name VARCHAR(50), 
+    last_name VARCHAR(50), 
+    address VARCHAR(50), 
     email VARCHAR(50), 
     phone VARCHAR(60), 
     admin tinyint(1), 

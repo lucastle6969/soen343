@@ -20,10 +20,10 @@ class UserMapper:
                 if tool == 'create_client':
                     is_admin = 0
 
-                new_user_id = self.tdg.insert_user(form.firstname.data, form.lastname.data, form.address.data, form.email.data,
+                new_user_id = self.tdg.insert_user(form.first_name.data, form.last_name.data, form.address.data, form.email.data,
                                           form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
                 if new_user_id:
-                    self.user_registry.insert_user(new_user_id, form.firstname.data, form.lastname.data, form.address.data, form.email.data,
+                    self.user_registry.insert_user(new_user_id, form.first_name.data, form.last_name.data, form.address.data, form.email.data,
                                           form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
                 if tool == 'create_admin':
                     flash('The new administrator has been registered', 'success')

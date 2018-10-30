@@ -78,7 +78,7 @@ class ItemMapper:
             item.producers = form.producers.data
             item.actors = form.actors.data
             item.language = form.language.data
-            item.subs = form.subtitles.data
+            item.subtitles = form.subtitles.data
             item.dubbed = form.dubbed.data
             item.release_date = form.release_date.data
             item.runtime = form.runtime.data
