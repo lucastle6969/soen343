@@ -80,7 +80,7 @@ class ItemMapper:
             item.language = form.language.data
             item.subs = form.subtitles.data
             item.dubbed = form.dubbed.data
-            item.release_date = form.releaseDate.data
+            item.release_date = form.release_date.data
             item.runtime = form.runtime.data
 
         elif item_prefix == "mu":
@@ -88,7 +88,7 @@ class ItemMapper:
             item.media_type = form.media_type.data
             item.artist = form.artist.data
             item.label = form.label.data
-            item.release_date = form.releaseDate.data
+            item.release_date = form.release_date.data
             item.asin = form.asin.data
 
         self.uow.register_dirty(item)
@@ -138,7 +138,7 @@ class ItemMapper:
         language = form.language.data
         subtitles = form.subtitles.data
         dubbed = form.dubbed.data
-        release_date = form.releaseDate.data
+        release_date = form.release_date.data
         run_time = form.runtime.data
         movie = Movie(None, title, prefix, status, director, producers, actors,
                       language, subtitles, dubbed, release_date, run_time)
@@ -155,7 +155,7 @@ class ItemMapper:
         status = "Available"
         artist = form.artist.data
         label = form.label.data
-        release_date = form.releaseDate.data
+        release_date = form.release_date.data
         asin = form.asin.data
         music = Music(None, title, prefix, status, media_type, artist, label,
                       release_date, asin)

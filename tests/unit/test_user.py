@@ -1,7 +1,6 @@
 #from file import class
 from model.User import User
 
-
 #Note: Functions need to start with test_
 def test_new_user(new_user):
     assert new_user.id == '23452'
