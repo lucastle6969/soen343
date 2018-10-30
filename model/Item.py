@@ -28,14 +28,14 @@ class Magazine(Item):
 
 
 class Movie(Item):
-    def __init__(self, item_id, title, prefix, status, director, producers, actors, language, subs, dubbed,
+    def __init__(self, item_id, title, prefix, status, director, producers, actors, language, subtitles, dubbed,
                  release_date, runtime):
         Item.__init__(self, item_id, title, prefix, status)
         self.director = director
         self.producers = producers
         self.actors = actors
         self.language = language
-        self.subs = subs
+        self.subtitles = subtitles
         self.dubbed = dubbed
         self.release_date = release_date
         self.runtime = runtime

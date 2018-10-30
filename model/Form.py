@@ -168,7 +168,7 @@ class Forms(Form):
             form.producers.data = item_selected.producers
             form.actors.data = item_selected.actors
             form.language.data = item_selected.language
-            form.subtitles.data = item_selected.subs
+            form.subtitles.data = item_selected.subtitles
             form.dubbed.data = item_selected.dubbed
             form.release_date.data = item_selected.release_date
             form.runtime.data = item_selected.runtime

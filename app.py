@@ -49,7 +49,7 @@ def login():
                 user_mapper.ensure_not_already_logged(user.id)
                 app.logger.info('PASSWORD MATCHED')
                 session['logged_in'] = True
-                session['firstname'] = user.firstname
+                session['first_name'] = user.first_name
                 session['user_id'] = user.id
                 session['admin'] = user.admin
 

@@ -45,8 +45,8 @@ class UserRegistry:
                         return True
         return False
 
-    def insert_user(self, user_id, firstname, lastname, address, email, phone, admin, password):
-        self.list_of_users.append(User(user_id, firstname, lastname, address, email, phone, admin, password))
+    def insert_user(self, user_id, first_name, last_name, address, email, phone, admin, password):
+        self.list_of_users.append(User(user_id, first_name, last_name, address, email, phone, admin, password))
 
     def get_user_by_email(self, email):
         for user in self.list_of_users:
