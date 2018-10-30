@@ -14,18 +14,23 @@ def person_name(form, field):
 # Verifies if password does contain at least a letter and a digit
 def password(form, field):
     mininum_password_length = 6
-    if not any(char.isdigit() for char in field.data):
-        raise ValidationError('Must contain at least 1 digit')
-    if not any(char.isalpha() for char in field.data):
+    if type(field.data) is int:
         raise ValidationError('Must contain at least 1 letter')
+    if type(field.data) is str:
+        if not any(char.isdigit() for char in field.data):
+            raise ValidationError('Must contain at least 1 digit')
+        if not any(char.isalpha() for char in field.data):
+            raise ValidationError('Must contain at least 1 letter')
     if (len(field.data) < mininum_password_length):
-        raise ValidationError('The password needs to be at least '+ mininum_password_length +' characters')
+        raise ValidationError('The password needs to be at least ' + mininum_password_length + ' characters')
 
 
 # Verifies phone number does not contain any letter
 def phone_number(form, field):
-    if any(char.isalpha() for char in field.data):
-        raise ValidationError('Phone numbers should not contain any alphabetic character')
+    if type(field.data) is not int:
+        if type(field.data) is str:
+            if any(char.isalpha() for char in field.data):
+                raise ValidationError('Phone numbers should not contain any alphabetic character')
 
 
 # Verifies that the date input matches the format DD-MM-YYYY
@@ -38,13 +43,18 @@ def date(form, field):
 
 # Verifies string does not contain any letter
 def number(form, field):
-    if any(char.isalpha() for char in field.data):
-        raise ValidationError('A number cannot contain any alphabetic character')
+    if type(field.data) is not int:
+        if type(field.data) is str:
+            if any(char.isalpha() for char in field.data):
+                raise ValidationError('A number cannot contain any alphabetic character')
 
 
 # Verifies word does not contain any digit
 def no_digit(form, field):
-    if any(char.isdigit() for char in field.data):
+    if type(field.data) is str:
+        if any(char.isdigit() for char in field.data):
+            raise ValidationError('This field cannot contain any digit')
+    else:
         raise ValidationError('This field cannot contain any digit')
 
 
@@ -99,7 +109,7 @@ class MusicForm(Form):
     artist = StringField('Artist', [validators.DataRequired(), validators.Length(min=1, max=70)])
     label = StringField('Label', [validators.DataRequired(), validators.Length(min=1, max=30)])
     release_date = StringField('Release Date', [validators.DataRequired(), date, validators.Length(min=1, max=30)])
-    asin = StringField('ASIN', [validators.DataRequired(), validators.Length(min=20, max=20)])
+    asin = StringField('ASIN', [validators.DataRequired(), validators.Length(min=10, max=10)])
 
 
 class Forms(Form):
