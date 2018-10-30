@@ -5,7 +5,6 @@
         {% from "includes/_form_helpers.html" import render_field %}
        
         <form method="POST" action="/admin_tools/catalog_manager/add_music">
-            <h4>Please fill each required fields</h4>
             <div class="form-group text-white">
                 {{render_field(form.media_type, class_="form-control")}}
             </div>
