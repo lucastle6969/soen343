@@ -4,8 +4,7 @@ from model.ItemMapper import ItemMapper
 
 
 app = Flask(__name__)
-tdg = Tdg(app)
-item_mapper = ItemMapper(tdg)
+item_mapper = ItemMapper(app)
 catalog = item_mapper.get_catalog()
 
 

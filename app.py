@@ -1,7 +1,6 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, request
-from model.Tdg import Tdg
 from model.ItemMapper import ItemMapper
-from model.UserRegistry import UserRegistry
+from model.UserMapper import UserMapper
 from passlib.hash import sha256_crypt
 from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, Forms
 import datetime
@@ -9,15 +8,13 @@ import time
 
 
 app = Flask(__name__)
-tdg = Tdg(app)
-user_registry = UserRegistry()
-user_registry.populate(tdg.get_all_users())
-item_mapper = ItemMapper(tdg)
+item_mapper = ItemMapper(app)
+user_mapper = UserMapper(app)
 
 
 @app.before_request
 def before_request():
-    cleared = user_registry.check_restart_session(session)
+    cleared = user_mapper.check_restart_session(session)
     if cleared:
         flash('Automatically logged out due to a disconnect', 'warning')
         return redirect(url_for('home'))
@@ -45,11 +42,11 @@ def login():
         # Get Form Fields
         email = request.form['email']
         password_candidate = request.form['password']
-        user = user_registry.get_user_by_email(email)
+        user = user_mapper.get_user_by_email(email)
         if user:
             if sha256_crypt.verify(password_candidate, user.password):
                 # log user out if they are already logged in
-                user_registry.ensure_not_already_logged(user.id)
+                user_mapper.ensure_not_already_logged(user.id)
                 app.logger.info('PASSWORD MATCHED')
                 session['logged_in'] = True
                 session['firstname'] = user.firstname
@@ -59,11 +56,10 @@ def login():
             # add the user to the active user registry in the form of a tuple (user_id, timestamp)
                 timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
 
-                user_registry.enlist_active_user(user.id, timestamp)
-                if user_registry.check_another_admin(user.id):
+                user_mapper.enlist_active_user(user.id, timestamp)
+                if user_mapper.check_another_admin(user.id):
                     flash('Limited functionality', 'warning')
                     return redirect(url_for('home'))
-
 
                 flash('You are now logged in', 'success')
                 return redirect(url_for('home'))
@@ -78,34 +74,6 @@ def login():
             return render_template('login.html', error=error, form=form)
 
     return render_template('login.html', form=form)
-
-
-def register(request_, tool):
-    form = RegisterForm(request_.form)
-    app.logger.info(tool)
-    if request_.method == 'POST' and form.validate():
-        if not (tdg.get_user_by_email(form.email.data)):
-            if tool == 'create_admin':
-                is_admin = 1
-            if tool == 'create_client':
-                is_admin = 0
-                
-            new_user_id = tdg.insert_user(form.first_name.data, form.last_name.data, form.address.data, form.email.data,
-                            form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
-            if new_user_id:
-                user_registry.insert_user(new_user_id, form.first_name.data, form.last_name.data, form.address.data, form.email.data,
-                            form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
-            if tool == 'create_admin':
-                flash('The new administrator has been registered', 'success')
-            if tool == 'create_client':
-                flash('The new client has been registered', 'success')
-
-            return redirect(url_for('admin_tools_default'))
-        else:
-            flash("This email has already been used.")
-            return render_template('admin_tools.html', tool='create_admin', form=form)
-
-    return render_template('admin_tools.html', tool=tool, form=form)
 
 
 def add_book(request_):
@@ -151,7 +119,7 @@ def add_music(request_):
 @app.route('/admin_tools')
 def admin_tools_default():
     if session['logged_in']:
-        if user_registry.validate_admin(session['user_id'], session['admin']) and not user_registry.check_another_admin(int(session['user_id'])):
+        if user_mapper.validate_admin(session['user_id'], session['admin']) and not user_mapper.check_another_admin(int(session['user_id'])):
             return render_template('admin_tools.html')
         flash("Limited functionality, cannot modify catalog.", "warning")
         return render_template('admin_tools.html', limited='limited')
@@ -162,17 +130,17 @@ def admin_tools_default():
 @app.route('/admin_tools/<tool>',  methods=['GET', 'POST'])
 def admin_tools(tool):
     if session['logged_in']:
-        if user_registry.validate_admin(session['user_id'], session['admin']):
+        if user_mapper.validate_admin(session['user_id'], session['admin']):
             if tool == 'view_active_registry':
-                return render_template('admin_tools.html', active_user_registry=user_registry.get_active_users(), tool=tool)
+                return render_template('admin_tools.html', active_user_registry=user_mapper.get_active_users(), tool=tool)
             elif tool == 'create_admin' or tool == 'create_client':
-                return register(request, tool)
+                return user_mapper.register(request, tool)
             elif tool == 'catalog_manager':
                 return render_template('admin_tools.html', tool=tool, catalog=item_mapper.get_catalog(), saved_changes=item_mapper.get_saved_changes())
             elif tool == 'catalog_manager_limited':
                 return render_template('admin_tools.html', tool=tool, catalog=item_mapper.get_catalog())
             elif tool == 'view_users':
-                return render_template('admin_tools.html', tool=tool, list_of_users=user_registry.get_all_users())
+                return render_template('admin_tools.html', tool=tool, list_of_users=user_mapper.get_all_users())
         else:
             flash('invalid tool')
             return render_template('admin_tools.html')
@@ -224,7 +192,7 @@ def cancel_deletion(item_prefix, item_id):
 def catalog_manager(item):
     app.logger.info(item)
     if session['logged_in']:
-        if user_registry.validate_admin(session['user_id'], session['admin']):
+        if user_mapper.validate_admin(session['user_id'], session['admin']):
             app.logger.info(item)
             if item == 'add_movie':
                 return add_movie(request)
@@ -250,7 +218,7 @@ def save_changes():
 
 @app.route('/logout')
 def logout():
-    user_registry.remove_from_active(session['user_id'])
+    user_mapper.remove_from_active(session['user_id'])
     session.clear()
 
     flash('You are now logged out', 'success')
