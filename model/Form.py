@@ -58,6 +58,11 @@ def no_digit(form, field):
         raise ValidationError('This field cannot contain any digit')
 
 
+def alpha_numeric(form, field):
+    if type(field.data) is int:
+        raise ValidationError('This field cannot contain only digits')
+
+
 class RegisterForm(Form):
     first_name = StringField('First Name', [validators.DataRequired(), person_name])
     last_name = StringField('Last Name', [validators.DataRequired(), person_name])
@@ -75,9 +80,9 @@ class RegisterForm(Form):
 class BookForm(Form):
     title = StringField('Title', [validators.DataRequired(), validators.Length(min=1, max=300)])
     author = StringField('Author', [validators.DataRequired(), person_name, no_digit, validators.Length(min=1, max=30)])
-    format = StringField('Format', [validators.DataRequired(), validators.Length(min=1, max=20)])
+    format = StringField('Format', [validators.DataRequired(), alpha_numeric, validators.Length(min=1, max=20)])
     pages = IntegerField('Pages', [validators.DataRequired(), number, validators.NumberRange(min=1, max=999999)])
-    publisher = StringField('Publisher', [validators.DataRequired(), validators.Length(min=1, max=50)])
+    publisher = StringField('Publisher', [validators.DataRequired(), alpha_numeric, validators.Length(min=1, max=50)])
     language = StringField('Language', [validators.DataRequired(), no_digit])
     isbn10 = IntegerField('ISBN10', [validators.DataRequired(), number, validators.NumberRange(min=1000000000, max=9999999999)])
     isbn13 = IntegerField('ISBN13', [validators.DataRequired(), number, validators.NumberRange(min=1000000000000, max=9999999999999)])
@@ -85,7 +90,7 @@ class BookForm(Form):
 
 class MagazineForm(Form):
     title = StringField('Title', [validators.DataRequired(), validators.Length(min=1, max=300)])
-    publisher = StringField('Publisher', [validators.DataRequired(), validators.Length(min=1, max=50)])
+    publisher = StringField('Publisher', [validators.DataRequired(), alpha_numeric, validators.Length(min=1, max=50)])
     language = StringField('Language', [validators.DataRequired(), no_digit])
     isbn10 = IntegerField('ISBN10', [validators.DataRequired(), number, validators.NumberRange(min=1000000000, max=9999999999)])
     isbn13 = IntegerField('ISBN13', [validators.DataRequired(), number, validators.NumberRange(min=1000000000000, max=9999999999999)])
