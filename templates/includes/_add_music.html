@@ -3,6 +3,7 @@
     <div class="col-md-12 login-form-2">
         <h3>Add Music</h3>
         {% from "includes/_form_helpers.html" import render_field %}
+       
         <form method="POST" action="/admin_tools/catalog_manager/add_music">
             <div class="form-group text-white">
                 {{render_field(form.media_type, class_="form-control")}}
@@ -17,10 +18,10 @@
                 {{render_field(form.label, class_="form-control")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(form.releaseDate, class_="form-control")}}
+                {{render_field(form.release_date, class_="form-control", placeholder="DD-MM-YYYY")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(form.asin, class_="form-control")}}
+                {{render_field(form.asin, class_="form-control", placeholder="10 character alphanumeric")}}
             </div>
             <div class="row form-group text-white">
                 <input type="submit" class="col-md-5 btnSubmit" value="Add" />

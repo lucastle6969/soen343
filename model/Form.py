@@ -1,74 +1,130 @@
-from wtforms import Form, StringField, PasswordField, validators, IntegerField
+from wtforms import ValidationError, Form, StringField, PasswordField, validators, IntegerField
+import datetime
+
+
+def person_name(form, field):
+    if any(char.isdigit() for char in field.data):
+        raise ValidationError('Must not contain any numerical digit')
+    if len(field.data) == 0:
+        raise ValidationError('This field is required')
+    if len(field.data) > 70:
+        raise ValidationError('This name is too long to be real')
+
+
+# Verifies if password does contain at least a letter and a digit
+def password(form, field):
+    mininum_password_length = 6
+    if type(field.data) is int:
+        raise ValidationError('Must contain at least 1 letter')
+    if type(field.data) is str:
+        if not any(char.isdigit() for char in field.data):
+            raise ValidationError('Must contain at least 1 digit')
+        if not any(char.isalpha() for char in field.data):
+            raise ValidationError('Must contain at least 1 letter')
+    if (len(field.data) < mininum_password_length):
+        raise ValidationError('The password needs to be at least ' + str(mininum_password_length) + ' characters')
+
+
+# Verifies phone number does not contain any letter
+def phone_number(form, field):
+    if type(field.data) is not int:
+        if type(field.data) is str:
+            if any(char.isalpha() for char in field.data):
+                raise ValidationError('Phone numbers should not contain any alphabetic character')
+
+
+# Verifies that the date input matches the format DD-MM-YYYY
+def date(form, field):
+    try:
+        datetime.datetime.strptime(field.data, "%d-%m-%Y")
+    except ValueError:
+        raise ValueError("Must be a date of format DD-MM-YYYY")
+
+
+# Verifies string does not contain any letter
+def number(form, field):
+    if type(field.data) is not int:
+        if type(field.data) is str:
+            if any(char.isalpha() for char in field.data):
+                raise ValidationError('A number cannot contain any alphabetic character')
+
+
+# Verifies word does not contain any digit
+def no_digit(form, field):
+    if type(field.data) is str:
+        if any(char.isdigit() for char in field.data):
+            raise ValidationError('This field cannot contain any digit')
+    else:
+        raise ValidationError('This field cannot contain any digit')
+
+
+def alpha_numeric(form, field):
+    if type(field.data) is int:
+        raise ValidationError('This field cannot contain only digits')
+    elif type(field.data) is str:
+        char_count = 0
+        if any(char.isalpha() for char in field.data):
+            char_count += 1
+        if char_count == 0:
+            raise ValidationError('This field cannot contain only digits')
 
 
 class RegisterForm(Form):
-    firstname = StringField('First Name', [validators.Length(min=1, max=50)])
-    lastname = StringField('Last Name', [validators.Length(min=1, max=25)])
-    email = StringField('Email', [validators.Length(min=6, max=50)])
-    phone = StringField('Phone', [validators.Length(min=1, max=12)])
-    address = StringField('Address', [validators.Length(min=6, max=50)])
+    first_name = StringField('First Name', [validators.DataRequired(), person_name])
+    last_name = StringField('Last Name', [validators.DataRequired(), person_name])
+    email = StringField('Email', [validators.DataRequired(), validators.Email()])
+    phone = StringField('Phone', [validators.DataRequired(), phone_number, validators.Length(min=1, max=12)])
+    address = StringField('Address', [validators.DataRequired(), validators.Length(min=6, max=50)])
     password = PasswordField('Password', [
         validators.DataRequired(),
+        password,
         validators.EqualTo('confirm', message='Passwords do not match')
     ])
     confirm = PasswordField('Confirmed Password')
 
 
 class BookForm(Form):
-    title = StringField('Title', [validators.Length(min=1, max=100)])
-    author = StringField('Author', [validators.Length(min=1, max=30)])
-    format = StringField('Format', [validators.Length(min=1, max=20)])
-    pages = IntegerField('Pages', [validators.NumberRange(min=1, max=999999)])
-    publisher = StringField('Publisher', [validators.Length(min=1, max=50)])
-    language = StringField('Language', [validators.Length(min=1, max=30)])
-    isbn10 = IntegerField('ISBN10', [validators.NumberRange(min=1000000000, max=9999999999)])
-    isbn13 = IntegerField('ISBN13', [validators.NumberRange(min=1000000000000, max=9999999999999)])
+    title = StringField('Title', [validators.DataRequired(), validators.Length(min=1, max=300)])
+    author = StringField('Author', [validators.DataRequired(), person_name, no_digit, validators.Length(min=1, max=30)])
+    format = StringField('Format', [validators.DataRequired(), alpha_numeric, validators.Length(min=1, max=20)])
+    pages = IntegerField('Pages', [validators.DataRequired(), number, validators.NumberRange(min=1, max=999999)])
+    publisher = StringField('Publisher', [validators.DataRequired(), alpha_numeric, validators.Length(min=1, max=50)])
+    language = StringField('Language', [validators.DataRequired(), no_digit])
+    isbn10 = IntegerField('ISBN10', [validators.DataRequired(), number, validators.NumberRange(min=1000000000, max=9999999999)])
+    isbn13 = IntegerField('ISBN13', [validators.DataRequired(), number, validators.NumberRange(min=1000000000000, max=9999999999999)])
 
 
 class MagazineForm(Form):
-    title = StringField('Title', [validators.Length(min=1, max=100)])
-    publisher = StringField('Publisher', [validators.Length(min=1, max=50)])
-    language = StringField('Language', [validators.Length(min=1, max=30)])
-    isbn10 = IntegerField('ISBN10', [validators.NumberRange(min=1000000000, max=9999999999)])
-    isbn13 = IntegerField('ISBN13', [validators.NumberRange(min=1000000000000, max=9999999999999)])
+    title = StringField('Title', [validators.DataRequired(), validators.Length(min=1, max=300)])
+    publisher = StringField('Publisher', [validators.DataRequired(), alpha_numeric, validators.Length(min=1, max=50)])
+    language = StringField('Language', [validators.DataRequired(), no_digit])
+    isbn10 = IntegerField('ISBN10', [validators.DataRequired(), number, validators.NumberRange(min=1000000000, max=9999999999)])
+    isbn13 = IntegerField('ISBN13', [validators.DataRequired(), number, validators.NumberRange(min=1000000000000, max=9999999999999)])
 
 
 class MovieForm(Form):
-    title = StringField('Title', [validators.Length(min=1, max=100)])
-    director = StringField('Director', [validators.Length(min=1, max=30)])
-    producers = StringField('Producers', [validators.Length(min=1, max=100)])
-    actors = StringField('Actors', [validators.Length(min=1, max=100)])
-    language = StringField('Language', [validators.Length(min=1, max=30)])
-    subtitles = StringField('Subtitles', [validators.Length(min=1, max=30)])
-    dubbed = StringField('Dubbed', [validators.Length(min=1, max=30)])
-    releaseDate = StringField('Release Date', [validators.Length(min=1, max=30)])
-    runtime = StringField('Run Time ', [validators.Length(min=1, max=30)])
+    title = StringField('Title', [validators.DataRequired(), validators.Length(min=1, max=300)])
+    director = StringField('Director', [validators.DataRequired(), no_digit, validators.Length(min=1, max=70)])
+    producers = StringField('Producers', [validators.DataRequired(), validators.Length(min=1, max=100)])
+    actors = StringField('Actors', [validators.DataRequired(), no_digit, validators.Length(min=1, max=300)])
+    language = StringField('Language', [validators.DataRequired(), no_digit])
+    subtitles = StringField('Subtitles', [validators.DataRequired(), no_digit])
+    dubbed = StringField('Dubbed', [no_digit])
+    release_date = StringField('Release Date', [validators.DataRequired(), date])
+    runtime = StringField('Run Time ', [validators.DataRequired(), number, validators.Length(min=1, max=30)])
 
 
 class MusicForm(Form):
-    media_type = StringField('Type', [validators.Length(min=1, max=10)])
-    title = StringField('Title', [validators.Length(min=1, max=100)])
-    artist = StringField('Artist', [validators.Length(min=1, max=30)])
-    label = StringField('Label', [validators.Length(min=1, max=30)])
-    releaseDate = StringField('Release Date', [validators.Length(min=1, max=30)])
-    asin = StringField('ASIN', [validators.Length(min=1, max=20)])
-
-
-class ItemForm(Form):
-   
-    # The following only applies to Book items
-    title = StringField('Title', [validators.Length(min=1, max=100)])
-    author = StringField('Author', [validators.Length(min=1, max=30)])
-    format = StringField('Format', [validators.Length(min=1, max=20)])
-    pages = IntegerField('Number of pages', [validators.Length(min=1, max=20)])
-    publisher = StringField('Publisher', [validators.Length(min=1, max=50)])
-    language = StringField('Language', [validators.Length(min=1, max=30)])
-    isbn10 = IntegerField('ISBN-10', [validators.Length(min=1, max=10)])
-    isbn13 = IntegerField('ISBN-13', [validators.Length(min=1, max=10)])
+    media_type = StringField('Type', [validators.DataRequired(), validators.Length(min=1, max=5)])
+    title = StringField('Title', [validators.DataRequired(), validators.Length(min=1, max=300)])
+    artist = StringField('Artist', [validators.DataRequired(), validators.Length(min=1, max=70)])
+    label = StringField('Label', [validators.DataRequired(), validators.Length(min=1, max=30)])
+    release_date = StringField('Release Date', [validators.DataRequired(), date, validators.Length(min=1, max=30)])
+    asin = StringField('ASIN', [validators.DataRequired(), validators.Length(min=10, max=10)])
 
 
 class Forms(Form):
-    
+
     @staticmethod
     def get_form_for_item_type(item_type, form):
         if item_type == 'bb':
@@ -114,7 +170,7 @@ class Forms(Form):
             form.language.data = item_selected.language
             form.subtitles.data = item_selected.subs
             form.dubbed.data = item_selected.dubbed
-            form.releaseDate.data = item_selected.release_date
+            form.release_date.data = item_selected.release_date
             form.runtime.data = item_selected.runtime
 
         elif selected_item_type == 'mu':
@@ -123,7 +179,7 @@ class Forms(Form):
             form.media_type.data = item_selected.media_type
             form.artist.data = item_selected.artist
             form.label.data = item_selected.label
-            form.releaseDate.data = item_selected.release_date
+            form.release_date.data = item_selected.release_date
             form.asin.data = item_selected.asin
 
         return form
