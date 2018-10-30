@@ -134,7 +134,7 @@ def admin_tools(tool):
             if tool == 'view_active_registry':
                 return render_template('admin_tools.html', active_user_registry=user_mapper.get_active_users(), tool=tool)
             elif tool == 'create_admin' or tool == 'create_client':
-                return user_mapper.register(request, tool, user_mapper.user_registry)
+                return user_mapper.register(request, tool)
             elif tool == 'catalog_manager':
                 return render_template('admin_tools.html', tool=tool, catalog=item_mapper.get_catalog(), saved_changes=item_mapper.get_saved_changes())
             elif tool == 'catalog_manager_limited':

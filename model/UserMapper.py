@@ -11,7 +11,7 @@ class UserMapper:
         self.user_registry = UserRegistry()
         self.user_registry.populate(self.tdg.get_all_users())
 
-    def register(self, request_, tool, user_registry):
+    def register(self, request_, tool):
         form = RegisterForm(request_.form)
         if request_.method == 'POST' and form.validate():
             if not (self.tdg.get_user_by_email(form.email.data)):
@@ -23,7 +23,7 @@ class UserMapper:
                 new_user_id = self.tdg.insert_user(form.firstname.data, form.lastname.data, form.address.data, form.email.data,
                                           form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
                 if new_user_id:
-                    user_registry.insert_user(new_user_id, form.firstname.data, form.lastname.data, form.address.data, form.email.data,
+                    self.user_registry.insert_user(new_user_id, form.firstname.data, form.lastname.data, form.address.data, form.email.data,
                                           form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
                 if tool == 'create_admin':
                     flash('The new administrator has been registered', 'success')
