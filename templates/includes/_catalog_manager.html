@@ -30,7 +30,13 @@
 </div>
 {% endif %}
 
+<hr>
+
 {% if catalog %}
+<h4>Type something in the following input field to search for specific items:</h4>
+<input class="form-control" id="myInput" type="text" placeholder="Search..">
+<br>
+<br>
 <h3>Books</h3>
 <table id="book-table" class="table table-hover table-bordered">
     <thead>
@@ -49,7 +55,7 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="book-table-body">
         {% for x in catalog.item_catalog %}
             {% set modified = {'foo': False} %}
             {% set deleted = {'foo': False} %}
@@ -160,7 +166,7 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="magazine-table-body">
         {% for x in catalog.item_catalog %}
             {% set modified = {'foo': False} %}
             {% set deleted = {'foo': False} %}
@@ -263,7 +269,7 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="movie-table-body">
         {% for x in catalog.item_catalog %}
             {% set modified = {'foo': False} %}
             {% set deleted = {'foo': False} %}
@@ -379,7 +385,7 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="music-table-body">
         {% for x in catalog.item_catalog %}
             {% set modified = {'foo': False} %}
             {% set deleted = {'foo': False} %}
@@ -466,6 +472,9 @@
         {% endif %}
     </tbody>
 </table>
+
+<script src="../static/presentation/js/catalog_manager_search.js"></script>
+
 {% if saved_changes %}
     <form method="POST" action="/admin_tools/catalog_manager/commit">
         <div class = "row">
@@ -475,8 +484,10 @@
             </div>
         </div>
     </form>
-    
 {% endif %}
+
 {% endif%}
 </div>
+<br>
+<br>
 {% endblock %}

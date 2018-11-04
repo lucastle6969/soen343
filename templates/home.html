@@ -7,7 +7,132 @@
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#book-modal" data-title="{{ x.title }}" data-author="{{ x.author }}" data-format="{{ x.format }}" data-pages="{{ x.pages }}" data-publisher="{{ x.publisher }}" data-language="{{ x.language }}" data-isbn10="{{ x.isbn10 }}" data-isbn13="{{ x.isbn13 }}"><img src="/static/presentation/img/detailed_view.svg"></button>
     {% endfor %}
     {% include 'includes/_detailed_view.html' %}
+    <div class="tool-container container">
+        <span id="items-title">Home</span>
+        <hr>
+    </div>
     {%if session.logged_in %}
         Welcome to the library {{session.first_name}} <br>
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="book-tab" data-toggle="tab" href="#book" role="tab" aria-controls="book" aria-selected="true">Books</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="magazine-tab" data-toggle="tab" href="#magazine" role="tab" aria-controls="magazine" aria-selected="false">Magazines</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="music-tab" data-toggle="tab" href="#music" role="tab" aria-controls="music" aria-selected="false">Music</a>
+            </li>
+            <li class="nav-item">
+                    <a class="nav-link" id="movie-tab" data-toggle="tab" href="#movie" role="tab" aria-controls="movie" aria-selected="false">Movies</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="book" role="tabpanel" aria-labelledby="book-tab">
+                <ul class="nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Search by..</a>
+                        <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Date</a>
+                        <a class="dropdown-item" href="#">ISBN</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
+                    </li>
+                    <li>
+                        <input type="text" name="fname" placeholder="Search Text Input">
+                    </li>
+                    <li>
+                        <button type="submit">Search</button>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Order by..</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">Title</a>
+                            <a class="dropdown-item" href="#">Author</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="tab-pane fade" id="magazine" role="tabpanel" aria-labelledby="magazine-tab">
+                <ul class="nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Search by..</a>
+                        <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Date</a>
+                        <a class="dropdown-item" href="#">ISBN</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
+                    </li>
+                    <li>
+                        <input type="text" name="fname" placeholder="Search Text Input">
+                    </li>
+                    <li>
+                        <button type="submit">Search</button>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Order by..</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">Title</a>
+                            <a class="dropdown-item" href="#">Author</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="tab-pane fade" id="music" role="tabpanel" aria-labelledby="music-tab">
+                <ul class="nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Search by..</a>
+                        <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Date</a>
+                        <a class="dropdown-item" href="#">ISBN</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
+                    </li>
+                    <li>
+                        <input type="text" name="fname" placeholder="Search Text Input">
+                    </li>
+                    <li>
+                        <button type="submit">Search</button>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Order by..</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">Title</a>
+                            <a class="dropdown-item" href="#">Author</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="tab-pane fade" id="movie" role="tabpanel" aria-labelledby="movie-tab">
+                <ul class="nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Search by..</a>
+                        <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Date</a>
+                        <a class="dropdown-item" href="#">ISBN</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
+                    </li>
+                    <li>
+                        <input type="text" name="fname" placeholder="Search Text Input">
+                    </li>
+                    <li>
+                        <button type="submit">Search</button>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Order by..</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">Title</a>
+                            <a class="dropdown-item" href="#">Author</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
     {% endif %}
 {% endblock %}
