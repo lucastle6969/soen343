@@ -1,4 +1,4 @@
-$('#book-modal').on('show.bs.modal', function (event) {
+/*$('#book-modal').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget) // Button that triggered the modal
     var title = button.data('title') // Extract info from data-* attributes
     var author = button.data('author')
@@ -19,4 +19,4 @@ $('#book-modal').on('show.bs.modal', function (event) {
     modal.find('.modal-body #book-language').text(language)
     modal.find('.modal-body #book-isbn10').text(isbn10)
     modal.find('.modal-body #book-isbn13').text(isbn13)
-  })
+  })*/
