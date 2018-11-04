@@ -1,0 +1,54 @@
+{% block body %}
+    {% if item == "bb" %}
+        <div class="modal fade" id="book-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Detailed Titlle</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="book-author" class="col-form-label">Author:</label>
+                                <span id="book-author"></span>
+                                <br>
+                                <label for="book-format" class="col-form-label">Format:</label>
+                                <span id="book-format"></span>
+                                <br>
+                                <label for="book-pages" class="col-form-label">Pages:</label>
+                                <span id="book-pages"></span>
+                                <br>
+                                <label for="book-publisher" class="col-form-label">Publisher:</label>
+                                <span id="book-publisher"></span>
+                                <br>
+                                <label for="book-language" class="col-form-label">Language:</label>
+                                <span id="book-language"></span>
+                                <br>
+                                <label for="book-isbn10" class="col-form-label">ISBN-10:</label>
+                                <span id="book-isbn10"></span>
+                                <br>
+                                <label for="book-isbn13" class="col-form-label">ISBN-13:</label>
+                                <span id="book-isbn13"></span>
+                                <br>
+                                <label for="book-copies" class="col-form-label">Copies:</label>
+                                <div class="copies">
+                                    <input type="radio" name="gender" value="male"> Copy #1 <br>
+                                    <input type="radio" name="gender" value="female"> Copy #2 <br>
+                                    <input type="radio" name="gender" value="other"> Copy #3 <br>  
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <form>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary">Loan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

@@ -2,6 +2,11 @@
 
 {% block body %}
     <div class="exampleClass">HOME</div>
+    {% for x in catalog.item_catalog %}
+        {{x.id}}
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#book-modal" data-title="{{ x.title }}" data-author="{{ x.author }}" data-format="{{ x.format }}" data-pages="{{ x.pages }}" data-publisher="{{ x.publisher }}" data-language="{{ x.language }}" data-isbn10="{{ x.isbn10 }}" data-isbn13="{{ x.isbn13 }}"><img src="/static/presentation/img/detailed_view.svg"></button>
+    {% endfor %}
+    {% include 'includes/_detailed_view.html' %}
     {%if session.logged_in %}
         Welcome to the library {{session.first_name}} <br>
     {% endif %}
