@@ -1,6 +1,6 @@
 TRUNCATE TABLE user;
 INSERT INTO user VALUES (1, 'John', 'Doe', '125 Ave Du Parc', 'johndoe@gmail.com', '514-336-4545', 1, '$5$rounds=535000$Y9aJsj6nDUIxrdX8$KjzneFoNwSBd8MiedeoCuhDR3AnFTQeYm7vBrCV/9a4');
-INSERT INTO user VALUES (2, 'John', 'Doe', '125 Ave Du Parc', 'a', '514-336-4545', 1, '$5$rounds=535000$vaRcpprbw7lAYCxY$onE09j6O55tDz45aVn0IgzCe/pzwcp44Q1TdAnO6lmB');
+INSERT INTO user VALUES (2, 'Jane', 'Dee', '125 Ave Du Parc', 'janedee@gmail.com', '514-336-4545', 1, '$5$rounds=535000$vaRcpprbw7lAYCxY$onE09j6O55tDz45aVn0IgzCe/pzwcp44Q1TdAnO6lmB');
 
 TRUNCATE TABLE book;
 INSERT INTO book VALUES (NULL, 'A Feast For Crows', 'George RR Martin', 'Physical', 250, 'Scholastic', 'English', 1234567890, 1234567890123, 2);
