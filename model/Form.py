@@ -92,6 +92,7 @@ class BookForm(Form):
     language = StringField('Language', [validators.DataRequired(), no_digit])
     isbn10 = IntegerField('ISBN10', [validators.DataRequired(), number, validators.NumberRange(min=1000000000, max=9999999999)])
     isbn13 = IntegerField('ISBN13', [validators.DataRequired(), number, validators.NumberRange(min=1000000000000, max=9999999999999)])
+    quantity = IntegerField('Quantity', [validators.DataRequired(), number, validators.NumberRange(min=1, max=1000)])
 
 
 class MagazineForm(Form):
@@ -100,6 +101,7 @@ class MagazineForm(Form):
     language = StringField('Language', [validators.DataRequired(), no_digit])
     isbn10 = IntegerField('ISBN10', [validators.DataRequired(), number, validators.NumberRange(min=1000000000, max=9999999999)])
     isbn13 = IntegerField('ISBN13', [validators.DataRequired(), number, validators.NumberRange(min=1000000000000, max=9999999999999)])
+    quantity = IntegerField('Quantity', [validators.DataRequired(), number, validators.NumberRange(min=1, max=1000)])
 
 
 class MovieForm(Form):
@@ -112,6 +114,7 @@ class MovieForm(Form):
     dubbed = StringField('Dubbed', [no_digit])
     release_date = StringField('Release Date', [validators.DataRequired(), date])
     runtime = StringField('Run Time ', [validators.DataRequired(), number, validators.Length(min=1, max=30)])
+    quantity = IntegerField('Quantity', [validators.DataRequired(), number, validators.NumberRange(min=1, max=1000)])
 
 
 class MusicForm(Form):
@@ -121,6 +124,7 @@ class MusicForm(Form):
     label = StringField('Label', [validators.DataRequired(), validators.Length(min=1, max=30)])
     release_date = StringField('Release Date', [validators.DataRequired(), date, validators.Length(min=1, max=30)])
     asin = StringField('ASIN', [validators.DataRequired(), validators.Length(min=10, max=10)])
+    quantity = IntegerField('Quantity', [validators.DataRequired(), number, validators.NumberRange(min=1, max=1000)])
 
 
 class Forms(Form):
@@ -152,6 +156,7 @@ class Forms(Form):
             form.language.data = item_selected.language
             form.isbn10.data = item_selected.isbn10
             form.isbn13.data = item_selected.isbn13
+            form.quantity.data = item_selected.quantity
 
         elif selected_item_type == 'ma':
             form = MagazineForm(request.form)
@@ -160,6 +165,7 @@ class Forms(Form):
             form.language.data = item_selected.language
             form.isbn10.data = item_selected.isbn10
             form.isbn13.data = item_selected.isbn13
+            form.quantity.data = item_selected.quantity
 
         elif selected_item_type == 'mo':
             form = MovieForm(request.form)
@@ -172,6 +178,7 @@ class Forms(Form):
             form.dubbed.data = item_selected.dubbed
             form.release_date.data = item_selected.release_date
             form.runtime.data = item_selected.runtime
+            form.quantity.data = item_selected.quantity
 
         elif selected_item_type == 'mu':
             form = MusicForm(request.form)
@@ -181,5 +188,6 @@ class Forms(Form):
             form.label.data = item_selected.label
             form.release_date.data = item_selected.release_date
             form.asin.data = item_selected.asin
+            form.quantity.data = item_selected.quantity
 
         return form

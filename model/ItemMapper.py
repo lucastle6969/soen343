@@ -64,6 +64,7 @@ class ItemMapper:
             item.language = form.language.data
             item.isbn10 = form.isbn10.data
             item.isbn13 = form.isbn13.data
+            item.quantity = form.quantity.data
 
         elif item_prefix == "ma":
             item.title = form.title.data
@@ -71,6 +72,7 @@ class ItemMapper:
             item.language = form.language.data
             item.isbn10 = form.isbn10.data
             item.isbn13 = form.isbn13.data
+            item.quantity = form.quantity.data
 
         elif item_prefix == "mo":
             item.title = form.title.data
@@ -82,6 +84,7 @@ class ItemMapper:
             item.dubbed = form.dubbed.data
             item.release_date = form.release_date.data
             item.runtime = form.runtime.data
+            item.quantity = form.quantity.data
 
         elif item_prefix == "mu":
             item.title = form.title.data
@@ -90,6 +93,7 @@ class ItemMapper:
             item.label = form.label.data
             item.release_date = form.release_date.data
             item.asin = form.asin.data
+            item.quantity = form.quantity.data
 
         self.uow.register_dirty(item)
 
@@ -104,8 +108,9 @@ class ItemMapper:
         language = form.language.data
         isbn10 = form.isbn10.data
         isbn13 = form.isbn13.data
+        quantity = form.quantity.data
         book = Book(None, title, prefix, status, author, book_format, pages,
-                    publisher, language, isbn10, isbn13)
+                    publisher, language, isbn10, isbn13, quantity)
         if self.uow is None:
             self.uow = Uow()
         self.uow.add(book)
@@ -120,8 +125,9 @@ class ItemMapper:
         language = form.language.data
         isbn10 = form.isbn10.data
         isbn13 = form.isbn13.data
+        quantity = form.quantity.data
         magazine = Magazine(None, title, prefix, status, publisher, language,
-                            isbn10, isbn13)
+                            isbn10, isbn13, quantity)
         if self.uow is None:
             self.uow = Uow()
         self.uow.add(magazine)
@@ -140,8 +146,9 @@ class ItemMapper:
         dubbed = form.dubbed.data
         release_date = form.release_date.data
         run_time = form.runtime.data
+        quantity = form.quantity.data
         movie = Movie(None, title, prefix, status, director, producers, actors,
-                      language, subtitles, dubbed, release_date, run_time)
+                      language, subtitles, dubbed, release_date, run_time, quantity)
         if self.uow is None:
             self.uow = Uow()
         self.uow.add(movie)
@@ -157,8 +164,9 @@ class ItemMapper:
         label = form.label.data
         release_date = form.release_date.data
         asin = form.asin.data
+        quantity = form.quantity.data
         music = Music(None, title, prefix, status, media_type, artist, label,
-                      release_date, asin)
+                      release_date, asin, quantity)
         if self.uow is None:
             self.uow = Uow()
         self.uow.add(music)
