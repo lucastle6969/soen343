@@ -9,7 +9,7 @@ CREATE TABLE book (
     language VARCHAR(30), 
     isbn10 BIGINT(10), 
     isbn13 BIGINT(13),
-    quantity int(11)
+    quantity tinyint(3)
 );
 
 DROP TABLE IF EXISTS book_physical;
@@ -28,7 +28,7 @@ CREATE TABLE magazine (
     language VARCHAR(30), 
     isbn10 BIGINT(10), 
     isbn13 BIGINT(13),
-    quantity int(11)
+    quantity tinyint(3)
 );
 
 DROP TABLE IF EXISTS magazine_physical;
@@ -51,7 +51,7 @@ CREATE TABLE movie (
     dubbed VARCHAR(30), 
     release_date VARCHAR(30), 
     runtime VARCHAR(20),
-    quantity int(11)
+    quantity tinyint(3)
 );
 
 DROP TABLE IF EXISTS movie_physical;
@@ -72,7 +72,7 @@ CREATE TABLE music (
     label VARCHAR(30),
     release_date VARCHAR(30), 
     asin VARCHAR(20),
-    quantity int(11)
+    quantity tinyint(3)
 );
 
 DROP TABLE IF EXISTS music_physical;
