@@ -34,10 +34,10 @@ INSERT INTO magazine_physical VALUES (NULL, 2, "Available");
 TRUNCATE TABLE movie_physical;
 INSERT INTO movie_physical VALUES (NULL, 1, "Available");
 INSERT INTO movie_physical VALUES (NULL, 1, "Loaned");
-INSERT INTO magazine_physical VALUES (NULL, 2, "Available");
+INSERT INTO movie_physical VALUES (NULL, 2, "Available");
 
 
 TRUNCATE TABLE music_physical;
 INSERT INTO music_physical VALUES (NULL, 1, "Available");
 INSERT INTO music_physical VALUES (NULL, 1, "Loaned");
-INSERT INTO magazine_physical VALUES (NULL, 2, "Available");
+INSERT INTO music_physical VALUES (NULL, 2, "Available");
