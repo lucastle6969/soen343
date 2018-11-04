@@ -148,7 +148,7 @@ class Tdg:
     def get_books(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT * FROM book WHERE 1")
+        result = cur.execute("SELECT id, title, author, format, pages, publisher, language, isbn10, isbn13, quantity FROM book WHERE 1")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -161,7 +161,7 @@ class Tdg:
     def get_magazines(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT * FROM magazine WHERE 1")
+        result = cur.execute("SELECT id, title, publisher, language, isbn10, isbn13, quantity FROM magazine WHERE 1")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -174,7 +174,7 @@ class Tdg:
     def get_movies(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT * FROM movie WHERE 1")
+        result = cur.execute("SELECT id, title, director, producers, actors, language, subtitles, dubbed, release_date, runtime, quantity FROM movie WHERE 1")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -187,7 +187,7 @@ class Tdg:
     def get_music(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT * FROM music WHERE 1")
+        result = cur.execute("SELECT id, title, media_type, artist, label, release_date, asin, quantity FROM music WHERE 1")
         data = []
         for row in cur.fetchall():
             data.append(row)

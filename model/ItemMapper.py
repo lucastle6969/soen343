@@ -100,7 +100,6 @@ class ItemMapper:
     def add_book(self, form):
         title = form.title.data
         prefix = "bb"
-        status = "Available"
         author = form.author.data
         book_format = form.format.data
         pages = form.pages.data
@@ -109,7 +108,7 @@ class ItemMapper:
         isbn10 = form.isbn10.data
         isbn13 = form.isbn13.data
         quantity = form.quantity.data
-        book = Book(None, title, prefix, status, author, book_format, pages,
+        book = Book(None, title, prefix, author, book_format, pages,
                     publisher, language, isbn10, isbn13, quantity)
         if self.uow is None:
             self.uow = Uow()
@@ -121,12 +120,11 @@ class ItemMapper:
         title = form.title.data
         publisher = form.publisher.data
         prefix = "ma"
-        status = "Available"
         language = form.language.data
         isbn10 = form.isbn10.data
         isbn13 = form.isbn13.data
         quantity = form.quantity.data
-        magazine = Magazine(None, title, prefix, status, publisher, language,
+        magazine = Magazine(None, title, prefix, publisher, language,
                             isbn10, isbn13, quantity)
         if self.uow is None:
             self.uow = Uow()
@@ -137,7 +135,6 @@ class ItemMapper:
     def add_movie(self, form):
         title = form.title.data
         prefix = "mo"
-        status = "Available"
         director = form.director.data
         producers = form.producers.data
         actors = form.actors.data
@@ -147,7 +144,7 @@ class ItemMapper:
         release_date = form.release_date.data
         run_time = form.runtime.data
         quantity = form.quantity.data
-        movie = Movie(None, title, prefix, status, director, producers, actors,
+        movie = Movie(None, title, prefix, director, producers, actors,
                       language, subtitles, dubbed, release_date, run_time, quantity)
         if self.uow is None:
             self.uow = Uow()
@@ -159,13 +156,12 @@ class ItemMapper:
         media_type = form.media_type.data
         title = form.title.data
         prefix = "mu"
-        status = "Available"
         artist = form.artist.data
         label = form.label.data
         release_date = form.release_date.data
         asin = form.asin.data
         quantity = form.quantity.data
-        music = Music(None, title, prefix, status, media_type, artist, label,
+        music = Music(None, title, prefix, media_type, artist, label,
                       release_date, asin, quantity)
         if self.uow is None:
             self.uow = Uow()
