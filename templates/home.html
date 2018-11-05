@@ -24,31 +24,8 @@
         {% if item == "bb" %}
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="book" role="tabpanel" aria-labelledby="book-tab">
-                <ul class="nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Search by..</a>
-                        <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Date</a>
-                        <a class="dropdown-item" href="#">ISBN</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </li>
-                    <li>
-                        <input type="text" name="fname" placeholder="Search Text Input">
-                    </li>
-                    <li>
-                        <button type="submit">Search</button>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Order by..</a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Title</a>
-                            <a class="dropdown-item" href="#">Author</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </li>
-                </ul>
-                <h3>Books</h3>
+                <br/>
+                <center><h3>Books</h3></center>
                 <table class="table table-hover table-bordered">
                     <thead>
                     <tr>
@@ -81,31 +58,8 @@
             {% endif%}
             {% if item == "ma" %}
             <div class="tab-pane fade show active" id="magazine" role="tabpanel" aria-labelledby="magazine-tab">
-                <ul class="nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Search by..</a>
-                        <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Date</a>
-                        <a class="dropdown-item" href="#">ISBN</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </li>
-                    <li>
-                        <input type="text" name="fname" placeholder="Search Text Input">
-                    </li>
-                    <li>
-                        <button type="submit">Search</button>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Order by..</a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Title</a>
-                            <a class="dropdown-item" href="#">Author</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </li>
-                </ul>
-                <h3>Magazines</h3>
+                <br/>
+                <center><h3>Magazines</h3></center>
                 <table class="table table-hover table-bordered">
                     <thead>
                     <tr>
@@ -132,31 +86,8 @@
             {% endif%}
             {% if item == "mu" %}
             <div class="tab-pane fade show active" id="music" role="tabpanel" aria-labelledby="music-tab">
-                <ul class="nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Search by..</a>
-                        <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Date</a>
-                        <a class="dropdown-item" href="#">ISBN</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </li>
-                    <li>
-                        <input type="text" name="fname" placeholder="Search Text Input">
-                    </li>
-                    <li>
-                        <button type="submit">Search</button>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Order by..</a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Title</a>
-                            <a class="dropdown-item" href="#">Author</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </li>
-                </ul>
-                <h3>Music</h3>
+                <br/>
+                <center><h3>Music</h3></center>
                 <table class="table table-hover table-bordered">
                     <thead>
                     <tr>
@@ -185,31 +116,8 @@
             {% endif%}
             {% if item == "mo" %}
             <div class="tab-pane fade show active" id="movie" role="tabpanel" aria-labelledby="movie-tab">
-                <ul class="nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Search by..</a>
-                        <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Date</a>
-                        <a class="dropdown-item" href="#">ISBN</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </li>
-                    <li>
-                        <input type="text" name="fname" placeholder="Search Text Input">
-                    </li>
-                    <li>
-                        <button type="submit">Search</button>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Order by..</a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Title</a>
-                            <a class="dropdown-item" href="#">Author</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </li>
-                </ul>
-                <h3>Movies</h3>
+                <br/>
+                <center><h3>Movies</h3></center>
                 <table class="table table-hover table-bordered">
                     <thead>
                     <tr>
@@ -243,5 +151,13 @@
             </div>
             {% endif %}
         </div>
+
+        <script>
+            $(document).ready( function () {
+                $('table').DataTable({
+                    "searching": false
+                });
+            } );
+        </script>
     {% endif %}
 {% endblock %}
