@@ -243,3 +243,9 @@ td, th {
     border-radius: 5px;
     padding: 4px;
 }
+
+.divider {
+    width:140px;
+    height:auto;
+    display:inline-block;
+}
