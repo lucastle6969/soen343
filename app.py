@@ -27,7 +27,7 @@ def index():
 
 @app.route('/home')
 def home():
-    return render_template('home.html', catalog=item_mapper.get_catalog(), item = 'bb')
+    return render_template('home.html')
 
 
 @app.route('/home/<item>')

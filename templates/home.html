@@ -1,13 +1,6 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-    {% for x in catalog.item_catalog %}
-        {% with %}
-            {% set loop_index0 = loop.index0 %}
-            {% include 'includes/_detailed_view.html' %}
-        {% endwith %} 
-        {% include 'includes/_modal_open.html' %}
-    {% endfor %}
     <div class="tool-container container">
         <span id="items-title">Home</span>
         <hr>
@@ -44,6 +37,7 @@
                         <th>Language</th>
                         <th>ISBN-10</th>
                         <th>ISBN-13</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -57,6 +51,13 @@
                         <td>{{x.language}}</td>
                         <td>{{x.isbn10}}</td>
                         <td>{{x.isbn13}}</td>
+                        <td>
+                            {% with %}
+                                {% set loop_index0 = loop.index0 %}
+                                {% include 'includes/_detailed_view.html' %}
+                            {% endwith %} 
+                            {% include 'includes/_modal_open.html' %}
+                        </td>
                     </tr>
                     {% endfor %}
                     </tbody>
@@ -159,12 +160,5 @@
             {% endif %}
         </div>
 
-        <script>
-            $(document).ready( function () {
-                $('table').DataTable({
-                    "searching": false
-                });
-            } );
-        </script>
     {% endif %}
 {% endblock %}

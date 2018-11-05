@@ -44,11 +44,11 @@
                         </form>
                         <hr>
                         <div class = "container">
-                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{{ catalog.item_catalog[loop_index0-1].id }}" data-dismiss="modal">&lt;</button>
+                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{{ item_list[loop_index0-1].id }}" data-dismiss="modal">&lt;</button>
                             <div class = "divider"></div>
                             <button type="button" class="btn btn-info">Loan</button>
                             <div class = "divider"></div>
-                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{% if loop_index0 == catalog.item_catalog|length -1 %}{{ catalog.item_catalog[1].id }}{% else %}{{ catalog.item_catalog[loop_index0+1].id }}{% endif %}" data-dismiss="modal">&gt;</button>
+                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{% if loop_index0 == item_list|length -1 %}{{ item_list[0].id }}{% else %}{{ item_list[loop_index0+1].id }}{% endif %}" data-dismiss="modal">&gt;</button>
                         </div>
                     </div>
                     
