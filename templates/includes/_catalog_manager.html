@@ -33,10 +33,11 @@
 <hr>
 
 {% if catalog %}
-<h4>Type something in the following input field to search for specific items:</h4>
+<h4>Type something in the following input field to search across all items:</h4>
 <input class="form-control" id="myInput" type="text" placeholder="Search..">
 <br>
 <br>
+
 <h3>Books</h3>
 <table id="book-table" class="table table-hover table-bordered">
     <thead>
@@ -141,16 +142,17 @@
                             <input type="submit" value="Delete" /></form></td>
                     </tr>
                     {% endif %}
-            {% endfor%}    
+            {% endfor%}
         {% endif %}
     </tbody>
 </table>
 <br />
 
 <h3>Magazines</h3>
-<table class="table table-hover table-bordered">
+<table id="magazine-table" class="table table-hover table-bordered">
     <thead>
         <tr>
+            <th class="hidden">ID</th>
             <th>Title</th>
             <th>Publisher</th>
             <th>Language</th>
@@ -235,16 +237,17 @@
                             <input type="submit" value="Delete" /></form></td>
                     </tr>
                     {% endif %}
-            {% endfor%}    
+            {% endfor%}
         {% endif %}
     </tbody>
 </table>
 <br />
 
 <h3>Movies</h3>
-<table class="table table-hover table-bordered">
+<table id="movie-table" class="table table-hover table-bordered">
     <thead>
         <tr>
+            <th class="hidden">ID</th>
             <th>Title</th>
             <th>Director</th>
             <th>Producers</th>
@@ -349,16 +352,17 @@
                             <input type="submit" value="Delete" /></form></td>
                     </tr>
                     {% endif %}
-            {% endfor%}    
+            {% endfor%}
         {% endif %}
     </tbody>
 </table>
 <br />
 
 <h3>Music</h3>
-<table class="table table-hover table-bordered">
+<table id="music-table" class="table table-hover table-bordered">
     <thead>
         <tr>
+            <th class="hidden">ID</th>
             <th>Type</th>
             <th>Title</th>
             <th>Artist</th>
@@ -448,10 +452,19 @@
                             <input type="submit" value="Delete" /></form></td>
                     </tr>
                     {% endif %}
-            {% endfor%}    
+            {% endfor%}
         {% endif %}
     </tbody>
 </table>
+
+<!-- This script should not be called from an external js file -->
+<script>
+    $(document).ready( function () {
+        $('table').DataTable({
+            "orderClasses": false
+        });
+    } );
+</script>
 
 <script src="../static/presentation/js/catalog_manager_search.js"></script>
 
