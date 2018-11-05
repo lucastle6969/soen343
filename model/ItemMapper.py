@@ -16,6 +16,30 @@ class ItemMapper:
     def get_catalog(self):
         return self.catalog
 
+    def get_all_books(self):
+        book_list = []
+        for book in self.tdg.get_books():
+            book_list.append(Book(book[0], book[1], "bb", book[2], book[3], book[4], book[5], book[6], book[7], book[8], book[9]))
+        return book_list
+
+    def get_all_magazines(self):
+        magazine_list = []
+        for magazine in self.tdg.get_magazines():
+            magazine_list.append(Magazine(magazine[0], magazine[1], "ma", magazine[2], magazine[3], magazine[4], magazine[5], magazine[6]))
+        return magazine_list
+
+    def get_all_music(self):
+        music_list = []
+        for music in self.tdg.get_music():
+            music_list.append(Music(music[0], music[1], "mu", music[2], music[3], music[4], music[5], music[6], music[7]))
+        return music_list
+
+    def get_all_movies(self):
+        movie_list = []
+        for movie in self.tdg.get_movies():
+            movie_list.append(Movie(movie[0], movie[1], "mo", movie[2], movie[3], movie[4], movie[5], movie[6], movie[7], movie[8], movie[9], movie[10]))
+        return movie_list
+
     def get_saved_changes(self):
         if self.uow is None:
             return None
