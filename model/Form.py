@@ -126,6 +126,9 @@ class MusicForm(Form):
     asin = StringField('ASIN', [validators.DataRequired(), validators.Length(min=10, max=10)])
     quantity = IntegerField('Quantity', [validators.DataRequired(), number, validators.NumberRange(min=1, max=255)])
 
+class SearchForm(Form):
+    filter = StringField('Type')
+    search = StringField('Type')
 
 class Forms(Form):
 

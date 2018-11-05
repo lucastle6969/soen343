@@ -26,6 +26,36 @@
             <div class="tab-pane fade show active" id="book" role="tabpanel" aria-labelledby="book-tab">
                 <br/>
                 <center><h3>Books</h3></center>
+                {% from "includes/_form_helpers.html" import render_field %}
+                <form method="POST" action="/home/search/books">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <select class="form-control" name="filter">
+                                <option value="title">Title</option>
+                                <option value="author">Author</option>
+                                <option value="publisher">Publisher</option>
+                                <option value="language">Language</option>
+                                <option value="isbn10">ISBN-10</option>
+                                <option value="isbn13">ISBN-13</option>
+                            </select>
+                        </li>
+                        <li class="nav-item col-sm-9">
+                            <input class="form-control" name="search" type="text" placeholder="Search..">
+                        </li>
+                        <li class="nav-item">
+                            <input class="form-control" type="submit" value="Search">
+                        </li>
+                    </ul>
+                </form>
+
+                <script>
+                    $("a.dropdown-item").click(function(){
+                      var selText = $(this).text();
+                      $(this).parents('.btn-group').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
+                    });
+                </script>
+
+                <br/>
                 <table class="table table-hover table-bordered">
                     <thead>
                     <tr>
@@ -62,7 +92,7 @@
                     {% endfor %}
                     </tbody>
                 </table>
-            </div>
+            </form>
             {% endif%}
             {% if item == "ma" %}
             <div class="tab-pane fade show active" id="magazine" role="tabpanel" aria-labelledby="magazine-tab">
@@ -160,5 +190,12 @@
             {% endif %}
         </div>
 
+        <script>
+            $(document).ready( function () {
+                $('table').DataTable({
+                    "searching": false
+                });
+            } );
+        </script>
     {% endif %}
 {% endblock %}

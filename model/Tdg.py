@@ -171,6 +171,20 @@ class Tdg:
         else:
             return data
 
+    def get_filtered_books(self, filter, search):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        str = filter + " = \"" + search + "\""
+        result = cur.execute("Select id, title, author, format, pages, publisher, language, isbn10, isbn13, quantity FROM book WHERE %s;", str)
+        data = []
+        for row in cur.fetchall():
+            data.append(row)
+        cur.close()
+        if result is None:
+            return False
+        else:
+            return data
+
     def get_magazines(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
