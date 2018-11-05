@@ -174,8 +174,8 @@ class Tdg:
     def get_filtered_books(self, filter, search):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        str = filter + " = \"" + search + "\""
-        result = cur.execute("Select id, title, author, format, pages, publisher, language, isbn10, isbn13, quantity FROM book WHERE %s;", str)
+        str = filter + " LIKE \"%" + search + "%\""
+        result = cur.execute("Select * FROM book WHERE " + str)
         data = []
         for row in cur.fetchall():
             data.append(row)
