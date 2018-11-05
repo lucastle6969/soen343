@@ -6,10 +6,11 @@ def person_name(form, field):
     if any(char.isdigit() for char in field.data):
         raise ValidationError('Must not contain any numerical digit')
     if len(field.data) == 0:
-        raise ValidationError('This field is required')
+        raise ValidationError('Please enter the name')
     if len(field.data) > 70:
         raise ValidationError('This name is too long to be real')
-
+    if len(field.data) < 2:
+        raise ValidationError('The name is too short to be real')    
 
 # Verifies if password does contain at least a letter and a digit
 def password(form, field):
@@ -31,6 +32,8 @@ def phone_number(form, field):
         if type(field.data) is str:
             if any(char.isalpha() for char in field.data):
                 raise ValidationError('Phone numbers should not contain any alphabetic character')
+    if len(field.data) < 10:
+        raise ValidationError('The phone number needs more digits to be valid')
 
 
 # Verifies that the date input matches the format DD-MM-YYYY
@@ -47,6 +50,7 @@ def number(form, field):
         if type(field.data) is str:
             if any(char.isalpha() for char in field.data):
                 raise ValidationError('A number cannot contain any alphabetic character')
+    
 
 
 # Verifies word does not contain any digit
@@ -70,13 +74,13 @@ def alpha_numeric(form, field):
 
 
 class RegisterForm(Form):
-    first_name = StringField('First Name', [validators.DataRequired(), person_name])
-    last_name = StringField('Last Name', [validators.DataRequired(), person_name])
-    email = StringField('Email', [validators.DataRequired(), validators.Email()])
-    phone = StringField('Phone', [validators.DataRequired(), phone_number, validators.Length(min=1, max=12)])
-    address = StringField('Address', [validators.DataRequired(), validators.Length(min=6, max=50)])
+    first_name = StringField('First Name', [validators.InputRequired(), person_name])
+    last_name = StringField('Last Name', [validators.InputRequired(), person_name])
+    email = StringField('Email', [validators.InputRequired(), validators.Email()])
+    phone = StringField('Phone', [validators.InputRequired(), phone_number, validators.Length(min=1, max=12)])
+    address = StringField('Address', [validators.InputRequired(), validators.Length(min=6, max=50)])
     password = PasswordField('Password', [
-        validators.DataRequired(),
+        validators.InputRequired(),
         password,
         validators.EqualTo('confirm', message='Passwords do not match')
     ])
@@ -107,12 +111,12 @@ class MagazineForm(Form):
 
 
 class MovieForm(Form):
-    title = StringField('Title', [validators.DataRequired(), validators.Length(min=1, max=300)])
-    director = StringField('Director', [validators.DataRequired(), no_digit, validators.Length(min=1, max=70)])
-    producers = StringField('Producers', [validators.DataRequired(), validators.Length(min=1, max=100)])
-    actors = StringField('Actors', [validators.DataRequired(), no_digit, validators.Length(min=1, max=300)])
-    language = StringField('Language', [validators.DataRequired(), no_digit])
-    subtitles = StringField('Subtitles', [validators.DataRequired(), no_digit])
+    title = StringField('Title', [validators.InputRequired(), validators.Length(min=1, max=300)])
+    director = StringField('Director', [validators.InputRequired(), no_digit, validators.Length(min=1, max=70)])
+    producers = StringField('Producers', [validators.InputRequired(), validators.Length(min=1, max=100)])
+    actors = StringField('Actors', [validators.InputRequired(), no_digit, validators.Length(min=1, max=300)])
+    language = StringField('Language', [validators.InputRequired(), no_digit])
+    subtitles = StringField('Subtitles', [validators.InputRequired(), no_digit])
     dubbed = StringField('Dubbed', [no_digit])
     release_date = StringField('Release Date', [validators.DataRequired(), date])
     runtime = StringField('Run Time ', [validators.DataRequired(), number, validators.Length(min=1, max=30)])
