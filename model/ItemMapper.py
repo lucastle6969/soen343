@@ -64,6 +64,7 @@ class ItemMapper:
             item.language = form.language.data
             item.isbn10 = form.isbn10.data
             item.isbn13 = form.isbn13.data
+            item.quantity = form.quantity.data
 
         elif item_prefix == "ma":
             item.title = form.title.data
@@ -71,6 +72,7 @@ class ItemMapper:
             item.language = form.language.data
             item.isbn10 = form.isbn10.data
             item.isbn13 = form.isbn13.data
+            item.quantity = form.quantity.data
 
         elif item_prefix == "mo":
             item.title = form.title.data
@@ -82,6 +84,7 @@ class ItemMapper:
             item.dubbed = form.dubbed.data
             item.release_date = form.release_date.data
             item.runtime = form.runtime.data
+            item.quantity = form.quantity.data
 
         elif item_prefix == "mu":
             item.title = form.title.data
@@ -90,13 +93,13 @@ class ItemMapper:
             item.label = form.label.data
             item.release_date = form.release_date.data
             item.asin = form.asin.data
+            item.quantity = form.quantity.data
 
         self.uow.register_dirty(item)
 
     def add_book(self, form):
         title = form.title.data
         prefix = "bb"
-        status = "Available"
         author = form.author.data
         book_format = form.format.data
         pages = form.pages.data
@@ -104,8 +107,9 @@ class ItemMapper:
         language = form.language.data
         isbn10 = form.isbn10.data
         isbn13 = form.isbn13.data
-        book = Book(None, title, prefix, status, author, book_format, pages,
-                    publisher, language, isbn10, isbn13)
+        quantity = form.quantity.data
+        book = Book(None, title, prefix, author, book_format, pages,
+                    publisher, language, isbn10, isbn13, quantity)
         if self.uow is None:
             self.uow = Uow()
         self.uow.add(book)
@@ -116,12 +120,12 @@ class ItemMapper:
         title = form.title.data
         publisher = form.publisher.data
         prefix = "ma"
-        status = "Available"
         language = form.language.data
         isbn10 = form.isbn10.data
         isbn13 = form.isbn13.data
-        magazine = Magazine(None, title, prefix, status, publisher, language,
-                            isbn10, isbn13)
+        quantity = form.quantity.data
+        magazine = Magazine(None, title, prefix, publisher, language,
+                            isbn10, isbn13, quantity)
         if self.uow is None:
             self.uow = Uow()
         self.uow.add(magazine)
@@ -131,7 +135,6 @@ class ItemMapper:
     def add_movie(self, form):
         title = form.title.data
         prefix = "mo"
-        status = "Available"
         director = form.director.data
         producers = form.producers.data
         actors = form.actors.data
@@ -140,8 +143,9 @@ class ItemMapper:
         dubbed = form.dubbed.data
         release_date = form.release_date.data
         run_time = form.runtime.data
-        movie = Movie(None, title, prefix, status, director, producers, actors,
-                      language, subtitles, dubbed, release_date, run_time)
+        quantity = form.quantity.data
+        movie = Movie(None, title, prefix, director, producers, actors,
+                      language, subtitles, dubbed, release_date, run_time, quantity)
         if self.uow is None:
             self.uow = Uow()
         self.uow.add(movie)
@@ -152,13 +156,13 @@ class ItemMapper:
         media_type = form.media_type.data
         title = form.title.data
         prefix = "mu"
-        status = "Available"
         artist = form.artist.data
         label = form.label.data
         release_date = form.release_date.data
         asin = form.asin.data
-        music = Music(None, title, prefix, status, media_type, artist, label,
-                      release_date, asin)
+        quantity = form.quantity.data
+        music = Music(None, title, prefix, media_type, artist, label,
+                      release_date, asin, quantity)
         if self.uow is None:
             self.uow = Uow()
         self.uow.add(music)
