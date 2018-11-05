@@ -17,28 +17,28 @@ def new_user():
 # Book created for testing insertion, deletion and modification
 @pytest.fixture(scope='module')
 def new_book():
-    book = Book(324, "DARK MATTER", "bb", "Available", "Blake Crouch", "Hardcover", 300, "VonRueden-Swaniawski", "EN", 5914602904, 5914602904123)
+    book = Book(324, "DARK MATTER", "bb", "Blake Crouch", "Hardcover", 300, "VonRueden-Swaniawski", "EN", 5914602904, 5914602904123, 1)
     return book
 
 
 # Magazine created for testing insertion, deletion and modification
 @pytest.fixture(scope='module')
 def new_magazine():
-    magazine = Magazine(333, "The UFO Incident", "ma", "avail", "Kuhic Ferry", "EN", 7464072294, 7464072294123)
+    magazine = Magazine(333, "The UFO Incident", "ma", "Kuhic Ferry", "EN", 7464072294, 7464072294123, 1)
     return magazine
 
 
 # Movie created for testing insertion, deletion and modification
 @pytest.fixture(scope='module')
 def new_movie():
-    movie = Movie(434, "Man Is Not a Bird", "mo", "avail", "Gorden Kermon", "Skiles Swaniawski", "Eleen Leavesley", "EN", "None", "None", "18/10/2018", "2h30")
+    movie = Movie(434, "Man Is Not a Bird", "mo", "Gorden Kermon", "Skiles Swaniawski", "Eleen Leavesley", "EN", "None", "None", "18/10/2018", "2h30", 1)
     return movie
 
 
 # Music created for testing insertion, deletion and modification
 @pytest.fixture(scope='module')
 def new_music():
-    music = Music(331, "Boiling Point", "mu", "avail", "CD", "Dianna Argo", "Sony Music", "19/01/1976", "B008FOB124")
+    music = Music(331, "Boiling Point", "mu", "CD", "Dianna Argo", "Sony Music", "19/01/1976", "B008FOB124", 1)
     return music
 
 
@@ -54,6 +54,7 @@ def new_book_form():
     form.language.data = "EN"
     form.isbn13.data = 5914602904
     form.isbn13.data = 5914602904123
+    form.quantity.data = 1
     return form
 
 
@@ -66,6 +67,7 @@ def new_magazine_form():
     form.language.data = "EN"
     form.isbn13.data = 7464072294
     form.isbn13.data = 7464072294123
+    form.quantity.data = 1
     return form
 
 
@@ -82,6 +84,7 @@ def new_movie_form():
     form.dubbed.data = "None"
     form.release_date.data = "18/10/2018"
     form.runtime.data = "2h30"
+    form.quantity.data = 1
     return form
 
 
@@ -95,4 +98,5 @@ def new_music_form():
     form.label.data = "Sony Music"
     form.release_date.data = "19/01/1976"
     form.asin.data = "B008FOB124"
+    form.quantity.data = 1
     return form
