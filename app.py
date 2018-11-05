@@ -30,6 +30,18 @@ def home():
     return render_template('home.html', catalog=item_mapper.get_catalog(), item = 'bb')
 
 
+@app.route('/home/<item>')
+def itemList(item):
+    if item == "bb":
+        return render_template('home.html', item_list=item_mapper.get_all_books(), item="bb")
+    elif item == "ma":
+        return render_template('home.html', item_list=item_mapper.get_all_magazines(), item="ma")
+    elif item == "mu":
+        return render_template('home.html', item_list=item_mapper.get_all_music(), item="mu")
+    elif item == "mo":
+        return render_template('home.html', item_list=item_mapper.get_all_movies(), item="mo")
+
+
 @app.route('/about')
 def about():
     return render_template('about.html')

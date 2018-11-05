@@ -16,6 +16,30 @@ class ItemMapper:
     def get_catalog(self):
         return self.catalog
 
+    def get_all_books(self):
+        book_list = []
+        for book in self.tdg.get_books():
+            book_list.append(Book(book[0], book[1], "bb", book[2], book[3], book[4], book[5], book[6], book[7], book[8], book[9]))
+        return book_list
+
+    def get_all_magazines(self):
+        magazine_list = []
+        for magazine in self.tdg.get_magazines():
+            magazine_list.append(Magazine(magazine[0], magazine[1], "ma", magazine[2], magazine[3], magazine[4], magazine[5], magazine[6]))
+        return magazine_list
+
+    def get_all_music(self):
+        music_list = []
+        for music in self.tdg.get_music():
+            music_list.append(Music(music[0], music[1], "mu", music[2], music[3], music[4], music[5], music[6], music[7]))
+        return music_list
+
+    def get_all_movies(self):
+        movie_list = []
+        for movie in self.tdg.get_movies():
+            movie_list.append(Movie(movie[0], movie[1], "mo", movie[2], movie[3], movie[4], movie[5], movie[6], movie[7], movie[8], movie[9], movie[10]))
+        return movie_list
+
     def get_saved_changes(self):
         if self.uow is None:
             return None
@@ -64,6 +88,7 @@ class ItemMapper:
             item.language = form.language.data
             item.isbn10 = form.isbn10.data
             item.isbn13 = form.isbn13.data
+            item.quantity = form.quantity.data
 
         elif item_prefix == "ma":
             item.title = form.title.data
@@ -71,6 +96,7 @@ class ItemMapper:
             item.language = form.language.data
             item.isbn10 = form.isbn10.data
             item.isbn13 = form.isbn13.data
+            item.quantity = form.quantity.data
 
         elif item_prefix == "mo":
             item.title = form.title.data
@@ -82,6 +108,7 @@ class ItemMapper:
             item.dubbed = form.dubbed.data
             item.release_date = form.release_date.data
             item.runtime = form.runtime.data
+            item.quantity = form.quantity.data
 
         elif item_prefix == "mu":
             item.title = form.title.data
@@ -90,13 +117,13 @@ class ItemMapper:
             item.label = form.label.data
             item.release_date = form.release_date.data
             item.asin = form.asin.data
+            item.quantity = form.quantity.data
 
         self.uow.register_dirty(item)
 
     def add_book(self, form):
         title = form.title.data
         prefix = "bb"
-        status = "Available"
         author = form.author.data
         book_format = form.format.data
         pages = form.pages.data
@@ -104,8 +131,9 @@ class ItemMapper:
         language = form.language.data
         isbn10 = form.isbn10.data
         isbn13 = form.isbn13.data
-        book = Book(None, title, prefix, status, author, book_format, pages,
-                    publisher, language, isbn10, isbn13)
+        quantity = form.quantity.data
+        book = Book(None, title, prefix, author, book_format, pages,
+                    publisher, language, isbn10, isbn13, quantity)
         if self.uow is None:
             self.uow = Uow()
         self.uow.add(book)
@@ -116,12 +144,12 @@ class ItemMapper:
         title = form.title.data
         publisher = form.publisher.data
         prefix = "ma"
-        status = "Available"
         language = form.language.data
         isbn10 = form.isbn10.data
         isbn13 = form.isbn13.data
-        magazine = Magazine(None, title, prefix, status, publisher, language,
-                            isbn10, isbn13)
+        quantity = form.quantity.data
+        magazine = Magazine(None, title, prefix, publisher, language,
+                            isbn10, isbn13, quantity)
         if self.uow is None:
             self.uow = Uow()
         self.uow.add(magazine)
@@ -131,7 +159,6 @@ class ItemMapper:
     def add_movie(self, form):
         title = form.title.data
         prefix = "mo"
-        status = "Available"
         director = form.director.data
         producers = form.producers.data
         actors = form.actors.data
@@ -140,8 +167,9 @@ class ItemMapper:
         dubbed = form.dubbed.data
         release_date = form.release_date.data
         run_time = form.runtime.data
-        movie = Movie(None, title, prefix, status, director, producers, actors,
-                      language, subtitles, dubbed, release_date, run_time)
+        quantity = form.quantity.data
+        movie = Movie(None, title, prefix, director, producers, actors,
+                      language, subtitles, dubbed, release_date, run_time, quantity)
         if self.uow is None:
             self.uow = Uow()
         self.uow.add(movie)
@@ -152,13 +180,13 @@ class ItemMapper:
         media_type = form.media_type.data
         title = form.title.data
         prefix = "mu"
-        status = "Available"
         artist = form.artist.data
         label = form.label.data
         release_date = form.release_date.data
         asin = form.asin.data
-        music = Music(None, title, prefix, status, media_type, artist, label,
-                      release_date, asin)
+        quantity = form.quantity.data
+        music = Music(None, title, prefix, media_type, artist, label,
+                      release_date, asin, quantity)
         if self.uow is None:
             self.uow = Uow()
         self.uow.add(music)

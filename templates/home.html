@@ -16,124 +16,155 @@
         Welcome to the library {{session.first_name}} <br>
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item">
-                <a class="nav-link active" id="book-tab" data-toggle="tab" href="#book" role="tab" aria-controls="book" aria-selected="true">Books</a>
+                <a class="nav-link active" id="book-tab" href="/home/bb" aria-controls="book" aria-selected="true">Books</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="magazine-tab" data-toggle="tab" href="#magazine" role="tab" aria-controls="magazine" aria-selected="false">Magazines</a>
+                <a class="nav-link active" id="magazine-tab"  href="/home/ma" aria-controls="magazine" aria-selected="false">Magazines</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="music-tab" data-toggle="tab" href="#music" role="tab" aria-controls="music" aria-selected="false">Music</a>
+                <a class="nav-link active" id="music-tab" href="/home/mu" aria-controls="music" aria-selected="false">Music</a>
             </li>
             <li class="nav-item">
-                    <a class="nav-link" id="movie-tab" data-toggle="tab" href="#movie" role="tab" aria-controls="movie" aria-selected="false">Movies</a>
+                <a class="nav-link active" id="movie-tab" href="/home/mo" aria-controls="movie" aria-selected="false">Movies</a>
             </li>
         </ul>
+        {% if item == "bb" %}
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="book" role="tabpanel" aria-labelledby="book-tab">
-                <ul class="nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Search by..</a>
-                        <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Date</a>
-                        <a class="dropdown-item" href="#">ISBN</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </li>
-                    <li>
-                        <input type="text" name="fname" placeholder="Search Text Input">
-                    </li>
-                    <li>
-                        <button type="submit">Search</button>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Order by..</a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Title</a>
-                            <a class="dropdown-item" href="#">Author</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </li>
-                </ul>
+                <br/>
+                <center><h3>Books</h3></center>
+                <table class="table table-hover table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Format</th>
+                        <th>Pages</th>
+                        <th>Publisher</th>
+                        <th>Language</th>
+                        <th>ISBN-10</th>
+                        <th>ISBN-13</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for x in item_list %}
+                    <tr>
+                        <td>{{x.title}}</td>
+                        <td>{{x.author}}</td>
+                        <td>{{x.format}}</td>
+                        <td>{{x.pages}}</td>
+                        <td>{{x.publisher}}</td>
+                        <td>{{x.language}}</td>
+                        <td>{{x.isbn10}}</td>
+                        <td>{{x.isbn13}}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
-            <div class="tab-pane fade" id="magazine" role="tabpanel" aria-labelledby="magazine-tab">
-                <ul class="nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Search by..</a>
-                        <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Date</a>
-                        <a class="dropdown-item" href="#">ISBN</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </li>
-                    <li>
-                        <input type="text" name="fname" placeholder="Search Text Input">
-                    </li>
-                    <li>
-                        <button type="submit">Search</button>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Order by..</a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Title</a>
-                            <a class="dropdown-item" href="#">Author</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </li>
-                </ul>
+            {% endif%}
+            {% if item == "ma" %}
+            <div class="tab-pane fade show active" id="magazine" role="tabpanel" aria-labelledby="magazine-tab">
+                <br/>
+                <center><h3>Magazines</h3></center>
+                <table class="table table-hover table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Publisher</th>
+                        <th>Language</th>
+                        <th>ISBN-10</th>
+                        <th>ISBN-13</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for x in item_list %}
+                    <tr>
+                        <td>{{x.title}}</td>
+                        <td>{{x.publisher}}</td>
+                        <td>{{x.language}}</td>
+                        <td>{{x.isbn10}}</td>
+                        <td>{{x.isbn13}}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
-            <div class="tab-pane fade" id="music" role="tabpanel" aria-labelledby="music-tab">
-                <ul class="nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Search by..</a>
-                        <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Date</a>
-                        <a class="dropdown-item" href="#">ISBN</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </li>
-                    <li>
-                        <input type="text" name="fname" placeholder="Search Text Input">
-                    </li>
-                    <li>
-                        <button type="submit">Search</button>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Order by..</a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Title</a>
-                            <a class="dropdown-item" href="#">Author</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </li>
-                </ul>
+            {% endif%}
+            {% if item == "mu" %}
+            <div class="tab-pane fade show active" id="music" role="tabpanel" aria-labelledby="music-tab">
+                <br/>
+                <center><h3>Music</h3></center>
+                <table class="table table-hover table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Title</th>
+                        <th>Artist</th>
+                        <th>Label</th>
+                        <th>Release Date</th>
+                        <th>ASIN</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for x in item_list %}
+                    <tr>
+                        <td>{{x.media_type}}</td>
+                        <td>{{x.title}}</td>
+                        <td>{{x.artist}}</td>
+                        <td>{{x.label}}</td>
+                        <td>{{x.release_date}}</td>
+                        <td>{{x.asin}}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
-            <div class="tab-pane fade" id="movie" role="tabpanel" aria-labelledby="movie-tab">
-                <ul class="nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Search by..</a>
-                        <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Date</a>
-                        <a class="dropdown-item" href="#">ISBN</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </li>
-                    <li>
-                        <input type="text" name="fname" placeholder="Search Text Input">
-                    </li>
-                    <li>
-                        <button type="submit">Search</button>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Order by..</a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Title</a>
-                            <a class="dropdown-item" href="#">Author</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </li>
-                </ul>
+            {% endif%}
+            {% if item == "mo" %}
+            <div class="tab-pane fade show active" id="movie" role="tabpanel" aria-labelledby="movie-tab">
+                <br/>
+                <center><h3>Movies</h3></center>
+                <table class="table table-hover table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Director</th>
+                        <th>Producers</th>
+                        <th>Actors</th>
+                        <th>Language</th>
+                        <th>Subtitles</th>
+                        <th>Dubbed</th>
+                        <th>Release Date</th>
+                        <th>Run Time</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for x in item_list %}
+                    <tr>
+                        <td>{{x.title}}</td>
+                        <td>{{x.director}}</td>
+                        <td>{{x.producers}}</td>
+                        <td>{{x.actors}}</td>
+                        <td>{{x.language}}</td>
+                        <td>{{x.subtitles}}</td>
+                        <td>{{x.dubbed}}</td>
+                        <td>{{x.release_date}}</td>
+                        <td>{{x.runtime}}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
+            {% endif %}
         </div>
-    </div>
+
+        <script>
+            $(document).ready( function () {
+                $('table').DataTable({
+                    "searching": false
+                });
+            } );
+        </script>
     {% endif %}
 {% endblock %}

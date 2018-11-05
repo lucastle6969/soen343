@@ -118,15 +118,15 @@ td, th {
 }
 
 .uow-added {
-    background-color: green;
+    background-color: green !important;
 }
 
 .uow-modify {
-    background-color: yellow;
+    background-color: yellow !important;
 }
 
 .uow-delete {
-    background-color: red;
+    background-color: red !important;
 }
 
 .hidden {
