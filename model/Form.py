@@ -92,7 +92,7 @@ class BookForm(Form):
     language = StringField('Language', [validators.DataRequired(), no_digit])
     isbn10 = IntegerField('ISBN10', [validators.DataRequired(), number, validators.NumberRange(min=1000000000, max=9999999999)])
     isbn13 = IntegerField('ISBN13', [validators.DataRequired(), number, validators.NumberRange(min=1000000000000, max=9999999999999)])
-    quantity = IntegerField('Quantity', [validators.DataRequired(), number, validators.NumberRange(min=1, max=1000)])
+    quantity = IntegerField('Quantity', [validators.DataRequired(), number, validators.NumberRange(min=1, max=255)])
 
 
 class MagazineForm(Form):
@@ -101,7 +101,7 @@ class MagazineForm(Form):
     language = StringField('Language', [validators.DataRequired(), no_digit])
     isbn10 = IntegerField('ISBN10', [validators.DataRequired(), number, validators.NumberRange(min=1000000000, max=9999999999)])
     isbn13 = IntegerField('ISBN13', [validators.DataRequired(), number, validators.NumberRange(min=1000000000000, max=9999999999999)])
-    quantity = IntegerField('Quantity', [validators.DataRequired(), number, validators.NumberRange(min=1, max=1000)])
+    quantity = IntegerField('Quantity', [validators.DataRequired(), number, validators.NumberRange(min=1, max=255)])
 
 
 class MovieForm(Form):
@@ -114,7 +114,7 @@ class MovieForm(Form):
     dubbed = StringField('Dubbed', [no_digit])
     release_date = StringField('Release Date', [validators.DataRequired(), date])
     runtime = StringField('Run Time ', [validators.DataRequired(), number, validators.Length(min=1, max=30)])
-    quantity = IntegerField('Quantity', [validators.DataRequired(), number, validators.NumberRange(min=1, max=1000)])
+    quantity = IntegerField('Quantity', [validators.DataRequired(), number, validators.NumberRange(min=1, max=255)])
 
 
 class MusicForm(Form):
@@ -124,7 +124,7 @@ class MusicForm(Form):
     label = StringField('Label', [validators.DataRequired(), validators.Length(min=1, max=30)])
     release_date = StringField('Release Date', [validators.DataRequired(), date, validators.Length(min=1, max=30)])
     asin = StringField('ASIN', [validators.DataRequired(), validators.Length(min=10, max=10)])
-    quantity = IntegerField('Quantity', [validators.DataRequired(), number, validators.NumberRange(min=1, max=1000)])
+    quantity = IntegerField('Quantity', [validators.DataRequired(), number, validators.NumberRange(min=1, max=255)])
 
 
 class Forms(Form):
