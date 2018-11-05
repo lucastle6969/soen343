@@ -82,7 +82,6 @@ class Catalog:
                 item.label = mod_item.label
                 item.release_date = mod_item.release_date
                 item.asin = mod_item.asin
-
         return True
 
     def delete_items(self, items):
