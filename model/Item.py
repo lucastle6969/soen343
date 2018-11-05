@@ -1,14 +1,15 @@
 class Item:
-    def __init__(self, item_id, title, prefix, status):
+    def __init__(self, item_id, title, prefix, quantity):
         self.title = title
         self.prefix = prefix
         self.id = item_id
-        self.status = status
+
+        self.quantity = quantity
 
 
 class Book(Item):
-    def __init__(self, item_id, title, prefix, status, author, item_format, pages, publisher, language, isbn10, isbn13):
-        Item.__init__(self, item_id, title, prefix, status)
+    def __init__(self, item_id, title, prefix, author, item_format, pages, publisher, language, isbn10, isbn13, quantity):
+        Item.__init__(self, item_id, title, prefix, quantity)
         self.author = author
         self.format = item_format
         self.pages = pages
@@ -19,8 +20,8 @@ class Book(Item):
 
 
 class Magazine(Item):
-    def __init__(self, item_id, title, prefix, status, publisher, language, isbn10, isbn13):
-        Item.__init__(self, item_id, title, prefix, status)
+    def __init__(self, item_id, title, prefix, publisher, language, isbn10, isbn13, quantity):
+        Item.__init__(self, item_id, title, prefix, quantity)
         self.publisher = publisher
         self.language = language
         self.isbn10 = isbn10
@@ -28,9 +29,9 @@ class Magazine(Item):
 
 
 class Movie(Item):
-    def __init__(self, item_id, title, prefix, status, director, producers, actors, language, subtitles, dubbed,
-                 release_date, runtime):
-        Item.__init__(self, item_id, title, prefix, status)
+    def __init__(self, item_id, title, prefix, director, producers, actors, language, subtitles, dubbed,
+                 release_date, runtime, quantity):
+        Item.__init__(self, item_id, title, prefix, quantity)
         self.director = director
         self.producers = producers
         self.actors = actors
@@ -42,10 +43,11 @@ class Movie(Item):
 
 
 class Music(Item):
-    def __init__(self, item_id, title, prefix, status, media_type, artist, label, release_date, asin):
-        Item.__init__(self, item_id, title, prefix, status)
+    def __init__(self, item_id, title, prefix, media_type, artist, label, release_date, asin, quantity):
+        Item.__init__(self, item_id, title, prefix, quantity)
         self.media_type = media_type
         self.artist = artist
         self.label = label
         self.release_date = release_date
         self.asin = asin
+

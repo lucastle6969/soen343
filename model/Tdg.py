@@ -78,12 +78,14 @@ class Tdg:
         connection = self.mysql.connect()
         cur = connection.cursor()
         # Execute query
-        cur.execute("""INSERT INTO book(title, author, format, pages, publisher, language, isbn10, isbn13)
-                    VALUES(%s, %s, %s, %s, %s, %s, %s, %s)""",
-                    (book.title, book.author, book.format, book.pages, book.publisher, book.language, book.isbn10, book.isbn13))
+        cur.execute("""INSERT INTO book(title, author, format, pages, publisher, language, isbn10, isbn13, quantity)
+                    VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)""",
+                    (book.title, book.author, book.format, book.pages, book.publisher, book.language, book.isbn10, book.isbn13, book.quantity))
         # get the new user id
         result = cur.execute("SELECT * FROM book ORDER BY id DESC LIMIT 1")
         new_book_id = cur.fetchone()
+        for x in range(0, book.quantity):
+            cur.execute("""INSERT INTO book_physical(book_fk, status) VALUES (%s, %s)""", (str(new_book_id[0]), "Available"))
         # send new id back to the controller
         cur.close()
         if result > 0:
@@ -95,11 +97,13 @@ class Tdg:
     def add_magazine(self, magazine):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        cur.execute("""INSERT INTO magazine(title, publisher, language, isbn10, isbn13)
-                    VALUES(%s, %s, %s, %s, %s)""",
-                    (magazine.title, magazine.publisher, magazine.language, magazine.isbn10, magazine.isbn13))
+        cur.execute("""INSERT INTO magazine(title, publisher, language, isbn10, isbn13, quantity)
+                    VALUES(%s, %s, %s, %s, %s, %s)""",
+                    (magazine.title, magazine.publisher, magazine.language, magazine.isbn10, magazine.isbn13, magazine.quantity))
         result = cur.execute("SELECT * FROM magazine ORDER BY id DESC LIMIT 1")
         new_magazine_id = cur.fetchone()
+        for x in range(0, magazine.quantity):
+            cur.execute("""INSERT INTO magazine_physical(magazine_fk, status) VALUES (%s, %s)""", (str(new_magazine_id[0]), "Available"))
         cur.close()
         if result > 0:
             return new_magazine_id[0]
@@ -110,11 +114,13 @@ class Tdg:
     def add_movie(self, movie):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        cur.execute("""INSERT INTO movie(title, director, producers, actors, language, subtitles, dubbed, release_date, runtime)
-                    VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)""",
-                    (movie.title, movie.director, movie.producers, movie.actors, movie.language, movie.subtitles, movie.dubbed, movie.release_date, movie.runtime))
+        cur.execute("""INSERT INTO movie(title, director, producers, actors, language, subtitles, dubbed, release_date, runtime, quantity)
+                    VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
+                    (movie.title, movie.director, movie.producers, movie.actors, movie.language, movie.subtitles, movie.dubbed, movie.release_date, movie.runtime, movie.quantity))
         result = cur.execute("SELECT * FROM movie ORDER BY id DESC LIMIT 1")
         new_movie_id = cur.fetchone()
+        for x in range(0, movie.quantity):
+            cur.execute("""INSERT INTO movie_physical(movie_fk, status) VALUES (%s, %s)""", (str(new_movie_id[0]), "Available"))
         cur.close()
         if result > 0:
             return new_movie_id[0]
@@ -125,11 +131,13 @@ class Tdg:
     def add_music(self, music):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        cur.execute("""INSERT INTO music(title, media_type, artist, label, release_date, asin)
-                    VALUES(%s, %s, %s, %s, %s, %s)""",
-                    (music.title, music.media_type, music.artist, music.label, music.release_date, music.asin))
+        cur.execute("""INSERT INTO music(title, media_type, artist, label, release_date, asin, quantity)
+                    VALUES(%s, %s, %s, %s, %s, %s, %s)""",
+                    (music.title, music.media_type, music.artist, music.label, music.release_date, music.asin, music.quantity))
         result = cur.execute("SELECT * FROM music ORDER BY id DESC LIMIT 1")
         new_music_id = cur.fetchone()
+        for x in range(0, music.quantity):
+            cur.execute("""INSERT INTO music_physical(music_fk, status) VALUES (%s, %s)""", (str(new_music_id[0]), "Available"))
         cur.close()
         if result > 0:
             return new_music_id[0]
@@ -140,7 +148,7 @@ class Tdg:
     def get_books(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT * FROM book WHERE 1")
+        result = cur.execute("SELECT id, title, author, format, pages, publisher, language, isbn10, isbn13, quantity FROM book WHERE 1")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -153,7 +161,7 @@ class Tdg:
     def get_magazines(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT * FROM magazine WHERE 1")
+        result = cur.execute("SELECT id, title, publisher, language, isbn10, isbn13, quantity FROM magazine WHERE 1")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -166,7 +174,7 @@ class Tdg:
     def get_movies(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT * FROM movie WHERE 1")
+        result = cur.execute("SELECT id, title, director, producers, actors, language, subtitles, dubbed, release_date, runtime, quantity FROM movie WHERE 1")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -179,7 +187,7 @@ class Tdg:
     def get_music(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT * FROM music WHERE 1")
+        result = cur.execute("SELECT id, title, media_type, artist, label, release_date, asin, quantity FROM music WHERE 1")
         data = []
         for row in cur.fetchall():
             data.append(row)

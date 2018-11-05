@@ -50,7 +50,6 @@
             <th>Language</th>
             <th>ISBN-10</th>
             <th>ISBN-13</th>
-            <th>Status</th>
             <th></th>
             <th></th>
         </tr>
@@ -75,7 +74,6 @@
                                 <td>{{q.language}}</td>
                                 <td>{{q.isbn10}}</td>
                                 <td>{{q.isbn13}}</td>
-                                <td>{{q.status}}</td>
                                 <td><form method="GET" action="/admin_tools/edit_entry/{{q.prefix}}/{{q.id}}">
                                     <input type="submit" value="Edit" /></form></td>
                                 <td><form method="POST" action="/admin_tools/delete_entry/{{q.prefix}}/{{q.id}}">
@@ -98,7 +96,6 @@
                                 <td>{{x.language}}</td>
                                 <td>{{x.isbn10}}</td>
                                 <td>{{x.isbn13}}</td>
-                                <td>{{x.status}}</td>
                                 <td><form method="POST" action="/admin_tools/delete_entry/cancel/{{x.prefix}}/{{x.id}}">
                                     <input type="submit" value="Cancel" /></form></td>
                                 <td></td>
@@ -117,7 +114,6 @@
                         <td>{{x.language}}</td>
                         <td>{{x.isbn10}}</td>
                         <td>{{x.isbn13}}</td>
-                        <td>{{x.status}}</td>
                         <td><form method="GET" action="/admin_tools/edit_entry/{{x.prefix}}/{{x.id}}">
                             <input type="submit" value="Edit" /></form></td>
                         <td><form method="POST" action="/admin_tools/delete_entry/{{x.prefix}}/{{x.id}}">
@@ -139,7 +135,6 @@
                         <td>{{y.language}}</td>
                         <td>{{y.isbn10}}</td>
                         <td>{{y.isbn13}}</td>
-                        <td>{{y.status}}</td>
                         <td><form method="GET" action="/admin_tools/edit_entry/{{y.prefix}}/{{y.id}}">
                             <input type="submit" value="Edit" /></form></td>
                         <td><form method="POST" action="/admin_tools/delete_entry/{{y.prefix}}/{{y.id}}">
@@ -161,7 +156,6 @@
             <th>Language</th>
             <th>ISBN-10</th>
             <th>ISBN-13</th>
-            <th>Status</th>
             <th></th>
             <th></th>
         </tr>
@@ -183,7 +177,6 @@
                                 <td>{{q.language}}</td>
                                 <td>{{q.isbn10}}</td>
                                 <td>{{q.isbn13}}</td>
-                                <td>{{q.status}}</td>
                                 <td><form method="GET" action="/admin_tools/edit_entry/{{q.prefix}}/{{q.id}}">
                                     <input type="submit" value="Edit" /></form></td>
                                 <td><form method="POST" action="/admin_tools/delete_entry/{{q.prefix}}/{{q.id}}">
@@ -203,7 +196,6 @@
                                 <td>{{x.language}}</td>
                                 <td>{{x.isbn10}}</td>
                                 <td>{{x.isbn13}}</td>
-                                <td>{{x.status}}</td>
                                 <td><form method="POST" action="/admin_tools/delete_entry/cancel/{{x.prefix}}/{{x.id}}">
                                     <input type="submit" value="Cancel" /></form></td>
                                 <td></td>
@@ -219,7 +211,6 @@
                         <td>{{x.language}}</td>
                         <td>{{x.isbn10}}</td>
                         <td>{{x.isbn13}}</td>
-                        <td>{{x.status}}</td>
                         <td><form method="GET" action="/admin_tools/edit_entry/{{x.prefix}}/{{x.id}}">
                             <input type="submit" value="Edit" /></form></td>
                         <td><form method="POST" action="/admin_tools/delete_entry/{{x.prefix}}/{{x.id}}">
@@ -238,7 +229,6 @@
                         <td>{{y.language}}</td>
                         <td>{{y.isbn10}}</td>
                         <td>{{y.isbn13}}</td>
-                        <td>{{y.status}}</td>
                         <td><form method="GET" action="/admin_tools/edit_entry/{{y.prefix}}/{{y.id}}">
                             <input type="submit" value="Edit" /></form></td>
                         <td><form method="POST" action="/admin_tools/delete_entry/{{y.prefix}}/{{y.id}}">
@@ -264,7 +254,6 @@
             <th>Dubbed</th>
             <th>Release Date</th>
             <th>Run Time</th>
-            <th>Status</th>
             <th></th>
             <th></th>
         </tr>
@@ -290,7 +279,6 @@
                                 <td>{{q.dubbed}}</td>
                                 <td>{{q.release_date}}</td>
                                 <td>{{q.runtime}}</td>
-                                <td>{{q.status}}</td>
                                 <td><form method="GET" action="/admin_tools/edit_entry/{{q.prefix}}/{{q.id}}">
                                     <input type="submit" value="Edit" /></form></td>
                                 <td><form method="POST" action="/admin_tools/delete_entry/{{q.prefix}}/{{q.id}}">
@@ -314,7 +302,6 @@
                                 <td>{{x.dubbed}}</td>
                                 <td>{{x.release_date}}</td>
                                 <td>{{x.runtime}}</td>
-                                <td>{{x.status}}</td>
                                 <td><form method="POST" action="/admin_tools/delete_entry/cancel/{{x.prefix}}/{{x.id}}">
                                     <input type="submit" value="Cancel" /></form></td>
                                 <td></td>
@@ -334,7 +321,6 @@
                         <td>{{x.dubbed}}</td>
                         <td>{{x.release_date}}</td>
                         <td>{{x.runtime}}</td>
-                        <td>{{x.status}}</td>
                         <td><form method="GET" action="/admin_tools/edit_entry/{{x.prefix}}/{{x.id}}">
                             <input type="submit" value="Edit" /></form></td>
                         <td><form method="POST" action="/admin_tools/delete_entry/{{x.prefix}}/{{x.id}}">
@@ -357,7 +343,6 @@
                         <td>{{y.dubbed}}</td>
                         <td>{{y.release_date}}</td>
                         <td>{{y.runtime}}</td>
-                        <td>{{y.status}}</td>
                         <td><form method="GET" action="/admin_tools/edit_entry/{{y.prefix}}/{{y.id}}">
                             <input type="submit" value="Edit" /></form></td>
                         <td><form method="POST" action="/admin_tools/delete_entry/{{y.prefix}}/{{y.id}}">
@@ -380,7 +365,6 @@
             <th>Label</th>
             <th>Release Date</th>
             <th>ASIN</th>
-            <th>Status</th>
             <th></th>
             <th></th>
         </tr>
@@ -403,7 +387,6 @@
                                 <td>{{q.label}}</td>
                                 <td>{{q.release_date}}</td>
                                 <td>{{q.asin}}</td>
-                                <td>{{q.status}}</td>
                                 <td><form method="GET" action="/admin_tools/edit_entry/{{q.prefix}}/{{q.id}}">
                                     <input type="submit" value="Edit" /></form></td>
                                 <td><form method="POST" action="/admin_tools/delete_entry/{{q.prefix}}/{{q.id}}">
@@ -424,7 +407,6 @@
                                 <td>{{x.label}}</td>
                                 <td>{{x.release_date}}</td>
                                 <td>{{x.asin}}</td>
-                                <td>{{x.status}}</td>
                                 <td><form method="POST" action="/admin_tools/delete_entry/cancel/{{x.prefix}}/{{x.id}}">
                                     <input type="submit" value="Cancel" /></form></td>
                                 <td></td>
@@ -441,7 +423,6 @@
                         <td>{{x.label}}</td>
                         <td>{{x.release_date}}</td>
                         <td>{{x.asin}}</td>
-                        <td>{{x.status}}</td>
                         <td><form method="GET" action="/admin_tools/edit_entry/{{x.prefix}}/{{x.id}}">
                             <input type="submit" value="Edit" /></form></td>
                         <td><form method="POST" action="/admin_tools/delete_entry/{{x.prefix}}/{{x.id}}">
@@ -461,7 +442,6 @@
                             <td>{{y.label}}</td>
                             <td>{{y.release_date}}</td>
                             <td>{{y.asin}}</td>
-                            <td>{{y.status}}</td>
                         <td><form method="GET" action="/admin_tools/edit_entry/{{y.prefix}}/{{y.id}}">
                             <input type="submit" value="Edit" /></form></td>
                         <td><form method="POST" action="/admin_tools/delete_entry/{{y.prefix}}/{{y.id}}">
