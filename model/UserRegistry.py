@@ -11,13 +11,13 @@ class UserRegistry:
         for entry in all_users:
             self.list_of_users.append(User(entry[0], entry[1], entry[2], entry[3], entry[4], entry[5], entry[6], entry[7]))
 
-    def enlist_active_user(self, data, timestamp):
-        self.active_user_registry.append((data, timestamp))
+    def enlist_active_user(self, data, first_name, last_name, email, admin, timestamp):
+        self.active_user_registry.append((data, first_name, last_name, email, admin, timestamp))
 
     def check_restart_session(self, session):
         online = False
         only_flashes = len(session) == 1 and '_flashes' in session
-        for id, time in self.active_user_registry:
+        for id, first_name, last_name, email, admin, time in self.active_user_registry:
             if 'user_id' in session and id == session['user_id']:
                 online = True
         if not online and only_flashes:
