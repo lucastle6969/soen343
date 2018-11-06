@@ -33,13 +33,13 @@ def home():
 @app.route('/home/<item>')
 def itemList(item):
     if item == "bb":
-        return render_template('home.html', item_list=item_mapper.get_all_books(), item="bb")
+        return render_template('home.html', item_list=item_mapper.get_all_item("bb"), item="bb")
     elif item == "ma":
-        return render_template('home.html', item_list=item_mapper.get_all_magazines(), item="ma")
+        return render_template('home.html', item_list=item_mapper.get_all_item("ma"), item="ma")
     elif item == "mu":
-        return render_template('home.html', item_list=item_mapper.get_all_music(), item="mu")
+        return render_template('home.html', item_list=item_mapper.get_all_item("mu"), item="mu")
     elif item == "mo":
-        return render_template('home.html', item_list=item_mapper.get_all_movies(), item="mo")
+        return render_template('home.html', item_list=item_mapper.get_all_item("mo"), item="mo")
 
 
 @app.route('/home/search/<item>', methods=['GET', 'POST'])
@@ -53,6 +53,7 @@ def search(item):
         return render_template('home.html', item_list=item_mapper.get_filtered_items("movie", form), item="mo")
     elif item == 'music':
         return render_template('home.html', item_list=item_mapper.get_filtered_items("music", form), item="mu")
+
 
 @app.route('/about')
 def about():
