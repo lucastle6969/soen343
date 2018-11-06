@@ -8,7 +8,7 @@ class Item:
 
 
 class Book(Item):
-    def __init__(self, item_id, title, prefix, author, item_format, pages, publisher, language, isbn10, isbn13, quantity):
+    def __init__(self, item_id, title, prefix, author, item_format, pages, publisher, language, isbn10, isbn13, quantity, copies):
         Item.__init__(self, item_id, title, prefix, quantity)
         self.author = author
         self.format = item_format
@@ -17,20 +17,38 @@ class Book(Item):
         self.language = language
         self.isbn10 = isbn10
         self.isbn13 = isbn13
+        self.copies = copies
+
+class PhysicalBook:
+    def __init__(self, id, book_fk, status, return_date):
+        self.id = id
+        self.book_fk = book_fk
+        self.status = status
+        self.return_date = return_date
+
 
 
 class Magazine(Item):
-    def __init__(self, item_id, title, prefix, publisher, language, isbn10, isbn13, quantity):
+    def __init__(self, item_id, title, prefix, publisher, language, isbn10, isbn13, quantity, copies):
         Item.__init__(self, item_id, title, prefix, quantity)
         self.publisher = publisher
         self.language = language
         self.isbn10 = isbn10
         self.isbn13 = isbn13
+        self.copies = copies
+
+
+class PhysicalMagazine:
+    def __init__(self, id, magazine_fk, status, return_date):
+        self.id = id
+        self.magazine_fk = magazine_fk
+        self.status = status
+        self.return_date = return_date
 
 
 class Movie(Item):
     def __init__(self, item_id, title, prefix, director, producers, actors, language, subtitles, dubbed,
-                 release_date, runtime, quantity):
+                 release_date, runtime, quantity, copies):
         Item.__init__(self, item_id, title, prefix, quantity)
         self.director = director
         self.producers = producers
@@ -40,14 +58,32 @@ class Movie(Item):
         self.dubbed = dubbed
         self.release_date = release_date
         self.runtime = runtime
+        self.copies = copies
+
+
+class PhysicalMovie:
+    def __init__(self, id, movie_fk, status, return_date):
+        self.id = id
+        self.movie_fk = movie_fk
+        self.status = status
+        self.return_date = return_date
 
 
 class Music(Item):
-    def __init__(self, item_id, title, prefix, media_type, artist, label, release_date, asin, quantity):
+    def __init__(self, item_id, title, prefix, media_type, artist, label, release_date, asin, quantity, copies):
         Item.__init__(self, item_id, title, prefix, quantity)
         self.media_type = media_type
         self.artist = artist
         self.label = label
         self.release_date = release_date
         self.asin = asin
+        self.copies = copies
+
+
+class PhysicalMusic:
+    def __init__(self, id, music_fk, status, return_date):
+        self.id = id
+        self.movie_fk = music_fk
+        self.status = status
+        self.return_date = return_date
 

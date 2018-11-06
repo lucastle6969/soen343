@@ -1,4 +1,4 @@
-from model.Item import Book, Magazine, Movie, Music
+from model.Item import Book, PhysicalBook, Magazine, PhysicalMagazine, Movie, PhysicalMovie, Music, PhysicalMusic
 from model.Uow import Uow
 from model.Catalog import Catalog
 from model.Tdg import Tdg
@@ -10,8 +10,8 @@ class ItemMapper:
         self.uow = None
         self.catalog = Catalog()
         self.tdg = Tdg(app)
-        self.catalog.populate(self.tdg.get_books(), self.tdg.get_magazines(),
-                              self.tdg.get_movies(), self.tdg.get_music())
+        self.catalog.populate(self.get_all_books(), self.get_all_magazines(),
+                              self.get_all_movies(), self.get_all_music())
 
     def get_catalog(self):
         return self.catalog
@@ -19,25 +19,37 @@ class ItemMapper:
     def get_all_books(self):
         book_list = []
         for book in self.tdg.get_books():
-            book_list.append(Book(book[0], book[1], "bb", book[2], book[3], book[4], book[5], book[6], book[7], book[8], book[9]))
+            copies = []
+            for copy in self.tdg.get_books_physical(book[0]):
+                copies.append(PhysicalBook(copy[0], copy[1], copy[2], copy[3]))
+            book_list.append(Book(book[0], book[1], "bb", book[2], book[3], book[4], book[5], book[6], book[7], book[8], book[9], copies))
         return book_list
 
     def get_all_magazines(self):
         magazine_list = []
         for magazine in self.tdg.get_magazines():
-            magazine_list.append(Magazine(magazine[0], magazine[1], "ma", magazine[2], magazine[3], magazine[4], magazine[5], magazine[6]))
+            copies = []
+            for copy in self.tdg.get_magazines_physical(magazine[0]):
+                copies.append(PhysicalMagazine(copy[0], copy[1], copy[2], copy[3]))
+            magazine_list.append(Magazine(magazine[0], magazine[1], "ma", magazine[2], magazine[3], magazine[4], magazine[5], magazine[6], copies))
         return magazine_list
 
     def get_all_music(self):
         music_list = []
         for music in self.tdg.get_music():
-            music_list.append(Music(music[0], music[1], "mu", music[2], music[3], music[4], music[5], music[6], music[7]))
+            copies = []
+            for copy in self.tdg.get_music_physical(music[0]):
+                copies.append(PhysicalMusic(copy[0], copy[1], copy[2], copy[3]))
+            music_list.append(Music(music[0], music[1], "mu", music[2], music[3], music[4], music[5], music[6], music[7], copies))
         return music_list
 
     def get_all_movies(self):
         movie_list = []
         for movie in self.tdg.get_movies():
-            movie_list.append(Movie(movie[0], movie[1], "mo", movie[2], movie[3], movie[4], movie[5], movie[6], movie[7], movie[8], movie[9], movie[10]))
+            copies = []
+            for copy in self.tdg.get_movies_physical(movie[0]):
+                copies.append(PhysicalMovie(copy[0], copy[1], copy[2], copy[3]))
+            movie_list.append(Movie(movie[0], movie[1], "mo", movie[2], movie[3], movie[4], movie[5], movie[6], movie[7], movie[8], movie[9], movie[10], copies))
         return movie_list
 
     def get_saved_changes(self):
@@ -133,7 +145,7 @@ class ItemMapper:
         isbn13 = form.isbn13.data
         quantity = form.quantity.data
         book = Book(None, title, prefix, author, book_format, pages,
-                    publisher, language, isbn10, isbn13, quantity)
+                    publisher, language, isbn10, isbn13, quantity, None)
         if self.uow is None:
             self.uow = Uow()
         self.uow.add(book)
@@ -149,7 +161,7 @@ class ItemMapper:
         isbn13 = form.isbn13.data
         quantity = form.quantity.data
         magazine = Magazine(None, title, prefix, publisher, language,
-                            isbn10, isbn13, quantity)
+                            isbn10, isbn13, quantity, None)
         if self.uow is None:
             self.uow = Uow()
         self.uow.add(magazine)
@@ -169,7 +181,7 @@ class ItemMapper:
         run_time = form.runtime.data
         quantity = form.quantity.data
         movie = Movie(None, title, prefix, director, producers, actors,
-                      language, subtitles, dubbed, release_date, run_time, quantity)
+                      language, subtitles, dubbed, release_date, run_time, quantity, None)
         if self.uow is None:
             self.uow = Uow()
         self.uow.add(movie)
@@ -186,7 +198,7 @@ class ItemMapper:
         asin = form.asin.data
         quantity = form.quantity.data
         music = Music(None, title, prefix, media_type, artist, label,
-                      release_date, asin, quantity)
+                      release_date, asin, quantity, None)
         if self.uow is None:
             self.uow = Uow()
         self.uow.add(music)

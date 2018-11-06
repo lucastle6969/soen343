@@ -158,10 +158,10 @@ class Tdg:
         else:
             return data
 
-    def get_books_physical(self):
+    def get_books_physical(self, id):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, book_fk, status, return_date FROM book_physical")
+        result = cur.execute("SELECT id, book_fk, status, return_date FROM book_physical WHERE book_fk = "+str(id))
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -198,10 +198,10 @@ class Tdg:
         else:
             return data
 
-    def get_magazines_physical(self):
+    def get_magazines_physical(self, id):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, magazine_fk, status, return_date FROM magazine_physical")
+        result = cur.execute("SELECT id, magazine_fk, status, return_date FROM magazine_physical WHERE magazine_fk = "+str(id))
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -224,10 +224,10 @@ class Tdg:
         else:
             return data
 
-    def get_movies_physical(self):
+    def get_movies_physical(self, id):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, movie_fk, status, return_date FROM movie_physical")
+        result = cur.execute("SELECT id, movie_fk, status, return_date FROM movie_physical WHERE movie_fk = "+str(id))
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -250,10 +250,10 @@ class Tdg:
         else:
             return data
 
-    def get_music_physical(self):
+    def get_music_physical(self, id):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, music_fk, status, return_date FROM music_physical")
+        result = cur.execute("SELECT id, music_fk, status, return_date FROM music_physical WHERE music_fk = "+str(id))
         data = []
         for row in cur.fetchall():
             data.append(row)
