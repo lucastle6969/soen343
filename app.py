@@ -22,12 +22,12 @@ def before_request():
 
 @app.route('/')
 def index():
-    return render_template('home.html')
+    return render_template('home.html', item_list=item_mapper.get_all_item("bb"), item="bb")
 
 
 @app.route('/home')
 def home():
-    return render_template('home.html', item_list=item_mapper.get_all_books(), item="bb")
+    return render_template('home.html', item_list=item_mapper.get_all_item("bb"), item="bb")
 
 
 @app.route('/home/<item>')
