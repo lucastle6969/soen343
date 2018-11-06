@@ -171,11 +171,11 @@ class Tdg:
         else:
             return data
 
-    def get_filtered_books(self, filter, search):
+    def get_filtered_items(self, table, filter_value, search_value):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        str = filter + " LIKE \"%" + search + "%\""
-        result = cur.execute("Select * FROM book WHERE " + str)
+        condition = filter_value + " LIKE \"%" + search_value + "%\""
+        result = cur.execute("Select * FROM " + table + " WHERE " + condition)
         data = []
         for row in cur.fetchall():
             data.append(row)

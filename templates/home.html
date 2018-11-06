@@ -21,6 +21,8 @@
                 <a class="nav-link active" id="movie-tab" href="/home/mo" aria-controls="movie" aria-selected="false">Movies</a>
             </li>
         </ul>
+
+        <script src="../static/presentation/js/dropdown_menu.js"></script>
         {% if item == "bb" %}
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="book" role="tabpanel" aria-labelledby="book-tab">
@@ -33,27 +35,16 @@
                             <select class="form-control" name="filter">
                                 <option value="title">Title</option>
                                 <option value="author">Author</option>
-                                <option value="publisher">Publisher</option>
-                                <option value="language">Language</option>
-                                <option value="isbn10">ISBN-10</option>
-                                <option value="isbn13">ISBN-13</option>
                             </select>
                         </li>
                         <li class="nav-item col-sm-9">
-                            <input class="form-control" name="search" type="text" placeholder="Search..">
+                            <input class="form-control" name="search" type="text" placeholder="Search for a book...">
                         </li>
                         <li class="nav-item">
-                            <input class="form-control" type="submit" value="Search">
+                            <input class="form-control bg-success text-white" type="submit" value="Search">
                         </li>
                     </ul>
                 </form>
-
-                <script>
-                    $("a.dropdown-item").click(function(){
-                      var selText = $(this).text();
-                      $(this).parents('.btn-group').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
-                    });
-                </script>
 
                 <br/>
                 <table class="table table-hover table-bordered">
@@ -61,12 +52,6 @@
                     <tr>
                         <th>Title</th>
                         <th>Author</th>
-                        <th>Format</th>
-                        <th>Pages</th>
-                        <th>Publisher</th>
-                        <th>Language</th>
-                        <th>ISBN-10</th>
-                        <th>ISBN-13</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -75,12 +60,6 @@
                     <tr>
                         <td>{{x.title}}</td>
                         <td>{{x.author}}</td>
-                        <td>{{x.format}}</td>
-                        <td>{{x.pages}}</td>
-                        <td>{{x.publisher}}</td>
-                        <td>{{x.language}}</td>
-                        <td>{{x.isbn10}}</td>
-                        <td>{{x.isbn13}}</td>
                         <td>
                             {% with %}
                                 {% set loop_index0 = loop.index0 %}
@@ -98,14 +77,30 @@
             <div class="tab-pane fade show active" id="magazine" role="tabpanel" aria-labelledby="magazine-tab">
                 <br/>
                 <center><h3>Magazines</h3></center>
+                {% from "includes/_form_helpers.html" import render_field %}
+                <form method="POST" action="/home/search/magazines">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <select class="form-control" name="filter">
+                                <option value="title">Title</option>
+                                <option value="publisher">Publisher</option>
+                            </select>
+                        </li>
+                        <li class="nav-item col-sm-9">
+                            <input class="form-control" name="search" type="text" placeholder="Search for a magazine...">
+                        </li>
+                        <li class="nav-item">
+                            <input class="form-control bg-success text-white" type="submit" value="Search">
+                        </li>
+                    </ul>
+                </form>
+                <br/>
+
                 <table class="table table-hover table-bordered">
                     <thead>
                     <tr>
                         <th>Title</th>
                         <th>Publisher</th>
-                        <th>Language</th>
-                        <th>ISBN-10</th>
-                        <th>ISBN-13</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -114,9 +109,6 @@
                     <tr>
                         <td>{{x.title}}</td>
                         <td>{{x.publisher}}</td>
-                        <td>{{x.language}}</td>
-                        <td>{{x.isbn10}}</td>
-                        <td>{{x.isbn13}}</td>
                         <td>
                             {% with %}
                                 {% set loop_index0 = loop.index0 %}
@@ -134,27 +126,38 @@
             <div class="tab-pane fade show active" id="music" role="tabpanel" aria-labelledby="music-tab">
                 <br/>
                 <center><h3>Music</h3></center>
+                {% from "includes/_form_helpers.html" import render_field %}
+                <form method="POST" action="/home/search/music">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <select class="form-control" name="filter">
+                                <option value="title">Title</option>
+                                <option value="artist">Artist</option>
+                            </select>
+                        </li>
+                        <li class="nav-item col-sm-9">
+                            <input class="form-control" name="search" type="text" placeholder="Search for music...">
+                        </li>
+                        <li class="nav-item">
+                            <input class="form-control bg-success text-white" type="submit" value="Search">
+                        </li>
+                    </ul>
+                </form>
+                <br/>
+
                 <table class="table table-hover table-bordered">
                     <thead>
                     <tr>
-                        <th>Type</th>
                         <th>Title</th>
                         <th>Artist</th>
-                        <th>Label</th>
-                        <th>Release Date</th>
-                        <th>ASIN</th>
                         <th></th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for x in item_list %}
                     <tr>
-                        <td>{{x.media_type}}</td>
                         <td>{{x.title}}</td>
                         <td>{{x.artist}}</td>
-                        <td>{{x.label}}</td>
-                        <td>{{x.release_date}}</td>
-                        <td>{{x.asin}}</td>
                         <td>
                             {% with %}
                                 {% set loop_index0 = loop.index0 %}
@@ -172,18 +175,30 @@
             <div class="tab-pane fade show active" id="movie" role="tabpanel" aria-labelledby="movie-tab">
                 <br/>
                 <center><h3>Movies</h3></center>
+                {% from "includes/_form_helpers.html" import render_field %}
+                <form method="POST" action="/home/search/movies">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <select class="form-control" name="filter">
+                                <option value="title">Title</option>
+                                <option value="director">Director</option>
+                            </select>
+                        </li>
+                        <li class="nav-item col-sm-9">
+                            <input class="form-control" name="search" type="text" placeholder="Search for a movie...">
+                        </li>
+                        <li class="nav-item">
+                            <input class="form-control bg-success text-white" type="submit" value="Search">
+                        </li>
+                    </ul>
+                </form>
+                <br/>
+
                 <table class="table table-hover table-bordered">
                     <thead>
                     <tr>
                         <th>Title</th>
                         <th>Director</th>
-                        <th>Producers</th>
-                        <th>Actors</th>
-                        <th>Language</th>
-                        <th>Subtitles</th>
-                        <th>Dubbed</th>
-                        <th>Release Date</th>
-                        <th>Run Time</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -192,13 +207,6 @@
                     <tr>
                         <td>{{x.title}}</td>
                         <td>{{x.director}}</td>
-                        <td>{{x.producers}}</td>
-                        <td>{{x.actors}}</td>
-                        <td>{{x.language}}</td>
-                        <td>{{x.subtitles}}</td>
-                        <td>{{x.dubbed}}</td>
-                        <td>{{x.release_date}}</td>
-                        <td>{{x.runtime}}</td>
                         <td>
                             {% with %}
                                 {% set loop_index0 = loop.index0 %}
@@ -213,13 +221,6 @@
             </div>
             {% endif %}
         </div>
-
-        <script>
-            $(document).ready( function () {
-                $('table').DataTable({
-                    "searching": false
-                });
-            } );
-        </script>
+        </div>
     {% endif %}
 {% endblock %}

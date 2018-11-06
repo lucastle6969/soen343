@@ -46,8 +46,13 @@ def itemList(item):
 def search(item):
     form = SearchForm(request.form)
     if item == 'books':
-        return render_template('home.html', item_list=item_mapper.get_filtered_books(form), item="bb")
-
+        return render_template('home.html', item_list=item_mapper.get_filtered_items("book", form), item="bb")
+    elif item == 'magazines':
+        return render_template('home.html', item_list=item_mapper.get_filtered_items("magazine", form), item="ma")
+    elif item == 'movies':
+        return render_template('home.html', item_list=item_mapper.get_filtered_items("movie", form), item="mo")
+    elif item == 'music':
+        return render_template('home.html', item_list=item_mapper.get_filtered_items("music", form), item="mu")
 
 @app.route('/about')
 def about():
