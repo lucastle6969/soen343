@@ -264,3 +264,12 @@ class ItemMapper:
                 self.tdg.delete_movies(deleted_movies)
             if len(deleted_music) != 0:
                 self.tdg.delete_music(deleted_music)
+
+    def get_filtered_books(self, form):
+        filter = form.filter.data
+        search = form.search.data
+
+        book_list = []
+        for book in self.tdg.get_filtered_books(filter, search):
+            book_list.append(Book(book[0], book[1], "bb", book[2], book[3], book[4], book[5], book[6], book[7], book[8], book[9]))
+        return book_list
