@@ -97,9 +97,9 @@ class Tdg:
     def add_magazine(self, magazine):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        cur.execute("""INSERT INTO magazine(title, publisher, language, isbn10, isbn13, quantity)
-                    VALUES(%s, %s, %s, %s, %s, %s)""",
-                    (magazine.title, magazine.publisher, magazine.language, magazine.isbn10, magazine.isbn13, magazine.quantity))
+        cur.execute("""INSERT INTO magazine(title, publisher, publication_date, language, isbn10, isbn13, quantity)
+                    VALUES(%s, %s, %s, %s, %s, %s, %s)""",
+                    (magazine.title, magazine.publisher, magazine.publication_date, magazine.language, magazine.isbn10, magazine.isbn13, magazine.quantity))
         result = cur.execute("SELECT * FROM magazine ORDER BY id DESC LIMIT 1")
         new_magazine_id = cur.fetchone()
         for x in range(0, magazine.quantity):
@@ -161,7 +161,7 @@ class Tdg:
     def get_magazines(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, title, publisher, language, isbn10, isbn13, quantity FROM magazine WHERE 1")
+        result = cur.execute("SELECT id, title, publisher, publication_date, language, isbn10, isbn13, quantity FROM magazine WHERE 1")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -238,7 +238,7 @@ class Tdg:
         connection = self.mysql.connect()
         cur = connection.cursor()
         for magazine in modified_magazines:
-            cur.execute("UPDATE magazine SET title = %s, publisher = %s, language = %s, isbn10 = %s, isbn13 = %s WHERE id = %s", (magazine.title, magazine.publisher, magazine.language, magazine.isbn10, magazine.isbn13, magazine.id))
+            cur.execute("UPDATE magazine SET title = %s, publisher = %s, publication_date = %s, language = %s, isbn10 = %s, isbn13 = %s WHERE id = %s", (magazine.title, magazine.publisher, magazine.publication_date, magazine.language, magazine.isbn10, magazine.isbn13, magazine.id))
         cur.close()
 
     def modify_movies(self, modified_movies):

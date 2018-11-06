@@ -121,11 +121,12 @@ class ItemMapper:
         title = form.title.data
         publisher = form.publisher.data
         prefix = "ma"
+        publication_date = form.publication_date.data
         language = form.language.data
         isbn10 = form.isbn10.data
         isbn13 = form.isbn13.data
         quantity = form.quantity.data
-        magazine = Magazine(None, title, prefix, publisher, language,
+        magazine = Magazine(None, title, prefix, publisher, publication_date, language,
                             isbn10, isbn13, quantity)
         if self.uow is None:
             self.uow = Uow()

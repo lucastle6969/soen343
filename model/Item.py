@@ -21,9 +21,10 @@ class Book(Item):
 
 
 class Magazine(Item):
-    def __init__(self, item_id, title, prefix, publisher, language, isbn10, isbn13, quantity):
+    def __init__(self, item_id, title, prefix, publisher, publication_date, language, isbn10, isbn13, quantity):
         Item.__init__(self, item_id, title, prefix, quantity)
         self.publisher = publisher
+        self.publication_date = publication_date
         self.language = language
         self.isbn10 = isbn10
         self.isbn13 = isbn13

@@ -24,7 +24,7 @@ def new_book():
 # Magazine created for testing insertion, deletion and modification
 @pytest.fixture(scope='module')
 def new_magazine():
-    magazine = Magazine(333, "The UFO Incident", "ma", "Kuhic Ferry", "EN", 7464072294, 7464072294123, 1)
+    magazine = Magazine(333, "The UFO Incident", "ma", "Kuhic Ferry", "Nov. 23 2014", "EN", 7464072294, 7464072294123, 1)
     return magazine
 
 
@@ -65,6 +65,7 @@ def new_magazine_form():
     form = MagazineForm()
     form.title.data = "The UFO Incident"
     form.publisher.data = "Kuhic Ferry"
+    form.publication_date = "Nov. 23 2014"
     form.language.data = "EN"
     form.isbn13.data = 7464072294
     form.isbn13.data = 7464072294123
