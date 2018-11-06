@@ -83,7 +83,7 @@ class Music(Item):
 class PhysicalMusic:
     def __init__(self, id, music_fk, status, return_date):
         self.id = id
-        self.movie_fk = music_fk
+        self.music_fk = music_fk
         self.status = status
         self.return_date = return_date
 

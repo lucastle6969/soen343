@@ -20,38 +20,54 @@ class ItemMapper:
         return self.catalog.get_all_item(item_prefix)
 
     def get_all_books(self):
+        all_copies = []
+        for copy in self.tdg.get_books_physical():
+            all_copies.append(PhysicalBook(copy[0], copy[1], copy[2], copy[3]))
         book_list = []
         for book in self.tdg.get_books():
             copies = []
-            for copy in self.tdg.get_books_physical(book[0]):
-                copies.append(PhysicalBook(copy[0], copy[1], copy[2], copy[3]))
+            for single_copy in all_copies:
+                if single_copy.book_fk == book[0]:
+                    copies.append(single_copy)
             book_list.append(Book(book[0], book[1], "bb", book[2], book[3], book[4], book[5], book[6], book[7], book[8], book[9], copies))
         return book_list
 
     def get_all_magazines(self):
+        all_copies = []
+        for copy in self.tdg.get_magazines_physical():
+            all_copies.append(PhysicalMagazine(copy[0], copy[1], copy[2], copy[3]))
         magazine_list = []
         for magazine in self.tdg.get_magazines():
             copies = []
-            for copy in self.tdg.get_magazines_physical(magazine[0]):
-                copies.append(PhysicalMagazine(copy[0], copy[1], copy[2], copy[3]))
+            for single_copy in all_copies:
+                if single_copy.magazine_fk == magazine[0]:
+                    copies.append(single_copy)
             magazine_list.append(Magazine(magazine[0], magazine[1], "ma", magazine[2], magazine[3], magazine[4], magazine[5], magazine[6], copies))
         return magazine_list
 
     def get_all_music(self):
+        all_copies = []
+        for copy in self.tdg.get_music_physical():
+            all_copies.append(PhysicalMusic(copy[0], copy[1], copy[2], copy[3]))
         music_list = []
         for music in self.tdg.get_music():
             copies = []
-            for copy in self.tdg.get_music_physical(music[0]):
-                copies.append(PhysicalMusic(copy[0], copy[1], copy[2], copy[3]))
+            for single_copy in all_copies:
+                if single_copy.music_fk == music[0]:
+                    copies.append(single_copy)
             music_list.append(Music(music[0], music[1], "mu", music[2], music[3], music[4], music[5], music[6], music[7], copies))
         return music_list
 
     def get_all_movies(self):
+        all_copies = []
+        for copy in self.tdg.get_movies_physical():
+            all_copies.append(PhysicalMovie(copy[0], copy[1], copy[2], copy[3]))
         movie_list = []
         for movie in self.tdg.get_movies():
             copies = []
-            for copy in self.tdg.get_movies_physical(movie[0]):
-                copies.append(PhysicalMovie(copy[0], copy[1], copy[2], copy[3]))
+            for single_copy in all_copies:
+                if single_copy.movie_fk == movie[0]:
+                    copies.append(single_copy)
             movie_list.append(Movie(movie[0], movie[1], "mo", movie[2], movie[3], movie[4], movie[5], movie[6], movie[7], movie[8], movie[9], movie[10], copies))
         return movie_list
 
