@@ -8,12 +8,13 @@ class Item:
 
 
 class Book(Item):
-    def __init__(self, item_id, title, prefix, author, item_format, pages, publisher, language, isbn10, isbn13, quantity):
+    def __init__(self, item_id, title, prefix, author, item_format, pages, publisher, publication_year, language, isbn10, isbn13, quantity):
         Item.__init__(self, item_id, title, prefix, quantity)
         self.author = author
         self.format = item_format
         self.pages = pages
         self.publisher = publisher
+        self.publication_year = publication_year
         self.language = language
         self.isbn10 = isbn10
         self.isbn13 = isbn13

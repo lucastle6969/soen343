@@ -17,7 +17,7 @@ def new_user():
 # Book created for testing insertion, deletion and modification
 @pytest.fixture(scope='module')
 def new_book():
-    book = Book(324, "DARK MATTER", "bb", "Blake Crouch", "Hardcover", 300, "VonRueden-Swaniawski", "EN", 5914602904, 5914602904123, 1)
+    book = Book(324, "DARK MATTER", "bb", "Blake Crouch", "Hardcover", 300, "VonRueden-Swaniawski", 2015 "EN", 5914602904, 5914602904123, 1)
     return book
 
 
@@ -51,6 +51,7 @@ def new_book_form():
     form.format.data = "Hardcover"
     form.pages.data = 300
     form.publisher.data = "VonRueden-Swaniawski"
+    form.publication_year.data = 2015
     form.language.data = "EN"
     form.isbn13.data = 5914602904
     form.isbn13.data = 5914602904123

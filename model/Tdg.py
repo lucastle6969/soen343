@@ -78,9 +78,9 @@ class Tdg:
         connection = self.mysql.connect()
         cur = connection.cursor()
         # Execute query
-        cur.execute("""INSERT INTO book(title, author, format, pages, publisher, language, isbn10, isbn13, quantity)
-                    VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)""",
-                    (book.title, book.author, book.format, book.pages, book.publisher, book.language, book.isbn10, book.isbn13, book.quantity))
+        cur.execute("""INSERT INTO book(title, author, format, pages, publisher, publication_year, language, isbn10, isbn13, quantity)
+                    VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
+                    (book.title, book.author, book.format, book.pages, book.publisher, book.publication_year, book.language, book.isbn10, book.isbn13, book.quantity))
         # get the new user id
         result = cur.execute("SELECT * FROM book ORDER BY id DESC LIMIT 1")
         new_book_id = cur.fetchone()
@@ -148,7 +148,7 @@ class Tdg:
     def get_books(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, title, author, format, pages, publisher, language, isbn10, isbn13, quantity FROM book WHERE 1")
+        result = cur.execute("SELECT id, title, author, format, pages, publisher, publication_year, language, isbn10, isbn13, quantity FROM book WHERE 1")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -230,7 +230,7 @@ class Tdg:
         connection = self.mysql.connect()
         cur = connection.cursor()
         for book in modified_books:
-            cur.execute("UPDATE book SET title = %s, author = %s, format = %s, pages = %s, publisher = %s, language = %s, isbn10 = %s, isbn13 = %s WHERE id = %s", (book.title, book.author, book.format, book.pages, book.publisher, book.language, book.isbn10, book.isbn13, book.id))
+            cur.execute("UPDATE book SET title = %s, author = %s, format = %s, pages = %s, publisher = %s, publication_year = %s, language = %s, isbn10 = %s, isbn13 = %s WHERE id = %s", (book.title, book.author, book.format, book.pages, book.publisher, book.publication_year, book.language, book.isbn10, book.isbn13, book.id))
         # ideally a check if there were errors here and return a boolean to be handled by the mapper
         cur.close()
 

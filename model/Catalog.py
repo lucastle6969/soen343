@@ -18,7 +18,7 @@ class Catalog:
 
         if books is not None:
             for book in books:
-                self.item_catalog.append(Book(book[0], book[1], "bb", book[2], book[3], book[4], book[5], book[6], book[7], book[8], book[9]))
+                self.item_catalog.append(Book(book[0], book[1], "bb", book[2], book[3], book[4], book[5], book[6], book[7], book[8], book[9], book[10]))
         if magazines is not None:
             for magazine in magazines:
                 self.item_catalog.append(Magazine(magazine[0], magazine[1], "ma", magazine[2], magazine[3], magazine[4], magazine[5], magazine[6]))

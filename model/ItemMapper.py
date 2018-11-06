@@ -104,12 +104,13 @@ class ItemMapper:
         book_format = form.format.data
         pages = form.pages.data
         publisher = form.publisher.data
+        publication_year = form.publication_date.data
         language = form.language.data
         isbn10 = form.isbn10.data
         isbn13 = form.isbn13.data
         quantity = form.quantity.data
         book = Book(None, title, prefix, author, book_format, pages,
-                    publisher, language, isbn10, isbn13, quantity)
+                    publisher, publication_year, language, isbn10, isbn13, quantity)
         if self.uow is None:
             self.uow = Uow()
         self.uow.add(book)
