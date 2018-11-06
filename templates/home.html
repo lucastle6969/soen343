@@ -35,10 +35,6 @@
                             <select class="form-control" name="filter">
                                 <option value="title">Title</option>
                                 <option value="author">Author</option>
-                                <option value="publisher">Publisher</option>
-                                <option value="language">Language</option>
-                                <option value="isbn10">ISBN-10</option>
-                                <option value="isbn13">ISBN-13</option>
                             </select>
                         </li>
                         <li class="nav-item col-sm-9">
@@ -56,12 +52,6 @@
                     <tr>
                         <th>Title</th>
                         <th>Author</th>
-                        <th>Format</th>
-                        <th>Pages</th>
-                        <th>Publisher</th>
-                        <th>Language</th>
-                        <th>ISBN-10</th>
-                        <th>ISBN-13</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -70,12 +60,6 @@
                     <tr>
                         <td>{{x.title}}</td>
                         <td>{{x.author}}</td>
-                        <td>{{x.format}}</td>
-                        <td>{{x.pages}}</td>
-                        <td>{{x.publisher}}</td>
-                        <td>{{x.language}}</td>
-                        <td>{{x.isbn10}}</td>
-                        <td>{{x.isbn13}}</td>
                         <td>
                             {% with %}
                                 {% set loop_index0 = loop.index0 %}
@@ -100,9 +84,6 @@
                             <select class="form-control" name="filter">
                                 <option value="title">Title</option>
                                 <option value="publisher">Publisher</option>
-                                <option value="language">Language</option>
-                                <option value="isbn10">ISBN-10</option>
-                                <option value="isbn13">ISBN-13</option>
                             </select>
                         </li>
                         <li class="nav-item col-sm-9">
@@ -120,9 +101,6 @@
                     <tr>
                         <th>Title</th>
                         <th>Publisher</th>
-                        <th>Language</th>
-                        <th>ISBN-10</th>
-                        <th>ISBN-13</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -131,9 +109,6 @@
                     <tr>
                         <td>{{x.title}}</td>
                         <td>{{x.publisher}}</td>
-                        <td>{{x.language}}</td>
-                        <td>{{x.isbn10}}</td>
-                        <td>{{x.isbn13}}</td>
                         <td>
                             {% with %}
                                 {% set loop_index0 = loop.index0 %}
@@ -156,12 +131,8 @@
                     <ul class="nav">
                         <li class="nav-item">
                             <select class="form-control" name="filter">
-                                <option value="media_type">Media Type</option>
                                 <option value="title">Title</option>
                                 <option value="artist">Artist</option>
-                                <option value="label">Label</option>
-                                <option value="release_date">Release Date</option>
-                                <option value="asin">ASIN</option>
                             </select>
                         </li>
                         <li class="nav-item col-sm-9">
@@ -177,24 +148,16 @@
                 <table class="table table-hover table-bordered">
                     <thead>
                     <tr>
-                        <th>Type</th>
                         <th>Title</th>
                         <th>Artist</th>
-                        <th>Label</th>
-                        <th>Release Date</th>
-                        <th>ASIN</th>
                         <th></th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for x in item_list %}
                     <tr>
-                        <td>{{x.media_type}}</td>
                         <td>{{x.title}}</td>
                         <td>{{x.artist}}</td>
-                        <td>{{x.label}}</td>
-                        <td>{{x.release_date}}</td>
-                        <td>{{x.asin}}</td>
                         <td>
                             {% with %}
                                 {% set loop_index0 = loop.index0 %}
@@ -219,13 +182,6 @@
                             <select class="form-control" name="filter">
                                 <option value="title">Title</option>
                                 <option value="director">Director</option>
-                                <option value="producers">Producers</option>
-                                <option value="actors">Actors</option>
-                                <option value="language">Language</option>
-                                <option value="subtitles">Subtitles</option>
-                                <option value="dubbed">Dubbed</option>
-                                <option value="release_date">Release Date</option>
-                                <option value="runtime">Run Time</option>
                             </select>
                         </li>
                         <li class="nav-item col-sm-9">
@@ -243,13 +199,6 @@
                     <tr>
                         <th>Title</th>
                         <th>Director</th>
-                        <th>Producers</th>
-                        <th>Actors</th>
-                        <th>Language</th>
-                        <th>Subtitles</th>
-                        <th>Dubbed</th>
-                        <th>Release Date</th>
-                        <th>Run Time</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -258,13 +207,6 @@
                     <tr>
                         <td>{{x.title}}</td>
                         <td>{{x.director}}</td>
-                        <td>{{x.producers}}</td>
-                        <td>{{x.actors}}</td>
-                        <td>{{x.language}}</td>
-                        <td>{{x.subtitles}}</td>
-                        <td>{{x.dubbed}}</td>
-                        <td>{{x.release_date}}</td>
-                        <td>{{x.runtime}}</td>
                         <td>
                             {% with %}
                                 {% set loop_index0 = loop.index0 %}
