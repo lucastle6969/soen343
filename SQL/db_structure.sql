@@ -6,7 +6,7 @@ CREATE TABLE book (
     format VARCHAR(20), 
     pages INT(255), 
     publisher VARCHAR(50), 
-    publication_year VARCHAR(30),
+    publication_year INT(4),
     language VARCHAR(30), 
     isbn10 BIGINT(10), 
     isbn13 BIGINT(13),
