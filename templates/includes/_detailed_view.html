@@ -205,7 +205,7 @@
                     <div class = "container">
                         <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{{ item_list[loop_index0-1].id }}" data-dismiss="modal">&lt;</button>
                         <div class = "divider"></div>
-                        
+                        <div class = "divider-small"></div>
                         <div class = "divider"></div>
                         <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{% if loop_index0 == item_list|length -1 %}{{ item_list[0].id }}{% else %}{{ item_list[loop_index0+1].id }}{% endif %}" data-dismiss="modal">&gt;</button>
                     </div>

@@ -249,3 +249,9 @@ td, th {
     height:auto;
     display:inline-block;
 }
+
+.divider-small {
+    width:60px;
+    height:auto;
+    display:inline-block;
+}
