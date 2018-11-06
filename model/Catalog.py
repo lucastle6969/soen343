@@ -6,6 +6,13 @@ class Catalog:
     def __init__(self):
         self.item_catalog = []
 
+    def get_all_item(self, item_type):
+        item_list = []
+        for item in self.item_catalog:
+            if item.prefix == item_type:
+                item_list.append(item)
+        return item_list
+
     def get_item_by_id(self, item_prefix, item_id):
         int_id = int(item_id)
 
@@ -29,7 +36,7 @@ class Catalog:
 
         if music is not None:
             for item in music:
-                self.item_catalog.append(music)
+                self.item_catalog.append(item)
 
     # [Testing] Used to remove objects added to catalog while testing
     def delete_last_item(self):
