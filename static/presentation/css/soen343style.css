@@ -241,6 +241,7 @@ td, th {
     border-color: black;
     border-width: 1px;
     border-radius: 5px;
+    text-align: center;
     padding: 4px;
 }
 
@@ -251,7 +252,7 @@ td, th {
 }
 
 .divider-small {
-    width:60px;
+    width:120px;
     height:auto;
     display:inline-block;
 }
