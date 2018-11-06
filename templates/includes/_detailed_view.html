@@ -56,4 +56,64 @@
             </div>
         </div>
     {% endif %}
+    {% if item == 'mo' %}
+        <div class="modal fade" id="demo-{{x.id}}" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <button type="button" class="close" data-dismiss="modal"><i class="icon-xs-o-md"></i></button>
+                    <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">{{x.title}}</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="movie-director" class="col-form-label">Director:</label>
+                                <span id="movie-director">{{x.director}}</span>
+                                <br>
+                                <label for="movie-producers" class="col-form-label">Producers:</label>
+                                <span id="movie-producers">{{x.producers}}</span>
+                                <br>
+                                <label for="movie-actors" class="col-form-label">Actors:</label>
+                                <span id="movie-actors">{{x.actors}}</span>
+                                <br>
+                                <label for="movie-language" class="col-form-label">Language:</label>
+                                <span id="movie-language">{{x.language}}</span>
+                                <br>
+                                <label for="movie-subtitles" class="col-form-label">Subtitles:</label>
+                                <span id="movie-subtitles">{{x.subtitles}}</span>
+                                <br>
+                                <label for="movie-dubbed" class="col-form-label">Dubbed:</label>
+                                <span id="movie-dubbed">{{x.dubbed}}</span>
+                                <br>
+                                <label for="movie-release" class="col-form-label">Release Date:</label>
+                                <span id="movie-release">{{x.release_date}}</span>
+                                <br>
+                                <label for="movie-runtime" class="col-form-label">Runtime:</label>
+                                <span id="movie-runtime">{{x.runtime}}</span>
+                                <br>
+                                <label for="book-copies" class="col-form-label">Copies:</label>
+                                <div class="copies">
+                                     Copy #1 <br>
+                                     Copy #2 <br>
+                                     Copy #3 <br>  
+                                </div>
+                            </div>
+                        </form>
+                        <hr>
+                        <div class = "container">
+                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{{ item_list[loop_index0-1].id }}" data-dismiss="modal">&lt;</button>
+                            <div class = "divider"></div>
+                            <button type="button" class="btn btn-info">Loan</button>
+                            <div class = "divider"></div>
+                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{% if loop_index0 == item_list|length -1 %}{{ item_list[0].id }}{% else %}{{ item_list[loop_index0+1].id }}{% endif %}" data-dismiss="modal">&gt;</button>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}
