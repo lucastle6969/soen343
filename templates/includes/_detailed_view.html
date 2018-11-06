@@ -145,7 +145,7 @@
                             <label for="music-quantity" class="col-form-label">Quantity:</label>
                             <span id="music-quantity">{{x.quantity}}</span>
                             <br>
-                            <label for="book-copies" class="col-form-label">Copies:</label>
+                            <label for="book-copies" class=git sta"col-form-label">Copies:</label>
                             <div class="copies">
                                  Copy #1 <br>
                                  Copy #2 <br>
@@ -158,6 +158,54 @@
                         <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{{ item_list[loop_index0-1].id }}" data-dismiss="modal">&lt;</button>
                         <div class = "divider"></div>
                         <button type="button" class="btn btn-info">Loan</button>
+                        <div class = "divider"></div>
+                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{% if loop_index0 == item_list|length -1 %}{{ item_list[0].id }}{% else %}{{ item_list[loop_index0+1].id }}{% endif %}" data-dismiss="modal">&gt;</button>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% if item == 'ma' %}
+    <div class="modal fade" id="demo-{{x.id}}" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal"><i class="icon-xs-o-md"></i></button>
+                <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">{{x.title}}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="mag-publisher" class="col-form-label">Publisher:</label>
+                            <span id="mag-publisher">{{x.publisher}}</span>
+                            <br>
+                            <label for="mag-language" class="col-form-label">Language:</label>
+                            <span id="mag-language">{{x.language}}</span>
+                            <br>
+                            <label for="mag-isbn10" class="col-form-label">ISBN-10:</label>
+                            <span id="mag-isbn10">{{x.isbn10}}</span>
+                            <br>
+                            <label for="mag-isbn13" class="col-form-label">ISBN-13:</label>
+                            <span id="mag-isbn13">{{x.isbn13}}</span>
+                            <br>
+                            <label for="book-copies" class=git sta"col-form-label">Copies:</label>
+                            <div class="copies">
+                                 Copy #1 <br>
+                                 Copy #2 <br>
+                                 Copy #3 <br>  
+                            </div>
+                        </div>
+                    </form>
+                    <hr>
+                    <div class = "container">
+                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{{ item_list[loop_index0-1].id }}" data-dismiss="modal">&lt;</button>
+                        <div class = "divider"></div>
+                        
                         <div class = "divider"></div>
                         <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{% if loop_index0 == item_list|length -1 %}{{ item_list[0].id }}{% else %}{{ item_list[loop_index0+1].id }}{% endif %}" data-dismiss="modal">&gt;</button>
                     </div>
