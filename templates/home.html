@@ -21,6 +21,8 @@
                 <a class="nav-link active" id="movie-tab" href="/home/mo" aria-controls="movie" aria-selected="false">Movies</a>
             </li>
         </ul>
+
+        <script src="../static/presentation/js/dropdown_menu.js"></script>
         {% if item == "bb" %}
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="book" role="tabpanel" aria-labelledby="book-tab">
@@ -40,20 +42,13 @@
                             </select>
                         </li>
                         <li class="nav-item col-sm-9">
-                            <input class="form-control" name="search" type="text" placeholder="Search..">
+                            <input class="form-control" name="search" type="text" placeholder="Search for a book...">
                         </li>
                         <li class="nav-item">
-                            <input class="form-control" type="submit" value="Search">
+                            <input class="form-control bg-success text-white" type="submit" value="Search">
                         </li>
                     </ul>
                 </form>
-
-                <script>
-                    $("a.dropdown-item").click(function(){
-                      var selText = $(this).text();
-                      $(this).parents('.btn-group').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
-                    });
-                </script>
 
                 <br/>
                 <table class="table table-hover table-bordered">
@@ -98,6 +93,28 @@
             <div class="tab-pane fade show active" id="magazine" role="tabpanel" aria-labelledby="magazine-tab">
                 <br/>
                 <center><h3>Magazines</h3></center>
+                {% from "includes/_form_helpers.html" import render_field %}
+                <form method="POST" action="/home/search/magazines">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <select class="form-control" name="filter">
+                                <option value="title">Title</option>
+                                <option value="publisher">Publisher</option>
+                                <option value="language">Language</option>
+                                <option value="isbn10">ISBN-10</option>
+                                <option value="isbn13">ISBN-13</option>
+                            </select>
+                        </li>
+                        <li class="nav-item col-sm-9">
+                            <input class="form-control" name="search" type="text" placeholder="Search for a magazine...">
+                        </li>
+                        <li class="nav-item">
+                            <input class="form-control bg-success text-white" type="submit" value="Search">
+                        </li>
+                    </ul>
+                </form>
+                <br/>
+
                 <table class="table table-hover table-bordered">
                     <thead>
                     <tr>
@@ -134,6 +151,29 @@
             <div class="tab-pane fade show active" id="music" role="tabpanel" aria-labelledby="music-tab">
                 <br/>
                 <center><h3>Music</h3></center>
+                {% from "includes/_form_helpers.html" import render_field %}
+                <form method="POST" action="/home/search/music">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <select class="form-control" name="filter">
+                                <option value="media_type">Media Type</option>
+                                <option value="title">Title</option>
+                                <option value="artist">Artist</option>
+                                <option value="label">Label</option>
+                                <option value="release_date">Release Date</option>
+                                <option value="asin">ASIN</option>
+                            </select>
+                        </li>
+                        <li class="nav-item col-sm-9">
+                            <input class="form-control" name="search" type="text" placeholder="Search for music...">
+                        </li>
+                        <li class="nav-item">
+                            <input class="form-control bg-success text-white" type="submit" value="Search">
+                        </li>
+                    </ul>
+                </form>
+                <br/>
+
                 <table class="table table-hover table-bordered">
                     <thead>
                     <tr>
@@ -172,6 +212,32 @@
             <div class="tab-pane fade show active" id="movie" role="tabpanel" aria-labelledby="movie-tab">
                 <br/>
                 <center><h3>Movies</h3></center>
+                {% from "includes/_form_helpers.html" import render_field %}
+                <form method="POST" action="/home/search/movies">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <select class="form-control" name="filter">
+                                <option value="title">Title</option>
+                                <option value="director">Director</option>
+                                <option value="producers">Producers</option>
+                                <option value="actors">Actors</option>
+                                <option value="language">Language</option>
+                                <option value="subtitles">Subtitles</option>
+                                <option value="dubbed">Dubbed</option>
+                                <option value="release_date">Release Date</option>
+                                <option value="runtime">Run Time</option>
+                            </select>
+                        </li>
+                        <li class="nav-item col-sm-9">
+                            <input class="form-control" name="search" type="text" placeholder="Search for a movie...">
+                        </li>
+                        <li class="nav-item">
+                            <input class="form-control bg-success text-white" type="submit" value="Search">
+                        </li>
+                    </ul>
+                </form>
+                <br/>
+
                 <table class="table table-hover table-bordered">
                     <thead>
                     <tr>
