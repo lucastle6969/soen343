@@ -61,6 +61,7 @@ class ItemMapper:
             item.format = form.format.data
             item.pages = form.pages.data
             item.publisher = form.publisher.data
+            item.publication_year = form.publication_year.data
             item.language = form.language.data
             item.isbn10 = form.isbn10.data
             item.isbn13 = form.isbn13.data
@@ -69,6 +70,7 @@ class ItemMapper:
         elif item_prefix == "ma":
             item.title = form.title.data
             item.publisher = form.publisher.data
+            item.publication_date = form.publication_date.data
             item.language = form.language.data
             item.isbn10 = form.isbn10.data
             item.isbn13 = form.isbn13.data
@@ -104,7 +106,7 @@ class ItemMapper:
         book_format = form.format.data
         pages = form.pages.data
         publisher = form.publisher.data
-        publication_year = form.publication_date.data
+        publication_year = form.publication_year.data
         language = form.language.data
         isbn10 = form.isbn10.data
         isbn13 = form.isbn13.data
@@ -119,8 +121,8 @@ class ItemMapper:
 
     def add_magazine(self, form):
         title = form.title.data
-        publisher = form.publisher.data
         prefix = "ma"
+        publisher = form.publisher.data
         publication_date = form.publication_date.data
         language = form.language.data
         isbn10 = form.isbn10.data
