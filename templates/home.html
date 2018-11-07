@@ -41,8 +41,25 @@
                                 <option value="isbn13">ISBN-13</option>
                             </select>
                         </li>
-                        <li class="nav-item col-sm-9">
+                        <li class="nav-item col-sm-6">
                             <input class="form-control" name="search" type="text" placeholder="Search for a book...">
+                        </li>
+                        <li><div id="sort-tag">Sort by:</div></li>
+                        <li class="nav-item">
+                            <select class="form-control" name="order_filter">
+                                <option value="title">Title</option>
+                                <option value="author">Author</option>
+                                <option value="publisher">Publisher</option>
+                                <option value="language">Language</option>
+                                <option value="isbn10">ISBN-10</option>
+                                <option value="isbn13">ISBN-13</option>
+                            </select>
+                        </li>
+                        <li class="nav-item col-sm-2">
+                            <select class="form-control" name="order_type">
+                                <option value="ASC">Ascending</option>
+                                <option value="DESC">Descending</option>
+                            </select>
                         </li>
                         <li class="nav-item">
                             <input class="form-control bg-success text-white" type="submit" value="Search">

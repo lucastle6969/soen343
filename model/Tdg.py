@@ -171,11 +171,25 @@ class Tdg:
         else:
             return data
 
-    def get_filtered_items(self, table, filter_value, search_value):
+    def get_filtered_items(self, table, filter_value, search_value, sorted_value):
         connection = self.mysql.connect()
         cur = connection.cursor()
         condition = filter_value + " LIKE \"%" + search_value + "%\""
-        result = cur.execute("Select * FROM " + table + " WHERE " + condition)
+        clause = filter_value + " " + sorted_value
+        result = cur.execute("SELECT * FROM " + table + " WHERE " + condition + " ORDER BY " + clause)
+        data = []
+        for row in cur.fetchall():
+            data.append(row)
+        cur.close()
+        if result is None:
+            return False
+        else:
+            return data
+
+    def get_sorted_items(self, table, filter_value, order):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        result = cur.execute("SELECT * FROM " + table + " ORDER BY " + filter_value + " " + order)
         data = []
         for row in cur.fetchall():
             data.append(row)

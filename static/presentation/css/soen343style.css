@@ -256,3 +256,8 @@ td, th {
     height:auto;
     display:inline-block;
 }
+
+#sort-tag {
+    margin-top: 5px;
+    margin-right: 5px;
+}

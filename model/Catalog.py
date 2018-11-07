@@ -1,4 +1,4 @@
-from model.Item import Book, Magazine, Movie, Music
+from operator import itemgetter, attrgetter, methodcaller
 
 
 class Catalog:
@@ -21,11 +21,27 @@ class Catalog:
                 return item
         return None
 
+    def get_filtered_items(self, prefix, filter_field, search_value, order_filter, order_type):
+        filtered_items = []
+        for item in self.item_catalog:
+            if item.prefix == prefix:
+                value = eval("item." + filter_field)
+                if search_value in value:
+                    filtered_items.append(item)
+        return self.order_items(filtered_items, order_filter, order_type)
+
+    @staticmethod
+    def order_items(item_list, order_filter, order_type):
+        if order_type == "ASC":
+            return sorted(item_list, key=attrgetter(order_filter))
+        elif order_type == "DESC":
+            return sorted(item_list, key=attrgetter(order_filter), reverse=True)
+
     def populate(self, books, magazines, movies, music):
         if books is not None:
             for book in books:
                 self.item_catalog.append(book)
-        
+
         if magazines is not None:
             for magazine in magazines:
                 self.item_catalog.append(magazine)
