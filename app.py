@@ -81,7 +81,7 @@ def login():
             # add the user to the active user registry in the form of a tuple (user_id, timestamp)
                 timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
 
-                user_mapper.enlist_active_user(user.id, timestamp)
+                user_mapper.enlist_active_user(user.id, user.first_name, user.last_name, user.email, user.admin, timestamp)
                 if user_mapper.check_another_admin(user.id):
                     flash('Limited functionality', 'warning')
                     return redirect(url_for('home'))
