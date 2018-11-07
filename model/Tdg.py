@@ -321,6 +321,26 @@ class Tdg:
             cur.execute("UPDATE music SET title = %s, media_type = %s, artist = %s, label = %s, release_date = %s, asin = %s WHERE id = %s", (music.title, music.media_type, music.artist, music.label, music.release_date, music.asin, music.id))
         cur.close()
 
+    def get_physical_keys(self, id, prefix):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        keys = []
+        if prefix == "bb":
+            result = cur.execute("SELECT id FROM book_physical WHERE book_fk = "+str(id))
+        if prefix == "ma":
+            result = cur.execute("SELECT id FROM magazine_physical WHERE magazine_fk = "+str(id))
+        if prefix == "mo":
+            result = cur.execute("SELECT id FROM movie_physical WHERE movie_fk = "+str(id))
+        if prefix == "mu":
+            result = cur.execute("SELECT id FROM music_physical WHERE music_fk = "+str(id))
+        for row in cur.fetchall():
+            keys.append(row)
+        cur.close()
+        if result is None:
+            return False
+        else:
+            return keys
+
     # [Testing] Used to verify add/remove/modify test objects
     def get_last_inserted_id(self, table_name):
         connection = self.mysql.connect()

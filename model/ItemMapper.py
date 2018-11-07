@@ -243,15 +243,35 @@ class ItemMapper:
             for item in items_to_commit[0]:
                 if item.prefix == "bb":
                     item.id = self.tdg.add_book(item)
+                    keys = self.tdg.get_physical_keys(item.id, item.prefix)
+                    physical_copies = []
+                    for key in keys:
+                        physical_copies.append(PhysicalBook(key, item.id, "Available", None))
+                    item.copies = physical_copies[:]
                     self.catalog.add_item(item)
                 elif item.prefix == "ma":
                     item.id = self.tdg.add_magazine(item)
+                    keys = self.tdg.get_physical_keys(item.id, item.prefix)
+                    physical_copies = []
+                    for key in keys:
+                        physical_copies.append(PhysicalMagazine(key, item.id, "Available", None))
+                    item.copies = physical_copies[:]
                     self.catalog.add_item(item)
                 elif item.prefix == "mo":
                     item.id = self.tdg.add_movie(item)
+                    keys = self.tdg.get_physical_keys(item.id, item.prefix)
+                    physical_copies = []
+                    for key in keys:
+                        physical_copies.append(PhysicalMovie(key, item.id, "Available", None))
+                    item.copies = physical_copies[:]
                     self.catalog.add_item(item)
                 elif item.prefix == "mu":
                     item.id = self.tdg.add_music(item)
+                    keys = self.tdg.get_physical_keys(item.id, item.prefix)
+                    physical_copies = []
+                    for key in keys:
+                        physical_copies.append(PhysicalMusic(key, item.id, "Available", None))
+                    item.copies = physical_copies[:]
                     self.catalog.add_item(item)
 
         # Modify
