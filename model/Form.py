@@ -89,7 +89,7 @@ class BookForm(Form):
     format = StringField('Format', [validators.DataRequired(), alpha_numeric, validators.Length(min=1, max=20)])
     pages = IntegerField('Pages', [validators.DataRequired(), number, validators.NumberRange(min=1, max=999999)])
     publisher = StringField('Publisher', [validators.DataRequired(), alpha_numeric, validators.Length(min=1, max=50)])
-    publication_year = IntegerField('Publication Year', [validators.InputRequired(), validators.Length(min=3, max=4)])
+    publication_year = IntegerField('Publication Year', [validators.InputRequired(), number, validators.NumberRange(min=0, max=9999)])
     language = StringField('Language', [validators.DataRequired(), no_digit])
     isbn10 = IntegerField('ISBN10', [validators.DataRequired(), number, validators.NumberRange(min=1000000000, max=9999999999)])
     isbn13 = IntegerField('ISBN13', [validators.DataRequired(), number, validators.NumberRange(min=1000000000000, max=9999999999999)])
