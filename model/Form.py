@@ -127,8 +127,10 @@ class MusicForm(Form):
     quantity = IntegerField('Quantity', [validators.DataRequired(), number, validators.NumberRange(min=1, max=255)])
 
 class SearchForm(Form):
-    filter = StringField('Type')
-    search = StringField('Type')
+    filter = StringField('Filter')
+    search = StringField('Search')
+    order_filter = StringField('Order Filter')
+    order_type = StringField('Order Type')
 
 class Forms(Form):
 

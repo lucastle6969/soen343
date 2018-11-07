@@ -1,14 +1,5 @@
 {% block body %}
-        <button type="button" class="btn" data-toggle="modal" data-target="#demo-{{x.id}}" 
-            data-title="{{ x.title }}" 
-            data-author="{{ x.author }}"
-            data-format="{{ x.format }}" 
-            data-pages="{{ x.pages }}" 
-            data-publisher="{{ x.publisher }}" 
-            data-language="{{ x.language }}" 
-            data-isbn10="{{ x.isbn10 }}" 
-            data-isbn13="{{ x.isbn13 }}"
-        >
+        <button type="button" class="btn" data-toggle="modal" data-target="#demo-{{x.id}}">
             <img src="/static/presentation/img/detailed_view.svg">
         </button>
 {% endblock %}
