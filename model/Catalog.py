@@ -36,6 +36,8 @@ class Catalog:
             return sorted(item_list, key=attrgetter(order_filter))
         elif order_type == "DESC":
             return sorted(item_list, key=attrgetter(order_filter), reverse=True)
+        elif order_type == "NONE":
+            return item_list
 
     def populate(self, books, magazines, movies, music):
         if books is not None:
