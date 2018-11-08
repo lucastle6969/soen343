@@ -23,15 +23,15 @@ fl.close()
 sqlCommands = sqlFile.split(';')
 sqlCommands2 = sqlFile2.split(';')
 
+
 # Execute every command from the input file
-print('Reseting table structures...')
+print('Resetting table structures...')
 for command in sqlCommands:
     # This will skip and report errors
     try:
         c.execute(command)
     except:
         if command != '':
-            print(command)
             print('Command skipped')
 
 print('Repopulating tables...')
@@ -40,10 +40,8 @@ for command in sqlCommands2:
     try:
         c.execute(command)
     except:
-        if command == '':
-            print(command)
+        if command != '':
             print('Command skipped')
 
 c.close()
 print('All tables reset and repopulated')
-        

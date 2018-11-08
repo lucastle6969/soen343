@@ -17,7 +17,8 @@ DROP TABLE IF EXISTS book_physical;
 CREATE TABLE book_physical (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,
     book_fk INT(11),
-    status VARCHAR(100)
+    status VARCHAR(100),
+    return_date timestamp default CURRENT_TIMESTAMP
 );
 
 
@@ -37,7 +38,8 @@ DROP TABLE IF EXISTS magazine_physical;
 CREATE TABLE magazine_physical (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,
     magazine_fk INT(11),
-    status VARCHAR(100)
+    status VARCHAR(100),
+    return_date timestamp default CURRENT_TIMESTAMP
 );
 
 
@@ -60,7 +62,8 @@ DROP TABLE IF EXISTS movie_physical;
 CREATE TABLE movie_physical (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,
     movie_fk INT(11),
-    status VARCHAR(100)
+    status VARCHAR(100),
+    return_date timestamp default CURRENT_TIMESTAMP
 );
 
 
@@ -81,7 +84,8 @@ DROP TABLE IF EXISTS music_physical;
 CREATE TABLE music_physical (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,
     music_fk INT(11),
-    status VARCHAR(100)
+    status VARCHAR(100),
+    return_date timestamp default CURRENT_TIMESTAMP
 );
 
 
