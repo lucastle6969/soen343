@@ -1,4 +1,4 @@
-from operator import itemgetter, attrgetter, methodcaller
+from operator import attrgetter
 
 
 class Catalog:
@@ -6,7 +6,7 @@ class Catalog:
     def __init__(self):
         self.item_catalog = []
 
-    def get_all_item(self, item_type):
+    def get_all_items(self, item_type):
         item_list = []
         for item in self.item_catalog:
             if item.prefix == item_type:

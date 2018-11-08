@@ -22,11 +22,13 @@ def before_request():
 
 @app.route('/')
 def index():
+    # Default table view shows all books
     return render_template('home.html', item_list=item_mapper.get_all_item("bb"), item="bb")
 
 
 @app.route('/home')
 def home():
+    # Default table view shows all books
     return render_template('home.html', item_list=item_mapper.get_all_item("bb"), item="bb")
 
 
