@@ -1,7 +1,7 @@
 from flask import Flask
 from model.Tdg import Tdg
 from model.ItemMapper import ItemMapper
-
+import pytest
 
 app = Flask(__name__)
 tdg = Tdg(app)
@@ -9,12 +9,28 @@ item_mapper = ItemMapper(app)
 catalog = item_mapper.get_catalog()
 
 
+@pytest.fixture(scope='function')
+def get_last_inserted_id(tdg_, table_name):
+    connection = tdg_.mysql.connect()
+    cur = connection.cursor()
+
+    result = cur.execute("SELECT * FROM " + table_name + " ORDER BY id DESC LIMIT 1")
+    item_id = cur.fetchone()
+    cur.close()
+
+    if result > 0:
+        return item_id[0]
+    else:
+        item_id = False
+    return item_id
+
+
 # Tests whether a new book was successfully added, edited, then deleted.
 def test_book_persistence(new_book_form):
     item_mapper.add_book(new_book_form)
     item_mapper.end()
     table_name = "book"
-    book_id = tdg.get_last_inserted_id(table_name)
+    book_id = get_last_inserted_id(tdg, table_name)
     book = catalog.get_item_by_id("bb", book_id)
     assert book is not None
 
@@ -36,7 +52,7 @@ def test_magazine_persistence(new_magazine_form):
     item_mapper.add_magazine(new_magazine_form)
     item_mapper.end()
     table_name = "magazine"
-    magazine_id = tdg.get_last_inserted_id(table_name)
+    magazine_id = get_last_inserted_id(tdg, table_name)
     magazine = catalog.get_item_by_id("ma", magazine_id)
     assert magazine is not None
 
@@ -58,7 +74,7 @@ def test_movie_persistence(new_movie_form):
     item_mapper.add_movie(new_movie_form)
     item_mapper.end()
     table_name = "movie"
-    movie_id = tdg.get_last_inserted_id(table_name)
+    movie_id = get_last_inserted_id(tdg, table_name)
     movie = catalog.get_item_by_id("mo", movie_id)
     assert movie is not None
 
@@ -80,7 +96,7 @@ def test_music_persistence(new_music_form):
     item_mapper.add_music(new_music_form)
     item_mapper.end()
     table_name = "music"
-    music_id = tdg.get_last_inserted_id(table_name)
+    music_id = get_last_inserted_id(tdg, table_name)
     music = catalog.get_item_by_id("mu", music_id)
     assert music is not None
 

@@ -326,18 +326,3 @@ class Tdg:
             return False
         else:
             return keys
-
-    # [Testing] Used to verify add/remove/modify test objects
-    def get_last_inserted_id(self, table_name):
-        connection = self.mysql.connect()
-        cur = connection.cursor()
-
-        result = cur.execute("SELECT * FROM " + table_name + " ORDER BY id DESC LIMIT 1")
-        item_id = cur.fetchone()
-        cur.close()
-
-        if result > 0:
-            return item_id[0]
-        else:
-            item_id = False
-        return item_id
