@@ -29,7 +29,7 @@ class ItemMapper:
             for single_copy in all_copies:
                 if single_copy.book_fk == book[0]:
                     copies.append(single_copy)
-            book_list.append(Book(book[0], book[1], "bb", book[2], book[3], book[4], book[5], book[6], book[7], book[8], book[9], copies))
+            book_list.append(Book(book[0], book[1], "bb", book[2], book[3], book[4], book[5], book[6], book[7], book[8], book[9], book[10], copies))
         return book_list
 
     def get_all_magazines(self):
@@ -42,7 +42,7 @@ class ItemMapper:
             for single_copy in all_copies:
                 if single_copy.magazine_fk == magazine[0]:
                     copies.append(single_copy)
-            magazine_list.append(Magazine(magazine[0], magazine[1], "ma", magazine[2], magazine[3], magazine[4], magazine[5], magazine[6], copies))
+            magazine_list.append(Magazine(magazine[0], magazine[1], "ma", magazine[2], magazine[3], magazine[4], magazine[5], magazine[6], magazine[7], copies))
         return magazine_list
 
     def get_all_music(self):
@@ -116,6 +116,7 @@ class ItemMapper:
             item.format = form.format.data
             item.pages = form.pages.data
             item.publisher = form.publisher.data
+            item.publication_year = form.publication_year.data
             item.language = form.language.data
             item.isbn10 = form.isbn10.data
             item.isbn13 = form.isbn13.data
@@ -124,6 +125,7 @@ class ItemMapper:
         elif item_prefix == "ma":
             item.title = form.title.data
             item.publisher = form.publisher.data
+            item.publication_date = form.publication_date.data
             item.language = form.language.data
             item.isbn10 = form.isbn10.data
             item.isbn13 = form.isbn13.data
@@ -159,12 +161,13 @@ class ItemMapper:
         book_format = form.format.data
         pages = form.pages.data
         publisher = form.publisher.data
+        publication_year = form.publication_year.data
         language = form.language.data
         isbn10 = form.isbn10.data
         isbn13 = form.isbn13.data
         quantity = form.quantity.data
-        book = Book(None, title, prefix, author, book_format, pages,
-                    publisher, language, isbn10, isbn13, quantity, None)
+        book = Book(None, title, prefix, author, book_format, pages, publisher, publication_year, language, isbn10, isbn13, quantity, None)
+
         if self.uow is None:
             self.uow = Uow()
         self.uow.add(book)
@@ -173,14 +176,15 @@ class ItemMapper:
 
     def add_magazine(self, form):
         title = form.title.data
-        publisher = form.publisher.data
         prefix = "ma"
+        publisher = form.publisher.data
+        publication_date = form.publication_date.data
         language = form.language.data
         isbn10 = form.isbn10.data
         isbn13 = form.isbn13.data
         quantity = form.quantity.data
-        magazine = Magazine(None, title, prefix, publisher, language,
-                            isbn10, isbn13, quantity, None)
+        magazine = Magazine(None, title, prefix, publisher, publication_date, language, isbn10, isbn13, quantity, None)
+
         if self.uow is None:
             self.uow = Uow()
         self.uow.add(magazine)

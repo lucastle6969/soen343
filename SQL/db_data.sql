@@ -3,12 +3,12 @@ INSERT INTO user VALUES (1, 'John', 'Doe', '125 Ave Du Parc', 'johndoe@gmail.com
 INSERT INTO user VALUES (2, 'Jane', 'Dee', '125 Ave Du Parc', 'janedee@gmail.com', '514-336-4545', 1, '$5$rounds=535000$vaRcpprbw7lAYCxY$onE09j6O55tDz45aVn0IgzCe/pzwcp44Q1TdAnO6lmB');
 
 TRUNCATE TABLE book;
-INSERT INTO book VALUES (NULL, 'A Feast For Crows', 'George RR Martin', 'Physical', 250, 'Scholastic', 'English', 1234567890, 1234567890123, 2);
-INSERT INTO book VALUES (NULL, 'Neuromancer', 'William Gibson', 'Paperback', 186, 'Random House', 'English', 1230987654, 1231234567890, 1);
+INSERT INTO book VALUES (NULL, 'A Feast For Crows', 'George RR Martin', 'Physical', 250, 'Scholastic', 2005, 'English', 1234567890, 1234567890123, 2);
+INSERT INTO book VALUES (NULL, 'Neuromancer', 'William Gibson', 'Paperback', 186, 'Random House', 1984, 'English', 1230987654, 1231234567890, 1);
 
 TRUNCATE TABLE magazine;
-INSERT INTO magazine VALUES (NULL, 'The New York Times Magazine', 'Arthurr Ochs Sulzberger Jr.', 'English', 1439401890, 8461968342412, 2);
-INSERT INTO magazine VALUES (NULL, 'National Geographic', 'Neil DeGrasse Tyson', 'English', 1234567890, 1234567890123, 1);
+INSERT INTO magazine VALUES (NULL, 'The New York Times Magazine', 'Arthurr Ochs Sulzberger Jr.', 'Nov. 23 2017', 'English', 1439401890, 8461968342412, 2);
+INSERT INTO magazine VALUES (NULL, 'National Geographic', 'Neil DeGrasse Tyson', 'Jun. 17 2013', 'English', 1234567890, 1234567890123, 1);
 
 TRUNCATE TABLE movie;
 INSERT INTO movie VALUES (NULL, 'The Last Jedi', 'Rian Johnson', 'Kathleen Kennedy', 'Mark Hamil, Carrie Fisher, Adam Driver and Daisy Ridley', 'English', 'None', 'None', 'Dec. 15 2017', '152 minutes', 2);

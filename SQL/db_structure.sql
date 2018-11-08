@@ -6,16 +6,17 @@ CREATE TABLE book (
     format VARCHAR(20), 
     pages INT(255), 
     publisher VARCHAR(50), 
+    publication_year INT(4),
     language VARCHAR(30), 
     isbn10 BIGINT(10), 
     isbn13 BIGINT(13),
-    quantity tinyint(3)
+    quantity TINYINT(3)
 );
 
 DROP TABLE IF EXISTS book_physical;
 CREATE TABLE book_physical (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,
-    book_fk int(11),
+    book_fk INT(11),
     status VARCHAR(100)
 );
 
@@ -24,17 +25,18 @@ DROP TABLE IF EXISTS magazine;
 CREATE TABLE magazine (
     id INT(20) AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(100),
-    publisher VARCHAR(50), 
+    publisher VARCHAR(50),
+    publication_date VARCHAR(30), 
     language VARCHAR(30), 
     isbn10 BIGINT(10), 
     isbn13 BIGINT(13),
-    quantity tinyint(3)
+    quantity TINYINT(3)
 );
 
 DROP TABLE IF EXISTS magazine_physical;
 CREATE TABLE magazine_physical (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,
-    magazine_fk int(11),
+    magazine_fk INT(11),
     status VARCHAR(100)
 );
 
@@ -51,13 +53,13 @@ CREATE TABLE movie (
     dubbed VARCHAR(30), 
     release_date VARCHAR(30), 
     runtime VARCHAR(20),
-    quantity tinyint(3)
+    quantity TINYINT(3)
 );
 
 DROP TABLE IF EXISTS movie_physical;
 CREATE TABLE movie_physical (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,
-    movie_fk int(11),
+    movie_fk INT(11),
     status VARCHAR(100)
 );
 
@@ -72,13 +74,13 @@ CREATE TABLE music (
     label VARCHAR(30),
     release_date VARCHAR(30), 
     asin VARCHAR(20),
-    quantity tinyint(3)
+    quantity TINYINT(3)
 );
 
 DROP TABLE IF EXISTS music_physical;
 CREATE TABLE music_physical (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,
-    music_fk int(11),
+    music_fk INT(11),
     status VARCHAR(100)
 );
 
@@ -91,6 +93,6 @@ CREATE TABLE user(
     address VARCHAR(50), 
     email VARCHAR(50), 
     phone VARCHAR(60), 
-    admin tinyint(1), 
+    admin TINYINT(1), 
     password VARCHAR(100)
 );
