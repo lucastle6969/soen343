@@ -53,6 +53,7 @@ class Catalog:
                 item.format = mod_item.format
                 item.pages = mod_item.pages
                 item.publisher = mod_item.publisher
+                item.publication_year = mod_item.publication_year
                 item.language = mod_item.language
                 item.isbn10 = mod_item.isbn10
                 item.isbn13 = mod_item.isbn13
@@ -60,6 +61,7 @@ class Catalog:
             elif mod_item.prefix == "ma":
                 item.title = mod_item.title
                 item.publisher = mod_item.publisher
+                item.publication_date = mod_item.publication_date
                 item.language = mod_item.language
                 item.isbn10 = mod_item.isbn10
                 item.isbn13 = mod_item.isbn13
