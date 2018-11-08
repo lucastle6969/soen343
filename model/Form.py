@@ -2,12 +2,27 @@ from wtforms import ValidationError, Form, StringField, PasswordField, validator
 import datetime
 import re
 
+def quantity(itemType):
+    def validate_quantity(form, field):
+        if field.data is None:
+            raise ValidationError('Please enter the amount of '+itemType+'s to register under this entry.')  
+        if type(field.data) is not int:
+            if type(field.data) is str:
+                if any(char.isalpha() for char in field.data):
+                    raise ValidationError('This is not a valid quantity. Please give a valid quantity of '+itemType+'(s) to register')
+        if field.data == 0:
+            raise ValidationError('There must be at least 1 '+itemType+' to register.') 
+        if field.data > 255:
+            raise ValidationError('That is way too many '+itemType+'s! Please enter less than 256 at a time') 
+    
+    return validate_quantity
+
 def input_required(message):
-    def _title(form, field):
+    def _input_required(form, field):
         if len(field.data) < 1:
             raise ValidationError(message)  
     
-    return _title
+    return _input_required
 
 def person_name(form, field):
     if len(field.data) == 0:
@@ -105,15 +120,16 @@ class BookForm(Form):
     language = StringField('Language', [no_digit, input_required(message='Please enter the language in which the book is published.')])
     isbn10 = IntegerField('ISBN10', [number, validators.NumberRange(min=1000000000, max=9999999999, message='Please enter a valid 10-digit ISBN.')])
     isbn13 = IntegerField('ISBN13', [number, validators.NumberRange(min=1000000000000, max=9999999999999, message='Please enter a valid 13-digit ISBN.')])
-    quantity = IntegerField('Quantity', [input_required(message='Please enter the amount of books to register under this entry.'), number, validators.NumberRange(min=1, max=255)])
+    quantity = IntegerField('Quantity', [quantity(itemType='book')])
 
 class MagazineForm(Form):
     title = StringField('Title', [input_required(message='Please insert the title of the magazine.')])
     publisher = StringField('Publisher', [alpha_numeric, input_required(message='Please enter the name of the publisher.')])
+    publication_date = StringField('Publication Date', [date])
     language = StringField('Language', [no_digit, input_required(message='Please enter the language in which the magazine is published.')])
     isbn10 = IntegerField('ISBN10', [number, validators.NumberRange(min=1000000000, max=9999999999, message='Please enter a valid 10-digit ISBN.')])
     isbn13 = IntegerField('ISBN13', [number, validators.NumberRange(min=1000000000000, max=9999999999999, message='Please enter a valid 13-digit ISBN.')])
-    quantity = IntegerField('Quantity', [input_required(message='Please enter the amount of magazines to register under this entry.'), number, validators.NumberRange(min=1, max=255)])
+    quantity = IntegerField('Quantity', [quantity(itemType='magazine')])
 
 
 class MovieForm(Form):
@@ -126,7 +142,7 @@ class MovieForm(Form):
     dubbed = StringField('Dubbed', [no_digit])
     release_date = StringField('Release Date', [date])
     runtime = StringField('Run Time ', [number, validators.Length(min=1, max=30)])
-    quantity = IntegerField('Quantity', [input_required(message='Please enter the amount of musics to register under this entry.'), number, validators.NumberRange(min=1, max=255)])
+    quantity = IntegerField('Quantity', [quantity(itemType='movie')])
 
 
 class MusicForm(Form):
@@ -136,7 +152,7 @@ class MusicForm(Form):
     label = StringField('Label', [input_required(message='Please insert the label of the music.')])
     release_date = StringField('Release Date', [date])
     asin = StringField('ASIN', [validators.Length(min=10, max=10, message='This is not a valid ASIN code.')])
-    quantity = IntegerField('Quantity', [input_required(message='Please enter the amount of musics to register under this entry.'), number, validators.NumberRange(min=1, max=255)])
+    quantity = IntegerField('Quantity', [quantity(itemType='music')])
 
 class SearchForm(Form):
     filter = StringField('Filter')
@@ -168,6 +184,7 @@ class Forms(Form):
             form.title.data = item_selected.title
             form.author.data = item_selected.author
             form.format.data = item_selected.format
+            form.publication_year.data = item_selected.publication_year
             form.pages.data = item_selected.pages
             form.publisher.data = item_selected.publisher
             form.publication_year.data = item_selected.publication_year
