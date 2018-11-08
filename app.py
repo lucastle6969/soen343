@@ -52,7 +52,7 @@ def search(item):
     elif item == 'movies':
         return render_template('home.html', item_list=item_mapper.get_filtered_items("mo", form), item="mo")
     elif item == 'music':
-        return render_template('home.html', item_list=item_mapper.get_filtered_items("ma", form), item="mu")
+        return render_template('home.html', item_list=item_mapper.get_filtered_items("mu", form), item="mu")
 
 
 @app.route('/about')
