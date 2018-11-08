@@ -78,9 +78,9 @@ class Tdg:
         connection = self.mysql.connect()
         cur = connection.cursor()
         # Execute query
-        cur.execute("""INSERT INTO book(title, author, format, pages, publisher, language, isbn10, isbn13, quantity)
-                    VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)""",
-                    (book.title, book.author, book.format, book.pages, book.publisher, book.language, book.isbn10, book.isbn13, book.quantity))
+        cur.execute("""INSERT INTO book(title, author, format, pages, publisher, publication_year, language, isbn10, isbn13, quantity)
+                    VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
+                    (book.title, book.author, book.format, book.pages, book.publisher, book.publication_year, book.language, book.isbn10, book.isbn13, book.quantity))
         # get the new user id
         result = cur.execute("SELECT * FROM book ORDER BY id DESC LIMIT 1")
         new_book_id = cur.fetchone()
@@ -97,9 +97,9 @@ class Tdg:
     def add_magazine(self, magazine):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        cur.execute("""INSERT INTO magazine(title, publisher, language, isbn10, isbn13, quantity)
-                    VALUES(%s, %s, %s, %s, %s, %s)""",
-                    (magazine.title, magazine.publisher, magazine.language, magazine.isbn10, magazine.isbn13, magazine.quantity))
+        cur.execute("""INSERT INTO magazine(title, publisher, publication_date, language, isbn10, isbn13, quantity)
+                    VALUES(%s, %s, %s, %s, %s, %s, %s)""",
+                    (magazine.title, magazine.publisher, magazine.publication_date, magazine.language, magazine.isbn10, magazine.isbn13, magazine.quantity))
         result = cur.execute("SELECT * FROM magazine ORDER BY id DESC LIMIT 1")
         new_magazine_id = cur.fetchone()
         for x in range(0, magazine.quantity):
@@ -148,7 +148,7 @@ class Tdg:
     def get_books(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, title, author, format, pages, publisher, language, isbn10, isbn13, quantity FROM book WHERE 1")
+        result = cur.execute("SELECT id, title, author, format, pages, publisher, publication_year, language, isbn10, isbn13, quantity FROM book WHERE 1")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -174,7 +174,7 @@ class Tdg:
     def get_magazines(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, title, publisher, language, isbn10, isbn13, quantity FROM magazine WHERE 1")
+        result = cur.execute("SELECT id, title, publisher, publication_date, language, isbn10, isbn13, quantity FROM magazine WHERE 1")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -282,7 +282,7 @@ class Tdg:
         connection = self.mysql.connect()
         cur = connection.cursor()
         for book in modified_books:
-            cur.execute("UPDATE book SET title = %s, author = %s, format = %s, pages = %s, publisher = %s, language = %s, isbn10 = %s, isbn13 = %s WHERE id = %s", (book.title, book.author, book.format, book.pages, book.publisher, book.language, book.isbn10, book.isbn13, book.id))
+            cur.execute("UPDATE book SET title = %s, author = %s, format = %s, pages = %s, publisher = %s, publication_year = %s, language = %s, isbn10 = %s, isbn13 = %s WHERE id = %s", (book.title, book.author, book.format, book.pages, book.publisher, book.publication_year, book.language, book.isbn10, book.isbn13, book.id))
         # ideally a check if there were errors here and return a boolean to be handled by the mapper
         cur.close()
 
@@ -290,7 +290,7 @@ class Tdg:
         connection = self.mysql.connect()
         cur = connection.cursor()
         for magazine in modified_magazines:
-            cur.execute("UPDATE magazine SET title = %s, publisher = %s, language = %s, isbn10 = %s, isbn13 = %s WHERE id = %s", (magazine.title, magazine.publisher, magazine.language, magazine.isbn10, magazine.isbn13, magazine.id))
+            cur.execute("UPDATE magazine SET title = %s, publisher = %s, publication_date = %s, language = %s, isbn10 = %s, isbn13 = %s WHERE id = %s", (magazine.title, magazine.publisher, magazine.publication_date, magazine.language, magazine.isbn10, magazine.isbn13, magazine.id))
         cur.close()
 
     def modify_movies(self, modified_movies):

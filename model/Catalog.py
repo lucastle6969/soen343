@@ -26,7 +26,7 @@ class Catalog:
         for item in self.item_catalog:
             if item.prefix == prefix:
                 value = eval("item." + filter_field)
-                if search_value.lower() in value.lower():
+                if search_value.lower() in str(value).lower():
                     filtered_items.append(item)
         return self.order_items(filtered_items, order_filter, order_type)
 
@@ -76,6 +76,7 @@ class Catalog:
                 item.format = mod_item.format
                 item.pages = mod_item.pages
                 item.publisher = mod_item.publisher
+                item.publication_year = mod_item.publication_year
                 item.language = mod_item.language
                 item.isbn10 = mod_item.isbn10
                 item.isbn13 = mod_item.isbn13
@@ -83,6 +84,7 @@ class Catalog:
             elif mod_item.prefix == "ma":
                 item.title = mod_item.title
                 item.publisher = mod_item.publisher
+                item.publication_date = mod_item.publication_date
                 item.language = mod_item.language
                 item.isbn10 = mod_item.isbn10
                 item.isbn13 = mod_item.isbn13

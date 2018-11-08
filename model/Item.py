@@ -3,21 +3,22 @@ class Item:
         self.title = title
         self.prefix = prefix
         self.id = item_id
-
         self.quantity = quantity
 
 
 class Book(Item):
-    def __init__(self, item_id, title, prefix, author, item_format, pages, publisher, language, isbn10, isbn13, quantity, copies):
+    def __init__(self, item_id, title, prefix, author, item_format, pages, publisher, publication_year, language, isbn10, isbn13, quantity, copies):
         Item.__init__(self, item_id, title, prefix, quantity)
         self.author = author
         self.format = item_format
         self.pages = pages
         self.publisher = publisher
+        self.publication_year = publication_year
         self.language = language
         self.isbn10 = isbn10
         self.isbn13 = isbn13
         self.copies = copies
+
 
 class PhysicalBook:
     def __init__(self, id, book_fk, status, return_date):
@@ -27,11 +28,11 @@ class PhysicalBook:
         self.return_date = return_date
 
 
-
 class Magazine(Item):
-    def __init__(self, item_id, title, prefix, publisher, language, isbn10, isbn13, quantity, copies):
+    def __init__(self, item_id, title, prefix, publisher, publication_date, language, isbn10, isbn13, quantity, copies):
         Item.__init__(self, item_id, title, prefix, quantity)
         self.publisher = publisher
+        self.publication_date = publication_date
         self.language = language
         self.isbn10 = isbn10
         self.isbn13 = isbn13
