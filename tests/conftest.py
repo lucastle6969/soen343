@@ -55,7 +55,7 @@ def new_book_form():
     form.language.data = "EN"
     form.isbn10.data = 5914602904
     form.isbn13.data = 5914602904123
-    form.quantity.data = 1
+    form.quantity.data = 3
     return form
 
 
