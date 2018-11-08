@@ -120,7 +120,6 @@ class ItemMapper:
             item.language = form.language.data
             item.isbn10 = form.isbn10.data
             item.isbn13 = form.isbn13.data
-            item.quantity = form.quantity.data
 
         elif item_prefix == "ma":
             item.title = form.title.data
@@ -129,7 +128,6 @@ class ItemMapper:
             item.language = form.language.data
             item.isbn10 = form.isbn10.data
             item.isbn13 = form.isbn13.data
-            item.quantity = form.quantity.data
 
         elif item_prefix == "mo":
             item.title = form.title.data
@@ -141,7 +139,6 @@ class ItemMapper:
             item.dubbed = form.dubbed.data
             item.release_date = form.release_date.data
             item.runtime = form.runtime.data
-            item.quantity = form.quantity.data
 
         elif item_prefix == "mu":
             item.title = form.title.data
@@ -150,7 +147,6 @@ class ItemMapper:
             item.label = form.label.data
             item.release_date = form.release_date.data
             item.asin = form.asin.data
-            item.quantity = form.quantity.data
 
         self.uow.register_dirty(item)
 
