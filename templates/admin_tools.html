@@ -14,6 +14,8 @@
             {% include 'includes/_catalog_manager_limited.html' %}
         {% elif tool == "view_users" %}
             {% include 'includes/_view_users.html' %}
+        {%elif tool == "HELP" %}
+            {% include 'includes/_admin_help.html' %}
 
         {% endif %}
     {% elif item %}
@@ -32,6 +34,7 @@
                 {% else %}
                     <a class="admin-tools rounded" href="/admin_tools/catalog_manager"><div class="rounded">Catalog Manager</div></a>
                 {% endif %}
+                <a class="admin-tools rounded" href="/admin_tools/admin_help"><div class="rounded">HELP</div></a>
             </div>
         </div>
     {% endif %}

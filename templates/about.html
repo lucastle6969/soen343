@@ -1,6 +1,11 @@
 {% extends 'layout.html' %}
 
 {% block body %}
+    {% if session.admin == True %}
+    hello
+        {% include 'includes/_admin_help.html' %}
+    {% endif %}
+
     <span class="about_header" id="about">About</span>
     <hr>
     <br>
@@ -42,6 +47,7 @@
         </tr>
         <tr>
             <th class="borderless"> Hi, I am Alice! Log in, come back on this page and follow me to get more instructions about how to navigate as an administrator.</th>  
+            <td class="borderless" colspan="3"><a href="/about/_admin_help" ><button class="actors"><img src="/static/presentation/img/Alice Says Follow Me.png" alt="Follow Me!"/></button></a></td>
             <td class="instruction">Coming soon !</td>  
         </tr>
     </table>
