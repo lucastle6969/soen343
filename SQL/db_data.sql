@@ -27,11 +27,11 @@ INSERT INTO music (id, title, media_type, artist, label, release_date, asin, qua
 TRUNCATE TABLE book_physical;
 INSERT INTO book_physical (id, book_fk, status, return_date) VALUES
 (NULL, 1, "Available", NULL),
-(NULL, 1, "Loaned", (DATE_ADD(now() , INTERVAL 1 HOUR))),
-(NULL, 2, "Loaned", (DATE_ADD(now() , INTERVAL 7 DAY))),
-(NULL, 2, "Loaned", (DATE_ADD(now() , INTERVAL 5 DAY))),
-(NULL, 2, "Loaned", (DATE_ADD(now() , INTERVAL 3 DAY))),
-(NULL, 2, "Loaned", (DATE_ADD(now() , INTERVAL 1 DAY))),
+(NULL, 1, "Available", NULL),
+(NULL, 2, "Available", NULL),
+(NULL, 2, "Available", NULL),
+(NULL, 2, "Available", NULL),
+(NULL, 2, "Available", NULL),
 (NULL, 2, "Available",  NULL),
 (NULL, 2, "Available",  NULL),
 (NULL, 2, "Available",  NULL),
@@ -59,9 +59,9 @@ INSERT INTO magazine_physical (id, magazine_fk, status, return_date) VALUES
 TRUNCATE TABLE movie_physical;
 INSERT INTO movie_physical (id, movie_fk, status, return_date) VALUES
 (NULL, 1, "Available", NULL),
-(NULL, 1, "Loaned", (DATE_ADD(now() , INTERVAL 1 HOUR))),
-(NULL, 2, "Loaned", (DATE_ADD(now() , INTERVAL 2 DAY))),
-(NULL, 2, "Loaned", (DATE_ADD(now() , INTERVAL 1 DAY))),
+(NULL, 1, "Available", NULL),
+(NULL, 2, "Available", NULL),
+(NULL, 2, "Available", NULL),
 (NULL, 2, "Available",  NULL),
 (NULL, 2, "Available",  NULL),
 (NULL, 2, "Available",  NULL),
@@ -75,9 +75,9 @@ INSERT INTO movie_physical (id, movie_fk, status, return_date) VALUES
 TRUNCATE TABLE music_physical;
 INSERT INTO music_physical (id, music_fk, status, return_date) VALUES
 (NULL, 1, "Available", NULL),
-(NULL, 1, "Loaned", (DATE_ADD(now() , INTERVAL 1 HOUR))),
-(NULL, 2, "Loaned", (DATE_ADD(now() , INTERVAL 2 DAY))),
-(NULL, 2, "Loaned", (DATE_ADD(now() , INTERVAL 1 DAY))),
+(NULL, 1, "Available", NULL),
+(NULL, 2, "Available", NULL),
+(NULL, 2, "Available", NULL),
 (NULL, 2, "Available",  NULL),
 (NULL, 2, "Available",  NULL),
 (NULL, 2, "Available",  NULL),
