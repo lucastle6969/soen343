@@ -30,7 +30,14 @@
 </div>
 {% endif %}
 
+<hr>
+
 {% if catalog %}
+<h4>Type something in the following input field to search across all items:</h4>
+<input class="form-control" id="myInput" type="text" placeholder="Search..">
+<br>
+<br>
+
 <h3>Books</h3>
 <table id="book-table" class="table table-hover table-bordered">
     <thead>
@@ -41,6 +48,7 @@
             <th>Format</th>
             <th>Pages</th>
             <th>Publisher</th>
+            <th>Publication Year</th>
             <th>Language</th>
             <th>ISBN-10</th>
             <th>ISBN-13</th>
@@ -48,7 +56,7 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="book-table-body">
         {% for x in catalog.item_catalog %}
             {% set modified = {'foo': False} %}
             {% set deleted = {'foo': False} %}
@@ -65,6 +73,7 @@
                                 <td>{{q.format}}</td>
                                 <td>{{q.pages}}</td>
                                 <td>{{q.publisher}}</td>
+                                <td>{{q.publication_year}}</td>
                                 <td>{{q.language}}</td>
                                 <td>{{q.isbn10}}</td>
                                 <td>{{q.isbn13}}</td>
@@ -87,6 +96,7 @@
                                 <td>{{x.format}}</td>
                                 <td>{{x.pages}}</td>
                                 <td>{{x.publisher}}</td>
+                                <td>{{x.publication_year}}</td>
                                 <td>{{x.language}}</td>
                                 <td>{{x.isbn10}}</td>
                                 <td>{{x.isbn13}}</td>
@@ -105,6 +115,7 @@
                         <td>{{x.format}}</td>
                         <td>{{x.pages}}</td>
                         <td>{{x.publisher}}</td>
+                        <td>{{x.publication_year}}</td>
                         <td>{{x.language}}</td>
                         <td>{{x.isbn10}}</td>
                         <td>{{x.isbn13}}</td>
@@ -126,6 +137,7 @@
                         <td>{{y.format}}</td>
                         <td>{{y.pages}}</td>
                         <td>{{y.publisher}}</td>
+                        <td>{{y.publication_year}}</td>
                         <td>{{y.language}}</td>
                         <td>{{y.isbn10}}</td>
                         <td>{{y.isbn13}}</td>
@@ -135,18 +147,20 @@
                             <input type="submit" value="Delete" /></form></td>
                     </tr>
                     {% endif %}
-            {% endfor%}    
+            {% endfor%}
         {% endif %}
     </tbody>
 </table>
 <br />
 
 <h3>Magazines</h3>
-<table class="table table-hover table-bordered">
+<table id="magazine-table" class="table table-hover table-bordered">
     <thead>
         <tr>
+            <th class="hidden">ID</th>
             <th>Title</th>
             <th>Publisher</th>
+            <th>Publication Date</th>
             <th>Language</th>
             <th>ISBN-10</th>
             <th>ISBN-13</th>
@@ -154,7 +168,7 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="magazine-table-body">
         {% for x in catalog.item_catalog %}
             {% set modified = {'foo': False} %}
             {% set deleted = {'foo': False} %}
@@ -168,6 +182,7 @@
                                 <td class="hidden">{{q.id}}</td>
                                 <td>{{q.title}}</td>
                                 <td>{{q.publisher}}</td>
+                                <td>{{q.publication_date}}</td>
                                 <td>{{q.language}}</td>
                                 <td>{{q.isbn10}}</td>
                                 <td>{{q.isbn13}}</td>
@@ -187,6 +202,7 @@
                                 <td class="hidden">{{x.id}}</td>
                                 <td>{{x.title}}</td>
                                 <td>{{x.publisher}}</td>
+                                <td>{{x.publication_date}}</td>
                                 <td>{{x.language}}</td>
                                 <td>{{x.isbn10}}</td>
                                 <td>{{x.isbn13}}</td>
@@ -202,6 +218,7 @@
                         <td class="hidden">{{x.id}}</td>
                         <td>{{x.title}}</td>
                         <td>{{x.publisher}}</td>
+                        <td>{{x.publication_date}}</td>
                         <td>{{x.language}}</td>
                         <td>{{x.isbn10}}</td>
                         <td>{{x.isbn13}}</td>
@@ -220,6 +237,7 @@
                         <td class="hidden"></td>
                         <td>{{y.title}}</td>
                         <td>{{y.publisher}}</td>
+                        <td>{{y.publication_date}}</td>
                         <td>{{y.language}}</td>
                         <td>{{y.isbn10}}</td>
                         <td>{{y.isbn13}}</td>
@@ -229,16 +247,17 @@
                             <input type="submit" value="Delete" /></form></td>
                     </tr>
                     {% endif %}
-            {% endfor%}    
+            {% endfor%}
         {% endif %}
     </tbody>
 </table>
 <br />
 
 <h3>Movies</h3>
-<table class="table table-hover table-bordered">
+<table id="movie-table" class="table table-hover table-bordered">
     <thead>
         <tr>
+            <th class="hidden">ID</th>
             <th>Title</th>
             <th>Director</th>
             <th>Producers</th>
@@ -252,7 +271,7 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="movie-table-body">
         {% for x in catalog.item_catalog %}
             {% set modified = {'foo': False} %}
             {% set deleted = {'foo': False} %}
@@ -343,16 +362,17 @@
                             <input type="submit" value="Delete" /></form></td>
                     </tr>
                     {% endif %}
-            {% endfor%}    
+            {% endfor%}
         {% endif %}
     </tbody>
 </table>
 <br />
 
 <h3>Music</h3>
-<table class="table table-hover table-bordered">
+<table id="music-table" class="table table-hover table-bordered">
     <thead>
         <tr>
+            <th class="hidden">ID</th>
             <th>Type</th>
             <th>Title</th>
             <th>Artist</th>
@@ -363,7 +383,7 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="music-table-body">
         {% for x in catalog.item_catalog %}
             {% set modified = {'foo': False} %}
             {% set deleted = {'foo': False} %}
@@ -442,10 +462,22 @@
                             <input type="submit" value="Delete" /></form></td>
                     </tr>
                     {% endif %}
-            {% endfor%}    
+            {% endfor%}
         {% endif %}
     </tbody>
 </table>
+
+<!-- This script should not be called from an external js file -->
+<script>
+    $(document).ready( function () {
+        $('table').DataTable({
+            "orderClasses": false
+        });
+    } );
+</script>
+
+<script src="../static/presentation/js/catalog_manager_search.js"></script>
+
 {% if saved_changes %}
     <form method="POST" action="/admin_tools/catalog_manager/commit">
         <div class = "row">
@@ -455,8 +487,10 @@
             </div>
         </div>
     </form>
-    
 {% endif %}
+
 {% endif%}
 </div>
+<br>
+<br>
 {% endblock %}

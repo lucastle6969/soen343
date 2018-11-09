@@ -1,4 +1,4 @@
-from model.Item import Book, Magazine, Movie, Music
+from model.Item import Book, PhysicalBook, Magazine, PhysicalMagazine, Movie, PhysicalMovie, Music, PhysicalMusic
 from model.Uow import Uow
 from model.Catalog import Catalog
 from model.Tdg import Tdg
@@ -10,11 +10,66 @@ class ItemMapper:
         self.uow = None
         self.catalog = Catalog()
         self.tdg = Tdg(app)
-        self.catalog.populate(self.tdg.get_books(), self.tdg.get_magazines(),
-                              self.tdg.get_movies(), self.tdg.get_music())
+        self.catalog.populate(self.get_all_books(), self.get_all_magazines(),
+                              self.get_all_movies(), self.get_all_music())
 
     def get_catalog(self):
         return self.catalog
+
+    def get_all_items(self, item_prefix):
+        return self.catalog.get_all_items(item_prefix)
+
+    def get_all_books(self):
+        all_copies = []
+        for copy in self.tdg.get_books_physical():
+            all_copies.append(PhysicalBook(copy[0], copy[1], copy[2], copy[3]))
+        book_list = []
+        for book in self.tdg.get_books():
+            copies = []
+            for single_copy in all_copies:
+                if single_copy.book_fk == book[0]:
+                    copies.append(single_copy)
+            book_list.append(Book(book[0], book[1], "bb", book[2], book[3], book[4], book[5], book[6], book[7], book[8], book[9], book[10], copies))
+        return book_list
+
+    def get_all_magazines(self):
+        all_copies = []
+        for copy in self.tdg.get_magazines_physical():
+            all_copies.append(PhysicalMagazine(copy[0], copy[1], copy[2], copy[3]))
+        magazine_list = []
+        for magazine in self.tdg.get_magazines():
+            copies = []
+            for single_copy in all_copies:
+                if single_copy.magazine_fk == magazine[0]:
+                    copies.append(single_copy)
+            magazine_list.append(Magazine(magazine[0], magazine[1], "ma", magazine[2], magazine[3], magazine[4], magazine[5], magazine[6], magazine[7], copies))
+        return magazine_list
+
+    def get_all_music(self):
+        all_copies = []
+        for copy in self.tdg.get_music_physical():
+            all_copies.append(PhysicalMusic(copy[0], copy[1], copy[2], copy[3]))
+        music_list = []
+        for music in self.tdg.get_music():
+            copies = []
+            for single_copy in all_copies:
+                if single_copy.music_fk == music[0]:
+                    copies.append(single_copy)
+            music_list.append(Music(music[0], music[1], "mu", music[2], music[3], music[4], music[5], music[6], music[7], copies))
+        return music_list
+
+    def get_all_movies(self):
+        all_copies = []
+        for copy in self.tdg.get_movies_physical():
+            all_copies.append(PhysicalMovie(copy[0], copy[1], copy[2], copy[3]))
+        movie_list = []
+        for movie in self.tdg.get_movies():
+            copies = []
+            for single_copy in all_copies:
+                if single_copy.movie_fk == movie[0]:
+                    copies.append(single_copy)
+            movie_list.append(Movie(movie[0], movie[1], "mo", movie[2], movie[3], movie[4], movie[5], movie[6], movie[7], movie[8], movie[9], movie[10], copies))
+        return movie_list
 
     def get_saved_changes(self):
         if self.uow is None:
@@ -61,18 +116,18 @@ class ItemMapper:
             item.format = form.format.data
             item.pages = form.pages.data
             item.publisher = form.publisher.data
+            item.publication_year = form.publication_year.data
             item.language = form.language.data
             item.isbn10 = form.isbn10.data
             item.isbn13 = form.isbn13.data
-            item.quantity = form.quantity.data
 
         elif item_prefix == "ma":
             item.title = form.title.data
             item.publisher = form.publisher.data
+            item.publication_date = form.publication_date.data
             item.language = form.language.data
             item.isbn10 = form.isbn10.data
             item.isbn13 = form.isbn13.data
-            item.quantity = form.quantity.data
 
         elif item_prefix == "mo":
             item.title = form.title.data
@@ -84,7 +139,6 @@ class ItemMapper:
             item.dubbed = form.dubbed.data
             item.release_date = form.release_date.data
             item.runtime = form.runtime.data
-            item.quantity = form.quantity.data
 
         elif item_prefix == "mu":
             item.title = form.title.data
@@ -93,7 +147,6 @@ class ItemMapper:
             item.label = form.label.data
             item.release_date = form.release_date.data
             item.asin = form.asin.data
-            item.quantity = form.quantity.data
 
         self.uow.register_dirty(item)
 
@@ -104,12 +157,13 @@ class ItemMapper:
         book_format = form.format.data
         pages = form.pages.data
         publisher = form.publisher.data
+        publication_year = form.publication_year.data
         language = form.language.data
         isbn10 = form.isbn10.data
         isbn13 = form.isbn13.data
         quantity = form.quantity.data
-        book = Book(None, title, prefix, author, book_format, pages,
-                    publisher, language, isbn10, isbn13, quantity)
+        book = Book(None, title, prefix, author, book_format, pages, publisher, publication_year, language, isbn10, isbn13, quantity, None)
+
         if self.uow is None:
             self.uow = Uow()
         self.uow.add(book)
@@ -118,14 +172,15 @@ class ItemMapper:
 
     def add_magazine(self, form):
         title = form.title.data
-        publisher = form.publisher.data
         prefix = "ma"
+        publisher = form.publisher.data
+        publication_date = form.publication_date.data
         language = form.language.data
         isbn10 = form.isbn10.data
         isbn13 = form.isbn13.data
         quantity = form.quantity.data
-        magazine = Magazine(None, title, prefix, publisher, language,
-                            isbn10, isbn13, quantity)
+        magazine = Magazine(None, title, prefix, publisher, publication_date, language, isbn10, isbn13, quantity, None)
+
         if self.uow is None:
             self.uow = Uow()
         self.uow.add(magazine)
@@ -145,7 +200,7 @@ class ItemMapper:
         run_time = form.runtime.data
         quantity = form.quantity.data
         movie = Movie(None, title, prefix, director, producers, actors,
-                      language, subtitles, dubbed, release_date, run_time, quantity)
+                      language, subtitles, dubbed, release_date, run_time, quantity, None)
         if self.uow is None:
             self.uow = Uow()
         self.uow.add(movie)
@@ -162,7 +217,7 @@ class ItemMapper:
         asin = form.asin.data
         quantity = form.quantity.data
         music = Music(None, title, prefix, media_type, artist, label,
-                      release_date, asin, quantity)
+                      release_date, asin, quantity, None)
         if self.uow is None:
             self.uow = Uow()
         self.uow.add(music)
@@ -188,15 +243,35 @@ class ItemMapper:
             for item in items_to_commit[0]:
                 if item.prefix == "bb":
                     item.id = self.tdg.add_book(item)
+                    keys = self.tdg.get_physical_keys(item.id, item.prefix)
+                    physical_copies = []
+                    for key in keys:
+                        physical_copies.append(PhysicalBook(key, item.id, "Available", None))
+                    item.copies = physical_copies[:]
                     self.catalog.add_item(item)
                 elif item.prefix == "ma":
                     item.id = self.tdg.add_magazine(item)
+                    keys = self.tdg.get_physical_keys(item.id, item.prefix)
+                    physical_copies = []
+                    for key in keys:
+                        physical_copies.append(PhysicalMagazine(key, item.id, "Available", None))
+                    item.copies = physical_copies[:]
                     self.catalog.add_item(item)
                 elif item.prefix == "mo":
                     item.id = self.tdg.add_movie(item)
+                    keys = self.tdg.get_physical_keys(item.id, item.prefix)
+                    physical_copies = []
+                    for key in keys:
+                        physical_copies.append(PhysicalMovie(key, item.id, "Available", None))
+                    item.copies = physical_copies[:]
                     self.catalog.add_item(item)
                 elif item.prefix == "mu":
                     item.id = self.tdg.add_music(item)
+                    keys = self.tdg.get_physical_keys(item.id, item.prefix)
+                    physical_copies = []
+                    for key in keys:
+                        physical_copies.append(PhysicalMusic(key, item.id, "Available", None))
+                    item.copies = physical_copies[:]
                     self.catalog.add_item(item)
 
         # Modify
@@ -240,3 +315,13 @@ class ItemMapper:
                 self.tdg.delete_movies(deleted_movies)
             if len(deleted_music) != 0:
                 self.tdg.delete_music(deleted_music)
+
+    def get_filtered_items(self, prefix, form):
+        filter_value = form.filter.data
+        search_value = form.search.data
+        order_filter = form.order_filter.data
+        order_type = form.order_type.data
+
+        filtered_items = self.catalog.get_filtered_items(prefix, filter_value, search_value, order_filter, order_type)
+        return filtered_items
+

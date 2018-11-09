@@ -1,0 +1,221 @@
+{% block body %}
+    {% if item == 'bb' %}
+        <div class="modal fade" id="demo-{{x.id}}" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <button type="button" class="close" data-dismiss="modal"><i class="icon-xs-o-md"></i></button>
+                    <div class="modal-header text-center">
+                            <h5 class="modal-title" id="exampleModalLabel"><strong>{{x.title}}</strong></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="book-author" class="col-form-label"><strong>Author:</strong></label>
+                                <span id="book-author">{{x.author}}</span>
+                                <br>
+                                <label for="book-format" class="col-form-label"><strong>Format:</strong></label>
+                                <span id="book-format">{{x.format}}</span>
+                                <br>
+                                <label for="book-pages" class="col-form-label"><strong>Pages:</strong></label>
+                                <span id="book-pages">{{x.pages}}</span>
+                                <br>
+                                <label for="book-publisher" class="col-form-label"><strong>Publisher:</strong></label>
+                                <span id="book-publisher">{{x.publisher}}</span>
+                                <br>
+                                <label for="book-publication" class="col-form-label"><strong>Publication Year:</strong></label>
+                                <span id="book-publication">{{x.publication_year}}</span>
+                                <br>
+                                <label for="book-language" class="col-form-label"><strong>Language:</strong></label>
+                                <span id="book-language">{{x.language}}</span>
+                                <br>
+                                <label for="book-isbn10" class="col-form-label"><strong>ISBN-10:</strong></label>
+                                <span id="book-isbn10">{{x.isbn10}}</span>
+                                <br>
+                                <label for="book-isbn13" class="col-form-label"><strong>ISBN-13:</strong></label>
+                                <span id="book-isbn13">{{x.isbn13}}</span>
+                                <br>
+                                <label for="book-copies" class="col-form-label text-center"><strong>{{x.quantity}} {% if x.quantity == 1%} Copy: {% else %} Copies: {% endif %}</strong></label>
+                                <div class="copies">
+                                    {% for copy in x.copies %}
+                                        Copy {{loop.index}}   |   {{copy.status}}   |   {{copy.return_date}}<br>
+                                    {% endfor %}  
+                                </div>
+                            </div>
+                        </form>
+                        <hr>
+                        <div class = "container">
+                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{{ item_list[loop_index0-1].id }}" data-dismiss="modal">&lt;</button>
+                            <div class = "divider"></div>
+                            <button type="button" class="btn btn-info">Loan</button>
+                            <div class = "divider"></div>
+                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{% if loop_index0 == item_list|length -1 %}{{ item_list[0].id }}{% else %}{{ item_list[loop_index0+1].id }}{% endif %}" data-dismiss="modal">&gt;</button>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    {% if item == 'mo' %}
+        <div class="modal fade" id="demo-{{x.id}}" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <button type="button" class="close" data-dismiss="modal"><i class="icon-xs-o-md"></i></button>
+                    <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel"><strong>{{x.title}}</strong></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="movie-director" class="col-form-label"><strong>Director:</strong></label>
+                                <span id="movie-director">{{x.director}}</span>
+                                <br>
+                                <label for="movie-producers" class="col-form-label"><strong>Producers:</strong></label>
+                                <span id="movie-producers">{{x.producers}}</span>
+                                <br>
+                                <label for="movie-actors" class="col-form-label"><strong>Actors:</strong></label>
+                                <span id="movie-actors">{{x.actors}}</span>
+                                <br>
+                                <label for="movie-language" class="col-form-label"><strong>Language:</strong></label>
+                                <span id="movie-language">{{x.language}}</span>
+                                <br>
+                                <label for="movie-subtitles" class="col-form-label"><strong>Subtitles:</strong></label>
+                                <span id="movie-subtitles">{{x.subtitles}}</span>
+                                <br>
+                                <label for="movie-dubbed" class="col-form-label"><strong>Dubbed:</strong></label>
+                                <span id="movie-dubbed">{{x.dubbed}}</span>
+                                <br>
+                                <label for="movie-release" class="col-form-label"><strong>Release Date:</strong></label>
+                                <span id="movie-release">{{x.release_date}}</span>
+                                <br>
+                                <label for="movie-runtime" class="col-form-label"><strong>Runtime:</strong></label>
+                                <span id="movie-runtime">{{x.runtime}}</span>
+                                <br>
+                                <label for="movie-copies" class="col-form-label"><strong>{{x.quantity}} {% if x.quantity == 1%} Copy: {% else %} Copies: {% endif %}</strong></label>
+                                <div class="copies">
+                                    {% for copy in x.copies %}
+                                        Copy {{loop.index}}   |   {{copy.status}}   |   {{copy.return_date}}<br>
+                                    {% endfor %}  
+                                </div>
+                            </div>
+                        </form>
+                        <hr>
+                        <div class = "container">
+                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{{ item_list[loop_index0-1].id }}" data-dismiss="modal">&lt;</button>
+                            <div class = "divider"></div>
+                            <button type="button" class="btn btn-info">Loan</button>
+                            <div class = "divider"></div>
+                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{% if loop_index0 == item_list|length -1 %}{{ item_list[0].id }}{% else %}{{ item_list[loop_index0+1].id }}{% endif %}" data-dismiss="modal">&gt;</button>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    {% if item == 'mu' %}
+        <div class="modal fade" id="demo-{{x.id}}" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <button type="button" class="close" data-dismiss="modal"><i class="icon-xs-o-md"></i></button>
+                    <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel"><strong>{{x.title}}</strong></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="music-media" class="col-form-label"><strong>Media Type:</strong></label>
+                                <span id="music-media">{{x.media_type}}</span>
+                                <br>
+                                <label for="music-artist" class="col-form-label"><strong>Artist:</strong></label>
+                                <span id="music-artist">{{x.artist}}</span>
+                                <br>
+                                <label for="music-label" class="col-form-label"><strong>Label:</strong></label>
+                                <span id="music-label">{{x.label}}</span>
+                                <br>
+                                <label for="music-release" class="col-form-label"><strong>Release Date:</strong></label>
+                                <span id="music-release">{{x.release_date}}</span>
+                                <br>
+                                <label for="music-copies" class="col-form-label"><strong> {{x.quantity}} {% if x.quantity == 1%} Copy: {% else %} Copies: {% endif %}</strong></label>
+                                <div class="copies">
+                                {% for copy in x.copies %}
+                                    Copy {{loop.index}}   |   {{copy.status}}   |   {{copy.return_date}}<br>
+                                {% endfor %}   
+                                </div>
+                            </div>
+                        </form>
+                        <hr>
+                        <div class = "container">
+                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{{ item_list[loop_index0-1].id }}" data-dismiss="modal">&lt;</button>
+                            <div class = "divider"></div>
+                            <button type="button" class="btn btn-info">Loan</button>
+                            <div class = "divider"></div>
+                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{% if loop_index0 == item_list|length -1 %}{{ item_list[0].id }}{% else %}{{ item_list[loop_index0+1].id }}{% endif %}" data-dismiss="modal">&gt;</button>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    {% if item == 'ma' %}
+        <div class="modal fade" id="demo-{{x.id}}" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <button type="button" class="close" data-dismiss="modal"><i class="icon-xs-o-md"></i></button>
+                    <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel"><strong>{{x.title}}</strong></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="mag-publisher" class="col-form-label"><strong>Publisher:</strong></label>
+                                <span id="mag-publisher">{{x.publisher}}</span>
+                                <br>
+                                <label for="mag-publication-date" class="col-form-label"><strong>Publication Date:</strong></label>
+                                <span id="mag-publication-date">{{x.publication_date}}</span>
+                                <br>
+                                <label for="mag-language" class="col-form-label"><strong>Language:</strong></label>
+                                <span id="mag-language">{{x.language}}</span>
+                                <br>
+                                <label for="mag-isbn10" class="col-form-label"><strong>ISBN-10:</strong></label>
+                                <span id="mag-isbn10">{{x.isbn10}}</span>
+                                <br>
+                                <label for="mag-isbn13" class="col-form-label"><strong>ISBN-13:</strong></label>
+                                <span id="mag-isbn13">{{x.isbn13}}</span>
+                                <br>
+                                <label for="magazine-copies" class=git sta"col-form-label"><strong>{{x.quantity}} {% if x.quantity == 1%} Copy: {% else %} Copies: {% endif %}</strong></label>
+                                <div class="copies">
+                                {% for copy in x.copies %}
+                                    Copy {{loop.index}}   |   {{copy.status}}   |   {{copy.return_date}}<br>
+                                {% endfor %}  
+                                </div>
+                            </div>
+                        </form>
+                        <hr>
+                        <div class = "container">
+                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{{ item_list[loop_index0-1].id }}" data-dismiss="modal">&lt;</button>
+                            <div class = "divider-small"></div>
+                            <button type="button" class="btn btn-info" disabled>Not Loanable</button>
+                            <div class = "divider-small"></div>
+                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{% if loop_index0 == item_list|length -1 %}{{ item_list[0].id }}{% else %}{{ item_list[loop_index0+1].id }}{% endif %}" data-dismiss="modal">&gt;</button>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

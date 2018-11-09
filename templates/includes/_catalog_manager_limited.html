@@ -13,6 +13,7 @@
         <th>Format</th>
         <th>Pages</th>
         <th>Publisher</th>
+        <th>Publication Year</th>
         <th>Language</th>
         <th>ISBN-10</th>
         <th>ISBN-13</th>
@@ -27,6 +28,7 @@
         <td>{{x.format}}</td>
         <td>{{x.pages}}</td>
         <td>{{x.publisher}}</td>
+        <td>{{x.publication_year}}</td>
         <td>{{x.language}}</td>
         <td>{{x.isbn10}}</td>
         <td>{{x.isbn13}}</td>
@@ -43,6 +45,7 @@
     <tr>
         <th>Title</th>
         <th>Publisher</th>
+        <th>Publication Date</th>
         <th>Language</th>
         <th>ISBN-10</th>
         <th>ISBN-13</th>
@@ -54,6 +57,7 @@
     <tr>
         <td>{{x.title}}</td>
         <td>{{x.publisher}}</td>
+        <td>{{x.publication_date}}</td>
         <td>{{x.language}}</td>
         <td>{{x.isbn10}}</td>
         <td>{{x.isbn13}}</td>
@@ -126,6 +130,16 @@
     {% endfor %}
     </tbody>
 </table>
+
+<!-- This script should not be called from an external js file -->
+<script>
+    $(document).ready( function () {
+        $('table').DataTable({
+            "orderClasses": false
+        });
+    } );
+</script>
+
 {% endif%}
 
 {% endblock %}

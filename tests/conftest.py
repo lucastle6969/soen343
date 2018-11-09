@@ -17,28 +17,28 @@ def new_user():
 # Book created for testing insertion, deletion and modification
 @pytest.fixture(scope='module')
 def new_book():
-    book = Book(324, "DARK MATTER", "bb", "Blake Crouch", "Hardcover", 300, "VonRueden-Swaniawski", "EN", 5914602904, 5914602904123, 1)
+    book = Book(324, "DARK MATTER", "bb", "Blake Crouch", "Hardcover", 300, "VonRueden-Swaniawski", 2015, "EN", 5914602904, 5914602904123, 1, 1)
     return book
 
 
 # Magazine created for testing insertion, deletion and modification
 @pytest.fixture(scope='module')
 def new_magazine():
-    magazine = Magazine(333, "The UFO Incident", "ma", "Kuhic Ferry", "EN", 7464072294, 7464072294123, 1)
+    magazine = Magazine(333, "The UFO Incident", "ma", "Kuhic Ferry", "Nov. 23 2014", "EN", 7464072294, 7464072294123, 1, 2)
     return magazine
 
 
 # Movie created for testing insertion, deletion and modification
 @pytest.fixture(scope='module')
 def new_movie():
-    movie = Movie(434, "Man Is Not a Bird", "mo", "Gorden Kermon", "Skiles Swaniawski", "Eleen Leavesley", "EN", "None", "None", "18/10/2018", "2h30", 1)
+    movie = Movie(434, "Man Is Not a Bird", "mo", "Gorden Kermon", "Skiles Swaniawski", "Eleen Leavesley", "EN", "None", "None", "18/10/2018", "2h30", 1, 3)
     return movie
 
 
 # Music created for testing insertion, deletion and modification
 @pytest.fixture(scope='module')
 def new_music():
-    music = Music(331, "Boiling Point", "mu", "CD", "Dianna Argo", "Sony Music", "19/01/1976", "B008FOB124", 1)
+    music = Music(331, "Boiling Point", "mu", "CD", "Dianna Argo", "Sony Music", "19/01/1976", "B008FOB124", 1, 4)
     return music
 
 
@@ -51,10 +51,11 @@ def new_book_form():
     form.format.data = "Hardcover"
     form.pages.data = 300
     form.publisher.data = "VonRueden-Swaniawski"
+    form.publication_year.data = 2015
     form.language.data = "EN"
-    form.isbn13.data = 5914602904
+    form.isbn10.data = 5914602904
     form.isbn13.data = 5914602904123
-    form.quantity.data = 1
+    form.quantity.data = 3
     return form
 
 
@@ -64,8 +65,9 @@ def new_magazine_form():
     form = MagazineForm()
     form.title.data = "The UFO Incident"
     form.publisher.data = "Kuhic Ferry"
+    form.publication_date.data = "Nov. 23 2014"
     form.language.data = "EN"
-    form.isbn13.data = 7464072294
+    form.isbn10.data = 7464072294
     form.isbn13.data = 7464072294123
     form.quantity.data = 1
     return form
@@ -100,3 +102,5 @@ def new_music_form():
     form.asin.data = "B008FOB124"
     form.quantity.data = 1
     return form
+
+

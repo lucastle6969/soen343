@@ -46,8 +46,8 @@ class UserMapper:
     def ensure_not_already_logged(self, user_id):
         self.user_registry.ensure_not_already_logged(user_id)
 
-    def enlist_active_user(self, user_id, timestamp):
-        self.user_registry.enlist_active_user(user_id, timestamp)
+    def enlist_active_user(self, user_id, user_first_name, user_last_name, user_email, user_admin, timestamp):
+        self.user_registry.enlist_active_user(user_id, user_first_name, user_last_name, user_email, user_admin, timestamp)
 
     def check_another_admin(self, user_id):
         return self.user_registry.check_another_admin(user_id)

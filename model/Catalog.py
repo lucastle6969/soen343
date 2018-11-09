@@ -1,10 +1,17 @@
-from model.Item import Book, Magazine, Movie, Music
+from operator import attrgetter
 
 
 class Catalog:
 
     def __init__(self):
         self.item_catalog = []
+
+    def get_all_items(self, item_type):
+        item_list = []
+        for item in self.item_catalog:
+            if item.prefix == item_type:
+                item_list.append(item)
+        return item_list
 
     def get_item_by_id(self, item_prefix, item_id):
         int_id = int(item_id)
@@ -14,28 +21,40 @@ class Catalog:
                 return item
         return None
 
-    def populate(self, books, magazines, movies, music):
+    def get_filtered_items(self, prefix, filter_field, search_value, order_filter, order_type):
+        filtered_items = []
+        for item in self.item_catalog:
+            if item.prefix == prefix:
+                value = eval("item." + filter_field)
+                if search_value.lower() in str(value).lower():
+                    filtered_items.append(item)
+        return self.order_items(filtered_items, order_filter, order_type)
 
+    @staticmethod
+    def order_items(item_list, order_filter, order_type):
+        if order_type == "ASC":
+            return sorted(item_list, key=attrgetter(order_filter))
+        elif order_type == "DESC":
+            return sorted(item_list, key=attrgetter(order_filter), reverse=True)
+        elif order_type == "NONE":
+            return item_list
+
+    def populate(self, books, magazines, movies, music):
         if books is not None:
             for book in books:
-                self.item_catalog.append(Book(book[0], book[1], "bb", book[2], book[3], book[4], book[5], book[6], book[7], book[8], book[9]))
+                self.item_catalog.append(book)
+
         if magazines is not None:
             for magazine in magazines:
-                self.item_catalog.append(Magazine(magazine[0], magazine[1], "ma", magazine[2], magazine[3], magazine[4], magazine[5], magazine[6]))
+                self.item_catalog.append(magazine)
 
         if movies is not None:
             for movie in movies:
-                self.item_catalog.append(Movie(movie[0], movie[1], "mo", movie[2], movie[3], movie[4], movie[5], movie[6], movie[7], movie[8], movie[9], movie[10]))
+                self.item_catalog.append(movie)
 
         if music is not None:
             for item in music:
-                self.item_catalog.append(Music(item[0], item[1], "mu", item[2], item[3], item[4], item[5], item[6], item[7]))
-
-    # [Testing] Used to remove objects added to catalog while testing
-    def delete_last_item(self):
-        if len(self.item_catalog) == 0:
-            return None
-        self.item_catalog = self.item_catalog[:-1]
+                self.item_catalog.append(item)
 
     def add_item(self, item):
         if item is not None:
@@ -53,6 +72,7 @@ class Catalog:
                 item.format = mod_item.format
                 item.pages = mod_item.pages
                 item.publisher = mod_item.publisher
+                item.publication_year = mod_item.publication_year
                 item.language = mod_item.language
                 item.isbn10 = mod_item.isbn10
                 item.isbn13 = mod_item.isbn13
@@ -60,6 +80,7 @@ class Catalog:
             elif mod_item.prefix == "ma":
                 item.title = mod_item.title
                 item.publisher = mod_item.publisher
+                item.publication_date = mod_item.publication_date
                 item.language = mod_item.language
                 item.isbn10 = mod_item.isbn10
                 item.isbn13 = mod_item.isbn13

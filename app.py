@@ -2,7 +2,7 @@ from flask import Flask, render_template, flash, redirect, url_for, session, req
 from model.ItemMapper import ItemMapper
 from model.UserMapper import UserMapper
 from passlib.hash import sha256_crypt
-from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, Forms
+from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, SearchForm, Forms
 import datetime
 import time
 
@@ -22,12 +22,39 @@ def before_request():
 
 @app.route('/')
 def index():
-    return render_template('home.html')
+    # Default table view shows all books
+    return render_template('home.html', item_list=item_mapper.get_all_item("bb"), item="bb")
 
 
 @app.route('/home')
 def home():
-    return render_template('home.html')
+    # Default table view shows all books
+    return render_template('home.html', item_list=item_mapper.get_all_item("bb"), item="bb")
+
+
+@app.route('/home/<item>')
+def itemList(item):
+    if item == "bb":
+        return render_template('home.html', item_list=item_mapper.get_all_item("bb"), item="bb")
+    elif item == "ma":
+        return render_template('home.html', item_list=item_mapper.get_all_item("ma"), item="ma")
+    elif item == "mu":
+        return render_template('home.html', item_list=item_mapper.get_all_item("mu"), item="mu")
+    elif item == "mo":
+        return render_template('home.html', item_list=item_mapper.get_all_item("mo"), item="mo")
+
+
+@app.route('/home/search/<item>', methods=['GET', 'POST'])
+def search(item):
+    form = SearchForm(request.form)
+    if item == 'books':
+        return render_template('home.html', item_list=item_mapper.get_filtered_items("bb", form), item="bb")
+    elif item == 'magazines':
+        return render_template('home.html', item_list=item_mapper.get_filtered_items("ma", form), item="ma")
+    elif item == 'movies':
+        return render_template('home.html', item_list=item_mapper.get_filtered_items("mo", form), item="mo")
+    elif item == 'music':
+        return render_template('home.html', item_list=item_mapper.get_filtered_items("mu", form), item="mu")
 
 
 @app.route('/about')
@@ -56,7 +83,7 @@ def login():
             # add the user to the active user registry in the form of a tuple (user_id, timestamp)
                 timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
 
-                user_mapper.enlist_active_user(user.id, timestamp)
+                user_mapper.enlist_active_user(user.id, user.first_name, user.last_name, user.email, user.admin, timestamp)
                 if user_mapper.check_another_admin(user.id):
                     flash('Limited functionality', 'warning')
                     return redirect(url_for('home'))
@@ -190,10 +217,8 @@ def cancel_deletion(item_prefix, item_id):
 
 @app.route('/admin_tools/catalog_manager/<item>',  methods=['GET', 'POST'])
 def catalog_manager(item):
-    app.logger.info(item)
     if session['logged_in']:
         if user_mapper.validate_admin(session['user_id'], session['admin']):
-            app.logger.info(item)
             if item == 'add_movie':
                 return add_movie(request)
             elif item == 'add_book':

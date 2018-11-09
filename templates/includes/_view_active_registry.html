@@ -3,11 +3,20 @@
         <caption style="caption-side:top">Active User Registry</caption>
         <tr>
             <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email Address</th>
+            <th>Administrator</th>
             <th>Timestamp</th>
+            
         </tr>
-        {% for id, timestamp in active_user_registry %}
+        {% for id, first_name, last_name, email, admin, timestamp in active_user_registry %}
         <tr>
             <td>{{ id }}</td>
+            <td>{{ first_name }}</td>
+            <td>{{ last_name }}</td>
+            <td>{{ email }}</td>
+            <td>{% if admin == 1%} Yes {%else%} No {% endif %}</td>
             <td>{{ timestamp }}</th>
         </tr>
         {% endfor %}

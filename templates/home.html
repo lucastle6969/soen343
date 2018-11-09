@@ -1,8 +1,322 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-    <div class="exampleClass">HOME</div>
+    <div class="tool-container container">
+        <span id="items-title">Home</span>
+        <hr>
+    </div>
     {%if session.logged_in %}
         Welcome to the library {{session.first_name}} <br>
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="book-tab" href="/home/bb" aria-controls="book" aria-selected="true">Books</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" id="magazine-tab"  href="/home/ma" aria-controls="magazine" aria-selected="false">Magazines</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" id="music-tab" href="/home/mu" aria-controls="music" aria-selected="false">Music</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" id="movie-tab" href="/home/mo" aria-controls="movie" aria-selected="false">Movies</a>
+            </li>
+        </ul>
+
+        <script src="../static/presentation/js/dropdown_menu.js"></script>
+        {% if item == "bb" %}
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="book" role="tabpanel" aria-labelledby="book-tab">
+                <br/>
+                <center><h3>Books</h3></center>
+                {% from "includes/_form_helpers.html" import render_field %}
+                <form method="POST" action="/home/search/books">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <select class="form-control" name="filter">
+                                <option value="title">Title</option>
+                                <option value="author">Author</option>
+                                <option value="publisher">Publisher</option>
+                                <option value="publication_year">Publication Year</option>
+                                <option value="language">Language</option>	
+                                <option value="isbn10">ISBN-10</option>	
+                                <option value="isbn13">ISBN-13</option>
+                            </select>
+                        </li>
+                        <li class="nav-item col-sm-5">
+                            <input class="form-control" name="search" type="text" placeholder="Search for a book...">
+                        </li>
+                        <li><div class="sort-tag">Sort by:</div></li>
+                        <li class="nav-item">
+                            <select class="form-control" name="order_filter">
+                                <option value="title">Title</option>
+                                <option value="author">Author</option>
+                                <option value="publisher">Publisher</option>
+                                <option value="publication_year">Publication Year</option>
+                                <option value="language">Language</option>
+                                <option value="isbn10">ISBN-10</option>
+                                <option value="isbn13">ISBN-13</option>
+                            </select>
+                        </li>
+                        <li class="nav-item col-sm-2">
+                            <select class="form-control" name="order_type">
+                                <option value="NONE">None</option>
+                                <option value="ASC">Ascending</option>
+                                <option value="DESC">Descending</option>
+                            </select>
+                        </li>
+                        <li class="nav-item">
+                            <input class="form-control bg-success text-white" type="submit" value="Search">
+                        </li>
+                    </ul>
+                </form>
+
+                <br/>
+                <table class="table table-hover table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for x in item_list %}
+                    <tr>
+                        <td>{{x.title}}</td>
+                        <td>{{x.author}}</td>
+                        <td>
+                            {% with %}
+                                {% set loop_index0 = loop.index0 %}
+                                {% include 'includes/_detailed_view.html' %}
+                            {% endwith %} 
+                            {% include 'includes/_modal_open.html' %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </form>
+            {% endif%}
+            {% if item == "ma" %}
+            <div class="tab-pane fade show active" id="magazine" role="tabpanel" aria-labelledby="magazine-tab">
+                <br/>
+                <center><h3>Magazines</h3></center>
+                {% from "includes/_form_helpers.html" import render_field %}
+                <form method="POST" action="/home/search/magazines">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <select class="form-control" name="filter">
+                                <option value="title">Title</option>
+                                <option value="publisher">Publisher</option>
+                                <option value="publication_date">Publication Date</option>
+                                <option value="language">Language</option>
+                                <option value="isbn10">ISBN-10</option>	
+                                <option value="isbn13">ISBN-13</option>
+                            </select>
+                        </li>
+                        <li class="nav-item col-sm-5">
+                            <input class="form-control" name="search" type="text" placeholder="Search for a magazine...">
+                        </li>
+                        <li><div class="sort-tag">Sort by:</div></li>
+                        <li class="nav-item">
+                            <select class="form-control" name="order_filter">
+                                <option value="title">Title</option>
+                                <option value="publisher">Publisher</option>
+                                <option value="publication_date">Publication Date</option>
+                                <option value="language">Language</option>
+                                <option value="isbn10">ISBN-10</option>
+                                <option value="isbn13">ISBN-13</option>
+                            </select>
+                        </li>
+                        <li class="nav-item col-sm-2">
+                            <select class="form-control" name="order_type">
+                                <option value="NONE">None</option>
+                                <option value="ASC">Ascending</option>
+                                <option value="DESC">Descending</option>
+                            </select>
+                        </li>
+                        <li class="nav-item">
+                            <input class="form-control bg-success text-white" type="submit" value="Search">
+                        </li>
+                    </ul>
+                </form>
+                <br/>
+
+                <table class="table table-hover table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Publisher</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for x in item_list %}
+                    <tr>
+                        <td>{{x.title}}</td>
+                        <td>{{x.publisher}}</td>
+                        <td>
+                            {% with %}
+                                {% set loop_index0 = loop.index0 %}
+                                {% include 'includes/_detailed_view.html' %}
+                            {% endwith %} 
+                            {% include 'includes/_modal_open.html' %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif%}
+            {% if item == "mu" %}
+            <div class="tab-pane fade show active" id="music" role="tabpanel" aria-labelledby="music-tab">
+                <br/>
+                <center><h3>Music</h3></center>
+                {% from "includes/_form_helpers.html" import render_field %}
+                <form method="POST" action="/home/search/music">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <select class="form-control" name="filter">
+                                <option value="media_type">Media Type</option>
+                                <option value="title">Title</option>
+                                <option value="artist">Artist</option>
+                                <option value="label">Label</option>	
+                                <option value="release_date">Release Date</option>	
+                                <option value="asin">ASIN</option>
+                            </select>
+                        </li>
+                        <li class="nav-item col-sm-5">
+                            <input class="form-control" name="search" type="text" placeholder="Search for music...">
+                        </li>
+                        <li><div class="sort-tag">Sort by:</div></li>
+                        <li class="nav-item">
+                            <select class="form-control" name="order_filter">
+                                <option value="media_type">Media Type</option>
+                                <option value="title">Title</option>
+                                <option value="artist">Artist</option>
+                                <option value="label">Label</option>
+                                <option value="release_date">Release Date</option>
+                                <option value="asin">ASIN</option>
+                            </select>
+                        </li>
+                        <li class="nav-item col-sm-2">
+                            <select class="form-control" name="order_type">
+                                <option value="NONE">None</option>
+                                <option value="ASC">Ascending</option>
+                                <option value="DESC">Descending</option>
+                            </select>
+                        </li>
+                        <li class="nav-item">
+                            <input class="form-control bg-success text-white" type="submit" value="Search">
+                        </li>
+                    </ul>
+                </form>
+                <br/>
+
+                <table class="table table-hover table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Artist</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for x in item_list %}
+                    <tr>
+                        <td>{{x.title}}</td>
+                        <td>{{x.artist}}</td>
+                        <td>
+                            {% with %}
+                                {% set loop_index0 = loop.index0 %}
+                                {% include 'includes/_detailed_view.html' %}
+                            {% endwith %} 
+                            {% include 'includes/_modal_open.html' %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif%}
+            {% if item == "mo" %}
+            <div class="tab-pane fade show active" id="movie" role="tabpanel" aria-labelledby="movie-tab">
+                <br/>
+                <center><h3>Movies</h3></center>
+                {% from "includes/_form_helpers.html" import render_field %}
+                <form method="POST" action="/home/search/movies">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <select class="form-control" name="filter">
+                                <option value="title">Title</option>
+                                <option value="director">Director</option>
+                                <option value="producers">Producers</option>	
+                                <option value="actors">Actors</option>	
+                                <option value="language">Language</option>	
+                                <option value="subtitles">Subtitles</option>	
+                                <option value="dubbed">Dubbed</option>	
+                                <option value="release_date">Release Date</option>	
+                                <option value="runtime">Run Time</option>
+                            </select>
+                        </li>
+                        <li class="nav-item col-sm-5">
+                            <input class="form-control" name="search" type="text" placeholder="Search for a movie...">
+                        </li>
+                        <li><div class="sort-tag">Sort by:</div></li>
+                        <li class="nav-item">
+                            <select class="form-control" name="order_filter">
+                                <option value="title">Title</option>
+                                <option value="director">Director</option>
+                                <option value="producers">Producers</option>
+                                <option value="actors">Actors</option>
+                                <option value="language">Language</option>
+                                <option value="subtitles">Subtitles</option>
+                                <option value="dubbed">Dubbed</option>
+                                <option value="release_date">Release Date</option>
+                                <option value="runtime">Run Time</option>
+                            </select>
+                        </li>
+                        <li class="nav-item col-sm-2">
+                            <select class="form-control" name="order_type">
+                                <option value="NONE">None</option>
+                                <option value="ASC">Ascending</option>
+                                <option value="DESC">Descending</option>
+                            </select>
+                        </li>
+                        <li class="nav-item">
+                            <input class="form-control bg-success text-white" type="submit" value="Search">
+                        </li>
+                    </ul>
+                </form>
+                <br/>
+
+                <table class="table table-hover table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Director</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for x in item_list %}
+                    <tr>
+                        <td>{{x.title}}</td>
+                        <td>{{x.director}}</td>
+                        <td>
+                            {% with %}
+                                {% set loop_index0 = loop.index0 %}
+                                {% include 'includes/_detailed_view.html' %}
+                            {% endwith %} 
+                            {% include 'includes/_modal_open.html' %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </div>
+        </div>
     {% endif %}
 {% endblock %}

@@ -101,6 +101,10 @@
     font-size: 145%;
 }
 
+#items-title {
+    font-size: 145%;
+}
+
 table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
@@ -114,15 +118,15 @@ td, th {
 }
 
 .uow-added {
-    background-color: green;
+    background-color: green !important;
 }
 
 .uow-modify {
-    background-color: yellow;
+    background-color: yellow !important;
 }
 
 .uow-delete {
-    background-color: red;
+    background-color: red !important;
 }
 
 .hidden {
@@ -230,3 +234,30 @@ td, th {
     transition-duration: 0.3s;
     -webkit-transition-duration: 0.3s; /* Safari */
     z-index: 1;
+}
+
+.copies {
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+    border-radius: 5px;
+    text-align: center;
+    padding: 4px;
+}
+
+.divider {
+    width:140px;
+    height:auto;
+    display:inline-block;
+}
+
+.divider-small {
+    width:110px;
+    height:auto;
+    display:inline-block;
+}
+
+.sort-tag {
+    margin-top: 5px;
+    margin-right: 5px;
+}

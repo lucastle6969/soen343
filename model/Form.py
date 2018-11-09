@@ -89,6 +89,7 @@ class BookForm(Form):
     format = StringField('Format', [validators.DataRequired(), alpha_numeric, validators.Length(min=1, max=20)])
     pages = IntegerField('Pages', [validators.DataRequired(), number, validators.NumberRange(min=1, max=999999)])
     publisher = StringField('Publisher', [validators.DataRequired(), alpha_numeric, validators.Length(min=1, max=50)])
+    publication_year = IntegerField('Publication Year', [validators.InputRequired(), number, validators.NumberRange(min=0, max=9999)])
     language = StringField('Language', [validators.DataRequired(), no_digit])
     isbn10 = IntegerField('ISBN10', [validators.DataRequired(), number, validators.NumberRange(min=1000000000, max=9999999999)])
     isbn13 = IntegerField('ISBN13', [validators.DataRequired(), number, validators.NumberRange(min=1000000000000, max=9999999999999)])
@@ -98,6 +99,7 @@ class BookForm(Form):
 class MagazineForm(Form):
     title = StringField('Title', [validators.DataRequired(), validators.Length(min=1, max=300)])
     publisher = StringField('Publisher', [validators.DataRequired(), alpha_numeric, validators.Length(min=1, max=50)])
+    publication_date = StringField('Publication Date', [validators.InputRequired(), date])
     language = StringField('Language', [validators.DataRequired(), no_digit])
     isbn10 = IntegerField('ISBN10', [validators.DataRequired(), number, validators.NumberRange(min=1000000000, max=9999999999)])
     isbn13 = IntegerField('ISBN13', [validators.DataRequired(), number, validators.NumberRange(min=1000000000000, max=9999999999999)])
@@ -126,6 +128,11 @@ class MusicForm(Form):
     asin = StringField('ASIN', [validators.DataRequired(), validators.Length(min=10, max=10)])
     quantity = IntegerField('Quantity', [validators.DataRequired(), number, validators.NumberRange(min=1, max=255)])
 
+class SearchForm(Form):
+    filter = StringField('Filter')
+    search = StringField('Search')
+    order_filter = StringField('Order Filter')
+    order_type = StringField('Order Type')
 
 class Forms(Form):
 
@@ -153,6 +160,7 @@ class Forms(Form):
             form.format.data = item_selected.format
             form.pages.data = item_selected.pages
             form.publisher.data = item_selected.publisher
+            form.publication_year.data = item_selected.publication_year
             form.language.data = item_selected.language
             form.isbn10.data = item_selected.isbn10
             form.isbn13.data = item_selected.isbn13
@@ -162,6 +170,7 @@ class Forms(Form):
             form = MagazineForm(request.form)
             form.title.data = item_selected.title
             form.publisher.data = item_selected.publisher
+            form.publication_date.data = item_selected.publication_date
             form.language.data = item_selected.language
             form.isbn10.data = item_selected.isbn10
             form.isbn13.data = item_selected.isbn13
