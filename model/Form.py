@@ -9,8 +9,6 @@ def quantity(itemType):
             if type(field.data) is str:
                 if any(char.isalpha() for char in field.data):
                     raise ValidationError('This is not a valid quantity. Please give a valid quantity of '+itemType+'(s) to register.')
-        elif field.data == 0:
-            raise ValidationError('There must be at least 1 '+itemType+' to register.') 
         elif field.data > 255:
             raise ValidationError('That is way too many '+itemType+'s! Please enter less than 256 at a time.') 
     
