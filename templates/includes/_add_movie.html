@@ -6,25 +6,25 @@
         
         <form method="POST" action="/admin_tools/catalog_manager/add_movie">
             <div class="form-group text-white">
-                {{render_field(form.title, class_="form-control", placeholder="E.g.: The Crimson King")}}
+                {{render_field(form.title, class_="form-control", placeholder="example: The Crimson King")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(form.director, class_="form-control", placeholder="E.g.: Kiefer Shaw")}}
+                {{render_field(form.director, class_="form-control", placeholder="example: Kiefer Shaw")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(form.producers, class_="form-control", placeholder="E.g.: Guy Tremblay, Regis Mortimer")}}
+                {{render_field(form.producers, class_="form-control", placeholder="example: Guy Tremblay, Regis Mortimer")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(form.actors, class_="form-control", placeholder="E.g.: Robert Ricky, Billy Boller")}}
+                {{render_field(form.actors, class_="form-control", placeholder="example: Robert Ricky, Billy Boller")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(form.language, class_="form-control", placeholder="E.g.: English")}}
+                {{render_field(form.language, class_="form-control", placeholder="example: English")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(form.subtitles, class_="form-control", placeholder="E.g.: English")}}
+                {{render_field(form.subtitles, class_="form-control", placeholder="example: English")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(form.dubbed, class_="form-control", placeholder="E.g.: French")}}
+                {{render_field(form.dubbed, class_="form-control", placeholder="example: French")}}
                 <p>(* optional)</p>
             </div>
             <div class="form-group text-white">
@@ -34,7 +34,7 @@
                 {{render_field(form.runtime, class_="form-control", placeholder="In minutes")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(form.quantity, class_="form-control", placeholder="From 1 to 255")}}
+                {{render_field(form.quantity, class_="form-control", placeholder="From 0 to 255")}}
             </div>
             <div class="row form-group text-white">
                 <input type="submit" class="col-md-5 btnSubmit" value="Add" />

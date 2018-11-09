@@ -6,16 +6,16 @@
        
         <form method="POST" action="/admin_tools/catalog_manager/add_music">
             <div class="form-group text-white">
-                {{render_field(form.media_type, class_="form-control", placeholder="E.g.: MP3")}}
+                {{render_field(form.media_type, class_="form-control", placeholder="example: MP3")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(form.title, class_="form-control", placeholder="E.g.: Another rock in the mall")}}
+                {{render_field(form.title, class_="form-control", placeholder="example: Another rock in the mall")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(form.artist, class_="form-control", placeholder="E.g.: Pink Freud")}}
+                {{render_field(form.artist, class_="form-control", placeholder="example: Pink Freud")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(form.label, class_="form-control", placeholder="E.g.: Sony Music")}}
+                {{render_field(form.label, class_="form-control", placeholder="example: Sony Music")}}
             </div>
             <div class="form-group text-white">
                 {{render_field(form.release_date, class_="form-control", placeholder="DD-MM-YYYY")}}
@@ -24,7 +24,7 @@
                 {{render_field(form.asin, class_="form-control", placeholder="10 character alphanumeric")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(form.quantity, class_="form-control", placeholder="From 1 to 255")}}
+                {{render_field(form.quantity, class_="form-control", placeholder="From 0 to 255")}}
             </div>
             <div class="row form-group text-white">
                 <input type="submit" class="col-md-5 btnSubmit" value="Add" />

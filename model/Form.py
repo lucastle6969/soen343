@@ -12,7 +12,7 @@ def quantity(item_type):
                     raise ValidationError('Please enter a valid quantity of items to stock.')
         elif field.data > 255:
             raise ValidationError('Item quantity must not be greater than 255.')
-    
+
     return validate_quantity
 
 
@@ -27,9 +27,9 @@ def person_name(form, field):
     if len(field.data) == 0:
         raise ValidationError('Please enter a name.')
     elif len(field.data) > 70:
-        raise ValidationError('Name length must not be greater than 70.')
+        raise ValidationError('Name length must not be greater than 70 characters.')
     elif len(field.data) < 2:
-        raise ValidationError('Name length must not be less than 2.')
+        raise ValidationError('Name length must not be less than 2 characters.')
     elif any(char.isdigit() for char in field.data):
         raise ValidationError('Name must not contain any digits.')
 
@@ -49,7 +49,7 @@ def password(form, field):
 # Verifies phone number does not contain any letter
 def phone_number(form, field):
     if len(field.data) == 0:
-        raise ValidationError('Please enter the phone number.')  
+        raise ValidationError('Please enter a phone number.')  
     elif type(field.data) is not int:
         if type(field.data) is str:
             if any(char.isalpha() for char in field.data):
@@ -81,6 +81,7 @@ def no_digit(form, field):
             raise ValidationError('This field must not contain any digits.')
     else:
         raise ValidationError('This field must not contain any digits.')
+
 
 class RegisterForm(Form):
     first_name = StringField('First Name', [person_name])
@@ -141,11 +142,13 @@ class MusicForm(Form):
     asin = StringField('ASIN', [validators.Length(min=10, max=10, message='This is not a valid ASIN code.')])
     quantity = IntegerField('Quantity', [quantity(item_type='music')])
 
+
 class SearchForm(Form):
     filter = StringField('Filter')
     search = StringField('Search')
     order_filter = StringField('Order Filter')
     order_type = StringField('Order Type')
+
 
 class Forms(Form):
 
