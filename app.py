@@ -23,25 +23,25 @@ def before_request():
 @app.route('/')
 def index():
     # Default table view shows all books
-    return render_template('home.html', item_list=item_mapper.get_all_item("bb"), item="bb")
+    return render_template('home.html', item_list=item_mapper.get_all_items("bb"), item="bb")
 
 
 @app.route('/home')
 def home():
     # Default table view shows all books
-    return render_template('home.html', item_list=item_mapper.get_all_item("bb"), item="bb")
+    return render_template('home.html', item_list=item_mapper.get_all_items("bb"), item="bb")
 
 
 @app.route('/home/<item>')
 def itemList(item):
     if item == "bb":
-        return render_template('home.html', item_list=item_mapper.get_all_item("bb"), item="bb")
+        return render_template('home.html', item_list=item_mapper.get_all_items("bb"), item="bb")
     elif item == "ma":
-        return render_template('home.html', item_list=item_mapper.get_all_item("ma"), item="ma")
+        return render_template('home.html', item_list=item_mapper.get_all_items("ma"), item="ma")
     elif item == "mu":
-        return render_template('home.html', item_list=item_mapper.get_all_item("mu"), item="mu")
+        return render_template('home.html', item_list=item_mapper.get_all_items("mu"), item="mu")
     elif item == "mo":
-        return render_template('home.html', item_list=item_mapper.get_all_item("mo"), item="mo")
+        return render_template('home.html', item_list=item_mapper.get_all_items("mo"), item="mo")
 
 
 @app.route('/home/search/<item>', methods=['GET', 'POST'])
