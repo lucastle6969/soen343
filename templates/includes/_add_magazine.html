@@ -6,16 +6,16 @@
         
         <form method="POST" action="/admin_tools/catalog_manager/add_magazine">
             <div class="form-group text-white">
-                {{render_field(form.title, class_="form-control")}}
+                {{render_field(form.title, class_="form-control", placeholder="example: Rimes Magazine")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(form.publisher, class_="form-control")}}
+                {{render_field(form.publisher, class_="form-control", placeholder="example: Bob Morano")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(form.publication_date, class_="form-control")}}
+                {{render_field(form.publication_date, class_="form-control", placeholder="DD-MM-YY")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(form.language, class_="form-control")}}
+                {{render_field(form.language, class_="form-control", placeholder="example: English")}}
             </div>
             <div class="form-group text-white">
                 {{render_field(form.isbn10, class_="form-control", placeholder="10-digit number")}}
@@ -24,7 +24,7 @@
                 {{render_field(form.isbn13, class_="form-control", placeholder="13-digit number")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(form.quantity, class_="form-control")}}
+                {{render_field(form.quantity, class_="form-control", placeholder="From 0 to 255")}}
             </div>
             <div class="row form-group text-white">
                 <input type="submit" class="col-md-5 btnSubmit" value="Add" />

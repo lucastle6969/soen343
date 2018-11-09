@@ -5,25 +5,25 @@
         {% from "includes/_form_helpers.html" import render_field %}
         <form method="POST" action="/admin_tools/create_client">
             <div class="form-group text-white">
-                {{render_field(form.first_name, class_="form-control")}}
+                {{render_field(form.first_name, class_="form-control", placeholder="example: Bob")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(form.last_name, class_="form-control")}}
+                {{render_field(form.last_name, class_="form-control", placeholder="example: Morane")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(form.email, class_="form-control")}}
+                {{render_field(form.email, class_="form-control", placeholder="example: bob@gmail.com")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(form.address, class_="form-control")}}
+                {{render_field(form.address, class_="form-control", placeholder="example: 3000 Ganger ave., QC, Canada")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(form.phone, class_="form-control")}}
+                {{render_field(form.phone, class_="form-control", pattern="^\(\d{3}\)\s\d{3}-\d{4}", placeholder="example: (514) 423-3918")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(form.password, class_="form-control", placeholder="Must contain at least 1 digit and 1 letter (6 characters minimum)")}}
+                {{render_field(form.password, class_="form-control", placeholder="Enter Password (minimum 6 characters, must contain at least 1 digit and 1 letter)")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(form.confirm, class_="form-control")}}
+                {{render_field(form.confirm, class_="form-control", placeholder="Confirm Password")}}
                 </div>
             <div class="form-group text-white">
                 <input type="submit" class="btnSubmit" value="Register" />
