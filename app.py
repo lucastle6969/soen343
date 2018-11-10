@@ -108,8 +108,8 @@ def add_book(request_):
     if request_.method == 'POST' and form.validate():
         books = item_mapper.get_all_books()
         for book in books:
-            if form.isbn10.data == book.isbn10 or form.isbn13.data == book.isbn13:
-                flash('Duplicate ISBN, please double-check.', 'error')
+            if int(form.isbn10.data) == book.isbn10 or int(form.isbn13.data) == book.isbn13:
+                flash('Duplicate ISBN, please double-check.', 'warning')
                 return render_template('admin_tools.html', item='add_book', form=form)
         item_mapper.add_book(form)
         flash('Book is ready to be added - save changes', 'success')

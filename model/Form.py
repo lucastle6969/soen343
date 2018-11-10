@@ -3,22 +3,26 @@ import datetime
 import re
 
 def alpha(minimum, maximum, allow_digits):
-    message = 'Input length must be between %d and %d characters long.' % (minimum, maximum)
     def _alpha(form, field):
         length = len(field.data)
         if length < minimum or length > maximum:
-            raise ValidationError(message)
+            raise ValidationError('Input length must be between %d and %d characters long.' % (minimum, maximum))
         if allow_digits == 0:
             if any(char.isdigit() for char in field.data):
                 raise ValidationError('Input must not contain any digits.')
     return _alpha
 
 
-def num(minimum, maximum):
-    message = 'Input value must be between %d and %d.' % (minimum, maximum)
+def num(minimum, maximum, isbn):
     def num(form, field):
-        if field.data is None or field.data < minimum or field.data > maximum:
-            raise ValidationError(message)
+        if field.data == '' or not all(char.isdigit() for char in field.data):
+            raise ValidationError('Input must be a valid digit.')
+        data = int(field.data)
+        if data < minimum or data > maximum:
+            if isbn == 0:
+                raise ValidationError('Input value must be between %d and %d.' % (minimum, maximum))
+            else:
+                raise ValidationError('Please enter a valid ISBN number.')
     return num
 
 
@@ -68,13 +72,13 @@ class BookForm(Form):
     title = StringField('Title', [alpha(1, 100, 1)])
     author = StringField('Author', [alpha(5, 100, 0)])
     format = StringField('Format', [alpha(2, 25, 0)])
-    publication_year = IntegerField('Publication Year', [num(0, current_time.year)])
-    pages = IntegerField('Pages', [num(1, 99999)])
+    publication_year = StringField('Publication Year', [num(0, current_time.year, 0)])
+    pages = StringField('Pages', [num(1, 99999, 0)])
     publisher = StringField('Publisher', [alpha(1, 100, 1)])
     language = StringField('Language', [alpha(1, 100, 0)])
-    isbn10 = IntegerField('ISBN10', [num(1000000000, 9999999999)])
-    isbn13 = IntegerField('ISBN13', [num(1000000000000, 9999999999999)])
-    quantity = IntegerField('Quantity', [num(1, 255)])
+    isbn10 = StringField('ISBN10', [num(1000000000, 9999999999, 1)])
+    isbn13 = StringField('ISBN13', [num(1000000000000, 9999999999999, 1)])
+    quantity = StringField('Quantity', [num(1, 255, 0)])
 
 
 class MagazineForm(Form):
@@ -82,9 +86,9 @@ class MagazineForm(Form):
     publisher = StringField('Publisher', [alpha(1, 100, 1)])
     publication_date = StringField('Publication Date', [date])
     language = StringField('Language', [alpha(1, 100, 0)])
-    isbn10 = IntegerField('ISBN10', [num(1000000000, 9999999999)])
-    isbn13 = IntegerField('ISBN13', [num(1000000000000, 9999999999999)])
-    quantity = IntegerField('Quantity', [num(1, 255)])
+    isbn10 = StringField('ISBN10', [num(1000000000, 9999999999, 1)])
+    isbn13 = StringField('ISBN13', [num(1000000000000, 9999999999999, 1)])
+    quantity = StringField('Quantity', [num(1, 255, 0)])
 
 
 class MovieForm(Form):
@@ -97,7 +101,7 @@ class MovieForm(Form):
     dubbed = StringField('Dubbed', [alpha(1, 100, 0)])
     release_date = StringField('Release Date', [date])
     runtime = StringField('Run Time ', [alpha(2, 50, 1)])
-    quantity = IntegerField('Quantity', [num(1, 255)])
+    quantity = StringField('Quantity', [num(1, 255, 0)])
 
 
 class MusicForm(Form):
@@ -107,7 +111,7 @@ class MusicForm(Form):
     label = StringField('Label', [alpha(1, 100, 1)])
     release_date = StringField('Release Date', [date])
     asin = StringField('ASIN', [alpha(10, 10, 1)])
-    quantity = IntegerField('Quantity', [num(1, 255)])
+    quantity = StringField('Quantity', [num(1, 255, 0)])
 
 
 class SearchForm(Form):
