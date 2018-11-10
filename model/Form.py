@@ -1,4 +1,4 @@
-from wtforms import ValidationError, Form, StringField, PasswordField, validators, IntegerField
+from wtforms import ValidationError, Form, StringField, PasswordField, validators, IntegerField, SelectField
 import datetime
 
 
@@ -100,7 +100,7 @@ class BookForm(Form):
     current_time = datetime.datetime.now()
     title = StringField('Title', [input_required(message='Please enter the title of the book.')])
     author = StringField('Author', [person_name, no_digit])
-    format = StringField('Format', [input_required(message='Please enter the format of the book.')])
+    format = SelectField('Format', choices=[('Paperback', 'Paperback'), ('Hardcover', 'Hardcover')])
     # From the first printed text (Gutenberg Bible in 1455) to this present year
     publication_year = IntegerField('Publication Year', [validators.NumberRange(min=1455, max=current_time.year, message='This is not a valid year for a published book.')])
     pages = IntegerField('Pages', [number, validators.NumberRange(min=1, max=99999, message="That is not a valid number of pages.")])
