@@ -2,6 +2,7 @@ from wtforms import ValidationError, Form, StringField, PasswordField, validator
 import datetime
 import re
 
+
 def alpha(minimum, maximum, allow_digits):
     def _alpha(form, field):
         length = len(field.data)
@@ -13,17 +14,24 @@ def alpha(minimum, maximum, allow_digits):
     return _alpha
 
 
-def num(minimum, maximum, isbn):
+def num(minimum, maximum):
     def num(form, field):
         if field.data == '' or not all(char.isdigit() for char in field.data):
             raise ValidationError('Input must be a valid digit.')
         data = int(field.data)
         if data < minimum or data > maximum:
-            if isbn == 0:
-                raise ValidationError('Input value must be between %d and %d.' % (minimum, maximum))
-            else:
-                raise ValidationError('Please enter a valid ISBN number.')
+            raise ValidationError('Input value must be between %d and %d.' % (minimum, maximum))
     return num
+
+
+def num_isbn(minimum, maximum):
+    def num_isbn(form, field):
+        if field.data == '' or not all(char.isdigit() for char in field.data):
+            raise ValidationError('Input must be a valid digit.')
+        data = int(field.data)
+        if data < minimum or data > maximum:
+            raise ValidationError('Please enter a valid ISBN number.')
+    return num_isbn
 
 
 # Verifies if password does contain at least a letter and a digit
@@ -41,7 +49,7 @@ def password(form, field):
 # Verifies phone number does not contain any letter
 def phone_number(form, field):
     if len(field.data) == 0:
-        raise ValidationError('Please enter a phone number.')  
+        raise ValidationError('Please enter a phone number.')
     elif not re.match('^[(]\d{3}[)]\s\d{3}[-]\d{4}$', field.data):
         raise ValidationError('Invalid phone number, please follow the pattern: (514) 423-3918')
 
@@ -52,6 +60,18 @@ def date(form, field):
         datetime.datetime.strptime(field.data, "%d-%m-%Y")
     except ValueError:
         raise ValueError("The date must be formatted as follows: DD-MM-YYYY.")
+
+
+def unique_isbn10_validator(form, field):
+        for item in form.all_items:
+            if int(form.isbn10.data) == item.isbn10:
+                raise ValidationError("Duplicate ISBN - " + item.prefix + " " + str(item.id) + " ISBN10: " + str(item.isbn10))
+
+
+def unique_isbn13_validator(form, field):
+        for item in form.all_items:
+            if int(form.isbn13.data) == item.isbn13:
+                raise ValidationError("Duplicate ISBN - " + item.prefix + " " + str(item.id) + " ISBN13: " + str(item.isbn13))
 
 
 class RegisterForm(Form):
@@ -72,13 +92,13 @@ class BookForm(Form):
     title = StringField('Title', [alpha(1, 100, 1)])
     author = StringField('Author', [alpha(5, 100, 0)])
     format = StringField('Format', [alpha(2, 25, 0)])
-    publication_year = StringField('Publication Year', [num(0, current_time.year, 0)])
-    pages = StringField('Pages', [num(1, 99999, 0)])
+    publication_year = StringField('Publication Year', [num(0, current_time.year)])
+    pages = StringField('Pages', [num(1, 99999)])
     publisher = StringField('Publisher', [alpha(1, 100, 1)])
     language = StringField('Language', [alpha(1, 100, 0)])
-    isbn10 = StringField('ISBN10', [num(1000000000, 9999999999, 1)])
-    isbn13 = StringField('ISBN13', [num(1000000000000, 9999999999999, 1)])
-    quantity = StringField('Quantity', [num(1, 255, 0)])
+    isbn10 = StringField('ISBN10', [num_isbn(1000000000, 9999999999), unique_isbn10_validator])
+    isbn13 = StringField('ISBN13', [num_isbn(1000000000000, 9999999999999), unique_isbn13_validator])
+    quantity = StringField('Quantity', [num(0, 255)])
 
 
 class MagazineForm(Form):
@@ -86,9 +106,9 @@ class MagazineForm(Form):
     publisher = StringField('Publisher', [alpha(1, 100, 1)])
     publication_date = StringField('Publication Date', [date])
     language = StringField('Language', [alpha(1, 100, 0)])
-    isbn10 = StringField('ISBN10', [num(1000000000, 9999999999, 1)])
-    isbn13 = StringField('ISBN13', [num(1000000000000, 9999999999999, 1)])
-    quantity = StringField('Quantity', [num(1, 255, 0)])
+    isbn10 = StringField('ISBN10', [num_isbn(1000000000, 9999999999), unique_isbn10_validator])
+    isbn13 = StringField('ISBN13', [num_isbn(1000000000000, 9999999999999), unique_isbn13_validator])
+    quantity = StringField('Quantity', [num(0, 255)])
 
 
 class MovieForm(Form):
@@ -101,7 +121,7 @@ class MovieForm(Form):
     dubbed = StringField('Dubbed', [alpha(1, 100, 0)])
     release_date = StringField('Release Date', [date])
     runtime = StringField('Run Time ', [alpha(2, 50, 1)])
-    quantity = StringField('Quantity', [num(1, 255, 0)])
+    quantity = StringField('Quantity', [num(0, 255)])
 
 
 class MusicForm(Form):
@@ -111,7 +131,7 @@ class MusicForm(Form):
     label = StringField('Label', [alpha(1, 100, 1)])
     release_date = StringField('Release Date', [date])
     asin = StringField('ASIN', [alpha(10, 10, 1)])
-    quantity = StringField('Quantity', [num(1, 255, 0)])
+    quantity = StringField('Quantity', [num(0, 255)])
 
 
 class SearchForm(Form):
