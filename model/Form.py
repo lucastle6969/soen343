@@ -24,17 +24,6 @@ def num(minimum, maximum):
     return num
 
 
-def num_isbn(minimum, maximum):
-    def num_isbn(form, field):
-        if field.data == '' or not all(char.isdigit() for char in field.data):
-            raise ValidationError('Input must be a valid digit.')
-        data = int(field.data)
-        if data < minimum or data > maximum:
-            raise ValidationError('Please enter a valid ISBN number.')
-    return num_isbn
-
-
-# Verifies if password does contain at least a letter and a digit
 def password(form, field):
     minimum_password_length = 6
     if type(field.data) is str:
@@ -63,15 +52,25 @@ def date(form, field):
 
 
 def unique_isbn10_validator(form, field):
-        for item in form.all_items:
-            if int(form.isbn10.data) == item.isbn10:
-                raise ValidationError("Duplicate ISBN - " + item.prefix + " " + str(item.id) + " ISBN10: " + str(item.isbn10))
+    if field.data == '' or not all(char.isdigit() for char in field.data):
+        raise ValidationError('Input must be a valid digit.')
+    data = int(field.data)
+    if data < 1000000000 or data > 9999999999:
+        raise ValidationError('Please enter a valid 10-digit ISBN number.')
+    for item in form.all_items:
+        if int(form.isbn10.data) == item.isbn10:
+            raise ValidationError("Duplicate ISBN - " + item.prefix + " ID#: " + str(item.id) + ", Title: " + item.title + ", ISBN10: " + str(item.isbn10))
 
 
 def unique_isbn13_validator(form, field):
-        for item in form.all_items:
-            if int(form.isbn13.data) == item.isbn13:
-                raise ValidationError("Duplicate ISBN - " + item.prefix + " " + str(item.id) + " ISBN13: " + str(item.isbn13))
+    if field.data == '' or not all(char.isdigit() for char in field.data):
+        raise ValidationError('Input must be a valid digit.')
+    data = int(field.data)
+    if data < 1000000000000 or data > 9999999999999:
+        raise ValidationError('Please enter a valid 13-digit ISBN number.')
+    for item in form.all_items:
+        if int(form.isbn13.data) == item.isbn13:
+            raise ValidationError("Duplicate ISBN - " + item.prefix + " ID#: " + str(item.id) + ", Title: " + item.title + ", ISBN13: " + str(item.isbn13))
 
 
 class RegisterForm(Form):
@@ -96,8 +95,8 @@ class BookForm(Form):
     pages = StringField('Pages', [num(1, 99999)])
     publisher = StringField('Publisher', [alpha(1, 100, 1)])
     language = StringField('Language', [alpha(1, 100, 0)])
-    isbn10 = StringField('ISBN10', [num_isbn(1000000000, 9999999999), unique_isbn10_validator])
-    isbn13 = StringField('ISBN13', [num_isbn(1000000000000, 9999999999999), unique_isbn13_validator])
+    isbn10 = StringField('ISBN10', [unique_isbn10_validator])
+    isbn13 = StringField('ISBN13', [unique_isbn13_validator])
     quantity = StringField('Quantity', [num(0, 255)])
 
 
@@ -106,8 +105,8 @@ class MagazineForm(Form):
     publisher = StringField('Publisher', [alpha(1, 100, 1)])
     publication_date = StringField('Publication Date', [date])
     language = StringField('Language', [alpha(1, 100, 0)])
-    isbn10 = StringField('ISBN10', [num_isbn(1000000000, 9999999999), unique_isbn10_validator])
-    isbn13 = StringField('ISBN13', [num_isbn(1000000000000, 9999999999999), unique_isbn13_validator])
+    isbn10 = StringField('ISBN10', [unique_isbn10_validator])
+    isbn13 = StringField('ISBN13', [unique_isbn13_validator])
     quantity = StringField('Quantity', [num(0, 255)])
 
 
