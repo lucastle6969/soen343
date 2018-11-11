@@ -18,7 +18,7 @@ CREATE TABLE book_physical (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,
     book_fk INT(11),
     status VARCHAR(100),
-    return_date timestamp
+    return_date timestamp NULL
 );
 
 
@@ -39,7 +39,7 @@ CREATE TABLE magazine_physical (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,
     magazine_fk INT(11),
     status VARCHAR(100),
-    return_date timestamp
+    return_date timestamp NULL
 );
 
 
@@ -63,7 +63,7 @@ CREATE TABLE movie_physical (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,
     movie_fk INT(11),
     status VARCHAR(100),
-    return_date timestamp
+    return_date timestamp NULL
 );
 
 
@@ -85,7 +85,7 @@ CREATE TABLE music_physical (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,
     music_fk INT(11),
     status VARCHAR(100),
-    return_date timestamp
+    return_date timestamp NULL
 );
 
 

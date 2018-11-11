@@ -95,6 +95,15 @@
     z-index: 1;
 }
 
+#admin-glow {
+    color: white;
+    text-shadow: -1px 0 grey, 0 1px grey, 1px 0 grey, 0 -1px grey;
+}
+
+#admin-glow:hover {
+    color: #fdf02a;
+}
+
 #cancel {
     color:red;
     text-align:center;

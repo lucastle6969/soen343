@@ -5,23 +5,23 @@ INSERT INTO user (id, first_name, last_name, address, email, phone, admin, passw
 
 TRUNCATE TABLE book;
 INSERT INTO book (id, title, author, format, pages, publisher, publication_year, language, isbn10, isbn13, quantity) VALUES
-(NULL, 'A Feast For Crows', 'George RR Martin', 'Physical', 250, 'Scholastic', 2005, 'English', 1234567890, 1234567890123, 2),
+(NULL, 'A Feast For Crows', 'George RR Martin', 'Hardcover', 250, 'Scholastic', 2005, 'English', 1234567890, 1234567890123, 2),
 (NULL, 'Neuromancer', 'William Gibson', 'Paperback', 186, 'Random House', 1984, 'English', 1230987654, 1231234567890, 10);
 
 TRUNCATE TABLE magazine;
 INSERT INTO magazine (id, title, publisher, publication_date, language, isbn10, isbn13, quantity) VALUES
-(NULL, 'The New York Times Magazine', 'Arthurr Ochs Sulzberger Jr.', 'Nov. 23 2017', 'English', 1439401890, 8461968342412, 2),
-(NULL, 'National Geographic', 'Neil DeGrasse Tyson', 'Jun. 17 2013', 'English', 1234567890, 1234567890123, 10);
+(NULL, 'The New York Times Magazine', 'Arthurr Ochs Sulzberger Jr.', '23-11-2018', 'English', 1439401890, 8461968342412, 2),
+(NULL, 'National Geographic', 'Neil DeGrasse Tyson', '17-06-2013', 'English', 1234567890, 1234567890123, 10);
 
 TRUNCATE TABLE movie;
 INSERT INTO movie (id, title, director, producers, actors, language, subtitles, dubbed, release_date, runtime, quantity) VALUES
-(NULL, 'The Last Jedi', 'Rian Johnson', 'Kathleen Kennedy', 'Mark Hamil, Carrie Fisher, Adam Driver and Daisy Ridley', 'English', 'None', 'None', 'Dec. 15 2017', '152 minutes', 2),
-(NULL, 'One Flew over the Cuckoos Nest', 'Milos Forman', 'Lawrence Hauben', 'Jack Nicholson', 'English', 'None', 'None', 'Nov. 19, 1975', '192 minutes', 10);
+(NULL, 'The Last Jedi', 'Rian Johnson', 'Kathleen Kennedy', 'Mark Hamil, Carrie Fisher, Adam Driver and Daisy Ridley', 'English', 'None', 'None', '15-12-2017', '152 minutes', 2),
+(NULL, 'One Flew over the Cuckoos Nest', 'Milos Forman', 'Lawrence Hauben', 'Jack Nicholson', 'English', 'None', 'None', '19-11-1975', '192 minutes', 10);
 
 TRUNCATE TABLE music;
 INSERT INTO music (id, title, media_type, artist, label, release_date, asin, quantity) VALUES
-(NULL, 'Thriller', 'CD', 'Michael Jackson', 'Epic Records', 'Nov. 30 1982', 'B008FOB124', 2),
-(NULL, 'The Path of Totality', 'CD', 'Korn', 'Roadrunner', 'Dec. 6 2011', 'Q1W2E3R4T5', 10);
+(NULL, 'Thriller', 'CD', 'Michael Jackson', 'Epic Records', '30-11-1982', 'B008FOB124', 2),
+(NULL, 'The Path of Totality', 'CD', 'Korn', 'Roadrunner', '6-12-2011', 'Q1W2E3R4T5', 10);
 
 
 TRUNCATE TABLE book_physical;
