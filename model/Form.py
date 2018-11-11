@@ -1,4 +1,4 @@
-from wtforms import ValidationError, Form, StringField, PasswordField, validators, IntegerField
+from wtforms import ValidationError, Form, StringField, PasswordField, validators, IntegerField, SelectField
 import datetime
 import re
 
@@ -90,7 +90,7 @@ class BookForm(Form):
     current_time = datetime.datetime.now()
     title = StringField('Title', [alpha(1, 100, 1)])
     author = StringField('Author', [alpha(5, 100, 0)])
-    format = StringField('Format', [alpha(2, 25, 0)])
+    format = SelectField('Format', choices=[('Paperback', 'Paperback'), ('Hardcover', 'Hardcover')])
     publication_year = StringField('Publication Year', [num(0, current_time.year)])
     pages = StringField('Pages', [num(1, 99999)])
     publisher = StringField('Publisher', [alpha(1, 100, 1)])
