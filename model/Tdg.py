@@ -254,6 +254,7 @@ class Tdg:
         cur = connection.cursor()
         for book in deleted_books:
             cur.execute("DELETE FROM book WHERE id = %s", book.id)
+            cur.execute("DELETE FROM book_physical WHERE book_fk = %s", book.id)
         # ideally a check if there were errors here and return a boolean to be handled by the mapper
         cur.close()
 
@@ -262,6 +263,7 @@ class Tdg:
         cur = connection.cursor()
         for magazine in deleted_magazines:
             cur.execute("DELETE FROM magazine WHERE id = %s", magazine.id)
+            cur.execute("DELETE FROM magazine_physical WHERE magazine_fk = %s", magazine.id)
         cur.close()
 
     def delete_movies(self, deleted_movies):
@@ -269,6 +271,7 @@ class Tdg:
         cur = connection.cursor()
         for movie in deleted_movies:
             cur.execute("DELETE FROM movie WHERE id = %s", movie.id)
+            cur.execute("DELETE FROM movie_physical WHERE movie_fk = %s", movie.id)
         cur.close()
 
     def delete_music(self, deleted_music):
@@ -276,6 +279,7 @@ class Tdg:
         cur = connection.cursor()
         for music in deleted_music:
             cur.execute("DELETE FROM music WHERE id = %s", music.id)
+            cur.execute("DELETE FROM music_physical WHERE music_fk = %s", music.id)
         cur.close()
 
     def modify_books(self, modified_books):
