@@ -71,6 +71,13 @@ class ItemMapper:
             movie_list.append(Movie(movie[0], movie[1], "mo", movie[2], movie[3], movie[4], movie[5], movie[6], movie[7], movie[8], movie[9], movie[10], copies))
         return movie_list
 
+    def get_all_isbn_items(self):
+        all_isbn_items = self.get_all_books()
+        all_magazines = self.get_all_magazines()
+        for magazine in all_magazines:
+            all_isbn_items.append(magazine)
+        return all_isbn_items
+
     def get_saved_changes(self):
         if self.uow is None:
             return None
