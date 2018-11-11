@@ -185,11 +185,22 @@ def edit_entry(item_prefix, item_id):
     # the Forms class has a getFormForItemType() which creates a form for the item type selected
     form = Forms.get_form_for_item_type(item_selected.prefix, request.form)
     if request.method == 'POST':
-        item_mapper.set_item(item_prefix, item_id, form)
-        return redirect('/admin_tools/catalog_manager')
+        form.all_items = item_mapper.get_all_isbn_items()
+        for item in form.all_items:
+            if item.id == int(item_id):
+                form.all_items.remove(item)
+        if form.validate():
+            item_mapper.set_item(item_prefix, item_id, form)
+            return redirect('/admin_tools/catalog_manager')
+        else:
+            form.quantity.render_kw = {'readonly': 'readonly'}
+            return render_template('admin_tools.html', form=form, prefix=item_selected.prefix, id=item_selected.id,
+                                   item="edit")
     else:
+
         # Forms class has a getFormData() which returns a preloaded form with the data of the selected item
         form = Forms.get_form_data(item_selected, request)
+        form.quantity.render_kw = {'readonly': 'readonly'}
         return render_template('admin_tools.html', form=form, prefix=item_selected.prefix, id=item_selected.id,
                                item="edit")
 
