@@ -107,7 +107,6 @@ def add_book(request_):
     form = BookForm(request_.form)
     form.all_items = item_mapper.get_all_isbn_items()
     if request_.method == 'POST' and form.validate():
-        form.quantity.data = int(form.quantity.data)
         item_mapper.add_book(form)
         flash('Book is ready to be added - save changes', 'success')
         return redirect('/admin_tools/catalog_manager')
@@ -119,7 +118,6 @@ def add_magazine(request_):
     form = MagazineForm(request_.form)
     form.all_items = item_mapper.get_all_isbn_items()
     if request_.method == 'POST' and form.validate():
-        form.quantity.data = int(form.quantity.data)
         item_mapper.add_magazine(form)
         flash('Magazine is ready to be added - save changes', 'success')
         return redirect('/admin_tools/catalog_manager')
@@ -130,7 +128,6 @@ def add_magazine(request_):
 def add_movie(request_):
     form = MovieForm(request_.form)
     if request_.method == 'POST' and form.validate():
-        form.quantity.data = int(form.quantity.data)
         item_mapper.add_movie(form)
         flash('Movie is ready to be added - save changes', 'success')
         return redirect('/admin_tools/catalog_manager')
@@ -141,7 +138,6 @@ def add_movie(request_):
 def add_music(request_):
     form = MusicForm(request_.form)
     if request_.method == 'POST' and form.validate():
-        form.quantity.data = int(form.quantity.data)
         item_mapper.add_music(form)
         flash('Music is ready to be added - save changes', 'success')
         return redirect('/admin_tools/catalog_manager')

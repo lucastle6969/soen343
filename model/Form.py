@@ -39,7 +39,7 @@ def password(form, field):
 def phone_number(form, field):
     if len(field.data) == 0:
         raise ValidationError('Please enter a phone number.')
-    elif not re.match('^[(]\d{3}[)]\s\d{3}[-]\d{4}$', field.data):
+    elif not re.match('^[(]\d{3}[)]\s*\d{3}[-]\d{4}$', field.data):
         raise ValidationError('Invalid phone number, please follow the pattern: (514) 423-3918')
 
 
