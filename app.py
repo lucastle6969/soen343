@@ -185,10 +185,11 @@ def edit_entry(item_prefix, item_id):
     # the Forms class has a getFormForItemType() which creates a form for the item type selected
     form = Forms.get_form_for_item_type(item_selected.prefix, request.form)
     if request.method == 'POST':
-        form.all_items = item_mapper.get_all_isbn_items()
-        for item in form.all_items:
-            if item.id == int(item_id):
-                form.all_items.remove(item)
+        if item_prefix == 'bb' or item_prefix == 'ma':
+            form.all_items = item_mapper.get_all_isbn_items()
+            for item in form.all_items:
+                if item.id == int(item_id) and item.prefix == item_prefix:
+                    form.all_items.remove(item)
         if form.validate():
             item_mapper.set_item(item_prefix, item_id, form)
             return redirect('/admin_tools/catalog_manager')
