@@ -71,6 +71,13 @@ class ItemMapper:
             movie_list.append(Movie(movie[0], movie[1], "mo", movie[2], movie[3], movie[4], movie[5], movie[6], movie[7], movie[8], movie[9], movie[10], copies))
         return movie_list
 
+    def get_all_isbn_items(self):
+        all_isbn_items = self.get_all_books()
+        all_magazines = self.get_all_magazines()
+        for magazine in all_magazines:
+            all_isbn_items.append(magazine)
+        return all_isbn_items
+
     def get_saved_changes(self):
         if self.uow is None:
             return None
@@ -161,7 +168,7 @@ class ItemMapper:
         language = form.language.data
         isbn10 = form.isbn10.data
         isbn13 = form.isbn13.data
-        quantity = form.quantity.data
+        quantity = int(form.quantity.data)
         book = Book(None, title, prefix, author, book_format, pages, publisher, publication_year, language, isbn10, isbn13, quantity, None)
 
         if self.uow is None:
@@ -178,7 +185,7 @@ class ItemMapper:
         language = form.language.data
         isbn10 = form.isbn10.data
         isbn13 = form.isbn13.data
-        quantity = form.quantity.data
+        quantity = int(form.quantity.data)
         magazine = Magazine(None, title, prefix, publisher, publication_date, language, isbn10, isbn13, quantity, None)
 
         if self.uow is None:
@@ -198,7 +205,7 @@ class ItemMapper:
         dubbed = form.dubbed.data
         release_date = form.release_date.data
         run_time = form.runtime.data
-        quantity = form.quantity.data
+        quantity = int(form.quantity.data)
         movie = Movie(None, title, prefix, director, producers, actors,
                       language, subtitles, dubbed, release_date, run_time, quantity, None)
         if self.uow is None:
@@ -215,7 +222,7 @@ class ItemMapper:
         label = form.label.data
         release_date = form.release_date.data
         asin = form.asin.data
-        quantity = form.quantity.data
+        quantity = int(form.quantity.data)
         music = Music(None, title, prefix, media_type, artist, label,
                       release_date, asin, quantity, None)
         if self.uow is None:
