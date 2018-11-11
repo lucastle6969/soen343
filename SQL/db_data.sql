@@ -5,7 +5,7 @@ INSERT INTO user (id, first_name, last_name, address, email, phone, admin, passw
 
 TRUNCATE TABLE book;
 INSERT INTO book (id, title, author, format, pages, publisher, publication_year, language, isbn10, isbn13, quantity) VALUES
-(NULL, 'A Feast For Crows', 'George RR Martin', 'Physical', 250, 'Scholastic', 2005, 'English', 1234567890, 1234567890123, 2),
+(NULL, 'A Feast For Crows', 'George RR Martin', 'Hardcover', 250, 'Scholastic', 2005, 'English', 1234567890, 1234567890123, 2),
 (NULL, 'Neuromancer', 'William Gibson', 'Paperback', 186, 'Random House', 1984, 'English', 1230987654, 1231234567890, 10);
 
 TRUNCATE TABLE magazine;
