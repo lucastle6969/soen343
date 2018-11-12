@@ -20,14 +20,13 @@
                     {{render_field(form.pages, class_="form-control", placeholder="example: 298")}}
                 </div>
                 <div class="form-group text-white">
-                    {{render_field(form.publisher, class_="form-control", , placeholder="example: Penguin Leaders")}}
+                    {{render_field(form.publisher, class_="form-control", placeholder="example: Penguin Leaders")}}
                 </div>
-               
                 <div class="form-group text-white">
                     {{render_field(form.language, class_="form-control", placeholder="example: English")}}
                 </div>
                 <div class="form-group text-white">
-                    {{render_field(form.isbn10, placeholder="10-digit number")}}
+                    {{render_field(form.isbn10, class_="form-control", placeholder="10-digit number")}}
                  </div>
                 <div class="form-group text-white">
                     {{render_field(form.isbn13, class_="form-control", placeholder="13-digit number")}}
@@ -51,7 +50,7 @@
                     {{render_field(form.publisher, class_="form-control", placeholder="example: Bob Morano")}}
                 </div>
                 <div class="form-group text-white">
-                    {{render_field(form.publication_date, class_="form-control", placeholder="DD-MM-YY"))}}
+                    {{render_field(form.publication_date, class_="form-control", placeholder="DD-MM-YY")}}
                 </div>
                 <div class="form-group text-white">
                     {{render_field(form.language, class_="form-control", placeholder="example: English")}}
@@ -93,7 +92,7 @@
                     {{render_field(form.asin, class_="form-control", placeholder="10 character alphanumeric")}}
                 </div>
                 <div class="form-group text-white">
-                    {{render_field(form.quantity, class_="form-control"", placeholder="From 0 to 255")}}
+                    {{render_field(form.quantity, class_="form-control", placeholder="From 0 to 255")}}
                 </div>
                 <div class="row form-group text-white">
                     <input type="submit" class="col-md-5 btnSubmit" value="Modify" />
@@ -105,7 +104,7 @@
             <h3>Modify a movie</h3>
             <form method="POST" action="/admin_tools/edit_entry/{{prefix}}/{{id}}">
                 <div class="form-group text-white">
-                    {{render_field(form.title, class_="form-control, "placeholder="example: The Crimson King")}}
+                    {{render_field(form.title, class_="form-control", placeholder="example: The Crimson King")}}
                 </div>
                 <div class="form-group text-white">
                     {{render_field(form.director, class_="form-control", placeholder="example: Kiefer Shaw")}}
@@ -123,7 +122,7 @@
                     {{render_field(form.subtitles, class_="form-control", placeholder="example: English")}}
                 </div>
                 <div class="form-group text-white">
-                    {{render_field(form.dubbed, class_="form-control", placeholder="example: French")}}
+                    {{render_field(form.dubbed, class_="form-control", placeholder="(optional) example: French")}}
                 </div>
                 <div class="form-group text-white">
                     {{render_field(form.release_date, class_="form-control", placeholder="DD-MM-YYYY")}}
