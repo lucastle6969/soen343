@@ -68,6 +68,7 @@
 .admin-tools {
     font-family: dindin, Arial, sans-serif;
     color: #ffffff;
+    text-shadow: -1px 0 grey, 0 1px grey, 1px 0 grey, 0 -1px grey;
     margin: 10px 10px 10px 10px;
     height: 50px;
     width: 150px;
