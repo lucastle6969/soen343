@@ -18,7 +18,7 @@ CREATE TABLE book_physical (
     id INT(6) AUTO_INCREMENT PRIMARY KEY,
     book_fk INT(6),
     status VARCHAR(100),
-    return_date DATETIME NULL
+    return_date DATETIME
 );
 
 
@@ -39,7 +39,7 @@ CREATE TABLE magazine_physical (
     id INT(6) AUTO_INCREMENT PRIMARY KEY,
     magazine_fk INT(6),
     status VARCHAR(100),
-    return_date DATETIME NULL
+    return_date DATETIME
 );
 
 
@@ -63,7 +63,7 @@ CREATE TABLE movie_physical (
     id INT(6) AUTO_INCREMENT PRIMARY KEY,
     movie_fk INT(6),
     status VARCHAR(100),
-    return_date DATETIME NULL
+    return_date DATETIME
 );
 
 
