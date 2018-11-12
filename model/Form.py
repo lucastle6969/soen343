@@ -117,7 +117,7 @@ class MovieForm(Form):
     actors = StringField('Actors', [alpha(5, 100, 0)])
     language = StringField('Language', [alpha(1, 100, 0)])
     subtitles = StringField('Subtitles', [alpha(1, 100, 0)])
-    dubbed = StringField('Dubbed', [alpha(1, 100, 0)])
+    dubbed = StringField('Dubbed', [alpha(0, 100, 0)])
     release_date = StringField('Release Date', [date])
     runtime = StringField('Run Time ', [alpha(2, 50, 1)])
     quantity = StringField('Quantity', [num(0, 255)])
