@@ -124,50 +124,6 @@ DROP TABLE IF EXISTS cart;
 CREATE TABLE cart(
     id INT(7) AUTO_INCREMENT PRIMARY KEY,
     user_fk INT(7),
-    prefix_1 INT(2),
-    physical_id_1 INT(6),
-    prefix_2 INT(2),
-    physical_id_2 INT(6),
-    prefix_3 INT(2),
-    physical_id_3 INT(6),
-    prefix_4 INT(2),
-    physical_id_4 INT(6),
-    prefix_5 INT(2),
-    physical_id_5 INT(6),
-    prefix_6 INT(2),
-    physical_id_6 INT(6),
-    prefix_7 INT(2),
-    physical_id_7 INT(6),
-    prefix_8 INT(2),
-    physical_id_8 INT(6),
-    prefix_9 INT(2),
-    physical_id_9 INT(6),
-    prefix_10 INT(2),
-    physical_id_10 INT(6)
-);
-
-DROP TABLE IF EXISTS borrowed_items;
-CREATE TABLE borrowed_items(
-    id INT(7) AUTO_INCREMENT PRIMARY KEY,
-    user_fk INT(7),
-    prefix_1 INT(2),
-    physical_id_1 INT(6),
-    prefix_2 INT(2),
-    physical_id_2 INT(6),
-    prefix_3 INT(2),
-    physical_id_3 INT(6),
-    prefix_4 INT(2),
-    physical_id_4 INT(6),
-    prefix_5 INT(2),
-    physical_id_5 INT(6),
-    prefix_6 INT(2),
-    physical_id_6 INT(6),
-    prefix_7 INT(2),
-    physical_id_7 INT(6),
-    prefix_8 INT(2),
-    physical_id_8 INT(6),
-    prefix_9 INT(2),
-    physical_id_9 INT(6),
-    prefix_10 INT(2),
-    physical_id_10 INT(6)
+    prefix_fk VARCHAR(2),
+    physical_id_fk INT(6)
 );
