@@ -33,9 +33,6 @@
 <hr>
 
 {% if catalog %}
-<h4>Type something in the following input field to search across all items:</h4>
-<input class="form-control" id="myInput" type="text" placeholder="Search..">
-<br>
 <br>
 
 <h3>Books</h3>
@@ -475,8 +472,6 @@
         });
     } );
 </script>
-
-<script src="../static/presentation/js/catalog_manager_search.js"></script>
 
 {% if saved_changes %}
     <form method="POST" action="/admin_tools/catalog_manager/commit">

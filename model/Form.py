@@ -136,6 +136,9 @@ class MusicForm(Form):
 class SearchForm(Form):
     filter = StringField('Filter')
     search = StringField('Search')
+
+
+class OrderForm(Form):
     order_filter = StringField('Order Filter')
     order_type = StringField('Order Type')
 
