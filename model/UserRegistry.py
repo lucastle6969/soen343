@@ -12,23 +12,22 @@ class UserRegistry:
         for entry in all_users:
             self.list_of_users.append(User(entry[0], entry[1], entry[2], entry[3], entry[4], entry[5], entry[6], entry[7]))
 
-    def check_lock(self, user_id):
-        if self.catalog_lock == -1:
-            self.catalog_lock = user_id
-            return user_id
-        else:
-            return self.catalog_lock
+    def check_lock(self):
+        return self.catalog_lock
 
     def remove_lock(self):
         self.catalog_lock = -1
 
-    def enlist_active_user(self, user_id, first_name, last_name, email, admin, timestamp, active_time):
-        self.active_user_registry.append((user_id, first_name, last_name, email, admin, timestamp, active_time))
+    def lock (self, user_id):
+        self.catalog_lock = user_id
+
+    def enlist_active_user(self, user_id, first_name, last_name, email, admin, timestamp, active_time, catalog_time, catalog_flag):
+        self.active_user_registry.append((user_id, first_name, last_name, email, admin, timestamp, active_time, catalog_time, catalog_flag))
 
     def check_restart_session(self, session):
         online = False
         only_flashes = len(session) == 1 and '_flashes' in session
-        for id, first_name, last_name, email, admin, time, active_time in self.active_user_registry:
+        for id, first_name, last_name, email, admin, time, active_time, catalog_time, catalog_flag in self.active_user_registry:
             if 'user_id' in session and id == session['user_id']:
                 online = True
         if not online and only_flashes:
