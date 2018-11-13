@@ -11,10 +11,15 @@ app = Flask(__name__)
 item_mapper = ItemMapper(app)
 user_mapper = UserMapper(app)
 
+ACTIVE_USER_GRACE_PERIOD = 1800
+CATALOG_MANAGER_GRACE_PERIOD = 300
+SECONDS_CLEAN_ACTIVE_USERS = 300
+SECONDS_CLEAN_CATALOG_USERS = 60
+
 
 def active_users():
     for user in user_mapper.user_registry.active_user_registry:
-        if time.time() - user[6] > 100:
+        if time.time() - user[6] > ACTIVE_USER_GRACE_PERIOD:
             user_to_remove = user[0]
             user_mapper.remove_from_active(user_to_remove)
             locker = user_mapper.user_registry.check_lock()
@@ -24,7 +29,7 @@ def active_users():
 
 def catalog_users():
     for user in user_mapper.user_registry.active_user_registry:
-        if time.time() - user[7] > 10 and user[8]:
+        if time.time() - user[7] > CATALOG_MANAGER_GRACE_PERIOD and user[8]:
             user_as_list = list(user)
             user_as_list[7] = 0
             user_mapper.remove_from_active(user[0])
@@ -32,14 +37,12 @@ def catalog_users():
             locker = user_mapper.user_registry.check_lock()
             if locker == user[0]:
                 user_mapper.user_registry.remove_lock()
-    print ("Removed catalog users")
 
 
 sched = BackgroundScheduler(daemon=True)
-sched.add_job(active_users, 'interval', seconds=1800)
-sched.add_job(catalog_users, 'interval', seconds=10)
+sched.add_job(active_users, 'interval', seconds=SECONDS_CLEAN_ACTIVE_USERS)
+sched.add_job(catalog_users, 'interval', seconds=SECONDS_CLEAN_CATALOG_USERS)
 sched.start()
-
 
 
 @app.before_request
@@ -70,8 +73,6 @@ def before_request():
     if cleared:
         flash('Automatically logged out due to a disconnect', 'warning')
         return redirect(url_for('home'))
-
-
 
 
 @app.route('/')

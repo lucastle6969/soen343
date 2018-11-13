@@ -11,7 +11,7 @@ INSERT INTO book (id, title, author, format, pages, publisher, publication_year,
 TRUNCATE TABLE magazine;
 INSERT INTO magazine (id, title, publisher, publication_date, language, isbn10, isbn13, quantity) VALUES
 (NULL, 'The New York Times Magazine', 'Arthurr Ochs Sulzberger Jr.', '23-11-2018', 'English', 1439401890, 8461968342412, 2),
-(NULL, 'National Geographic', 'Neil DeGrasse Tyson', '17-06-2013', 'English', 1234567890, 1234567890123, 10);
+(NULL, 'National Geographic', 'Neil DeGrasse Tyson', '17-06-2013', 'English', 2234567890, 2234567890123, 10);
 
 TRUNCATE TABLE movie;
 INSERT INTO movie (id, title, director, producers, actors, language, subtitles, dubbed, release_date, runtime, quantity) VALUES
