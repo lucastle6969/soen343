@@ -11,7 +11,6 @@ app = Flask(__name__)
 item_mapper = ItemMapper(app)
 user_mapper = UserMapper(app)
 
-
 @app.before_request
 def before_request():
     cleared = user_mapper.check_restart_session(session)
