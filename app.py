@@ -6,17 +6,33 @@ from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicFor
 import datetime
 import time
 
-
 app = Flask(__name__)
 item_mapper = ItemMapper(app)
 user_mapper = UserMapper(app)
 
+
 @app.before_request
 def before_request():
+    if len(session) > 0 and not (len(session) == 1 and '_flashes' in session):
+        user_id = session['user_id']
+        for user in user_mapper.user_registry.active_user_registry:
+            if user[0] == user_id:
+                if time.time() - user[6] > 10:
+                    user_mapper.remove_from_active(session['user_id'])
+                    session.clear()
+                    flash('Automatically logged out due to timeout.', 'warning')
+                    return redirect(url_for('home'))
+                else:
+                    user_as_list = list(user)
+                    user_as_list[6] = time.time()
+                    user_mapper.remove_from_active(session['user_id'])
+                    user_mapper.user_registry.active_user_registry.append(tuple(user_as_list))
     cleared = user_mapper.check_restart_session(session)
     if cleared:
         flash('Automatically logged out due to a disconnect', 'warning')
         return redirect(url_for('home'))
+
+
 
 
 @app.route('/')
@@ -82,7 +98,7 @@ def login():
             # add the user to the active user registry in the form of a tuple (user_id, timestamp)
                 timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
 
-                user_mapper.enlist_active_user(user.id, user.first_name, user.last_name, user.email, user.admin, timestamp)
+                user_mapper.enlist_active_user(user.id, user.first_name, user.last_name, user.email, user.admin, timestamp, time.time())
                 if user_mapper.check_another_admin(user.id):
                     flash('Limited functionality', 'warning')
                     return redirect(url_for('home'))
