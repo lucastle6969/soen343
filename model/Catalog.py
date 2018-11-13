@@ -21,7 +21,7 @@ class Catalog:
                 return item
         return None
 
-    def get_filtered_items(self, prefix, filter_field, search_value, order_filter, order_type):
+    def get_filtered_items(self, prefix, filter_field, search_value):
         search_tokens = search_value.split(" ")
         filtered_items = []
         for item in self.item_catalog:
@@ -34,7 +34,7 @@ class Catalog:
                     if item not in filtered_items:
                         filtered_items.append(item)
 
-        return self.order_items(filtered_items, order_filter, order_type)
+        return filtered_items
 
     @staticmethod
     def order_items(item_list, order_filter, order_type):

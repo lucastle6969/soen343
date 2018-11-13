@@ -29,46 +29,56 @@
                 <br/>
                 <center><h3>Books</h3></center>
                 {% from "includes/_form_helpers.html" import render_field %}
-                <form method="POST" action="/home/search/books">
-                    <ul class="nav">
-                        <li class="nav-item">
-                            <select class="form-control" name="filter">
-                                <option value="title">Title</option>
-                                <option value="author">Author</option>
-                                <option value="publisher">Publisher</option>
-                                <option value="publication_year">Publication Year</option>
-                                <option value="language">Language</option>	
-                                <option value="isbn10">ISBN-10</option>	
-                                <option value="isbn13">ISBN-13</option>
-                            </select>
-                        </li>
-                        <li class="nav-item col-sm-5">
-                            <input class="form-control" name="search" type="text" placeholder="Search for a book...">
-                        </li>
-                        <li><div class="sort-tag">Sort by:</div></li>
-                        <li class="nav-item">
-                            <select class="form-control" name="order_filter">
-                                <option value="title">Title</option>
-                                <option value="author">Author</option>
-                                <option value="publisher">Publisher</option>
-                                <option value="publication_year">Publication Year</option>
-                                <option value="language">Language</option>
-                                <option value="isbn10">ISBN-10</option>
-                                <option value="isbn13">ISBN-13</option>
-                            </select>
-                        </li>
-                        <li class="nav-item col-sm-2">
-                            <select class="form-control" name="order_type">
-                                <option value="NONE">None</option>
-                                <option value="ASC">Ascending</option>
-                                <option value="DESC">Descending</option>
-                            </select>
-                        </li>
-                        <li class="nav-item">
-                            <input class="form-control bg-success text-white" type="submit" value="Search">
-                        </li>
-                    </ul>
-                </form>
+                <div class="row m-0">
+                    <div class="col-sm-7 p-0">
+                        <form method="POST" action="/home/search/books">
+                            <ul class="nav">
+                                <li class="nav-item">
+                                    <select class="form-control" name="filter">
+                                        <option value="title">Title</option>
+                                        <option value="author">Author</option>
+                                        <option value="publisher">Publisher</option>
+                                        <option value="publication_year">Publication Year</option>
+                                        <option value="language">Language</option>
+                                        <option value="isbn10">ISBN-10</option>
+                                        <option value="isbn13">ISBN-13</option>
+                                    </select>
+                                </li>
+                                <li class="nav-item col-sm-7">
+                                    <input class="form-control" name="search" type="text" placeholder="Search for a book...">
+                                </li>
+                                <li class="nav-item">
+                                    <input class="form-control bg-success text-white" type="submit" value="Search">
+                                </li>
+                            </ul>
+                        </form>
+                    </div>
+                    <div class="col-sm-5 p-0">
+                        <form method="POST" action="/home/order/bb">
+                            <ul class="nav">
+                                <li class="nav-item"><div class="sort-tag">Sort by:</div></li>
+                                <li class="nav-item">
+                                    <select class="form-control" name="order_filter">
+                                        <option value="title">Title</option>
+                                        <option value="author">Author</option>
+                                        <option value="publisher">Publisher</option>
+                                        <option value="publication_year">Publication Year</option>
+                                        <option value="language">Language</option>
+                                        <option value="isbn10">ISBN-10</option>
+                                        <option value="isbn13">ISBN-13</option>
+                                    </select>
+                                </li>
+                                <li class="nav-item col-sm-5">
+                                    <select class="form-control" name="order_type" onchange="this.form.submit()">
+                                        <option value="NONE">None</option>
+                                        <option value="ASC">Ascending</option>
+                                        <option value="DESC">Descending</option>
+                                    </select>
+                                </li>
+                            </ul>
+                        </form>
+                    </div>
+                </div>
 
                 <br/>
                 <table class="table table-hover table-bordered">
@@ -102,46 +112,56 @@
                 <br/>
                 <center><h3>Magazines</h3></center>
                 {% from "includes/_form_helpers.html" import render_field %}
-                <form method="POST" action="/home/search/magazines">
-                    <ul class="nav">
-                        <li class="nav-item">
-                            <select class="form-control" name="filter">
-                                <option value="title">Title</option>
-                                <option value="publisher">Publisher</option>
-                                <option value="publication_date">Publication Date</option>
-                                <option value="language">Language</option>
-                                <option value="isbn10">ISBN-10</option>	
-                                <option value="isbn13">ISBN-13</option>
-                            </select>
-                        </li>
-                        <li class="nav-item col-sm-5">
-                            <input class="form-control" name="search" type="text" placeholder="Search for a magazine...">
-                        </li>
-                        <li><div class="sort-tag">Sort by:</div></li>
-                        <li class="nav-item">
-                            <select class="form-control" name="order_filter">
-                                <option value="title">Title</option>
-                                <option value="publisher">Publisher</option>
-                                <option value="publication_date">Publication Date</option>
-                                <option value="language">Language</option>
-                                <option value="isbn10">ISBN-10</option>
-                                <option value="isbn13">ISBN-13</option>
-                            </select>
-                        </li>
-                        <li class="nav-item col-sm-2">
-                            <select class="form-control" name="order_type">
-                                <option value="NONE">None</option>
-                                <option value="ASC">Ascending</option>
-                                <option value="DESC">Descending</option>
-                            </select>
-                        </li>
-                        <li class="nav-item">
-                            <input class="form-control bg-success text-white" type="submit" value="Search">
-                        </li>
-                    </ul>
-                </form>
-                <br/>
+                <div class="row m-0">
+                    <div class="col-sm-7 p-0">
+                        <form method="POST" action="/home/search/magazines">
+                            <ul class="nav">
+                                <li class="nav-item">
+                                    <select class="form-control" name="filter">
+                                        <option value="title">Title</option>
+                                        <option value="publisher">Publisher</option>
+                                        <option value="publication_date">Publication Date</option>
+                                        <option value="language">Language</option>
+                                        <option value="isbn10">ISBN-10</option>
+                                        <option value="isbn13">ISBN-13</option>
+                                    </select>
+                                </li>
+                                <li class="nav-item col-sm-7">
+                                    <input class="form-control" name="search" type="text" placeholder="Search for a magazine...">
+                                </li>
+                                <li class="nav-item">
+                                    <input class="form-control bg-success text-white" type="submit" value="Search">
+                                </li>
+                            </ul>
+                        </form>
+                    </div>
+                    <div class="col-sm-5 p-0">
+                        <form method="POST" action="/home/order/ma">
+                            <ul class="nav">
+                                <li><div class="sort-tag">Sort by:</div></li>
+                                <li class="nav-item">
+                                    <select class="form-control" name="order_filter">
+                                        <option value="title">Title</option>
+                                        <option value="publisher">Publisher</option>
+                                        <option value="publication_date">Publication Date</option>
+                                        <option value="language">Language</option>
+                                        <option value="isbn10">ISBN-10</option>
+                                        <option value="isbn13">ISBN-13</option>
+                                    </select>
+                                </li>
+                                <li class="nav-item col-sm-5">
+                                    <select class="form-control" name="order_type" onchange="this.form.submit()">
+                                        <option value="NONE">None</option>
+                                        <option value="ASC">Ascending</option>
+                                        <option value="DESC">Descending</option>
+                                    </select>
+                                </li>
+                            </ul>
+                        </form>
+                    </div>
+                </div>
 
+                <br/>
                 <table class="table table-hover table-bordered">
                     <thead>
                     <tr>
@@ -173,46 +193,56 @@
                 <br/>
                 <center><h3>Music</h3></center>
                 {% from "includes/_form_helpers.html" import render_field %}
-                <form method="POST" action="/home/search/music">
-                    <ul class="nav">
-                        <li class="nav-item">
-                            <select class="form-control" name="filter">
-                                <option value="media_type">Media Type</option>
-                                <option value="title">Title</option>
-                                <option value="artist">Artist</option>
-                                <option value="label">Label</option>	
-                                <option value="release_date">Release Date</option>	
-                                <option value="asin">ASIN</option>
-                            </select>
-                        </li>
-                        <li class="nav-item col-sm-5">
-                            <input class="form-control" name="search" type="text" placeholder="Search for music...">
-                        </li>
-                        <li><div class="sort-tag">Sort by:</div></li>
-                        <li class="nav-item">
-                            <select class="form-control" name="order_filter">
-                                <option value="media_type">Media Type</option>
-                                <option value="title">Title</option>
-                                <option value="artist">Artist</option>
-                                <option value="label">Label</option>
-                                <option value="release_date">Release Date</option>
-                                <option value="asin">ASIN</option>
-                            </select>
-                        </li>
-                        <li class="nav-item col-sm-2">
-                            <select class="form-control" name="order_type">
-                                <option value="NONE">None</option>
-                                <option value="ASC">Ascending</option>
-                                <option value="DESC">Descending</option>
-                            </select>
-                        </li>
-                        <li class="nav-item">
-                            <input class="form-control bg-success text-white" type="submit" value="Search">
-                        </li>
-                    </ul>
-                </form>
-                <br/>
+                <div class="row m-0">
+                    <div class="col-sm-7 p-0">
+                        <form method="POST" action="/home/search/music">
+                            <ul class="nav">
+                                <li class="nav-item">
+                                    <select class="form-control" name="filter">
+                                        <option value="media_type">Media Type</option>
+                                        <option value="title">Title</option>
+                                        <option value="artist">Artist</option>
+                                        <option value="label">Label</option>
+                                        <option value="release_date">Release Date</option>
+                                        <option value="asin">ASIN</option>
+                                    </select>
+                                </li>
+                                <li class="nav-item col-sm-7">
+                                    <input class="form-control" name="search" type="text" placeholder="Search for music...">
+                                </li>
+                                <li class="nav-item">
+                                    <input class="form-control bg-success text-white" type="submit" value="Search">
+                                </li>
+                            </ul>
+                        </form>
+                    </div>
+                    <div class="col-sm-5 p-0">
+                        <form method="POST" action="/home/order/mu">
+                            <ul class="nav">
+                                <li class="nav-item"><div class="sort-tag">Sort by:</div></li>
+                                <li class="nav-item">
+                                    <select class="form-control" name="order_filter">
+                                        <option value="media_type">Media Type</option>
+                                        <option value="title">Title</option>
+                                        <option value="artist">Artist</option>
+                                        <option value="label">Label</option>
+                                        <option value="release_date">Release Date</option>
+                                        <option value="asin">ASIN</option>
+                                    </select>
+                                </li>
+                                <li class="nav-item col-sm-5">
+                                    <select class="form-control" name="order_type" onchange="this.form.submit()">
+                                        <option value="NONE">None</option>
+                                        <option value="ASC">Ascending</option>
+                                        <option value="DESC">Descending</option>
+                                    </select>
+                                </li>
+                            </ul>
+                        </form>
+                    </div>
+                </div>
 
+                <br/>
                 <table class="table table-hover table-bordered">
                     <thead>
                     <tr>
@@ -244,52 +274,62 @@
                 <br/>
                 <center><h3>Movies</h3></center>
                 {% from "includes/_form_helpers.html" import render_field %}
-                <form method="POST" action="/home/search/movies">
-                    <ul class="nav">
-                        <li class="nav-item">
-                            <select class="form-control" name="filter">
-                                <option value="title">Title</option>
-                                <option value="director">Director</option>
-                                <option value="producers">Producers</option>	
-                                <option value="actors">Actors</option>	
-                                <option value="language">Language</option>	
-                                <option value="subtitles">Subtitles</option>	
-                                <option value="dubbed">Dubbed</option>	
-                                <option value="release_date">Release Date</option>	
-                                <option value="runtime">Run Time</option>
-                            </select>
-                        </li>
-                        <li class="nav-item col-sm-5">
-                            <input class="form-control" name="search" type="text" placeholder="Search for a movie...">
-                        </li>
-                        <li><div class="sort-tag">Sort by:</div></li>
-                        <li class="nav-item">
-                            <select class="form-control" name="order_filter">
-                                <option value="title">Title</option>
-                                <option value="director">Director</option>
-                                <option value="producers">Producers</option>
-                                <option value="actors">Actors</option>
-                                <option value="language">Language</option>
-                                <option value="subtitles">Subtitles</option>
-                                <option value="dubbed">Dubbed</option>
-                                <option value="release_date">Release Date</option>
-                                <option value="runtime">Run Time</option>
-                            </select>
-                        </li>
-                        <li class="nav-item col-sm-2">
-                            <select class="form-control" name="order_type">
-                                <option value="NONE">None</option>
-                                <option value="ASC">Ascending</option>
-                                <option value="DESC">Descending</option>
-                            </select>
-                        </li>
-                        <li class="nav-item">
-                            <input class="form-control bg-success text-white" type="submit" value="Search">
-                        </li>
-                    </ul>
-                </form>
-                <br/>
+                <div class="row m-0">
+                    <div class="col-sm-7 p-0">
+                        <form method="POST" action="/home/search/movies">
+                            <ul class="nav">
+                                <li class="nav-item">
+                                    <select class="form-control" name="filter">
+                                        <option value="title">Title</option>
+                                        <option value="director">Director</option>
+                                        <option value="producers">Producers</option>
+                                        <option value="actors">Actors</option>
+                                        <option value="language">Language</option>
+                                        <option value="subtitles">Subtitles</option>
+                                        <option value="dubbed">Dubbed</option>
+                                        <option value="release_date">Release Date</option>
+                                        <option value="runtime">Run Time</option>
+                                    </select>
+                                </li>
+                                <li class="nav-item col-sm-7">
+                                    <input class="form-control" name="search" type="text" placeholder="Search for a movie...">
+                                </li>
+                                <li class="nav-item">
+                                    <input class="form-control bg-success text-white" type="submit" value="Search">
+                                </li>
+                            </ul>
+                        </form>
+                    </div>
+                    <div class="col-sm-5 p-0">
+                        <form method="POST" action="/home/order/mo">
+                            <ul class="nav">
+                                <li class="nav-item"><div class="sort-tag">Sort by:</div></li>
+                                <li class="nav-item">
+                                    <select class="form-control" name="order_filter">
+                                        <option value="title">Title</option>
+                                        <option value="director">Director</option>
+                                        <option value="producers">Producers</option>
+                                        <option value="actors">Actors</option>
+                                        <option value="language">Language</option>
+                                        <option value="subtitles">Subtitles</option>
+                                        <option value="dubbed">Dubbed</option>
+                                        <option value="release_date">Release Date</option>
+                                        <option value="runtime">Run Time</option>
+                                    </select>
+                                </li>
+                                <li class="nav-item col-sm-5">
+                                    <select class="form-control" name="order_type" onchange="this.form.submit()">
+                                        <option value="NONE">None</option>
+                                        <option value="ASC">Ascending</option>
+                                        <option value="DESC">Descending</option>
+                                    </select>
+                                </li>
+                            </ul>
+                        </form>
+                    </div>
+                </div>
 
+                <br/>
                 <table class="table table-hover table-bordered">
                     <thead>
                     <tr>
