@@ -94,6 +94,8 @@ def login():
                 session['first_name'] = user.first_name
                 session['user_id'] = user.id
                 session['admin'] = user.admin
+                session.permanent = True
+                app.permanent_session_lifetime = datetime.timedelta(days=30)
 
             # add the user to the active user registry in the form of a tuple (user_id, timestamp)
                 timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
