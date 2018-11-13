@@ -17,7 +17,7 @@ def before_request():
         user_id = session['user_id']
         for user in user_mapper.user_registry.active_user_registry:
             if user[0] == user_id:
-                if time.time() - user[6] > 10:
+                if time.time() - user[6] > 1000:
                     user_mapper.remove_from_active(session['user_id'])
                     session.clear()
                     flash('Automatically logged out due to timeout.', 'warning')
@@ -101,9 +101,6 @@ def login():
                 timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
 
                 user_mapper.enlist_active_user(user.id, user.first_name, user.last_name, user.email, user.admin, timestamp, time.time())
-                if user_mapper.check_another_admin(user.id):
-                    flash('Limited functionality', 'warning')
-                    return redirect(url_for('home'))
 
                 flash('You are now logged in', 'success')
                 return redirect(url_for('home'))
@@ -165,10 +162,8 @@ def add_music(request_):
 @app.route('/admin_tools')
 def admin_tools_default():
     if session['logged_in']:
-        if user_mapper.validate_admin(session['user_id'], session['admin']) and not user_mapper.check_another_admin(int(session['user_id'])):
+        if user_mapper.validate_admin(session['user_id'], session['admin']):
             return render_template('admin_tools.html')
-        flash("Limited functionality, cannot modify catalog.", "warning")
-        return render_template('admin_tools.html', limited='limited')
     flash('You must be logged in as an admin to view this page.')
     return redirect(url_for('home'))
 
@@ -182,9 +177,12 @@ def admin_tools(tool):
             elif tool == 'create_admin' or tool == 'create_client':
                 return user_mapper.register(request, tool)
             elif tool == 'catalog_manager':
-                return render_template('admin_tools.html', tool=tool, catalog=item_mapper.get_catalog(), saved_changes=item_mapper.get_saved_changes())
-            elif tool == 'catalog_manager_limited':
-                return render_template('admin_tools.html', tool=tool, catalog=item_mapper.get_catalog())
+                locker = user_mapper.user_registry.check_lock(session['user_id'])
+                if locker == session['user_id']:
+                    return render_template('admin_tools.html', tool=tool, catalog=item_mapper.get_catalog(), saved_changes=item_mapper.get_saved_changes())
+                else:
+                    flash("Catalog currently locked by ID#: " + str(locker) + ".", 'warning')
+                    return redirect(url_for('admin_tools_default'))
             elif tool == 'view_users':
                 return render_template('admin_tools.html', tool=tool, list_of_users=user_mapper.get_all_users())
         else:
@@ -274,8 +272,8 @@ def save_changes():
 @app.route('/logout')
 def logout():
     user_mapper.remove_from_active(session['user_id'])
+    user_mapper.user_registry.remove_lock()
     session.clear()
-
     flash('You are now logged out', 'success')
     return redirect(url_for('login'))
 
