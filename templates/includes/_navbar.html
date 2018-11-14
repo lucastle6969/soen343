@@ -23,6 +23,11 @@
                 <a id="admin-glow" class="nav-link" href="/admin_tools">Admin Tools</a>
             </li>
             {% endif %}
+            {% if session.admin == False %}
+            <li class="nav-item">
+                <a id="borrowed_item_glow" class="nav-link" href="/home">My Borrowed Items</a>
+            </li>
+            {% endif %}
         </ul>
     </div>
   </nav>
