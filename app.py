@@ -4,6 +4,8 @@ from model.UserMapper import UserMapper
 from passlib.hash import sha256_crypt
 from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, SearchForm, Forms
 from apscheduler.schedulers.background import BackgroundScheduler
+from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, SearchForm, OrderForm, Forms
+
 import datetime
 import time
 
@@ -110,6 +112,12 @@ def search(item):
         return render_template('home.html', item_list=item_mapper.get_filtered_items("mo", form), item="mo")
     elif item == 'music':
         return render_template('home.html', item_list=item_mapper.get_filtered_items("mu", form), item="mu")
+
+
+@app.route('/home/order/<item_prefix>', methods=['GET', 'POST'])
+def order(item_prefix):
+    form = OrderForm(request.form)
+    return render_template('home.html', item_list=item_mapper.get_ordered_items(form), item=item_prefix)
 
 
 @app.route('/about')
