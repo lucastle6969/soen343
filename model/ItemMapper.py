@@ -6,6 +6,9 @@ from copy import deepcopy
 
 
 class ItemMapper:
+
+    visible_items = []
+
     def __init__(self, app):
         self.uow = None
         self.catalog = Catalog()
@@ -17,7 +20,8 @@ class ItemMapper:
         return self.catalog
 
     def get_all_items(self, item_prefix):
-        return self.catalog.get_all_items(item_prefix)
+        self.visible_items = self.catalog.get_all_items(item_prefix)
+        return self.visible_items
 
     def get_all_books(self):
         all_copies = []
@@ -326,9 +330,13 @@ class ItemMapper:
     def get_filtered_items(self, prefix, form):
         filter_value = form.filter.data
         search_value = form.search.data
+
+        self.visible_items = self.catalog.get_filtered_items(prefix, filter_value, search_value)
+        return self.visible_items
+
+    def get_ordered_items(self, form):
         order_filter = form.order_filter.data
         order_type = form.order_type.data
 
-        filtered_items = self.catalog.get_filtered_items(prefix, filter_value, search_value, order_filter, order_type)
-        return filtered_items
-
+        self.visible_items = self.catalog.order_items(self.visible_items, order_filter, order_type)
+        return self.visible_items

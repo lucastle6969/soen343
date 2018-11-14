@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS book;
 CREATE TABLE book (
-    id INT(20) AUTO_INCREMENT PRIMARY KEY,
+    id INT(6) AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(100),
     author VARCHAR(30), 
     format VARCHAR(20), 
@@ -15,16 +15,16 @@ CREATE TABLE book (
 
 DROP TABLE IF EXISTS book_physical;
 CREATE TABLE book_physical (
-    id INT(11) AUTO_INCREMENT PRIMARY KEY,
-    book_fk INT(11),
+    id INT(6) AUTO_INCREMENT PRIMARY KEY,
+    book_fk INT(6),
     status VARCHAR(100),
-    return_date timestamp NULL
+    return_date DATETIME
 );
 
 
 DROP TABLE IF EXISTS magazine;
 CREATE TABLE magazine (
-    id INT(20) AUTO_INCREMENT PRIMARY KEY,
+    id INT(6) AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(100),
     publisher VARCHAR(50),
     publication_date VARCHAR(30), 
@@ -36,16 +36,16 @@ CREATE TABLE magazine (
 
 DROP TABLE IF EXISTS magazine_physical;
 CREATE TABLE magazine_physical (
-    id INT(11) AUTO_INCREMENT PRIMARY KEY,
-    magazine_fk INT(11),
+    id INT(6) AUTO_INCREMENT PRIMARY KEY,
+    magazine_fk INT(6),
     status VARCHAR(100),
-    return_date timestamp NULL
+    return_date DATETIME
 );
 
 
 DROP TABLE IF EXISTS movie;
 CREATE TABLE movie (
-    id INT(20) AUTO_INCREMENT PRIMARY KEY,
+    id INT(6) AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(100),
     director VARCHAR(30), 
     producers VARCHAR(100), 
@@ -60,17 +60,17 @@ CREATE TABLE movie (
 
 DROP TABLE IF EXISTS movie_physical;
 CREATE TABLE movie_physical (
-    id INT(11) AUTO_INCREMENT PRIMARY KEY,
-    movie_fk INT(11),
+    id INT(6) AUTO_INCREMENT PRIMARY KEY,
+    movie_fk INT(6),
     status VARCHAR(100),
-    return_date timestamp NULL
+    return_date DATETIME
 );
 
 
 
 DROP TABLE IF EXISTS music;
 CREATE TABLE music (
-    id INT(20) AUTO_INCREMENT PRIMARY KEY,
+    id INT(6) AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(100),
     media_type VARCHAR(30), 
     artist VARCHAR(30), 
@@ -82,16 +82,16 @@ CREATE TABLE music (
 
 DROP TABLE IF EXISTS music_physical;
 CREATE TABLE music_physical (
-    id INT(11) AUTO_INCREMENT PRIMARY KEY,
-    music_fk INT(11),
+    id INT(6) AUTO_INCREMENT PRIMARY KEY,
+    music_fk INT(6),
     status VARCHAR(100),
-    return_date timestamp NULL
+    return_date DATETIME
 );
 
 
 DROP TABLE IF EXISTS user;
 CREATE TABLE user(
-    id INT(20) AUTO_INCREMENT PRIMARY KEY,
+    id INT(7) AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(50), 
     last_name VARCHAR(50), 
     address VARCHAR(50), 
@@ -99,4 +99,31 @@ CREATE TABLE user(
     phone VARCHAR(60), 
     admin TINYINT(1), 
     password VARCHAR(100)
+);
+
+DROP TABLE IF EXISTS transaction_registry;
+CREATE TABLE transaction_registry(
+    id INT(20) AUTO_INCREMENT PRIMARY KEY,
+    user_fk INT(7),
+    prefix VARCHAR(2),
+    physical_id INT(6),
+    transaction_type VARCHAR(6),
+    timestamp DATETIME
+);
+
+DROP TABLE IF EXISTS active_loan_registry;
+CREATE TABLE active_loan_registry(
+    id INT(10) AUTO_INCREMENT PRIMARY KEY,
+    user_fk INT(7),
+    prefix VARCHAR(2),
+    physical_id INT(6),
+    timestamp DATETIME  
+);
+
+DROP TABLE IF EXISTS cart;
+CREATE TABLE cart(
+    id INT(7) AUTO_INCREMENT PRIMARY KEY,
+    user_fk INT(7),
+    prefix_fk VARCHAR(2),
+    physical_id_fk INT(6)
 );

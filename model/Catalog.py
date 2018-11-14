@@ -21,14 +21,20 @@ class Catalog:
                 return item
         return None
 
-    def get_filtered_items(self, prefix, filter_field, search_value, order_filter, order_type):
+    def get_filtered_items(self, prefix, filter_field, search_value):
+        search_tokens = search_value.split(" ")
         filtered_items = []
         for item in self.item_catalog:
-            if item.prefix == prefix:
-                value = eval("item." + filter_field)
-                if search_value.lower() in str(value).lower():
-                    filtered_items.append(item)
-        return self.order_items(filtered_items, order_filter, order_type)
+            if item.prefix != prefix:
+                continue
+
+            value = eval("item." + filter_field)
+            for token in search_tokens:
+                if token.lower() in str(value).lower():
+                    if item not in filtered_items:
+                        filtered_items.append(item)
+
+        return filtered_items
 
     @staticmethod
     def order_items(item_list, order_filter, order_type):
