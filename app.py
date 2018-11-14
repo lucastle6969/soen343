@@ -4,7 +4,6 @@ from model.UserMapper import UserMapper
 from passlib.hash import sha256_crypt
 from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, SearchForm, Forms
 from apscheduler.schedulers.background import BackgroundScheduler
-from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, SearchForm, OrderForm, Forms
 
 import datetime
 import time
