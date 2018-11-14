@@ -71,7 +71,7 @@ def before_request():
                         user_mapper.user_registry.active_user_registry.append(tuple(user_as_list))
     cleared = user_mapper.check_restart_session(session)
     if cleared:
-        flash('Automatically logged out due to a disconnect', 'warning')
+        flash('Automatically logged out due to a disconnect/inactivity', 'warning')
         return redirect(url_for('home'))
 
 
