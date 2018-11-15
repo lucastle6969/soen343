@@ -75,6 +75,7 @@ class Tdg:
             return data
 
     def get_all_users_active_loans(self):
+        # This query gets all users and all the loans of those users.
         connection = self.mysql.connect()
         cur = connection.cursor()
         sql = "SELECT u.id, u.first_name, u.last_name, u.address, u.email, u.phone, u.admin, u.password, bp.id, bp.book_fk, bp.status, bp.return_date, bp.user_fk, mup.id, mup.music_fk, mup.status, mup.return_date, mup.user_fk, mop.id, mop.movie_fk, mop.status, mop.return_date, mop.user_fk "

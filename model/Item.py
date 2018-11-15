@@ -42,12 +42,10 @@ class Magazine(Item):
 
 
 class PhysicalMagazine:
-    def __init__(self, id, magazine_fk, status, return_date, user_fk = None):
+    def __init__(self, id, magazine_fk, status):
         self.id = id
         self.magazine_fk = magazine_fk
         self.status = status
-        self.return_date = return_date
-        self.user_fk = user_fk
         self.prefix = "ma"
 
 

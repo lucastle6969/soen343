@@ -40,8 +40,6 @@ CREATE TABLE magazine_physical (
     id INT(6) AUTO_INCREMENT PRIMARY KEY,
     magazine_fk INT(6),
     status VARCHAR(100),
-    return_date DATETIME
-    user_fk INT(6) NULL DEFAULT NULL
 );
 
 
