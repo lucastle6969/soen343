@@ -12,10 +12,10 @@ app = Flask(__name__)
 item_mapper = ItemMapper(app)
 user_mapper = UserMapper(app)
 
-ACTIVE_USER_GRACE_PERIOD = 1800
-CATALOG_MANAGER_GRACE_PERIOD = 300
+ACTIVE_USER_GRACE_PERIOD = 2400
+CATALOG_MANAGER_GRACE_PERIOD = 600
 SECONDS_CLEAN_ACTIVE_USERS = 300
-SECONDS_CLEAN_CATALOG_USERS = 60
+SECONDS_CLEAN_CATALOG_USERS = 1200
 
 
 def active_users():
@@ -63,6 +63,9 @@ def before_request():
                         user_mapper.remove_from_active(session['user_id'])
                         user_mapper.user_registry.active_user_registry.append(tuple(user_as_list))
                         item_mapper.uow = None
+                        locker = user_mapper.user_registry.check_lock()
+                        if locker == session['user_id']:
+                            user_mapper.user_registry.remove_lock()
                         flash('You have been removed from the catalog manager for inactivity, changes were not saved.', 'warning')
                         return redirect(url_for('home'))
                     else:
