@@ -6,18 +6,28 @@ class UserRegistry:
     def __init__(self):
         self.active_user_registry = []
         self.list_of_users = []
+        self.catalog_lock = -1
 
     def populate(self, all_users):
         for entry in all_users:
             self.list_of_users.append(User(entry[0], entry[1], entry[2], entry[3], entry[4], entry[5], entry[6], entry[7]))
 
-    def enlist_active_user(self, data, first_name, last_name, email, admin, timestamp):
-        self.active_user_registry.append((data, first_name, last_name, email, admin, timestamp))
+    def check_lock(self):
+        return self.catalog_lock
+
+    def remove_lock(self):
+        self.catalog_lock = -1
+
+    def lock (self, user_id):
+        self.catalog_lock = user_id
+
+    def enlist_active_user(self, user_id, first_name, last_name, email, admin, timestamp, active_time, catalog_time, catalog_flag):
+        self.active_user_registry.append((user_id, first_name, last_name, email, admin, timestamp, active_time, catalog_time, catalog_flag))
 
     def check_restart_session(self, session):
         online = False
         only_flashes = len(session) == 1 and '_flashes' in session
-        for id, first_name, last_name, email, admin, time in self.active_user_registry:
+        for id, first_name, last_name, email, admin, time, active_time, catalog_time, catalog_flag in self.active_user_registry:
             if 'user_id' in session and id == session['user_id']:
                 online = True
         if not online and only_flashes:
@@ -33,17 +43,6 @@ class UserRegistry:
         # log user out if they are already logged in
         self.active_user_registry[:] = [tup for tup in self.active_user_registry if not user_id == tup[0]]
 
-    def check_another_admin(self, user_id):
-        login_time = None
-        for active_user in self.active_user_registry:
-            if active_user[0] == user_id:
-                login_time = active_user[1]
-        for active_user in self.active_user_registry:
-            if active_user[0] != user_id:
-                for registered_user in self.list_of_users:
-                    if active_user[0] == registered_user.id and login_time > active_user[1] and registered_user.admin:
-                        return True
-        return False
 
     def insert_user(self, user_id, first_name, last_name, address, email, phone, admin, password):
         self.list_of_users.append(User(user_id, first_name, last_name, address, email, phone, admin, password))
