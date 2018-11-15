@@ -2,7 +2,7 @@ from flask import Flask, render_template, flash, redirect, url_for, session, req
 from model.ItemMapper import ItemMapper
 from model.UserMapper import UserMapper
 from passlib.hash import sha256_crypt
-from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, SearchForm, Forms
+from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, SearchForm, Forms, OrderForm
 from apscheduler.schedulers.background import BackgroundScheduler
 
 import datetime
@@ -328,7 +328,9 @@ def save_changes():
 @app.route('/logout')
 def logout():
     user_mapper.remove_from_active(session['user_id'])
-    user_mapper.user_registry.remove_lock()
+    locker = user_mapper.user_registry.check_lock()
+    if locker == session['user_id']:
+        user_mapper.user_registry.remove_lock()
     session.clear()
     flash('You are now logged out', 'success')
     return redirect(url_for('login'))
