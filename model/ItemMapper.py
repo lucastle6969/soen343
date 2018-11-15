@@ -26,7 +26,7 @@ class ItemMapper:
     def get_all_books(self):
         all_copies = []
         for copy in self.tdg.get_books_physical():
-            all_copies.append(PhysicalBook(copy[0], copy[1], copy[2], copy[3]))
+            all_copies.append(PhysicalBook(copy[0], copy[1], copy[2], copy[3], copy[4]))
         book_list = []
         for book in self.tdg.get_books():
             copies = []
@@ -39,7 +39,7 @@ class ItemMapper:
     def get_all_magazines(self):
         all_copies = []
         for copy in self.tdg.get_magazines_physical():
-            all_copies.append(PhysicalMagazine(copy[0], copy[1], copy[2], copy[3]))
+            all_copies.append(PhysicalMagazine(copy[0], copy[1], copy[2], copy[3], copy[4]))
         magazine_list = []
         for magazine in self.tdg.get_magazines():
             copies = []
@@ -52,7 +52,7 @@ class ItemMapper:
     def get_all_music(self):
         all_copies = []
         for copy in self.tdg.get_music_physical():
-            all_copies.append(PhysicalMusic(copy[0], copy[1], copy[2], copy[3]))
+            all_copies.append(PhysicalMusic(copy[0], copy[1], copy[2], copy[3], copy[4]))
         music_list = []
         for music in self.tdg.get_music():
             copies = []
@@ -65,7 +65,7 @@ class ItemMapper:
     def get_all_movies(self):
         all_copies = []
         for copy in self.tdg.get_movies_physical():
-            all_copies.append(PhysicalMovie(copy[0], copy[1], copy[2], copy[3]))
+            all_copies.append(PhysicalMovie(copy[0], copy[1], copy[2], copy[3], copy[4]))
         movie_list = []
         for movie in self.tdg.get_movies():
             copies = []

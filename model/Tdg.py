@@ -74,6 +74,23 @@ class Tdg:
         else:
             return data
 
+    def get_all_users_active_loans(self):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        sql = "SELECT u.id, u.first_name, u.last_name, u.address, u.email, u.phone, u.admin, u.password, bp.id, bp.book_fk, bp.status, bp.return_date, bp.user_fk, mup.id, mup.music_fk, mup.status, mup.return_date, mup.user_fk, mop.id, mop.movie_fk, mop.status, mop.return_date, mop.user_fk "
+        sql += "FROM user AS u LEFT JOIN book_physical AS bp ON (u.id = bp.user_fk) "
+        sql += "LEFT JOIN music_physical AS mup ON (u.id = bp.user_fk) "
+        sql += "LEFT JOIN movie_physical AS mop ON (u.id = bp.user_fk) WHERE 1 "
+        result = cur.execute(sql)
+        data = []
+        for row in cur.fetchall():
+            data.append(row)
+        cur.close()
+        if result is None:
+            return False
+        else:
+            return data
+
     def add_book(self, book):
         connection = self.mysql.connect()
         cur = connection.cursor()
@@ -161,7 +178,7 @@ class Tdg:
     def get_books_physical(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, book_fk, status, return_date FROM book_physical")
+        result = cur.execute("SELECT id, book_fk, status, return_date, user_fk FROM book_physical")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -187,7 +204,7 @@ class Tdg:
     def get_magazines_physical(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, magazine_fk, status, return_date FROM magazine_physical")
+        result = cur.execute("SELECT id, magazine_fk, status, return_date, user_fk FROM magazine_physical")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -213,7 +230,7 @@ class Tdg:
     def get_movies_physical(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, movie_fk, status, return_date FROM movie_physical")
+        result = cur.execute("SELECT id, movie_fk, status, return_date, user_fk FROM movie_physical")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -239,7 +256,7 @@ class Tdg:
     def get_music_physical(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, music_fk, status, return_date FROM music_physical")
+        result = cur.execute("SELECT id, music_fk, status, return_date, user_fk FROM music_physical")
         data = []
         for row in cur.fetchall():
             data.append(row)
