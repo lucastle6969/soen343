@@ -78,7 +78,7 @@ class RegisterForm(Form):
     last_name = StringField('Last Name', [alpha(2, 50, 0)])
     email = StringField('Email', [validators.Email(message='This is not a valid email address.')])
     phone = StringField('Phone', [phone_number])
-    address = StringField('Address', [alpha(2, 100, 0)])
+    address = StringField('Address', [alpha(2, 100, 1)])
     password = PasswordField('Password', [
         password,
         validators.EqualTo('confirm', message='Passwords do not match.')
