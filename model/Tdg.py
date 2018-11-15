@@ -388,5 +388,24 @@ class Tdg:
                     VALUES(%s, %s, %s, %s)""", (user_id, item.prefix, item.id, item.return_date))
             elif transaction_type is "return":
                 cur.execute("DELETE FROM active_loan_registry WHERE user_fk = %s AND prefix = %s AND physical_id = %s", (user_id, item.prefix, item.id))
+        
+        result = cur.execute("SELECT * FROM transaction_history ORDER BY id DESC LIMIT 1")
+        if result > 0:
+            last_historical_id = cur.fetchone()
+            last_historical_id = last_historical_id[0]
+        else :
+            last_historical_id = False
+        if transaction_type is "loan":
+            result = cur.execute("SELECT * FROM active_loan_history ORDER BY id DESC LIMIT 1")
+            if result > 0:
+                last_active_id = cur.fetchone()
+                last_active_id = last_active_id[0]
+            else:
+                last_active_id = False
+        else:
+            last_active_id = False
+        last_ids = []
+        last_ids.append(last_historical_id)
+        last_ids.append(last_active_id)
         cur.close()
-        return True
+        return last_ids

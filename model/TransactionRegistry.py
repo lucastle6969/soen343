@@ -7,13 +7,13 @@ class TransactionRegistry:
         self.historical_registry = []
         self.active_loan_registry = []
 
-    def add_transactions(self, user_id, physical_items, transaction_type, timestamp, next_ids):
-        transaction_id = next_ids.historical
+    def add_transactions(self, user_id, physical_items, transaction_type, timestamp, last_ids):
+        transaction_id = last_ids[0] - len(physical_items)
         for item in physical_items:
             self.historical_registry.append(HistoricalTransaction(transaction_id, user_id, item, transaction_type, timestamp))
             transaction_id = transaction_id + 1
             if transaction_type is "loan":
-                active_loan_id = next_ids.active
+                active_loan_id = last_ids[1] - len(physical_items)
                 self.active_loan_registry.append(ActiveLoan(active_loan_id, user_id, item, item.return_date))
                 active_loan_id = active_loan_id + 1
             elif transaction_type is "return":
