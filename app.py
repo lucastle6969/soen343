@@ -57,7 +57,7 @@ def before_request():
                 user_mapper.remove_from_active(session['user_id'])
                 user_mapper.user_registry.active_user_registry.append(tuple(user_as_list))
                 if "catalog_manager" in request.path and user[8]:
-                    if time.time() - user[7] > 10:
+                    if time.time() - user[7] > CATALOG_MANAGER_GRACE_PERIOD:
                         user_as_list = list(user)
                         user_as_list[8] = False
                         user_mapper.remove_from_active(session['user_id'])
