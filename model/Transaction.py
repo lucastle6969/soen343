@@ -1,7 +1,9 @@
 
 class Transaction:
     def __init__(self, transaction_id, user_fk, physical_item):
-        pass
+        self.transaction_id = transaction_id
+        self.user_fk = user_fk
+        self.physical_item = physical_item
 
 
 class HistoricalTransaction(Transaction):

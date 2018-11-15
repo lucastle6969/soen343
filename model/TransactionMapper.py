@@ -13,6 +13,5 @@ class TransactionMapper:
         self.transaction_registry.populate(self.tdg.get_transactions(), self.tdg.get_active_loans())
 
     def add_transactions(self, user_id, physical_items, transaction_type, timestamp):
-        self.transaction_registry.add_transactions(user_id, physical_items, transaction_type, timestamp)
-        self.tdg.add_transactions(user_id, physical_items, transaction_type, timestamp)
-
+        next_ids = self.tdg.add_transactions(user_id, physical_items, transaction_type, timestamp)
+        self.transaction_registry.add_transactions(user_id, physical_items, transaction_type, timestamp, next_ids)
