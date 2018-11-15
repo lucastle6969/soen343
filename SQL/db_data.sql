@@ -5,13 +5,13 @@ INSERT INTO user (id, first_name, last_name, address, email, phone, admin, passw
 
 TRUNCATE TABLE book;
 INSERT INTO book (id, title, author, format, pages, publisher, publication_year, language, isbn10, isbn13, quantity) VALUES
-(NULL, 'A Feast For Crows', 'George RR Martin', 'Hardcover', 250, 'Scholastic', 2005, 'English', 1234567890, 2234567890123, 2),
-(NULL, 'Neuromancer', 'William Gibson', 'Paperback', 186, 'Random House', 1984, 'English', 1230987654, 2231234567890, 10);
+(NULL, 'A Feast For Crows', 'George RR Martin', 'Hardcover', 250, 'Scholastic', 2005, 'English', 1234567890, 1234567890123, 2),
+(NULL, 'Neuromancer', 'William Gibson', 'Paperback', 186, 'Random House', 1984, 'English', 1230987654, 1231234567890, 10);
 
 TRUNCATE TABLE magazine;
 INSERT INTO magazine (id, title, publisher, publication_date, language, isbn10, isbn13, quantity) VALUES
 (NULL, 'The New York Times Magazine', 'Arthurr Ochs Sulzberger Jr.', '2018-11-23', 'English', 1439401890, 8461968342412, 2),
-(NULL, 'National Geographic', 'Neil DeGrasse Tyson', '2013-06-17', 'English', 1234567890, 1234567890123, 10);
+(NULL, 'National Geographic', 'Neil DeGrasse Tyson', '2013-06-17', 'English', 2234567890, 2234567890123, 10);
 
 TRUNCATE TABLE movie;
 INSERT INTO movie (id, title, director, producers, actors, language, subtitles, dubbed, release_date, runtime, quantity) VALUES
