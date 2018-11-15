@@ -205,7 +205,7 @@ class Tdg:
     def get_magazines_physical(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, magazine_fk, status, return_date, user_fk FROM magazine_physical")
+        result = cur.execute("SELECT id, magazine_fk, status FROM magazine_physical")
         data = []
         for row in cur.fetchall():
             data.append(row)
