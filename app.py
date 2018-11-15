@@ -1,6 +1,7 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, request
 from model.ItemMapper import ItemMapper
 from model.UserMapper import UserMapper
+from model.TransactionMapper import TransactionMapper
 from passlib.hash import sha256_crypt
 from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, SearchForm, OrderForm, Forms
 import datetime
