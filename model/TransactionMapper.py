@@ -9,7 +9,8 @@ class TransactionMapper:
 
     def __init__(self, app): 
         self.tdg = Tdg(app)
-        self.transaction_registry = []
+        self.transaction_registry = TransactionRegistry()
+        self.transaction_registry.populate(self.tdg.get_transactions(), self.tdg.get_active_loans())
 
-    def add_transaction(self):
+    def add_transactions(self):
         pass
