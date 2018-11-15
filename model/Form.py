@@ -46,9 +46,9 @@ def phone_number(form, field):
 # Verifies that the date input matches the format DD-MM-YYYY
 def date(form, field):
     try:
-        datetime.datetime.strptime(field.data, "%d-%m-%Y")
+        datetime.datetime.strptime(field.data, "%Y-%m-%d")
     except ValueError:
-        raise ValueError("The date must be formatted as follows: DD-MM-YYYY.")
+        raise ValueError("The date must be formatted as follows: YYYY-MM-DD.")
 
 
 def unique_isbn10_validator(form, field):
