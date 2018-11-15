@@ -1,6 +1,7 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, request
 from model.ItemMapper import ItemMapper
 from model.UserMapper import UserMapper
+from model.TransactionMapper import TransactionMapper
 from passlib.hash import sha256_crypt
 from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, SearchForm, Forms, OrderForm
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -11,6 +12,7 @@ import time
 app = Flask(__name__)
 item_mapper = ItemMapper(app)
 user_mapper = UserMapper(app)
+transaction_mapper = TransactionMapper(app)
 
 ACTIVE_USER_GRACE_PERIOD = 2400
 CATALOG_MANAGER_GRACE_PERIOD = 600

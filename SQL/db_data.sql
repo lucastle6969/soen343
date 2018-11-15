@@ -41,19 +41,19 @@ INSERT INTO book_physical (id, book_fk, status, return_date) VALUES
 
 
 TRUNCATE TABLE magazine_physical;
-INSERT INTO magazine_physical (id, magazine_fk, status, return_date) VALUES
-(NULL, 1, "Available", NULL),
-(NULL, 1, "Reserved",  NULL),
-(NULL, 2, "Reserved",  NULL),
-(NULL, 2, "Available",  NULL),
-(NULL, 2, "Available",  NULL),
-(NULL, 2, "Available",  NULL),
-(NULL, 2, "Available",  NULL),
-(NULL, 2, "Available",  NULL),
-(NULL, 2, "Available",  NULL),
-(NULL, 2, "Available",  NULL),
-(NULL, 2, "Available",  NULL),
-(NULL, 2, "Available",  NULL);
+INSERT INTO magazine_physical (id, magazine_fk, status) VALUES
+(NULL, 1, "Available"),
+(NULL, 1, "Reserved"),
+(NULL, 2, "Reserved"),
+(NULL, 2, "Available"),
+(NULL, 2, "Available"),
+(NULL, 2, "Available"),
+(NULL, 2, "Available"),
+(NULL, 2, "Available"),
+(NULL, 2, "Available"),
+(NULL, 2, "Available"),
+(NULL, 2, "Available"),
+(NULL, 2, "Available");
 
 
 TRUNCATE TABLE movie_physical;

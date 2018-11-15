@@ -9,7 +9,7 @@ class UserMapper:
     def __init__(self, app):
         self.tdg = Tdg(app)
         self.user_registry = UserRegistry()
-        self.user_registry.populate(self.tdg.get_all_users())
+        self.user_registry.populate(self.tdg.get_all_users_active_loans())
 
     def register(self, request_, tool):
         form = RegisterForm(request_.form)

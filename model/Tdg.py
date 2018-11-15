@@ -74,6 +74,24 @@ class Tdg:
         else:
             return data
 
+    def get_all_users_active_loans(self):
+        # This query gets all users and all the loans of those users.
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        sql = "SELECT u.id, u.first_name, u.last_name, u.address, u.email, u.phone, u.admin, u.password, bp.id, bp.book_fk, bp.status, bp.return_date, bp.user_fk, mup.id, mup.music_fk, mup.status, mup.return_date, mup.user_fk, mop.id, mop.movie_fk, mop.status, mop.return_date, mop.user_fk "
+        sql += "FROM user AS u LEFT JOIN book_physical AS bp ON (u.id = bp.user_fk) "
+        sql += "LEFT JOIN music_physical AS mup ON (u.id = mup.user_fk) "
+        sql += "LEFT JOIN movie_physical AS mop ON (u.id = mop.user_fk) WHERE 1 "
+        result = cur.execute(sql)
+        data = []
+        for row in cur.fetchall():
+            data.append(row)
+        cur.close()
+        if result is None:
+            return False
+        else:
+            return data
+
     def add_book(self, book):
         connection = self.mysql.connect()
         cur = connection.cursor()
@@ -161,7 +179,7 @@ class Tdg:
     def get_books_physical(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, book_fk, status, return_date FROM book_physical")
+        result = cur.execute("SELECT id, book_fk, status, return_date, user_fk FROM book_physical")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -187,7 +205,7 @@ class Tdg:
     def get_magazines_physical(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, magazine_fk, status, return_date FROM magazine_physical")
+        result = cur.execute("SELECT id, magazine_fk, status FROM magazine_physical")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -213,7 +231,7 @@ class Tdg:
     def get_movies_physical(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, movie_fk, status, return_date FROM movie_physical")
+        result = cur.execute("SELECT id, movie_fk, status, return_date, user_fk FROM movie_physical")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -239,7 +257,7 @@ class Tdg:
     def get_music_physical(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, music_fk, status, return_date FROM music_physical")
+        result = cur.execute("SELECT id, music_fk, status, return_date, user_fk FROM music_physical")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -330,3 +348,65 @@ class Tdg:
             return False
         else:
             return keys
+
+# ----------------------------------------------------
+# Transactions
+
+    def get_transactions(self):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        result = cur.execute("SELECT id, user_fk, prefix, physical_id, transaction_type, timestamp FROM transaction_registry WHERE 1")
+        data = []
+        for row in cur.fetchall():
+            data.append(row)
+        cur.close()
+        if result is None:
+            return False
+        else:
+            return data
+
+    def get_active_loans(self):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        result = cur.execute("SELECT id, user_fk, prefix, physical_id, return_date FROM active_loan_registry WHERE 1")
+        data = []
+        for row in cur.fetchall():
+            data.append(row)
+        cur.close()
+        if result is None:
+            return False
+        else:
+            return data
+
+    def add_transactions(self, user_id, physical_items, transaction_type, timestamp):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        for item in physical_items:
+            cur.execute("""INSERT INTO transaction_history(user_fk, prefix, physical_id, transaction_type, timestamp)
+                    VALUES(%s, %s, %s, %s, %s)""", (user_id, item.prefix, item.id, transaction_type, timestamp))
+            if transaction_type is "loan":
+                cur.execute("""INSERT INTO active_loan_registry(user_fk, prefix, physical_id, return_date)
+                    VALUES(%s, %s, %s, %s)""", (user_id, item.prefix, item.id, item.return_date))
+            elif transaction_type is "return":
+                cur.execute("DELETE FROM active_loan_registry WHERE user_fk = %s AND prefix = %s AND physical_id = %s", (user_id, item.prefix, item.id))
+        
+        result = cur.execute("SELECT * FROM transaction_history ORDER BY id DESC LIMIT 1")
+        if result > 0:
+            last_historical_id = cur.fetchone()
+            last_historical_id = last_historical_id[0]
+        else :
+            last_historical_id = False
+        if transaction_type is "loan":
+            result = cur.execute("SELECT * FROM active_loan_history ORDER BY id DESC LIMIT 1")
+            if result > 0:
+                last_active_id = cur.fetchone()
+                last_active_id = last_active_id[0]
+            else:
+                last_active_id = False
+        else:
+            last_active_id = False
+        last_ids = []
+        last_ids.append(last_historical_id)
+        last_ids.append(last_active_id)
+        cur.close()
+        return last_ids
