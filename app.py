@@ -166,6 +166,15 @@ def login():
 
     return render_template('login.html', form=form)
 
+@app.route('/borrowed_items', methods=['GET', 'POST'])
+def borrowed_items():
+    if request.method == 'POST':
+        # TODO: return selected items
+        # item_mapper.return_items(user_id, request.form)
+        return render_template('home.html', item_list=item_mapper.get_all_items("bb"), item="bb")
+    else:
+        # Temporarily display all books as the user's borrowed items
+        return render_template('borrowed_items.html', borrowed_items=item_mapper.get_all_books())
 
 def add_book(request_):
     form = BookForm(request_.form)
