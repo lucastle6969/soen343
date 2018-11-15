@@ -79,8 +79,8 @@ class Tdg:
         cur = connection.cursor()
         sql = "SELECT u.id, u.first_name, u.last_name, u.address, u.email, u.phone, u.admin, u.password, bp.id, bp.book_fk, bp.status, bp.return_date, bp.user_fk, mup.id, mup.music_fk, mup.status, mup.return_date, mup.user_fk, mop.id, mop.movie_fk, mop.status, mop.return_date, mop.user_fk "
         sql += "FROM user AS u LEFT JOIN book_physical AS bp ON (u.id = bp.user_fk) "
-        sql += "LEFT JOIN music_physical AS mup ON (u.id = bp.user_fk) "
-        sql += "LEFT JOIN movie_physical AS mop ON (u.id = bp.user_fk) WHERE 1 "
+        sql += "LEFT JOIN music_physical AS mup ON (u.id = mup.user_fk) "
+        sql += "LEFT JOIN movie_physical AS mop ON (u.id = mop.user_fk) WHERE 1 "
         result = cur.execute(sql)
         data = []
         for row in cur.fetchall():
