@@ -2,21 +2,80 @@ from flask import Flask, render_template, flash, redirect, url_for, session, req
 from model.ItemMapper import ItemMapper
 from model.UserMapper import UserMapper
 from passlib.hash import sha256_crypt
-from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, SearchForm, OrderForm, Forms
+from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, SearchForm, Forms, OrderForm
+from apscheduler.schedulers.background import BackgroundScheduler
+
 import datetime
 import time
-
 
 app = Flask(__name__)
 item_mapper = ItemMapper(app)
 user_mapper = UserMapper(app)
 
+ACTIVE_USER_GRACE_PERIOD = 2400
+CATALOG_MANAGER_GRACE_PERIOD = 600
+SECONDS_CLEAN_ACTIVE_USERS = 300
+SECONDS_CLEAN_CATALOG_USERS = 120
+
+
+def active_users():
+    for user in user_mapper.user_registry.active_user_registry:
+        if time.time() - user[6] > ACTIVE_USER_GRACE_PERIOD:
+            user_to_remove = user[0]
+            user_mapper.remove_from_active(user_to_remove)
+            locker = user_mapper.user_registry.check_lock()
+            if locker == user[0]:
+                user_mapper.user_registry.remove_lock()
+
+
+def catalog_users():
+    for user in user_mapper.user_registry.active_user_registry:
+        if time.time() - user[7] > CATALOG_MANAGER_GRACE_PERIOD and user[8]:
+            user_as_list = list(user)
+            user_as_list[7] = 0
+            user_mapper.remove_from_active(user[0])
+            user_mapper.user_registry.active_user_registry.append(tuple(user_as_list))
+            locker = user_mapper.user_registry.check_lock()
+            if locker == user[0]:
+                user_mapper.user_registry.remove_lock()
+
+
+sched = BackgroundScheduler(daemon=True)
+sched.add_job(active_users, 'interval', seconds=SECONDS_CLEAN_ACTIVE_USERS)
+sched.add_job(catalog_users, 'interval', seconds=SECONDS_CLEAN_CATALOG_USERS)
+sched.start()
+
 
 @app.before_request
 def before_request():
+    if len(session) > 0 and not (len(session) == 1 and '_flashes' in session):
+        user_id = session['user_id']
+        for user in user_mapper.user_registry.active_user_registry:
+            if user[0] == user_id:
+                user_as_list = list(user)
+                user_as_list[6] = time.time()
+                user_mapper.remove_from_active(session['user_id'])
+                user_mapper.user_registry.active_user_registry.append(tuple(user_as_list))
+                if "catalog_manager" in request.path and user[8]:
+                    if time.time() - user[7] > CATALOG_MANAGER_GRACE_PERIOD:
+                        user_as_list = list(user)
+                        user_as_list[8] = False
+                        user_mapper.remove_from_active(session['user_id'])
+                        user_mapper.user_registry.active_user_registry.append(tuple(user_as_list))
+                        item_mapper.uow = None
+                        locker = user_mapper.user_registry.check_lock()
+                        if locker == session['user_id']:
+                            user_mapper.user_registry.remove_lock()
+                        flash('You have been removed from the catalog manager for inactivity, changes were not saved.', 'warning')
+                        return redirect(url_for('home'))
+                    else:
+                        user_as_list = list(user)
+                        user_as_list[7] = time.time()
+                        user_mapper.remove_from_active(session['user_id'])
+                        user_mapper.user_registry.active_user_registry.append(tuple(user_as_list))
     cleared = user_mapper.check_restart_session(session)
     if cleared:
-        flash('Automatically logged out due to a disconnect', 'warning')
+        flash('Automatically logged out due to a disconnect/inactivity', 'warning')
         return redirect(url_for('home'))
 
 
@@ -85,14 +144,13 @@ def login():
                 session['first_name'] = user.first_name
                 session['user_id'] = user.id
                 session['admin'] = user.admin
+                session.permanent = True
+                app.permanent_session_lifetime = datetime.timedelta(days=30)
 
             # add the user to the active user registry in the form of a tuple (user_id, timestamp)
                 timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
 
-                user_mapper.enlist_active_user(user.id, user.first_name, user.last_name, user.email, user.admin, timestamp)
-                if user_mapper.check_another_admin(user.id):
-                    flash('Limited functionality', 'warning')
-                    return redirect(url_for('home'))
+                user_mapper.enlist_active_user(user.id, user.first_name, user.last_name, user.email, user.admin, timestamp, time.time(), time.time(), False)
 
                 flash('You are now logged in', 'success')
                 return redirect(url_for('home'))
@@ -154,10 +212,8 @@ def add_music(request_):
 @app.route('/admin_tools')
 def admin_tools_default():
     if session['logged_in']:
-        if user_mapper.validate_admin(session['user_id'], session['admin']) and not user_mapper.check_another_admin(int(session['user_id'])):
+        if user_mapper.validate_admin(session['user_id'], session['admin']):
             return render_template('admin_tools.html')
-        flash("Limited functionality, cannot modify catalog.", "warning")
-        return render_template('admin_tools.html', limited='limited')
     flash('You must be logged in as an admin to view this page.')
     return redirect(url_for('home'))
 
@@ -171,9 +227,21 @@ def admin_tools(tool):
             elif tool == 'create_admin' or tool == 'create_client':
                 return user_mapper.register(request, tool)
             elif tool == 'catalog_manager':
-                return render_template('admin_tools.html', tool=tool, catalog=item_mapper.get_catalog(), saved_changes=item_mapper.get_saved_changes())
-            elif tool == 'catalog_manager_limited':
-                return render_template('admin_tools.html', tool=tool, catalog=item_mapper.get_catalog())
+                locker = user_mapper.user_registry.check_lock()
+                if locker == -1 or locker == session['user_id']:
+                    user_mapper.user_registry.lock(session['user_id'])
+                    locker = session['user_id']
+                    for user in user_mapper.user_registry.active_user_registry:
+                        if user[0] == locker and not user[8]:
+                            user_as_list = list(user)
+                            user_as_list[7] = time.time()
+                            user_as_list[8] = True
+                            user_mapper.remove_from_active(session['user_id'])
+                            user_mapper.user_registry.active_user_registry.append(tuple(user_as_list))
+                    return render_template('admin_tools.html', tool=tool, catalog=item_mapper.get_catalog(), saved_changes=item_mapper.get_saved_changes())
+                else:
+                    flash("Catalog currently locked by ID#: " + str(locker) + ".", 'warning')
+                    return redirect(url_for('admin_tools_default'))
             elif tool == 'view_users':
                 return render_template('admin_tools.html', tool=tool, list_of_users=user_mapper.get_all_users())
         else:
@@ -263,8 +331,10 @@ def save_changes():
 @app.route('/logout')
 def logout():
     user_mapper.remove_from_active(session['user_id'])
+    locker = user_mapper.user_registry.check_lock()
+    if locker == session['user_id']:
+        user_mapper.user_registry.remove_lock()
     session.clear()
-
     flash('You are now logged out', 'success')
     return redirect(url_for('login'))
 
