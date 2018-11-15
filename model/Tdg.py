@@ -330,3 +330,40 @@ class Tdg:
             return False
         else:
             return keys
+
+# ----------------------------------------------------
+# Transactions
+
+    def get_transactions(self):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        result = cur.execute("SELECT id, user_fk, prefix, physical_id, transaction_type, timestamp FROM transaction_registry WHERE 1")
+        data = []
+        for row in cur.fetchall():
+            data.append(row)
+        cur.close()
+        if result is None:
+            return False
+        else:
+            return data
+
+    def get_active_loans(self):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        result = cur.execute("SELECT id, user_fk, prefix, physical_id, return_date FROM active_loan_registry WHERE 1")
+        data = []
+        for row in cur.fetchall():
+            data.append(row)
+        cur.close()
+        if result is None:
+            return False
+        else:
+            return data
+
+    def add_transactions(self, user_id, physical_items, type, timestamp):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        for item in physical_items:
+            cur.execute("""INSERT INTO transaction_history(user_fk, prefix, physical_id, transaction_type, timestamp)
+                    VALUES(%s, %s, %s, %s, %s)""",
+                    (user_id, item.prefix, item.id, ))
