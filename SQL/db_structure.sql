@@ -18,7 +18,8 @@ CREATE TABLE book_physical (
     id INT(6) AUTO_INCREMENT PRIMARY KEY,
     book_fk INT(6),
     status VARCHAR(100),
-    return_date DATETIME
+    return_date DATETIME,
+    user_fk INT(6) NULL DEFAULT NULL
 );
 
 
@@ -39,7 +40,6 @@ CREATE TABLE magazine_physical (
     id INT(6) AUTO_INCREMENT PRIMARY KEY,
     magazine_fk INT(6),
     status VARCHAR(100),
-    return_date DATETIME
 );
 
 
@@ -64,6 +64,7 @@ CREATE TABLE movie_physical (
     movie_fk INT(6),
     status VARCHAR(100),
     return_date DATETIME
+    user_fk INT(6) NULL DEFAULT NULL
 );
 
 
@@ -86,6 +87,7 @@ CREATE TABLE music_physical (
     music_fk INT(6),
     status VARCHAR(100),
     return_date DATETIME
+    user_fk INT(6) NULL DEFAULT NULL
 );
 
 
@@ -118,12 +120,4 @@ CREATE TABLE active_loan_registry(
     prefix VARCHAR(2),
     physical_id INT(6),
     timestamp DATETIME  
-);
-
-DROP TABLE IF EXISTS cart;
-CREATE TABLE cart(
-    id INT(7) AUTO_INCREMENT PRIMARY KEY,
-    user_fk INT(7),
-    prefix_fk VARCHAR(2),
-    physical_id_fk INT(6)
 );

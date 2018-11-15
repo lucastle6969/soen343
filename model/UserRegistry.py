@@ -1,4 +1,5 @@
 from model.User import User
+from model.Item import PhysicalBook, PhysicalMagazine, PhysicalMovie, PhysicalMusic
 
 
 class UserRegistry:
@@ -9,9 +10,27 @@ class UserRegistry:
         self.catalog_lock = -1
 
     def populate(self, all_users):
+        user_id = -1
+        items = []
         for entry in all_users:
-            self.list_of_users.append(User(entry[0], entry[1], entry[2], entry[3], entry[4], entry[5], entry[6], entry[7]))
-
+            if user_id != entry[0]:
+                if user_id != -1:
+                    current_user.borrowed_items = items[:]
+                    self.list_of_users.append(current_user)
+                user_id = entry[0]
+                current_user = User(entry[0], entry[1], entry[2], entry[3], entry[4], entry[5], entry[6], entry[7])
+                items = []
+            if entry[8] is not None:
+                    # (id, fk, status, return_date, user_fk)
+                    items.append(PhysicalBook(entry[8], entry[9], entry[10], entry[11], entry[12]))
+            if entry[13] is not None:
+                    items.append(PhysicalMusic(entry[13], entry[14], entry[15], entry[16], entry[17]))
+            if entry[18] is not None:
+                    items.append(PhysicalMovie(entry[18], entry[19], entry[20], entry[21], entry[22]))
+        #to account for the last user
+        current_user.borrowed_items = items[:]
+        self.list_of_users.append(current_user)
+            
     def check_lock(self):
         return self.catalog_lock
 

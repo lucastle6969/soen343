@@ -21,11 +21,13 @@ class Book(Item):
 
 
 class PhysicalBook:
-    def __init__(self, id, book_fk, status, return_date):
+    def __init__(self, id, book_fk, status, return_date, user_fk = None):
         self.id = id
         self.book_fk = book_fk
         self.status = status
         self.return_date = return_date
+        self.user_fk = user_fk
+        self.prefix = "bb"
 
 
 class Magazine(Item):
@@ -40,11 +42,11 @@ class Magazine(Item):
 
 
 class PhysicalMagazine:
-    def __init__(self, id, magazine_fk, status, return_date):
+    def __init__(self, id, magazine_fk, status):
         self.id = id
         self.magazine_fk = magazine_fk
         self.status = status
-        self.return_date = return_date
+        self.prefix = "ma"
 
 
 class Movie(Item):
@@ -63,11 +65,13 @@ class Movie(Item):
 
 
 class PhysicalMovie:
-    def __init__(self, id, movie_fk, status, return_date):
+    def __init__(self, id, movie_fk, status, return_date, user_fk = None):
         self.id = id
         self.movie_fk = movie_fk
         self.status = status
         self.return_date = return_date
+        self.user_fk = user_fk
+        self.prefix = "mo"
 
 
 class Music(Item):
@@ -82,9 +86,11 @@ class Music(Item):
 
 
 class PhysicalMusic:
-    def __init__(self, id, music_fk, status, return_date):
+    def __init__(self, id, music_fk, status, return_date, user_fk = None):
         self.id = id
         self.music_fk = music_fk
         self.status = status
         self.return_date = return_date
+        self.user_fk = user_fk
+        self.prefix = "mu"
 
