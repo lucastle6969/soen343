@@ -1,9 +1,17 @@
 
 class Transaction:
-    def __init__(self, transaction_id, user_fk, prefix, physical_id, transaction_type, timestamp):
+    def __init__(self, transaction_id, user_fk, physical_item):
         pass
+
+
+class HistoricalTransaction(Transaction):
+    def __init__(self, transaction_id, user_fk, physical_item, transaction_type, timestamp):
+        Transaction.__init__(self, transaction_id, user_fk, physical_item)
+        self.transaction_type = transaction_type
+        self.timestamp = timestamp
 
 
 class ActiveLoan:
-    def __init__(self, ):
-        pass
+    def __init__(self, transaction_id, user_fk, physical_item, return_date):
+        Transaction.__init__(self, transaction_id, user_fk, physical_item)
+        self.return_date = return_date

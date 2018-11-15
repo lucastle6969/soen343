@@ -360,10 +360,16 @@ class Tdg:
         else:
             return data
 
-    def add_transactions(self, user_id, physical_items, type, timestamp):
+    def add_transactions(self, user_id, physical_items, transaction_type, timestamp):
         connection = self.mysql.connect()
         cur = connection.cursor()
         for item in physical_items:
             cur.execute("""INSERT INTO transaction_history(user_fk, prefix, physical_id, transaction_type, timestamp)
-                    VALUES(%s, %s, %s, %s, %s)""",
-                    (user_id, item.prefix, item.id, ))
+                    VALUES(%s, %s, %s, %s, %s)""", (user_id, item.prefix, item.id, transaction_type, timestamp))
+            if transaction_type is "loan":
+                cur.execute("""INSERT INTO active_loan_registry(user_fk, prefix, physical_id, return_date)
+                    VALUES(%s, %s, %s, %s)""", (user_id, item.prefix, item.id, item.return_date))
+            elif transaction_type is "return":
+                cur.execute("DELETE FROM active_loan_registry WHERE user_fk = %s AND prefix = %s AND physical_id = %s", (user_id, item.prefix, item.id))
+        cur.close()
+        return True

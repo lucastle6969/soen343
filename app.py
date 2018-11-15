@@ -10,6 +10,7 @@ import time
 app = Flask(__name__)
 item_mapper = ItemMapper(app)
 user_mapper = UserMapper(app)
+transaction_mapper = TransactionMapper(app)
 
 
 @app.before_request
