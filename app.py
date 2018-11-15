@@ -62,6 +62,10 @@ def order(item_prefix):
     form = OrderForm(request.form)
     return render_template('home.html', item_list=item_mapper.get_ordered_items(form), item=item_prefix)
 
+@app.route('/cart')
+def cart():
+    return render_template('cart.html')
+
 
 @app.route('/about')
 def about():

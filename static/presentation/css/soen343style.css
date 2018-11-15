@@ -285,3 +285,7 @@ td, th {
     margin-right: 5px;
 }
 
+.cart_header{
+    font-size: 145%;
+    font-weight: bold;
+}
