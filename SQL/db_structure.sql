@@ -119,7 +119,7 @@ CREATE TABLE active_loan_registry(
     user_fk INT(7),
     prefix VARCHAR(2),
     physical_id INT(6),
-    timestamp DATETIME  
+    return_date DATETIME  
 );
 
 DROP TABLE IF EXISTS cart;
