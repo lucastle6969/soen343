@@ -5,9 +5,11 @@ from model.TransactionMapper import TransactionMapper
 from passlib.hash import sha256_crypt
 from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, SearchForm, Forms, OrderForm
 from apscheduler.schedulers.background import BackgroundScheduler
+from time import localtime, strftime
 
 import datetime
 import time
+
 
 app = Flask(__name__)
 app.jinja_env.filters['zip'] = zip
@@ -183,13 +185,14 @@ def borrowed_items():
     if request.method == 'POST':
         valid_return_state = user_mapper.validate_return()
         if valid_return_state is True:
-            item_mapper.return_items(user_id, request.form)
+            physical_items = item_mapper.get_physical_items_from_tuple(request.form)
+            item_mapper.return_items(user_id, request.form, physical_items)
             user_mapper.remove_borrowed_items(user_id, request.form)
-            # TODO transaction_mapper.add_transaction()
-            flash("Items were successfully returned.")
+            transaction_mapper.add_transactions(user_id, physical_items, "return", strftime('%Y-%m-%d %H:%M:%S', localtime()))
+            flash("Items were successfully returned.", 'success')
             return render_template('home.html', item_list=item_mapper.get_all_items("bb"), item="bb")
         else:
-            flash("There was an problem returning your items, please try again later.")
+            flash("There was an problem returning your items, please try again later.", 'warning')
             return redirect('/borrowed_items')
     else:
         physical_items = []

@@ -382,7 +382,7 @@ class Tdg:
         connection = self.mysql.connect()
         cur = connection.cursor()
         for item in physical_items:
-            cur.execute("""INSERT INTO transaction_history(user_fk, prefix, physical_id, transaction_type, timestamp)
+            cur.execute("""INSERT INTO transaction_registry(user_fk, prefix, physical_id, transaction_type, timestamp)
                     VALUES(%s, %s, %s, %s, %s)""", (user_id, item.prefix, item.id, transaction_type, timestamp))
             if transaction_type is "loan":
                 cur.execute("""INSERT INTO active_loan_registry(user_fk, prefix, physical_id, return_date)
@@ -390,7 +390,7 @@ class Tdg:
             elif transaction_type is "return":
                 cur.execute("DELETE FROM active_loan_registry WHERE user_fk = %s AND prefix = %s AND physical_id = %s", (user_id, item.prefix, item.id))
         
-        result = cur.execute("SELECT * FROM transaction_history ORDER BY id DESC LIMIT 1")
+        result = cur.execute("SELECT * FROM transaction_registry ORDER BY id DESC LIMIT 1")
         if result > 0:
             last_historical_id = cur.fetchone()
             last_historical_id = last_historical_id[0]
