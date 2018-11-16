@@ -6,6 +6,19 @@ class Item:
         self.quantity = quantity
 
 
+class PhysicalItem:
+    def __init__(self, id, prefix, item_fk):
+        self.id = id
+        self.prefix = prefix
+        self.item_fk = item_fk
+
+    def __eq__(self, other):
+        return self.id == other.id and self.prefix == other.prefix
+
+    def __hash__(self):
+        return hash(('id', self.id, "prefix", self.prefix))
+
+
 class Book(Item):
     def __init__(self, item_id, title, prefix, author, item_format, pages, publisher, publication_year, language, isbn10, isbn13, quantity, copies):
         Item.__init__(self, item_id, title, prefix, quantity)
@@ -20,14 +33,12 @@ class Book(Item):
         self.copies = copies
 
 
-class PhysicalBook:
+class PhysicalBook(PhysicalItem):
     def __init__(self, id, item_fk, status, return_date, user_fk = None):
-        self.id = id
-        self.item_fk = item_fk
+        PhysicalItem.__init__(self, id, "bb", item_fk)
         self.status = status
         self.return_date = return_date
         self.user_fk = user_fk
-        self.prefix = "bb"
 
 
 class Magazine(Item):
@@ -41,12 +52,10 @@ class Magazine(Item):
         self.copies = copies
 
 
-class PhysicalMagazine:
+class PhysicalMagazine(PhysicalItem):
     def __init__(self, id, item_fk, status):
-        self.id = id
-        self.item_fk = item_fk
+        PhysicalItem.__init__(self, id, "ma", item_fk)
         self.status = status
-        self.prefix = "ma"
 
 
 class Movie(Item):
@@ -64,14 +73,12 @@ class Movie(Item):
         self.copies = copies
 
 
-class PhysicalMovie:
+class PhysicalMovie(PhysicalItem):
     def __init__(self, id, item_fk, status, return_date, user_fk = None):
-        self.id = id
-        self.item_fk = item_fk
+        PhysicalItem.__init__(self, id, "mo", item_fk)
         self.status = status
         self.return_date = return_date
         self.user_fk = user_fk
-        self.prefix = "mo"
 
 
 class Music(Item):
@@ -85,12 +92,10 @@ class Music(Item):
         self.copies = copies
 
 
-class PhysicalMusic:
+class PhysicalMusic(PhysicalItem):
     def __init__(self, id, item_fk, status, return_date, user_fk = None):
-        self.id = id
-        self.item_fk = item_fk
+        PhysicalItem.__init__(self, id, "mu", item_fk)
         self.status = status
         self.return_date = return_date
         self.user_fk = user_fk
-        self.prefix = "mu"
 
