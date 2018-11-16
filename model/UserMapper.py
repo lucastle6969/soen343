@@ -66,6 +66,6 @@ class UserMapper:
 
     def remove_borrowed_items(self, user_id, prefix_fk_id_tuple):
         for tup in prefix_fk_id_tuple:
-            prefix = tup[0][0:2]
-            item_fk = int(tup[0][2:])
-            self.user_registry.remove_borrowed_items(user_id, prefix, item_fk, int(tup[1]))
+            prefix = tup[0:2]
+            item_fk = int(tup[2:])
+            self.user_registry.remove_borrowed_items(user_id, prefix, item_fk, int(prefix_fk_id_tuple[tup]))

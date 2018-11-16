@@ -181,6 +181,7 @@ def borrowed_items():
         if valid_return_state is True:
             item_mapper.return_items(user_id, request.form)
             user_mapper.remove_borrowed_items(user_id, request.form)
+            # TODO transaction_mapper.add_transaction()
             flash("Items were successfully returned.")
             return render_template('home.html', item_list=item_mapper.get_all_items("bb"), item="bb")
         else:
