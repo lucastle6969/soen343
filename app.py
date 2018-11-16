@@ -169,24 +169,32 @@ def login():
 
     return render_template('login.html', form=form)
 
+
 @app.route('/borrowed_items', methods=['GET', 'POST'])
 def borrowed_items():
+    if session.get('user_id') is not None:
+        user_id = session['user_id']
+    else:
+        return redirect('/home')
     if request.method == 'POST':
-        # TODO: return selected items
-        # request.form returns a list of physical items tuples where the
-        # 'name' field corresponds to the item prefix and the 'value' corresponds
-        # to the physical item id
-        # item_mapper.return_items(user_id, request.form)
-        return render_template('home.html', item_list=item_mapper.get_all_items("bb"), item="bb")
+        valid_return_state = user_mapper.validate_return()
+        if valid_return_state is True:
+            item_mapper.return_items(user_id, request.form)
+            user_mapper.remove_borrowed_items(user_id, request.form)
+            flash("Items were successfully returned.")
+            return render_template('home.html', item_list=item_mapper.get_all_items("bb"), item="bb")
+        else:
+            flash("There was an problem returning your items, please try again later.")
+            return redirect('/borrowed_items', method='GET')
     else:
         physical_items = []
-        user_id = session['user_id']
         for user in user_mapper.user_registry.list_of_users:
             if user.id == user_id:
                 physical_items = user.borrowed_items
 
         detailed_items = item_mapper.get_item_details(physical_items)
         return render_template('borrowed_items.html', borrowed_items=zip(physical_items, detailed_items))
+
 
 def add_book(request_):
     form = BookForm(request_.form)

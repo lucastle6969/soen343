@@ -355,3 +355,8 @@ class ItemMapper:
                 item = self.catalog.get_item_by_id(physical_item.prefix, physical_item.music_fk)
             items.append(item)
         return items
+
+    def return_items(self, user_id, prefix_id_tuple):
+        for tup in prefix_id_tuple:
+            self.catalog.mark_as_returned(tup[0], int(tup[1]), int(tup[2]))
+        return True

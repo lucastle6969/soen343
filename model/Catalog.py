@@ -117,3 +117,12 @@ class Catalog:
             if item is not None:
                 self.item_catalog.remove(item)
         return True
+
+    def mark_as_returned(self, prefix, item_fk, physical_id):
+        for item in self.item_catalog:
+            if item.prefix is prefix and item.id is item_fk:
+                for physical_item in item.copies:
+                    if physical_item.id is physical_id:
+                        physical_item.status = "Available"
+                        physical_item.return_date = None
+            
