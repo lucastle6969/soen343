@@ -12,7 +12,10 @@
             {% include 'includes/_catalog_manager.html' %}
         {% elif tool == "view_users" %}
             {% include 'includes/_view_users.html' %}
-
+        {% elif tool == "view_transaction_history" %}
+            {% include 'includes/_transaction_history.html' %}
+        {% elif tool == "view_active_loans" %}
+            {% include 'includes/_active_loans.html' %}
         {% endif %}
     {% elif item %}
         {% include 'includes/_catalog_manager.html' %}
@@ -30,6 +33,8 @@
                 {% else %}
                     <a class="admin-tools rounded" href="/admin_tools/catalog_manager"><div class="rounded">Catalog Manager</div></a>
                 {% endif %}
+                <a class="admin-tools rounded" href="/admin_tools/view_transaction_history"><div class="rounded">View Transactions</div></a>
+                <a class="admin-tools rounded" href="/admin_tools/view_active_loans"><div class="rounded">View Active Loans</div></a>
             </div>
         </div>
     {% endif %}
