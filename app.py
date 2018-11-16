@@ -186,7 +186,7 @@ def borrowed_items():
             return render_template('home.html', item_list=item_mapper.get_all_items("bb"), item="bb")
         else:
             flash("There was an problem returning your items, please try again later.")
-            return redirect('/borrowed_items', method='GET')
+            return redirect('/borrowed_items')
     else:
         physical_items = []
         for user in user_mapper.user_registry.list_of_users:
