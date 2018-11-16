@@ -89,6 +89,9 @@ class UserRegistry:
     def remove_borrowed_items(self, user_id, prefix, item_fk, physical_id):
         for user in self.list_of_users:
             if user.id == user_id:
+                to_remove = []
                 for item in user.borrowed_items:
                     if item.prefix == prefix and item.item_fk == item_fk and item.id == physical_id:
-                        user.borrowed_items.remove(item)
+                        to_remove.append(item)
+                for item_re in to_remove:
+                    user.borrowed_items.remove(item_re)
