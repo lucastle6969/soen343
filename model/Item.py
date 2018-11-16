@@ -21,9 +21,9 @@ class Book(Item):
 
 
 class PhysicalBook:
-    def __init__(self, id, book_fk, status, return_date, user_fk = None):
+    def __init__(self, id, item_fk, status, return_date, user_fk = None):
         self.id = id
-        self.book_fk = book_fk
+        self.item_fk = item_fk
         self.status = status
         self.return_date = return_date
         self.user_fk = user_fk
@@ -42,9 +42,9 @@ class Magazine(Item):
 
 
 class PhysicalMagazine:
-    def __init__(self, id, magazine_fk, status):
+    def __init__(self, id, item_fk, status):
         self.id = id
-        self.magazine_fk = magazine_fk
+        self.item_fk = item_fk
         self.status = status
         self.prefix = "ma"
 
@@ -65,9 +65,9 @@ class Movie(Item):
 
 
 class PhysicalMovie:
-    def __init__(self, id, movie_fk, status, return_date, user_fk = None):
+    def __init__(self, id, item_fk, status, return_date, user_fk = None):
         self.id = id
-        self.movie_fk = movie_fk
+        self.item_fk = item_fk
         self.status = status
         self.return_date = return_date
         self.user_fk = user_fk
@@ -86,9 +86,9 @@ class Music(Item):
 
 
 class PhysicalMusic:
-    def __init__(self, id, music_fk, status, return_date, user_fk = None):
+    def __init__(self, id, item_fk, status, return_date, user_fk = None):
         self.id = id
-        self.music_fk = music_fk
+        self.item_fk = item_fk
         self.status = status
         self.return_date = return_date
         self.user_fk = user_fk

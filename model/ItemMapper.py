@@ -31,7 +31,7 @@ class ItemMapper:
         for book in self.tdg.get_books():
             copies = []
             for single_copy in all_copies:
-                if single_copy.book_fk == book[0]:
+                if single_copy.item_fk == book[0]:
                     copies.append(single_copy)
             book_list.append(Book(book[0], book[1], "bb", book[2], book[3], book[4], book[5], book[6], book[7], book[8], book[9], book[10], copies))
         return book_list
@@ -44,7 +44,7 @@ class ItemMapper:
         for magazine in self.tdg.get_magazines():
             copies = []
             for single_copy in all_copies:
-                if single_copy.magazine_fk == magazine[0]:
+                if single_copy.item_fk == magazine[0]:
                     copies.append(single_copy)
             magazine_list.append(Magazine(magazine[0], magazine[1], "ma", magazine[2], magazine[3], magazine[4], magazine[5], magazine[6], magazine[7], copies))
         return magazine_list
@@ -57,7 +57,7 @@ class ItemMapper:
         for music in self.tdg.get_music():
             copies = []
             for single_copy in all_copies:
-                if single_copy.music_fk == music[0]:
+                if single_copy.item_fk == music[0]:
                     copies.append(single_copy)
             music_list.append(Music(music[0], music[1], "mu", music[2], music[3], music[4], music[5], music[6], music[7], copies))
         return music_list
@@ -70,7 +70,7 @@ class ItemMapper:
         for movie in self.tdg.get_movies():
             copies = []
             for single_copy in all_copies:
-                if single_copy.movie_fk == movie[0]:
+                if single_copy.item_fk == movie[0]:
                     copies.append(single_copy)
             movie_list.append(Movie(movie[0], movie[1], "mo", movie[2], movie[3], movie[4], movie[5], movie[6], movie[7], movie[8], movie[9], movie[10], copies))
         return movie_list
@@ -346,13 +346,13 @@ class ItemMapper:
         for physical_item in physical_items:
             item = None
             if physical_item.prefix == "bb":
-                item = self.catalog.get_item_by_id(physical_item.prefix, physical_item.book_fk)
+                item = self.catalog.get_item_by_id(physical_item.prefix, physical_item.item_fk)
             elif physical_item.prefix == "ma":
-                item = self.catalog.get_item_by_id(physical_item.prefix, physical_item.magazine_fk)
+                item = self.catalog.get_item_by_id(physical_item.prefix, physical_item.item_fk)
             elif physical_item.prefix == "mo":
-                item = self.catalog.get_item_by_id(physical_item.prefix, physical_item.movie_fk)
+                item = self.catalog.get_item_by_id(physical_item.prefix, physical_item.item_fk)
             elif physical_item.prefix == "mu":
-                item = self.catalog.get_item_by_id(physical_item.prefix, physical_item.music_fk)
+                item = self.catalog.get_item_by_id(physical_item.prefix, physical_item.item_fk)
             items.append(item)
         return items
 

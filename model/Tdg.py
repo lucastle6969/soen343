@@ -78,7 +78,7 @@ class Tdg:
         # This query gets all users and all the loans of those users.
         connection = self.mysql.connect()
         cur = connection.cursor()
-        sql = "SELECT u.id, u.first_name, u.last_name, u.address, u.email, u.phone, u.admin, u.password, bp.id, bp.book_fk, bp.status, bp.return_date, bp.user_fk, mup.id, mup.music_fk, mup.status, mup.return_date, mup.user_fk, mop.id, mop.movie_fk, mop.status, mop.return_date, mop.user_fk "
+        sql = "SELECT u.id, u.first_name, u.last_name, u.address, u.email, u.phone, u.admin, u.password, bp.id, bp.item_fk, bp.status, bp.return_date, bp.user_fk, mup.id, mup.item_fk, mup.status, mup.return_date, mup.user_fk, mop.id, mop.item_fk, mop.status, mop.return_date, mop.user_fk "
         sql += "FROM user AS u LEFT JOIN book_physical AS bp ON (u.id = bp.user_fk) "
         sql += "LEFT JOIN music_physical AS mup ON (u.id = mup.user_fk) "
         sql += "LEFT JOIN movie_physical AS mop ON (u.id = mop.user_fk) WHERE 1 "
@@ -103,7 +103,7 @@ class Tdg:
         result = cur.execute("SELECT * FROM book ORDER BY id DESC LIMIT 1")
         new_book_id = cur.fetchone()
         for x in range(0, book.quantity):
-            cur.execute("""INSERT INTO book_physical(book_fk, status) VALUES (%s, %s)""", (str(new_book_id[0]), "Available"))
+            cur.execute("""INSERT INTO book_physical(item_fk, status) VALUES (%s, %s)""", (str(new_book_id[0]), "Available"))
         # send new id back to the controller
         cur.close()
         if result > 0:
@@ -121,7 +121,7 @@ class Tdg:
         result = cur.execute("SELECT * FROM magazine ORDER BY id DESC LIMIT 1")
         new_magazine_id = cur.fetchone()
         for x in range(0, magazine.quantity):
-            cur.execute("""INSERT INTO magazine_physical(magazine_fk, status) VALUES (%s, %s)""", (str(new_magazine_id[0]), "Available"))
+            cur.execute("""INSERT INTO magazine_physical(item_fk, status) VALUES (%s, %s)""", (str(new_magazine_id[0]), "Available"))
         cur.close()
         if result > 0:
             return new_magazine_id[0]
@@ -138,7 +138,7 @@ class Tdg:
         result = cur.execute("SELECT * FROM movie ORDER BY id DESC LIMIT 1")
         new_movie_id = cur.fetchone()
         for x in range(0, movie.quantity):
-            cur.execute("""INSERT INTO movie_physical(movie_fk, status) VALUES (%s, %s)""", (str(new_movie_id[0]), "Available"))
+            cur.execute("""INSERT INTO movie_physical(item_fk, status) VALUES (%s, %s)""", (str(new_movie_id[0]), "Available"))
         cur.close()
         if result > 0:
             return new_movie_id[0]
@@ -155,7 +155,7 @@ class Tdg:
         result = cur.execute("SELECT * FROM music ORDER BY id DESC LIMIT 1")
         new_music_id = cur.fetchone()
         for x in range(0, music.quantity):
-            cur.execute("""INSERT INTO music_physical(music_fk, status) VALUES (%s, %s)""", (str(new_music_id[0]), "Available"))
+            cur.execute("""INSERT INTO music_physical(item_fk, status) VALUES (%s, %s)""", (str(new_music_id[0]), "Available"))
         cur.close()
         if result > 0:
             return new_music_id[0]
@@ -179,7 +179,7 @@ class Tdg:
     def get_books_physical(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, book_fk, status, return_date, user_fk FROM book_physical")
+        result = cur.execute("SELECT id, item_fk, status, return_date, user_fk FROM book_physical")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -205,7 +205,7 @@ class Tdg:
     def get_magazines_physical(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, magazine_fk, status FROM magazine_physical")
+        result = cur.execute("SELECT id, item_fk, status FROM magazine_physical")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -231,7 +231,7 @@ class Tdg:
     def get_movies_physical(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, movie_fk, status, return_date, user_fk FROM movie_physical")
+        result = cur.execute("SELECT id, item_fk, status, return_date, user_fk FROM movie_physical")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -257,7 +257,7 @@ class Tdg:
     def get_music_physical(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, music_fk, status, return_date, user_fk FROM music_physical")
+        result = cur.execute("SELECT id, item_fk, status, return_date, user_fk FROM music_physical")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -272,7 +272,7 @@ class Tdg:
         cur = connection.cursor()
         for book in deleted_books:
             cur.execute("DELETE FROM book WHERE id = %s", book.id)
-            cur.execute("DELETE FROM book_physical WHERE book_fk = %s", book.id)
+            cur.execute("DELETE FROM book_physical WHERE item_fk = %s", book.id)
         # ideally a check if there were errors here and return a boolean to be handled by the mapper
         cur.close()
 
@@ -281,7 +281,7 @@ class Tdg:
         cur = connection.cursor()
         for magazine in deleted_magazines:
             cur.execute("DELETE FROM magazine WHERE id = %s", magazine.id)
-            cur.execute("DELETE FROM magazine_physical WHERE magazine_fk = %s", magazine.id)
+            cur.execute("DELETE FROM magazine_physical WHERE item_fk = %s", magazine.id)
         cur.close()
 
     def delete_movies(self, deleted_movies):
@@ -289,7 +289,7 @@ class Tdg:
         cur = connection.cursor()
         for movie in deleted_movies:
             cur.execute("DELETE FROM movie WHERE id = %s", movie.id)
-            cur.execute("DELETE FROM movie_physical WHERE movie_fk = %s", movie.id)
+            cur.execute("DELETE FROM movie_physical WHERE item_fk = %s", movie.id)
         cur.close()
 
     def delete_music(self, deleted_music):
@@ -297,7 +297,7 @@ class Tdg:
         cur = connection.cursor()
         for music in deleted_music:
             cur.execute("DELETE FROM music WHERE id = %s", music.id)
-            cur.execute("DELETE FROM music_physical WHERE music_fk = %s", music.id)
+            cur.execute("DELETE FROM music_physical WHERE item_fk = %s", music.id)
         cur.close()
 
     def modify_books(self, modified_books):
@@ -334,13 +334,13 @@ class Tdg:
         cur = connection.cursor()
         keys = []
         if prefix == "bb":
-            result = cur.execute("SELECT id FROM book_physical WHERE book_fk = "+str(id))
+            result = cur.execute("SELECT id FROM book_physical WHERE item_fk = "+str(id))
         if prefix == "ma":
-            result = cur.execute("SELECT id FROM magazine_physical WHERE magazine_fk = "+str(id))
+            result = cur.execute("SELECT id FROM magazine_physical WHERE item_fk = "+str(id))
         if prefix == "mo":
-            result = cur.execute("SELECT id FROM movie_physical WHERE movie_fk = "+str(id))
+            result = cur.execute("SELECT id FROM movie_physical WHERE item_fk = "+str(id))
         if prefix == "mu":
-            result = cur.execute("SELECT id FROM music_physical WHERE music_fk = "+str(id))
+            result = cur.execute("SELECT id FROM music_physical WHERE item_fk = "+str(id))
         for row in cur.fetchall():
             keys.append(row)
         cur.close()
