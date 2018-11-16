@@ -111,7 +111,6 @@ class Uow():
         modified_items = []
         deleted_items = []
 
-        print("Get saved changes*********************************")
         for created_pair in self.created_items:
             if created_pair[0] == "bb":
                 for mapped_pair in self.mapped_book_items:

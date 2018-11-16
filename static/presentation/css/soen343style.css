@@ -120,6 +120,16 @@
     text-decoration:none;
 }
 
+.detailed_copies{
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+    border-radius: 5px;
+    text-align: center;
+    padding: 4px;
+    background-color: white;
+}
+
 #tools-title {
     font-size: 145%;
 }

@@ -31,29 +31,26 @@
                 <div class="form-group text-white">
                     {{render_field(form.isbn13, class_="form-control", placeholder="13-digit number")}}
                  </div>
-                <tr>
-                    <div class="form-group text-white">
-                        {{render_field(form.quantity, class_="form-control", placeholder="From 0 to 255")}}
-                    </div>
-
-                    <table class="table table-hover table-bordered">
-                        <thead>
-                        </thead>
-                        <tbody>
-                        {% for x in copies %}
-                        <tr>
-                            <div class="copies">
-                                    Copy:  {{x.status}}   |   {{x.return_date}}
-                                    <input type="submit" value="Delete copy" />
-                            </div>
-                        </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                    <td>
-                        <input type="submit" value="Add more copies" />
-                    </td>
-                </tr>
+                <div class="form-group text-white">
+                    {{render_field(form.quantity, class_="form-control", placeholder="From 0 to 255")}}
+                </div>
+                <table class="table table-hover table-bordered">
+                    <thead>
+                    </thead>
+                    <tbody>
+                    {% for x in copies %}
+                    <tr>
+                        <div class="detailed_copies">
+                                Copy:  {{x.status}}   |   {{x.return_date}}
+                                <input type="submit" value="Delete copy" />
+                        </div>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <td>
+                    <input type="submit" value="Add more copies" onclick=""/>
+                </td>
                 <div class="row form-group text-white">
                     <input type="submit" class="col-md-5 btnSubmit" value="Modify" />
                     <div class="col-md-2"></div>

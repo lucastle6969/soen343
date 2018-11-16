@@ -102,8 +102,7 @@ class Tdg:
         # get the new user id
         result = cur.execute("SELECT * FROM book ORDER BY id DESC LIMIT 1")
         new_book_id = cur.fetchone()
-        for x in range(0, book.quantity):
-            cur.execute("""INSERT INTO book_physical(book_fk, status) VALUES (%s, %s)""", (str(new_book_id[0]), "Available"))
+        self.add_physical_book(book.quantity, new_book_id, cur)
         # send new id back to the controller
         cur.close()
         if result > 0:
@@ -111,6 +110,10 @@ class Tdg:
         else:
             new_book_id = False
         return new_book_id
+
+    def add_physical_book(self, quantity, id, cur):
+        for x in range(0, quantity):
+            cur.execute("""INSERT INTO book_physical(book_fk, status) VALUES (%s, %s)""", (str(id[0]), "Available"))
 
     def add_magazine(self, magazine):
         connection = self.mysql.connect()
@@ -120,14 +123,17 @@ class Tdg:
                     (magazine.title, magazine.publisher, magazine.publication_date, magazine.language, magazine.isbn10, magazine.isbn13, magazine.quantity))
         result = cur.execute("SELECT * FROM magazine ORDER BY id DESC LIMIT 1")
         new_magazine_id = cur.fetchone()
-        for x in range(0, magazine.quantity):
-            cur.execute("""INSERT INTO magazine_physical(magazine_fk, status) VALUES (%s, %s)""", (str(new_magazine_id[0]), "Available"))
+        self.add_physical_magazine(magazine.quantity, new_magazine_id, cur)
         cur.close()
         if result > 0:
             return new_magazine_id[0]
         else:
             new_magazine_id = False
         return new_magazine_id
+
+    def add_physical_magazine(self, magazine, id, cur):
+        for x in range(0, quantity):
+            cur.execute("""INSERT INTO magazine_physical(magazine_fk, status) VALUES (%s, %s)""", (str(id[0]), "Available"))
 
     def add_movie(self, movie):
         connection = self.mysql.connect()
@@ -137,14 +143,17 @@ class Tdg:
                     (movie.title, movie.director, movie.producers, movie.actors, movie.language, movie.subtitles, movie.dubbed, movie.release_date, movie.runtime, movie.quantity))
         result = cur.execute("SELECT * FROM movie ORDER BY id DESC LIMIT 1")
         new_movie_id = cur.fetchone()
-        for x in range(0, movie.quantity):
-            cur.execute("""INSERT INTO movie_physical(movie_fk, status) VALUES (%s, %s)""", (str(new_movie_id[0]), "Available"))
+        self.add_physical_movie(movie.quantity, new_movie_id, cur)
         cur.close()
         if result > 0:
             return new_movie_id[0]
         else:
             new_movie_id = False
         return new_movie_id
+
+    def add_physical_movie(self, quantity, id, cur):
+        for x in range(0, quantity):
+            cur.execute("""INSERT INTO movie_physical(movie_fk, status) VALUES (%s, %s)""", (str(id[0]), "Available"))
 
     def add_music(self, music):
         connection = self.mysql.connect()
@@ -154,14 +163,17 @@ class Tdg:
                     (music.title, music.media_type, music.artist, music.label, music.release_date, music.asin, music.quantity))
         result = cur.execute("SELECT * FROM music ORDER BY id DESC LIMIT 1")
         new_music_id = cur.fetchone()
-        for x in range(0, music.quantity):
-            cur.execute("""INSERT INTO music_physical(music_fk, status) VALUES (%s, %s)""", (str(new_music_id[0]), "Available"))
-        cur.close()
+        self.add_physical_music(music.quantity, new_music_id, cur)
+        cur.close
         if result > 0:
             return new_music_id[0]
         else:
             new_music_id = False
         return new_music_id
+ 
+    def add_physical_music(self, quantity, id, cur):
+        for x in range(0, quantity):
+            cur.execute("""INSERT INTO music_physical(music_fk, status) VALUES (%s, %s)""", (str(id[0]), "Available"))
 
     def get_books(self):
         connection = self.mysql.connect()
@@ -304,7 +316,7 @@ class Tdg:
         connection = self.mysql.connect()
         cur = connection.cursor()
         for book in modified_books:
-            cur.execute("UPDATE book SET title = %s, author = %s, format = %s, pages = %s, publisher = %s, publication_year = %s, language = %s, isbn10 = %s, isbn13 = %s , quantity = %s WHERE id = %s", (book.title, book.author, book.format, book.pages, book.publisher, book.publication_year, book.language, book.isbn10, book.isbn13, book.id, book.quantity))
+            cur.execute("UPDATE book SET title = %s, author = %s, format = %s, pages = %s, publisher = %s, publication_year = %s, language = %s, isbn10 = %s, isbn13 = %s , quantity = %s WHERE id = %s", (book.title, book.author, book.format, book.pages, book.publisher, book.publication_year, book.language, book.isbn10, book.isbn13, book.quantity, book.id))
         # ideally a check if there were errors here and return a boolean to be handled by the mapper
         cur.close()
 
@@ -312,21 +324,21 @@ class Tdg:
         connection = self.mysql.connect()
         cur = connection.cursor()
         for magazine in modified_magazines:
-            cur.execute("UPDATE magazine SET title = %s, publisher = %s, publication_date = %s, language = %s, isbn10 = %s, isbn13 = %s WHERE id = %s", (magazine.title, magazine.publisher, magazine.publication_date, magazine.language, magazine.isbn10, magazine.isbn13, magazine.id))
+            cur.execute("UPDATE magazine SET title = %s, publisher = %s, publication_date = %s, language = %s, isbn10 = %s, isbn13 = %s, quantity = %s WHERE id = %s", (magazine.title, magazine.publisher, magazine.publication_date, magazine.language, magazine.isbn10, magazine.isbn13, magazine.quantity, magazine.id))
         cur.close()
 
     def modify_movies(self, modified_movies):
         connection = self.mysql.connect()
         cur = connection.cursor()
         for movie in modified_movies:
-            cur.execute("UPDATE movie SET title = %s, director = %s, producers = %s, actors = %s, language = %s, subtitles = %s, dubbed = %s, release_date = %s, runtime = %s WHERE id = %s", (movie.title, movie.director, movie.producers, movie.actors, movie.language, movie.subtitles, movie.dubbed, movie.release_date, movie.runtime, movie.id))
+            cur.execute("UPDATE movie SET title = %s, director = %s, producers = %s, actors = %s, language = %s, subtitles = %s, dubbed = %s, release_date = %s, runtime = %s, quantity = %s WHERE id = %s", (movie.title, movie.director, movie.producers, movie.actors, movie.language, movie.subtitles, movie.dubbed, movie.release_date, movie.runtime, movie.quantity, movie.id))
         cur.close()
 
     def modify_music(self, modified_music):
         connection = self.mysql.connect()
         cur = connection.cursor()
         for music in modified_music:
-            cur.execute("UPDATE music SET title = %s, media_type = %s, artist = %s, label = %s, release_date = %s, asin = %s WHERE id = %s", (music.title, music.media_type, music.artist, music.label, music.release_date, music.asin, music.id))
+            cur.execute("UPDATE music SET title = %s, media_type = %s, artist = %s, label = %s, release_date = %s, asin = %s, quantity = %s WHERE id = %s", (music.title, music.media_type, music.artist, music.label, music.release_date, music.asin, music.quantity, music.id))
         cur.close()
 
     def get_physical_keys(self, id, prefix):
