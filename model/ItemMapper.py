@@ -356,7 +356,9 @@ class ItemMapper:
             items.append(item)
         return items
 
-    def return_items(self, user_id, prefix_id_tuple):
-        for tup in prefix_id_tuple:
-            self.catalog.mark_as_returned(tup[0], int(tup[1]), int(tup[2]))
+    def return_items(self, user_id, prefix_fk_id_tuple):
+        for tup in prefix_fk_id_tuple:
+            prefix = tup[0][0:2]
+            item_fk = int(tup[0][2:])
+            self.catalog.mark_as_returned(prefix, item_fk, int(tup[1]))
         return True

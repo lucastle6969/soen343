@@ -125,4 +125,3 @@ class Catalog:
                     if physical_item.id is physical_id:
                         physical_item.status = "Available"
                         physical_item.return_date = None
-            

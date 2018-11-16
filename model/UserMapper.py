@@ -60,3 +60,12 @@ class UserMapper:
 
     def remove_from_active(self, user_id):
         self.user_registry.remove_from_active(user_id)
+
+    def validate_return(self):
+        return self.user_registry.catalog_lock is -1
+
+    def remove_borrowed_items(self, user_id, prefix_fk_id_tuple):
+        for tup in prefix_fk_id_tuple:
+            prefix = tup[0][0:2]
+            item_fk = int(tup[0][2:])
+            self.user_registry.remove_borrowed_items(user_id, prefix, item_fk, int(tup[1]))
