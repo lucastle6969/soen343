@@ -297,6 +297,7 @@ class ItemMapper:
                 elif item.prefix == "mu":
                     modified_music.append(item)
             self.catalog.edit_items(items_to_commit[1])
+            print("End method of ItemMappter ******************************************************************************")
             if len(modified_books) != 0:
                 self.tdg.modify_books(modified_books)
             if len(modified_magazines) != 0:
