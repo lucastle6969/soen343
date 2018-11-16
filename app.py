@@ -175,8 +175,13 @@ def borrowed_items():
         # item_mapper.return_items(user_id, request.form)
         return render_template('home.html', item_list=item_mapper.get_all_items("bb"), item="bb")
     else:
-        # Temporarily display all books as the user's borrowed items
-        return render_template('borrowed_items.html', borrowed_items=item_mapper.get_all_books())
+        borrowed_items = []
+        user_id = session['user_id']
+        for user in user_mapper.user_registry.list_of_users:
+            if user.id == user_id:
+                borrowed_items = user.borrowed_items
+
+        return render_template('borrowed_items.html', borrowed_items=item_mapper.get_item_details(borrowed_items))
 
 def add_book(request_):
     form = BookForm(request_.form)

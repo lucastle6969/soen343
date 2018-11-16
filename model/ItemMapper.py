@@ -340,3 +340,18 @@ class ItemMapper:
 
         self.visible_items = self.catalog.order_items(self.visible_items, order_filter, order_type)
         return self.visible_items
+
+    def get_item_details(self, physical_items):
+        items = []
+        for physical_item in physical_items:
+            item = None
+            if physical_item.prefix == "bb":
+                item = self.catalog.get_item_by_id(physical_item.prefix, physical_item.book_fk)
+            elif physical_item.prefix == "ma":
+                item = self.catalog.get_item_by_id(physical_item.prefix, physical_item.magazine_fk)
+            elif physical_item.prefix == "mo":
+                item = self.catalog.get_item_by_id(physical_item.prefix, physical_item.movie_fk)
+            elif physical_item.prefix == "mu":
+                item = self.catalog.get_item_by_id(physical_item.prefix, physical_item.music_fk)
+            items.append(item)
+        return items
