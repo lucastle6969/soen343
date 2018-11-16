@@ -356,11 +356,19 @@ class ItemMapper:
             items.append(item)
         return items
 
-    def return_items(self, user_id, prefix_fk_id_tuple):
+    def return_items(self, user_id, prefix_fk_id_tuple, physical_items):
         for tup in prefix_fk_id_tuple:
             prefix = tup[0:2]
             item_fk = int(tup[2:])
             self.catalog.mark_as_returned(prefix, item_fk, int(prefix_fk_id_tuple[tup]))
-
-        # TODO TDG update
+        self.tdg.mark_as_returned(physical_items)
         return True
+
+    def get_physical_items_from_tuple(self, prefix_fk_id_tuple):
+        physical_items = []
+        for tup in prefix_fk_id_tuple:
+            prefix = tup[0:2]
+            item_fk = int(tup[2:])
+            item_id = int(prefix_fk_id_tuple[tup])
+            physical_items.append(self.catalog.get_physical_items_from_tuple(prefix, item_fk, item_id))
+        return physical_items
