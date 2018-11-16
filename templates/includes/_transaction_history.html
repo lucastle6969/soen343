@@ -14,6 +14,7 @@
         </tr>
     </thead>
     <tbody>
+        {% for x in transaction %}
         <tr>
             <td>{{x.transaction_id}}</td>
             <td>{{x.user_fk}}</td>
@@ -27,11 +28,11 @@
             <td>{{x.transaction_type}}</td>
             <td>{{x.timestamp}}</td>
             <td>{% if x.transaction_type == "loan" %} x.physical_item.return_date {% else %} N/A {% endif %}</td>
-
         </tr>
+        {% endfor %}
     </tbody>
 </table>
-{% endfor %}
+
 <!-- This script should not be called from an external js file -->
 <script>
     $(document).ready( function () {

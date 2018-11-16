@@ -12,6 +12,7 @@
         </tr>
     </thead>
     <tbody>
+        {% for x in transaction %}
         <tr>
             <td>{{x.transaction_id}}</td>
             <td>{{x.user_fk}}</td>
@@ -24,6 +25,7 @@
             </td>
             <td>{{x.physical_item.return_date}}</td>
         </tr>
+        {% endfor %}
     </tbody>
 </table>
 {% endfor %}
