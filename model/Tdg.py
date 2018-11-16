@@ -349,6 +349,19 @@ class Tdg:
         else:
             return keys
 
+    def mark_as_returned(self, physical_items):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        for item in physical_items:
+            if item.prefix == "bb":
+                cur.execute("UPDATE book_physical SET status = 'Available', user_fk = NULL, return_date = NULL WHERE id = %s", item.id)
+            elif item.prefix == "mo":
+                cur.execute("UPDATE movie_physical SET status = 'Available', user_fk = NULL, return_date = NULL WHERE id = %s", item.id)
+            elif item.prefix == "mu":
+                cur.execute("UPDATE music_physical SET status = 'Available', user_fk = NULL, return_date = NULL WHERE id = %s", item.id)
+        cur.close()
+        return True
+
 # ----------------------------------------------------
 # Transactions
 
