@@ -35,6 +35,19 @@ class Tdg:
             new_user_id = False
         return new_user_id
 
+    def modify_user(self, user_id, first_name, last_name, address, email, phone, password):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        cur.execute("UPDATE user SET first_name = %s, last_name = %s, address = %s, email = %s, phone = %s, password = %s WHERE id = %s", 
+                    (first_name, last_name, address, email, phone, password, user_id))
+        cur.close()
+
+    def delete_user(self, user_id):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        cur.execute("DELETE FROM user WHERE id = %s", user_id)
+        cur.close()
+
     # -- SELECT Queries
     def get_user_by_email(self, email):
         connection = self.mysql.connect()
@@ -50,7 +63,7 @@ class Tdg:
 
         return data
 
-    def get_item_by_id(self, id):
+    def get_user_by_id(self, id):
         connection = self.mysql.connect()
         cur = connection.cursor()
         result = cur.execute("SELECT * FROM user WHERE id = %s", [id])
@@ -78,7 +91,7 @@ class Tdg:
         # This query gets all users and all the loans of those users.
         connection = self.mysql.connect()
         cur = connection.cursor()
-        sql = "SELECT u.id, u.first_name, u.last_name, u.address, u.email, u.phone, u.admin, u.password, bp.id, bp.book_fk, bp.status, bp.return_date, bp.user_fk, mup.id, mup.music_fk, mup.status, mup.return_date, mup.user_fk, mop.id, mop.movie_fk, mop.status, mop.return_date, mop.user_fk "
+        sql = "SELECT u.id, u.first_name, u.last_name, u.address, u.email, u.phone, u.admin, u.password, bp.id, bp.item_fk, bp.status, bp.return_date, bp.user_fk, mup.id, mup.item_fk, mup.status, mup.return_date, mup.user_fk, mop.id, mop.item_fk, mop.status, mop.return_date, mop.user_fk "
         sql += "FROM user AS u LEFT JOIN book_physical AS bp ON (u.id = bp.user_fk) "
         sql += "LEFT JOIN music_physical AS mup ON (u.id = mup.user_fk) "
         sql += "LEFT JOIN movie_physical AS mop ON (u.id = mop.user_fk) WHERE 1 "
@@ -179,7 +192,7 @@ class Tdg:
     def get_books_physical(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, book_fk, status, return_date, user_fk FROM book_physical")
+        result = cur.execute("SELECT id, item_fk, status, return_date, user_fk FROM book_physical")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -205,7 +218,7 @@ class Tdg:
     def get_magazines_physical(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, magazine_fk, status FROM magazine_physical")
+        result = cur.execute("SELECT id, item_fk, status FROM magazine_physical")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -231,7 +244,7 @@ class Tdg:
     def get_movies_physical(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, movie_fk, status, return_date, user_fk FROM movie_physical")
+        result = cur.execute("SELECT id, item_fk, status, return_date, user_fk FROM movie_physical")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -257,7 +270,7 @@ class Tdg:
     def get_music_physical(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, music_fk, status, return_date, user_fk FROM music_physical")
+        result = cur.execute("SELECT id, item_fk, status, return_date, user_fk FROM music_physical")
         data = []
         for row in cur.fetchall():
             data.append(row)

@@ -285,6 +285,21 @@ def edit_entry(item_prefix, item_id):
         return render_template('admin_tools.html', form=form, prefix=item_selected.prefix, id=item_selected.id,
                                item="edit")
 
+@app.route('/admin_tools/edit_user/<user_id>', methods=['GET', 'POST'])
+def edit_user(user_id):
+    user_selected = user_mapper.get_user_by_id(user_id)
+    form = Forms.get_user_form_data(user_selected, request)
+    if request.method == 'POST' and form.validate():
+        user_mapper.update(user_id, form, request)
+        return redirect('/admin_tools/view_users')
+    else:
+        return render_template('admin_tools.html', tool='view_users', form=form, id=user_selected[0], user="edit")
+
+@app.route('/admin_tools/delete_user/<user_id>', methods=['POST'])
+def delete_user(user_id):
+    user_mapper.delete(user_id)
+    flash(f'User (id {user_id}) has been deleted.', 'success')
+    return redirect('/admin_tools/view_users')
 
 @app.route('/admin_tools/delete_entry/<item_prefix>/<item_id>', methods=['POST'])
 def delete_item(item_prefix, item_id):

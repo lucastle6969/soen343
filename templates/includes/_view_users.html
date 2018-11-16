@@ -1,5 +1,8 @@
-﻿{% if list_of_users %}
-<table>
+﻿{% if user == "edit" %}
+    {% include 'includes/_edit_user.html' %}
+{% endif %}
+{% if list_of_users %} 
+    <table>
         <caption style="caption-side:top">List of Users</caption>
         <tr>
             <th>ID</th>
@@ -9,6 +12,8 @@
             <th>Email</th>
             <th>Phone</th>
             <th>Administrator</th>
+            <th></th>
+            <th></th>
         </tr>
         {% for user in list_of_users %}
         <tr>
@@ -19,6 +24,14 @@
             <td>{{ user.email }}</td>
             <td>{{ user.phone }}</td>
             <td>{{ 'Yes' if user.admin == 1 else 'No' }}</td>
+            <td><form method="GET" action="/admin_tools/edit_user/{{user.id}}">
+                <input type="submit" value="Edit" /></form></td>
+            {% if user.admin == 1 %}
+            <td></td>
+            {% else %}
+            <td><form method="POST" action="/admin_tools/delete_user/{{user.id}}">
+                <input type="submit" value="Delete" /></form></td>
+            {% endif %}
         {% endfor %}
     </table>
 {% endif %}

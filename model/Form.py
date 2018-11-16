@@ -85,6 +85,18 @@ class RegisterForm(Form):
     ])
     confirm = PasswordField('Confirmed Password')
 
+class EditForm(Form):
+    first_name = StringField('First Name', [alpha(2, 50, 0)])
+    last_name = StringField('Last Name', [alpha(2, 50, 0)])
+    email = StringField('Email', [validators.Email(message='This is not a valid email address.')])
+    phone = StringField('Phone', [phone_number])
+    address = StringField('Address', [alpha(2, 100, 1)])
+    #is_admin = SelectField('Administrator', choices=[('0', 'No'), ('1', 'Yes')])
+    password = PasswordField('Password', [
+        password,
+        validators.EqualTo('confirm', message='Passwords do not match.')
+    ])
+    confirm = PasswordField('Confirmed Password')
 
 class BookForm(Form):
     current_time = datetime.datetime.now()
@@ -209,4 +221,17 @@ class Forms(Form):
             form.asin.data = item_selected.asin
             form.quantity.data = item_selected.quantity
 
+        return form
+    
+    @staticmethod
+    def get_user_form_data(user_selected, request):
+        
+        form = EditForm(request.form)
+        form.first_name.data = user_selected[1]
+        form.last_name.data = user_selected[2]
+        form.address.data = user_selected[3]
+        form.email.data = user_selected[4]
+        form.phone.data = user_selected[5]
+        #form.is_admin.data = user_selected[6]
+    
         return form

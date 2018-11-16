@@ -37,11 +37,29 @@ class UserMapper:
 
         return render_template('admin_tools.html', tool=tool, form=form)
 
+    def update(self, user_id, form, request_):
+        return self.tdg.modify_user(user_id, request_.form['first_name'], request_.form['last_name'], request_.form['address'],
+            request_.form['email'], request_.form['phone'], sha256_crypt.encrypt(str(request_.form['password'])))
+        #if user_updated:
+        #    self.user_registry.modify_user(user_id, request_.form['first_name'], request_.form['last_name'], request_.form['address'], request_.form['email'], request_.form['phone'])
+        #                                 form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
+        #if is_admin == 1:
+        #    flash('The administrator account information has been modified.', 'success')
+        #if is_admin == 0:
+        #    flash('The client account information has been modified.', 'success')        
+        #return redirect('/admin_tools/view_users')
+
+    def delete(self, user_id):
+        return self.tdg.delete_user(user_id)
+
     def check_restart_session(self, session):
         return self.user_registry.check_restart_session(session)
 
     def get_user_by_email(self, email):
         return self.user_registry.get_user_by_email(email)
+
+    def get_user_by_id(self, user_id):
+        return self.tdg.get_user_by_id(user_id)
 
     def ensure_not_already_logged(self, user_id):
         self.user_registry.ensure_not_already_logged(user_id)
