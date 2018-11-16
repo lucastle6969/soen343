@@ -39,7 +39,7 @@ DROP TABLE IF EXISTS magazine_physical;
 CREATE TABLE magazine_physical (
     id INT(6) AUTO_INCREMENT PRIMARY KEY,
     item_fk INT(6),
-    status VARCHAR(100),
+    status VARCHAR(100)
 );
 
 
@@ -63,7 +63,7 @@ CREATE TABLE movie_physical (
     id INT(6) AUTO_INCREMENT PRIMARY KEY,
     item_fk INT(6),
     status VARCHAR(100),
-    return_date DATETIME
+    return_date DATETIME,
     user_fk INT(6) NULL DEFAULT NULL
 );
 
@@ -86,7 +86,7 @@ CREATE TABLE music_physical (
     id INT(6) AUTO_INCREMENT PRIMARY KEY,
     item_fk INT(6),
     status VARCHAR(100),
-    return_date DATETIME
+    return_date DATETIME,
     user_fk INT(6) NULL DEFAULT NULL
 );
 
