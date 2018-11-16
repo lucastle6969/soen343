@@ -1,0 +1,37 @@
+<h3>Active Loan Registry</h3>
+<hr>
+{% for x in transaction %}
+<table id="table" class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>Transaction ID</th>
+            <th>User ID</th>
+            <th>Item ID</th>
+            <th>Item Type</th>
+            <th>Return Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{x.transaction_id}}</td>
+            <td>{{x.user_fk}}</td>
+            <td>{{x.physical_item.id}}</td>
+            <td>{% if x.physical_item.prefix == "bb" %} Book 
+                    {% elif x.physical_item.prefix == "ma" %} Magazine 
+                    {% elif x.physical_item.prefix == "mu" %} Music 
+                    {% elif x.physical_item.prefix == "mo" %} Movie 
+                    {% endif %}
+            </td>
+            <td>{{x.physical_item.return_date}}</td>
+        </tr>
+    </tbody>
+</table>
+{% endfor %}
+<!-- This script should not be called from an external js file -->
+<script>
+    $(document).ready( function () {
+        $('table').DataTable({
+            "orderClasses": false
+        });
+    } );
+</script>
