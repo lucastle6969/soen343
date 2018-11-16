@@ -121,3 +121,11 @@ CREATE TABLE active_loan_registry(
     physical_id INT(6),
     timestamp DATETIME  
 );
+
+DROP TABLE IF EXISTS cart;
+CREATE TABLE cart(
+    id INT(7) AUTO_INCREMENT PRIMARY KEY,
+    user_fk INT(7),
+    prefix VARCHAR(2),
+    physical_id_fk INT(6)
+);
