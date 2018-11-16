@@ -182,10 +182,10 @@ def borrowed_items():
             item_mapper.return_items(user_id, request.form)
             user_mapper.remove_borrowed_items(user_id, request.form)
             # TODO transaction_mapper.add_transaction()
-            flash("Items were successfully returned.")
+            flash("Items were successfully returned.", 'success')
             return render_template('home.html', item_list=item_mapper.get_all_items("bb"), item="bb")
         else:
-            flash("There was an problem returning your items, please try again later.")
+            flash("There was an problem returning your items, please try again later.", 'warning')
             return redirect('/borrowed_items')
     else:
         physical_items = []
