@@ -387,7 +387,7 @@ class ItemMapper:
                         return copy
                 return None
 
-    def loan_items(self, user_id, requested_items):
+    def loan_items(self, user_id, requested_items, localtime):
         loaned_items = []
         for requested_item in requested_items:
             for item in self.catalog.item_catalog:
@@ -402,3 +402,5 @@ class ItemMapper:
             return loaned_items
         else:
             return None
+
+    def set_due_date(self, item_prefix, timestamp)

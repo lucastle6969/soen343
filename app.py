@@ -163,7 +163,7 @@ def empty_cart():
     else:
         return redirect('/home')
     if user_mapper.empty_cart(user_id):
-        flash('Items were successfully removed from your cart.', 'warning')
+        flash('Items were successfully removed from your cart.', 'success')
         return redirect('/home')
     else:
         flash('Items were not successfully removed from cart. please, try again later.', 'warning')
@@ -181,7 +181,7 @@ def cart():
         valid_loan_state = user_mapper.validate_loan(user_id, len(requested_items))
         if valid_loan_state[0] is True:
             if valid_loan_state[1] is True:
-                loaned_items = item_mapper.loan_items(user_id, requested_items)
+                loaned_items = item_mapper.loan_items(user_id, requested_items, localtime())
                 if loaned_items is not None:
                     user_mapper.loan_items(user_id, loaned_items)
                     transaction_mapper.add_transactions(user_id, loaned_items, "loan", strftime('%Y-%m-%d %H:%M:%S', localtime()))
