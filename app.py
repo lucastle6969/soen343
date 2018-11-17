@@ -153,6 +153,13 @@ def cart():
     else:
         return redirect('/home')
     if request.method == 'POST':
+        physical_items = item_mapper.get_physical_items_from_tuple(request.form)
+        valid_loan_state = user_mapper.validate_loan(user_id, len(physical_items))
+        if valid_loan_state is True:
+            # bla bla
+            print("true")
+        else:
+            flash("")
         """valid_return_state = user_mapper.validate_return()
         if valid_return_state is True:
             physical_items = item_mapper.get_physical_items_from_tuple(request.form)
