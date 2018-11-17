@@ -377,6 +377,7 @@ class ItemMapper:
             prefix = tup
             item_id = int(prefix_fk_tuple[tup])
             requested_items.append(self.catalog.get_item_by_id(prefix, item_id))
+            print("requested item: ", prefix, item_id)
         return requested_items
 
     def get_available_copy(self, item_prefix, item_id):
