@@ -47,7 +47,7 @@ function receive_add_to_cart(data){
 }
 
 function receive_remove_from_cart(data){
-  if(data == true){
+  if(data.result == true){
     document.getElementById("table_row_" + data.physical_item_prefix + data.physical_item_id).setAttribute("class", "hidden");
   }else{
     document.getElementById("message").innerHTML="Item could not be removed";

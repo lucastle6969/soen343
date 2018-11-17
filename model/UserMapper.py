@@ -81,6 +81,7 @@ class UserMapper:
                 user.cart.append(available_copy)
 
     def remove_from_cart(self, user_id, physical_item_prefix, physical_item_id):
+        item_to_remove = None
         for user in self.user_registry.list_of_users:
             if user.id == user_id:
                 for physical_item in user.cart:
