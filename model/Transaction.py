@@ -13,7 +13,7 @@ class HistoricalTransaction(Transaction):
         self.timestamp = timestamp
 
 
-class ActiveLoan:
+class ActiveLoan(Transaction):
     def __init__(self, transaction_id, user_fk, physical_item, return_date):
         Transaction.__init__(self, transaction_id, user_fk, physical_item)
         self.return_date = return_date
