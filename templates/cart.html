@@ -14,12 +14,12 @@
     <table class="table table-hover table-bordered">
         <thead>
         <tr>
-            <th>Item Type</th>
+            <th><center>Item Type</center></th>
             <th>Title</th>
-            <th>View Details</th>
-            <th>Status</th>
-            <th>Select</th>
-            <th>Remove</th>
+            <th><center>View Details</center></th>
+            <th><center>Status</center></th>
+            <th><center>Select</center></th>
+            <th><center>Remove From Cart</center></th>
         </tr>
         </thead>
         <tbody>
@@ -40,20 +40,17 @@
                 <td><center>Info</center></td>
                 <td><center>{{physical_item.status}}</center></td>
                 <td><center><input type="checkbox" class="loan" name={{physical_item.prefix}}{{physical_item.item_fk}} value={{physical_item.id}}></center></td>
-                <td><center> <button id={{physical_item.prefix}}{{physical_item.id}} type="button" class="btn btn-remove-from-cart" onclick="remove_from_cart(this.id)">Remove From Cart</button></center></td>
+                <td><center> <button id={{physical_item.prefix}}{{physical_item.id}} type="button" class="btn btn-remove-from-cart" onclick="remove_from_cart(this.id)">Remove</button></center></td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
     <div class="row m-0">
-       <!-- <div class="col-sm-9">
-            <img src="/static/presentation/img/my_cart.png">
-        </div> -->
         <div class="col-sm-3">
             <input id="submit" class="form-control btn btn-primary float-right" type="submit" value="Loan Selected Items">
         </div>
         <div class="col-sm-3">
-            <button type="button" class="btn btn-remove-from-cart">Remove All From Cart</button>
+            <button type="button" class="btn btn-remove-from-cart" onclick="my_redirect_function('/cart/empty_cart')">Empty My Cart</button>
         </div>
     </div>
 </form>

@@ -156,6 +156,19 @@ def remove_from_cart(physical_item_prefix, physical_item_id):
     return jsonify(result=response, physical_item_prefix=physical_item_prefix, physical_item_id=physical_item_id)
 
 
+@app.route('/cart/empty_cart')
+def empty_cart():
+    if session.get('user_id') is not None:
+        user_id = session['user_id']
+    else:
+        return redirect('/home')
+    if user_mapper.empty_cart(user_id):
+        flash('Items were successfully removed from your cart.', 'warning')
+        return redirect('/home')
+    else:
+        flash('Items were not successfully removed from cart. please, try again later.', 'warning')
+        return redirect('/cart')
+
 
 @app.route('/cart', methods=['GET', 'POST'])
 def cart():

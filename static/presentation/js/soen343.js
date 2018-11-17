@@ -33,15 +33,17 @@ function receive_add_to_cart(data){
   switch(data.result){
     case "added":
       button.innerHTML="Added To Cart";
-      button.setAttribute("background-color","#4CAF50");
+      button.style.backgroundColor = "#4CAF50";
       button.setAttribute("onclick", "");
 
       break;
     case "unavailable":
       button.innerHTML="Unavailable";
+      button.style.backgroundColor = "#888888";
       break;
     case "full":
       button.innerHTML="Cart Full";
+      button.style.backgroundColor = "#EE7E3E";
       break;
   }
 }
@@ -60,4 +62,8 @@ function send_remove_from_cart(prefix, id){
 
 function remove_from_cart(id){
   send_remove_from_cart(id.substring(0,2), id.substring(2));
+}
+
+function my_redirect_function(location){
+  window.location.href=location
 }
