@@ -105,10 +105,17 @@ class UserMapper:
         return valid_loan_state
 
     def loan_items(self, user_id, loaned_items):
+        items_to_remove_from_cart = []
         for user in self.user_registry.list_of_users:
             if user.id == user_id:
-                user.borrowed_items.update(loaned_items)
-                
+                for loaned_item in loaned_items:
+                    user.borrowed_items.add(loaned_item)
+                    for cart_item in user.cart:
+                        if cart_item.prefix == loaned_item.prefix and cart_item.id == loaned_item.item_fk:
+                            items_to_remove_from_cart.append(cart_item)
+                for item in items_to_remove_from_cart:
+                    user.cart.remove(item)
+
     def empty_cart(self, user_id):
         print("user_id param: ", user_id)
         for user in self.user_registry.list_of_users:
