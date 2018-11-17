@@ -246,6 +246,10 @@ def admin_tools(tool):
                     return redirect(url_for('admin_tools_default'))
             elif tool == 'view_users':
                 return render_template('admin_tools.html', tool=tool, list_of_users=user_mapper.get_all_users())
+            elif tool == 'view_transaction_history':
+                return render_template('admin_tools.html', tool=tool, transaction=transaction_mapper.transaction_registry.historical_registry)
+            elif tool == 'view_active_loans':
+                return render_template('admin_tools.html', tool=tool, transaction=transaction_mapper.transaction_registry.active_loan_registry)
         else:
             flash('invalid tool')
             return render_template('admin_tools.html')
