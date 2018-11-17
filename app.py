@@ -5,14 +5,17 @@ from model.TransactionMapper import TransactionMapper
 from passlib.hash import sha256_crypt
 from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, SearchForm, Forms, OrderForm
 from apscheduler.schedulers.background import BackgroundScheduler
+from time import localtime, strftime
 
 import datetime
 import time
 
+
 app = Flask(__name__)
+app.jinja_env.filters['zip'] = zip
 item_mapper = ItemMapper(app)
 user_mapper = UserMapper(app)
-transaction_mapper = TransactionMapper(app)
+transaction_mapper = TransactionMapper(app, item_mapper.catalog.item_catalog)
 
 ACTIVE_USER_GRACE_PERIOD = 2400
 CATALOG_MANAGER_GRACE_PERIOD = 600
@@ -167,6 +170,34 @@ def login():
             return render_template('login.html', error=error, form=form)
 
     return render_template('login.html', form=form)
+
+
+@app.route('/borrowed_items', methods=['GET', 'POST'])
+def borrowed_items():
+    if session.get('user_id') is not None:
+        user_id = session['user_id']
+    else:
+        return redirect('/home')
+    if request.method == 'POST':
+        valid_return_state = user_mapper.validate_return()
+        if valid_return_state is True:
+            physical_items = item_mapper.get_physical_items_from_tuple(request.form)
+            item_mapper.return_items(physical_items)
+            user_mapper.remove_borrowed_items(user_id, physical_items)
+            transaction_mapper.add_transactions(user_id, physical_items, "return", strftime('%Y-%m-%d %H:%M:%S', localtime()))
+            flash("Items were successfully returned.", 'success')
+            return render_template('home.html', item_list=item_mapper.get_all_items("bb"), item="bb")
+        else:
+            flash("There was an problem returning your items, please try again later.", 'warning')
+            return redirect('/borrowed_items')
+    else:
+        physical_items = []
+        for user in user_mapper.user_registry.list_of_users:
+            if user.id == user_id:
+                physical_items = user.borrowed_items
+
+        detailed_items = item_mapper.get_item_details(physical_items)
+        return render_template('borrowed_items.html', borrowed_items=zip(physical_items, detailed_items))
 
 
 def add_book(request_):

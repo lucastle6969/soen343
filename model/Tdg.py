@@ -78,7 +78,7 @@ class Tdg:
         # This query gets all users and all the loans of those users.
         connection = self.mysql.connect()
         cur = connection.cursor()
-        sql = "SELECT u.id, u.first_name, u.last_name, u.address, u.email, u.phone, u.admin, u.password, bp.id, bp.book_fk, bp.status, bp.return_date, bp.user_fk, mup.id, mup.music_fk, mup.status, mup.return_date, mup.user_fk, mop.id, mop.movie_fk, mop.status, mop.return_date, mop.user_fk "
+        sql = "SELECT u.id, u.first_name, u.last_name, u.address, u.email, u.phone, u.admin, u.password, bp.id, bp.item_fk, bp.status, bp.return_date, bp.user_fk, mup.id, mup.item_fk, mup.status, mup.return_date, mup.user_fk, mop.id, mop.item_fk, mop.status, mop.return_date, mop.user_fk "
         sql += "FROM user AS u LEFT JOIN book_physical AS bp ON (u.id = bp.user_fk) "
         sql += "LEFT JOIN music_physical AS mup ON (u.id = mup.user_fk) "
         sql += "LEFT JOIN movie_physical AS mop ON (u.id = mop.user_fk) WHERE 1 "
@@ -113,7 +113,7 @@ class Tdg:
 
     def add_physical_book(self, quantity, id, cur):
         for x in range(0, quantity):
-            cur.execute("""INSERT INTO book_physical(book_fk, status) VALUES (%s, %s)""", (str(id[0]), "Available"))
+            cur.execute("""INSERT INTO book_physical(item_fk, status) VALUES (%s, %s)""", (str(id[0]), "Available"))
 
     def add_magazine(self, magazine):
         connection = self.mysql.connect()
@@ -133,7 +133,7 @@ class Tdg:
 
     def add_physical_magazine(self, magazine, id, cur):
         for x in range(0, quantity):
-            cur.execute("""INSERT INTO magazine_physical(magazine_fk, status) VALUES (%s, %s)""", (str(id[0]), "Available"))
+            cur.execute("""INSERT INTO magazine_physical(item_fk, status) VALUES (%s, %s)""", (str(id[0]), "Available"))
 
     def add_movie(self, movie):
         connection = self.mysql.connect()
@@ -153,7 +153,7 @@ class Tdg:
 
     def add_physical_movie(self, quantity, id, cur):
         for x in range(0, quantity):
-            cur.execute("""INSERT INTO movie_physical(movie_fk, status) VALUES (%s, %s)""", (str(id[0]), "Available"))
+            cur.execute("""INSERT INTO movie_physical(item_fk, status) VALUES (%s, %s)""", (str(id[0]), "Available"))
 
     def add_music(self, music):
         connection = self.mysql.connect()
@@ -173,7 +173,7 @@ class Tdg:
  
     def add_physical_music(self, quantity, id, cur):
         for x in range(0, quantity):
-            cur.execute("""INSERT INTO music_physical(music_fk, status) VALUES (%s, %s)""", (str(id[0]), "Available"))
+            cur.execute("""INSERT INTO music_physical(item_fk, status) VALUES (%s, %s)""", (str(id[0]), "Available"))
 
     def get_books(self):
         connection = self.mysql.connect()
@@ -191,7 +191,7 @@ class Tdg:
     def get_books_physical(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, book_fk, status, return_date, user_fk FROM book_physical")
+        result = cur.execute("SELECT id, item_fk, status, return_date, user_fk FROM book_physical")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -217,7 +217,7 @@ class Tdg:
     def get_magazines_physical(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, magazine_fk, status FROM magazine_physical")
+        result = cur.execute("SELECT id, item_fk, status FROM magazine_physical")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -243,7 +243,7 @@ class Tdg:
     def get_movies_physical(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, movie_fk, status, return_date, user_fk FROM movie_physical")
+        result = cur.execute("SELECT id, item_fk, status, return_date, user_fk FROM movie_physical")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -269,7 +269,7 @@ class Tdg:
     def get_music_physical(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, music_fk, status, return_date, user_fk FROM music_physical")
+        result = cur.execute("SELECT id, item_fk, status, return_date, user_fk FROM music_physical")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -284,7 +284,7 @@ class Tdg:
         cur = connection.cursor()
         for book in deleted_books:
             cur.execute("DELETE FROM book WHERE id = %s", book.id)
-            cur.execute("DELETE FROM book_physical WHERE book_fk = %s", book.id)
+            cur.execute("DELETE FROM book_physical WHERE item_fk = %s", book.id)
         # ideally a check if there were errors here and return a boolean to be handled by the mapper
         cur.close()
 
@@ -293,7 +293,7 @@ class Tdg:
         cur = connection.cursor()
         for magazine in deleted_magazines:
             cur.execute("DELETE FROM magazine WHERE id = %s", magazine.id)
-            cur.execute("DELETE FROM magazine_physical WHERE magazine_fk = %s", magazine.id)
+            cur.execute("DELETE FROM magazine_physical WHERE item_fk = %s", magazine.id)
         cur.close()
 
     def delete_movies(self, deleted_movies):
@@ -301,7 +301,7 @@ class Tdg:
         cur = connection.cursor()
         for movie in deleted_movies:
             cur.execute("DELETE FROM movie WHERE id = %s", movie.id)
-            cur.execute("DELETE FROM movie_physical WHERE movie_fk = %s", movie.id)
+            cur.execute("DELETE FROM movie_physical WHERE item_fk = %s", movie.id)
         cur.close()
 
     def delete_music(self, deleted_music):
@@ -309,7 +309,7 @@ class Tdg:
         cur = connection.cursor()
         for music in deleted_music:
             cur.execute("DELETE FROM music WHERE id = %s", music.id)
-            cur.execute("DELETE FROM music_physical WHERE music_fk = %s", music.id)
+            cur.execute("DELETE FROM music_physical WHERE item_fk = %s", music.id)
         cur.close()
 
     def modify_books(self, modified_books):
@@ -346,13 +346,13 @@ class Tdg:
         cur = connection.cursor()
         keys = []
         if prefix == "bb":
-            result = cur.execute("SELECT id FROM book_physical WHERE book_fk = "+str(id))
+            result = cur.execute("SELECT id FROM book_physical WHERE item_fk = "+str(id))
         if prefix == "ma":
-            result = cur.execute("SELECT id FROM magazine_physical WHERE magazine_fk = "+str(id))
+            result = cur.execute("SELECT id FROM magazine_physical WHERE item_fk = "+str(id))
         if prefix == "mo":
-            result = cur.execute("SELECT id FROM movie_physical WHERE movie_fk = "+str(id))
+            result = cur.execute("SELECT id FROM movie_physical WHERE item_fk = "+str(id))
         if prefix == "mu":
-            result = cur.execute("SELECT id FROM music_physical WHERE music_fk = "+str(id))
+            result = cur.execute("SELECT id FROM music_physical WHERE item_fk = "+str(id))
         for row in cur.fetchall():
             keys.append(row)
         cur.close()
@@ -361,13 +361,26 @@ class Tdg:
         else:
             return keys
 
+    def mark_as_returned(self, physical_items):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        for item in physical_items:
+            if item.prefix == "bb":
+                cur.execute("UPDATE book_physical SET status = 'Available', user_fk = NULL, return_date = NULL WHERE id = %s", item.id)
+            elif item.prefix == "mo":
+                cur.execute("UPDATE movie_physical SET status = 'Available', user_fk = NULL, return_date = NULL WHERE id = %s", item.id)
+            elif item.prefix == "mu":
+                cur.execute("UPDATE music_physical SET status = 'Available', user_fk = NULL, return_date = NULL WHERE id = %s", item.id)
+        cur.close()
+        return True
+
 # ----------------------------------------------------
 # Transactions
 
     def get_transactions(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, user_fk, prefix, physical_id, transaction_type, timestamp FROM transaction_registry WHERE 1")
+        result = cur.execute("SELECT id, user_fk, prefix, item_fk, physical_id, transaction_type, timestamp FROM transaction_registry WHERE 1")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -380,7 +393,7 @@ class Tdg:
     def get_active_loans(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, user_fk, prefix, physical_id, return_date FROM active_loan_registry WHERE 1")
+        result = cur.execute("SELECT id, user_fk, prefix, item_fk, physical_id, return_date FROM active_loan_registry WHERE 1")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -394,19 +407,19 @@ class Tdg:
         connection = self.mysql.connect()
         cur = connection.cursor()
         for item in physical_items:
-            cur.execute("""INSERT INTO transaction_history(user_fk, prefix, physical_id, transaction_type, timestamp)
-                    VALUES(%s, %s, %s, %s, %s)""", (user_id, item.prefix, item.id, transaction_type, timestamp))
+            cur.execute("""INSERT INTO transaction_registry(user_fk, prefix, item_fk, physical_id, transaction_type, timestamp)
+                    VALUES(%s, %s, %s, %s, %s, %s)""", (user_id, item.prefix, item.item_fk, item.id, transaction_type, timestamp))
             if transaction_type is "loan":
-                cur.execute("""INSERT INTO active_loan_registry(user_fk, prefix, physical_id, return_date)
-                    VALUES(%s, %s, %s, %s)""", (user_id, item.prefix, item.id, item.return_date))
+                cur.execute("""INSERT INTO active_loan_registry(user_fk, prefix, item_fk, physical_id, return_date)
+                    VALUES(%s, %s, %s, %s, %s)""", (user_id, item.prefix, item.item_fk, item.id, item.return_date))
             elif transaction_type is "return":
                 cur.execute("DELETE FROM active_loan_registry WHERE user_fk = %s AND prefix = %s AND physical_id = %s", (user_id, item.prefix, item.id))
-        
-        result = cur.execute("SELECT * FROM transaction_history ORDER BY id DESC LIMIT 1")
+
+        result = cur.execute("SELECT * FROM transaction_registry ORDER BY id DESC LIMIT 1")
         if result > 0:
             last_historical_id = cur.fetchone()
             last_historical_id = last_historical_id[0]
-        else :
+        else:
             last_historical_id = False
         if transaction_type is "loan":
             result = cur.execute("SELECT * FROM active_loan_history ORDER BY id DESC LIMIT 1")
