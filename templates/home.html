@@ -264,7 +264,7 @@
                                 {% include 'includes/_detailed_view.html' %}
                             {% endwith %} 
                             {% include 'includes/_modal_open.html' %}
-                            <button type="button" class="btn btn-to-cart">Add To Cart</button>
+                            <button id={{x.prefix}}{{x.id}} type="button" class="btn btn-to-cart" onclick="add_to_cart(this.id)">Add To Cart</button>
                         </td>
                     </tr>
                     {% endfor %}
@@ -352,7 +352,7 @@
                                 {% include 'includes/_detailed_view.html' %}
                             {% endwith %} 
                             {% include 'includes/_modal_open.html' %}
-                            <button type="button" class="btn btn-to-cart">Add To Cart</button>
+                            <button id={{x.prefix}}{{x.id}} type="button" class="btn btn-to-cart" onclick="add_to_cart(this.id)">Add To Cart</button>
                         </td>
                     </tr>
                     {% endfor %}
