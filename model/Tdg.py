@@ -410,7 +410,7 @@ class Tdg:
         else:
             last_historical_id = False
         if transaction_type is "loan":
-            result = cur.execute("SELECT * FROM active_loan_history ORDER BY id DESC LIMIT 1")
+            result = cur.execute("SELECT * FROM active_loan_registry ORDER BY id DESC LIMIT 1")
             if result > 0:
                 last_active_id = cur.fetchone()
                 last_active_id = last_active_id[0]

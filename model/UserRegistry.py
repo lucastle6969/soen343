@@ -37,7 +37,7 @@ class UserRegistry:
     def remove_lock(self):
         self.catalog_lock = -1
 
-    def lock (self, user_id):
+    def lock(self, user_id):
         self.catalog_lock = user_id
 
     def enlist_active_user(self, user_id, first_name, last_name, email, admin, timestamp, active_time, catalog_time, catalog_flag):

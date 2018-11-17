@@ -5,6 +5,7 @@ from model.UserRegistry import UserRegistry
 from model.Tdg import Tdg
 
 CART_MAX_SIZE = 10
+BORROWED_MAX_SIZE = 10
 
 
 class UserMapper:
@@ -87,9 +88,23 @@ class UserMapper:
                 for physical_item in user.cart:
                     if physical_item.prefix == physical_item_prefix and physical_item.id == physical_item_id:
                         item_to_remove = physical_item
-                    break
+                        break
                 if item_to_remove is not None:
                     user.cart.remove(item_to_remove)
                     return True
                 else:
                     return False
+
+    def validate_loan(self, user_id, loan_size):
+        valid_loan_state = [False, False]
+        for user in self.user_registry.list_of_users:
+            if user.id == user_id:
+                valid_loan_state[0] = loan_size <= (BORROWED_MAX_SIZE - len(user.borrowed_items))
+                break
+        valid_loan_state[1] = self.user_registry.catalog_lock == -1
+        return valid_loan_state
+
+    def loan_items(self, user_id, loaned_items):
+        for user in self.user_registry.list_of_users:
+            if user.id == user_id:
+                user.borrowed_items.update(loaned_items)

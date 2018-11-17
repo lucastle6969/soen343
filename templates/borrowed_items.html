@@ -40,23 +40,13 @@
                 <td>{{spec_item.title}}</td>
                 <td><center>{{physical_item.return_date}}</center></td>
                 <td><center>Info</center></td>
-                <td><center><input type="checkbox" class="return" name={{physical_item.prefix}}{{physical_item.item_fk}} value={{physical_item.id}}></center></td>
+                <td><center><input type="checkbox" class="checkboxes" name={{physical_item.prefix}}{{physical_item.item_fk}} value={{physical_item.id}}></center></td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 </form>
 
-<!-- This script should not be called from an external js file -->
-<script>
-    $(document).ready( function () {
-        $('table').DataTable({
-            "orderClasses": false,
-            "paging": false,
-            "searching": false
-        });
-    } );
-</script>
 
 <script src="../static/presentation/js/check_items.js"></script>
 

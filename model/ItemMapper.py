@@ -371,6 +371,14 @@ class ItemMapper:
             physical_items.append(self.catalog.get_physical_items_from_tuple(prefix, item_fk, item_id))
         return physical_items
 
+    def get_items_from_tuple(self, prefix_fk_tuple):
+        requested_items = []
+        for tup in prefix_fk_tuple:
+            prefix = tup
+            item_id = int(prefix_fk_tuple[tup])
+            requested_items.append(self.catalog.get_item_by_id(prefix, item_id))
+        return requested_items
+
     def get_available_copy(self, item_prefix, item_id):
         for item in self.catalog.item_catalog:
             if item.prefix == item_prefix and item.id == item_id:
@@ -378,3 +386,19 @@ class ItemMapper:
                     if copy.status == "Available":
                         return copy
                 return None
+
+    def loan_items(self, user_id, requested_items):
+        loaned_items = []
+        for requested_item in requested_items:
+            for item in self.catalog.item_catalog:
+                if item.prefix == requested_item.prefix and item.id == requested_item.id:
+                    for copy in item.copies:
+                        if copy.status == "Available":
+                            copy.status = "Loaned"
+                            copy.user_fk = user_id
+                            loaned_items.append(copy)
+                            break
+        if len(loaned_items) != 0:
+            return loaned_items
+        else:
+            return None

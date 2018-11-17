@@ -156,7 +156,6 @@ def remove_from_cart(physical_item_prefix, physical_item_id):
     return jsonify(result=response, physical_item_prefix=physical_item_prefix, physical_item_id=physical_item_id)
 
 
-
 @app.route('/cart', methods=['GET', 'POST'])
 def cart():
     if session.get('user_id') is not None:
@@ -164,26 +163,26 @@ def cart():
     else:
         return redirect('/home')
     if request.method == 'POST':
-        physical_items = item_mapper.get_physical_items_from_tuple(request.form)
-        valid_loan_state = user_mapper.validate_loan(user_id, len(physical_items))
-        if valid_loan_state is True:
-            # bla bla
-            print("true")
+        requested_items = item_mapper.get_items_from_tuple(request.form)
+        valid_loan_state = user_mapper.validate_loan(user_id, len(requested_items))
+        if valid_loan_state[0] is True:
+            if valid_loan_state[1] is True:
+                loaned_items = item_mapper.loan_items(user_id, requested_items)
+                if loaned_items is not None:
+                    user_mapper.loan_items(user_id, loaned_items)
+                    transaction_mapper.add_transactions(user_id, loaned_items, "loan", strftime('%Y-%m-%d %H:%M:%S', localtime()))
+                if len(loaned_items) == len(requested_items):
+                    flash("Items successfully loaned", 'success')
+                    return redirect('/borrowed_items')
+                else:
+                    flash("Some items became unavailable.", "warning")
+                    return redirect('/borrowed_items')
+            else:
+                flash("There was a problem loaning these items at this time, please try again later.", 'warning')
+                return redirect('/cart')
         else:
-            flash("")
-        """valid_return_state = user_mapper.validate_return()
-        if valid_return_state is True:
-            physical_items = item_mapper.get_physical_items_from_tuple(request.form)
-            item_mapper.return_items(user_id, request.form, physical_items)
-            user_mapper.remove_borrowed_items(user_id, request.form)
-            transaction_mapper.add_transactions(user_id, physical_items, "return", strftime('%Y-%m-%d %H:%M:%S', localtime()))
-            flash("Items were successfully returned.", 'success')
-            return render_template('home.html', item_list=item_mapper.get_all_items("bb"), item="bb")
-        else:
-            flash("There was an problem returning your items, please try again later.", 'warning')
-            return redirect('/borrowed_items')"""
+            flash("This transaction would put you over the loan limit.")
     else:
-        print("request.method wasn't post")
         physical_items = []
         for user in user_mapper.user_registry.list_of_users:
             if user.id == user_id:
