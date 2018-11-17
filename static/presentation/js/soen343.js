@@ -21,7 +21,7 @@
     modal.find('.modal-body #book-isbn13').text(isbn13)
   })*/
 function add_to_cart(id){
-  send_add_to_cart(id.substring(0,2), id.substring(2))
+  send_add_to_cart(id.substring(0,2), id.substring(2));
 }
 
 function send_add_to_cart(prefix, id){
@@ -29,7 +29,7 @@ function send_add_to_cart(prefix, id){
 }
 
 function receive_add_to_cart(data){
-  button = document.getElementById(data.item_prefix + data.item_id)
+  button = document.getElementById(data.item_prefix + data.item_id);
   switch(data.result){
     case "added":
       button.innerHTML="Added To Cart";
@@ -38,10 +38,26 @@ function receive_add_to_cart(data){
 
       break;
     case "unavailable":
-      button.innerHTML="Unavailable"
+      button.innerHTML="Unavailable";
       break;
     case "full":
-      button.innerHTML="Cart Full"
+      button.innerHTML="Cart Full";
       break;
   }
+}
+
+function receive_remove_from_cart(data){
+  if(data == true){
+    document.getElementById("table_row_" + data.physical_item_prefix + data.physical_item_id).setAttribute("class", "hidden");
+  }else{
+    document.getElementById("message").innerHTML="Item could not be removed";
+  }
+}
+
+function send_remove_from_cart(prefix, id){
+  $.getJSON("/cart/remove_from_cart/" + prefix + "/" + id, {}, receive_remove_from_cart);
+}
+
+function remove_from_cart(id){
+  send_remove_from_cart(id.substring(0,2), id.substring(2));
 }

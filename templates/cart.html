@@ -10,7 +10,7 @@
         </div>
     </div>
     <br/>
-    <table class="table table-hover table-bordered">
+    <table class="table table-hover table-bordered"><span id="message">
         <thead>
         <tr>
             <th>Item Type</th>
@@ -23,7 +23,7 @@
         </thead>
         <tbody>
         {% for physical_item, spec_item in cart %}
-            <tr>
+            <tr id="table_row_{{physical_item.prefix}}{{physical_item.id}}">
                 <td><center>
                     {% if physical_item.prefix == "bb" %}
                         Book
@@ -39,7 +39,7 @@
                 <td><center>Info</center></td>
                 <td><center>{{physical_item.status}}</center></td>
                 <td><center><input type="checkbox" class="loan" name={{physical_item.prefix}}{{physical_item.item_fk}} value={{physical_item.id}}></center></td>
-                <td><center> <button type="button" class="btn btn-remove-from-cart">Remove From Cart</button></center></td>
+                <td><center> <button id={{physical_item.prefix}}{{physical_item.id}} type="button" class="btn btn-remove-from-cart" onclick="remove_from_cart(this.id)">Remove From Cart</button></center></td>
             </tr>
         {% endfor %}
         </tbody>

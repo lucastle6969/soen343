@@ -146,6 +146,17 @@ def add_to_cart(item_prefix, item_id):
     return jsonify(result=response, item_prefix=item_prefix, item_id=item_id)
 
 
+@app.route('/cart/remove_from_cart/<physical_item_prefix>/<physical_item_id>')
+def remove_from_cart(physical_item_prefix, physical_item_id):
+    if session.get('user_id') is not None:
+        user_id = session['user_id']
+    else:
+        return redirect('/home')
+    response = user_mapper.remove_from_cart(user_id, physical_item_prefix, int(physical_item_id))
+    return jsonify(result=response, physical_item_prefix=physical_item_prefix, physical_item_id=physical_item_id)
+
+
+
 @app.route('/cart', methods=['GET', 'POST'])
 def cart():
     if session.get('user_id') is not None:
@@ -181,7 +192,6 @@ def cart():
         detailed_items = item_mapper.get_item_details(physical_items)
         return render_template('cart.html', cart=zip(physical_items, detailed_items))
     return render_template('cart.html')
-
 
 
 @app.route('/about')
