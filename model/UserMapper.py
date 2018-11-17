@@ -111,7 +111,7 @@ class UserMapper:
                 for loaned_item in loaned_items:
                     user.borrowed_items.add(loaned_item)
                     for cart_item in user.cart:
-                        if cart_item.prefix == loaned_item.prefix and cart_item.id == loaned_item.item_fk:
+                        if cart_item.prefix == loaned_item.prefix and cart_item.item_fk == loaned_item.item_fk:
                             items_to_remove_from_cart.append(cart_item)
                 for item in items_to_remove_from_cart:
                     user.cart.remove(item)
