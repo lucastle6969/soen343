@@ -135,7 +135,7 @@ def add_to_cart(item_prefix, item_id):
         return redirect('/home')
     valid_cart_size = user_mapper.validate_cart_size(user_id)
     if valid_cart_size:
-        available_copy = item_mapper.get_available_copy(item_prefix, item_id)
+        available_copy = item_mapper.get_available_copy(item_prefix, int(item_id))
         if available_copy is not None:
             user_mapper.add_to_cart(user_id, available_copy)
             response = "added"
