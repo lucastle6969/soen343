@@ -346,13 +346,14 @@
                     <tr>
                         <td>{{x.title}}</td>
                         <td>{{x.director}}</td>
-                        <td>
+                        <td><center>
                             {% with %}
                                 {% set loop_index0 = loop.index0 %}
                                 {% include 'includes/_detailed_view.html' %}
                             {% endwith %} 
                             {% include 'includes/_modal_open.html' %}
                             <button id={{x.prefix}}{{x.id}} type="button" class="btn btn-to-cart" onclick="add_to_cart(this.id)">Add To Cart</button>
+                        </center>
                         </td>
                     </tr>
                     {% endfor %}

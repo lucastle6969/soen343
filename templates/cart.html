@@ -14,12 +14,12 @@
     <table class="table table-hover table-bordered">
         <thead>
         <tr>
-            <th>Item Type</th>
+            <th><center>Item Type</center></th>
             <th>Title</th>
-            <th>View Details</th>
-            <th>Status</th>
-            <th>Select</th>
-            <th>Remove</th>
+            <th><center>View Details</center></th>
+            <th><center>Status</center></th>
+            <th><center>Select</center></th>
+            <th><center>Remove From Cart</center></th>
         </tr>
         </thead>
         <tbody>
@@ -46,14 +46,11 @@
         </tbody>
     </table>
     <div class="row m-0">
-       <!-- <div class="col-sm-9">
-            <img src="/static/presentation/img/my_cart.png">
-        </div> -->
         <div class="col-sm-3">
             <input id="submit" class="form-control btn btn-primary float-right" type="submit" value="Loan Selected Items">
         </div>
         <div class="col-sm-3">
-            <button type="button" class="btn btn-remove-from-cart">Remove All From Cart</button>
+            <button type="button" class="btn btn-remove-from-cart" onclick="my_redirect_function('/cart/empty_cart')">Empty My Cart</button>
         </div>
     </div>
 </form>

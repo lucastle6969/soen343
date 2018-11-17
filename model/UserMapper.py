@@ -108,3 +108,12 @@ class UserMapper:
         for user in self.user_registry.list_of_users:
             if user.id == user_id:
                 user.borrowed_items.update(loaned_items)
+                
+    def empty_cart(self, user_id):
+        print("user_id param: ", user_id)
+        for user in self.user_registry.list_of_users:
+            print("user.id in loop: ", user.id)
+            if user.id == user_id:
+                user.cart = []
+                return True
+        return False
