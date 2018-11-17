@@ -1,3 +1,4 @@
+<script src="../../../static/presentation/js/physical_copies.js"></script>
 <div class="container login-container">
     <div class="col-md-12 login-form-2">
         {% from "includes/_form_helpers.html" import render_field %}
@@ -34,23 +35,26 @@
                 <div class="form-group text-white">
                     {{render_field(form.quantity, class_="form-control", placeholder="From 0 to 255")}}
                 </div>
-                <table class="table table-hover table-bordered">
-                    <thead>
-                    </thead>
+                <table id="physical-item-table" class="table table-hover table-bordered">
                     <tbody>
-                    {% for x in copies %}
-                    <tr>
-                        <div class="detailed_copies">
-                                Copy:  {{x.status}}   |   {{x.return_date}}
-                                <input type="submit" value="Delete copy" />
-                        </div>
-                    </tr>
+                    {% for copy in copies %}
+                        <tr data-physicalCopyId="{{copy.id}}">
+                            <td>{{copy.status}}</td>
+                            <td>{{copy.return_date}}</td>
+                            <td>
+                                <button type="button" class="btn btn-secondary" onclick="removeItem(this)">
+                                    Remove
+                                </button>
+                            </td>
+                        </tr>
                     {% endfor %}
                     </tbody>
                 </table>
-                <td>
-                    <input type="submit" value="Add more copies" onclick=""/>
-                </td>
+                <button type="button" class="btn btn-secondary" onclick="addItem()">Add more copies</button>
+                <input type="hidden" id="physicalAdd" name="physical_items_added" value="0" />
+                <span id="physicalDelete"></span>
+
+
                 <div class="row form-group text-white">
                     <input type="submit" class="col-md-5 btnSubmit" value="Modify" />
                     <div class="col-md-2"></div>
