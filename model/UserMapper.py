@@ -79,3 +79,16 @@ class UserMapper:
         for user in self.user_registry.list_of_users:
             if user.id == user_id:
                 user.cart.append(available_copy)
+
+    def remove_from_cart(self, user_id, physical_item_prefix, physical_item_id):
+        for user in self.user_registry.list_of_users:
+            if user.id == user_id:
+                for physical_item in user.cart:
+                    if physical_item.prefix == physical_item_prefix and physical_item.id == physical_item_id:
+                        item_to_remove = physical_item
+                    break
+                if item_to_remove is not None:
+                    user.cart.remove(item_to_remove)
+                    return True
+                else:
+                    return False
