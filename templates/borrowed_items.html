@@ -47,17 +47,6 @@
     </table>
 </form>
 
-<!-- This script should not be called from an external js file -->
-<script>
-    $(document).ready( function () {
-        $('table').DataTable({
-            "orderClasses": false,
-            "paging": false,
-            "searching": false
-        });
-    } );
-</script>
-
 <script src="../static/presentation/js/return_items.js"></script>
 
 {% endblock %}

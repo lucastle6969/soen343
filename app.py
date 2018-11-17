@@ -146,14 +146,14 @@ def add_to_cart(item_prefix, item_id):
     return jsonify(result=response, item_prefix=item_prefix, item_id=item_id)
 
 
-@app.route('/cart')
+@app.route('/cart', methods=['GET', 'POST'])
 def cart():
     if session.get('user_id') is not None:
         user_id = session['user_id']
     else:
         return redirect('/home')
-    """  if request.method == 'POST':
-        valid_return_state = user_mapper.validate_return()
+    if request.method == 'POST':
+        """valid_return_state = user_mapper.validate_return()
         if valid_return_state is True:
             physical_items = item_mapper.get_physical_items_from_tuple(request.form)
             item_mapper.return_items(user_id, request.form, physical_items)
@@ -163,15 +163,16 @@ def cart():
             return render_template('home.html', item_list=item_mapper.get_all_items("bb"), item="bb")
         else:
             flash("There was an problem returning your items, please try again later.", 'warning')
-            return redirect('/borrowed_items')
+            return redirect('/borrowed_items')"""
     else:
+        print("request.method wasn't post")
         physical_items = []
         for user in user_mapper.user_registry.list_of_users:
             if user.id == user_id:
-                physical_items = user.borrowed_items
+                physical_items = user.cart
 
         detailed_items = item_mapper.get_item_details(physical_items)
-        return render_template('borrowed_items.html', borrowed_items=zip(physical_items, detailed_items))"""
+        return render_template('cart.html', cart=zip(physical_items, detailed_items))
     return render_template('cart.html')
 
 

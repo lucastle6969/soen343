@@ -51,19 +51,11 @@
         <div class="col-sm-3">
             <input id="submit" class="form-control btn btn-primary float-right" type="submit" value="Loan Selected Items">
         </div>
+        <div class="col-sm-3">
+            <button type="button" class="btn btn-remove-from-cart">Remove All From Cart</button>
+        </div>
     </div>
 </form>
-
-<!-- This script should not be called from an external js file -->
-<script>
-    $(document).ready( function () {
-        $('table').DataTable({
-            "orderClasses": false,
-            "paging": false,
-            "searching": false
-        });
-    } );
-</script>
 
 <script src="../static/presentation/js/return_items.js"></script>
 

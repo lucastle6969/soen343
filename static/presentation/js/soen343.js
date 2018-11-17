@@ -29,7 +29,6 @@ function send_add_to_cart(prefix, id){
 }
 
 function receive_add_to_cart(data){
-  
   button = document.getElementById(data.item_prefix + data.item_id)
   switch(data.result){
     case "added":
