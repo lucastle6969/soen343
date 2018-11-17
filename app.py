@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, redirect, url_for, session, request
+from flask import Flask, render_template, flash, redirect, url_for, session, request, jsonify
 from model.ItemMapper import ItemMapper
 from model.UserMapper import UserMapper
 from model.TransactionMapper import TransactionMapper
@@ -126,9 +126,54 @@ def order(item_prefix):
     form = OrderForm(request.form)
     return render_template('home.html', item_list=item_mapper.get_ordered_items(form), item=item_prefix)
 
+
+@app.route('/home/add_to_cart/<item_prefix>/<item_id>')
+def add_to_cart(item_prefix, item_id):
+    if session.get('user_id') is not None:
+        user_id = session['user_id']
+    else:
+        return redirect('/home')
+    valid_cart_size = user_mapper.validate_cart_size(user_id)
+    if valid_cart_size:
+        available_copy = item_mapper.get_available_copy(item_prefix, item_id)
+        if available_copy is not None:
+            user_mapper.add_to_cart(user_id, available_copy)
+            response = "added"
+        else:
+            response = "unavailable"
+    else:
+        response = "full"
+    return jsonify(result=response, item_prefix=item_prefix, item_id=item_id)
+
+
 @app.route('/cart')
 def cart():
+    if session.get('user_id') is not None:
+        user_id = session['user_id']
+    else:
+        return redirect('/home')
+    """  if request.method == 'POST':
+        valid_return_state = user_mapper.validate_return()
+        if valid_return_state is True:
+            physical_items = item_mapper.get_physical_items_from_tuple(request.form)
+            item_mapper.return_items(user_id, request.form, physical_items)
+            user_mapper.remove_borrowed_items(user_id, request.form)
+            transaction_mapper.add_transactions(user_id, physical_items, "return", strftime('%Y-%m-%d %H:%M:%S', localtime()))
+            flash("Items were successfully returned.", 'success')
+            return render_template('home.html', item_list=item_mapper.get_all_items("bb"), item="bb")
+        else:
+            flash("There was an problem returning your items, please try again later.", 'warning')
+            return redirect('/borrowed_items')
+    else:
+        physical_items = []
+        for user in user_mapper.user_registry.list_of_users:
+            if user.id == user_id:
+                physical_items = user.borrowed_items
+
+        detailed_items = item_mapper.get_item_details(physical_items)
+        return render_template('borrowed_items.html', borrowed_items=zip(physical_items, detailed_items))"""
     return render_template('cart.html')
+
 
 
 @app.route('/about')

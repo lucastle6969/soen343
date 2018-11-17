@@ -372,3 +372,11 @@ class ItemMapper:
             item_id = int(prefix_fk_id_tuple[tup])
             physical_items.append(self.catalog.get_physical_items_from_tuple(prefix, item_fk, item_id))
         return physical_items
+
+    def get_available_copy(self, item_prefix, item_id):
+        for item in self.catalog.item_catalog:
+            if item.prefix == item_prefix and item.id == item_id:
+                for copy in item.copies:
+                    if copy.status == "Available":
+                        return copy
+                return None

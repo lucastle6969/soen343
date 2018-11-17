@@ -18,6 +18,7 @@
             <th>View Details</th>
             <th>Status</th>
             <th>Select</th>
+            <th>Remove</th>
         </tr>
         </thead>
         <tbody>
@@ -35,17 +36,18 @@
                     {% endif %}
                 </center></td>
                 <td>{{spec_item.title}}</td>
-                <td><center>{{physical_item.return_date}}</center></td>
                 <td><center>Info</center></td>
-                <td><center><input type="checkbox" class="return" name={{physical_item.prefix}}{{physical_item.item_fk}} value={{physical_item.id}}></center></td>
+                <td><center>{{physical_item.status}}</center></td>
+                <td><center><input type="checkbox" class="loan" name={{physical_item.prefix}}{{physical_item.item_fk}} value={{physical_item.id}}></center></td>
+                <td><center> <button type="button" class="btn btn-remove-from-cart">Remove From Cart</button></center></td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
     <div class="row m-0">
-        <div class="col-sm-9">
+       <!-- <div class="col-sm-9">
             <img src="/static/presentation/img/my_cart.png">
-        </div>
+        </div> -->
         <div class="col-sm-3">
             <input id="submit" class="form-control btn btn-primary float-right" type="submit" value="Loan Selected Items">
         </div>

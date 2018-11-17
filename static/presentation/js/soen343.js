@@ -20,3 +20,29 @@
     modal.find('.modal-body #book-isbn10').text(isbn10)
     modal.find('.modal-body #book-isbn13').text(isbn13)
   })*/
+function add_to_cart(id){
+  send_add_to_cart(id.substring(0,2), id.substring(2))
+}
+
+function send_add_to_cart(prefix, id){
+  $.getJSON("/home/add_to_cart/" + prefix + "/" + id, {}, receive_add_to_cart);
+}
+
+function receive_add_to_cart(data){
+  
+  button = document.getElementById(data.item_prefix + data.item_id)
+  switch(data.result){
+    case "added":
+      button.innerHTML="Added To Cart";
+      button.setAttribute("background-color","#4CAF50");
+      button.setAttribute("onclick", "");
+
+      break;
+    case "unavailable":
+      button.innerHTML="Unavailable"
+      break;
+    case "full":
+      button.innerHTML="Cart Full"
+      break;
+  }
+}

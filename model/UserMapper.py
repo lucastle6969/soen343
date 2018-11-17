@@ -4,6 +4,8 @@ from model.Form import RegisterForm
 from model.UserRegistry import UserRegistry
 from model.Tdg import Tdg
 
+CART_MAX_SIZE = 10
+
 
 class UserMapper:
     def __init__(self, app):
@@ -69,3 +71,13 @@ class UserMapper:
             prefix = tup[0:2]
             item_fk = int(tup[2:])
             self.user_registry.remove_borrowed_items(user_id, prefix, item_fk, int(prefix_fk_id_tuple[tup]))
+
+    def validate_cart_size(self, user_id):
+        for user in self.user_registry.list_of_users:
+            if user.id == user_id:
+                return len(user.cart) < CART_MAX_SIZE
+
+    def add_to_cart(self, user_id, available_copy):
+        for user in self.user_registry.list_of_users:
+            if user.id == user_id:
+                user.cart.append(available_copy)

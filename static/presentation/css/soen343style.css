@@ -269,7 +269,7 @@ td, th {
 }
 
 .divider {
-    width:140px;
+    width:115px;
     height:auto;
     display:inline-block;
 }
@@ -288,4 +288,22 @@ td, th {
 .cart_header{
     font-size: 145%;
     font-weight: bold;
+}
+
+.btn-to-cart, .btn-remove-from-cart{
+    color:#fff;
+    background-color:#0062cc;
+    border-color:#17a2b8
+}
+
+.btn-to-cart:hover, .btn-remove-from-cart:hover{
+    color:#fff;
+    background-color:#1a88ff;
+    border-color:#66a0e0
+}
+
+.btn-mag{
+    color:#fff;
+    background-color: #888888;
+    border-color: #0062cc;
 }
