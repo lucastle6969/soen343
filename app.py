@@ -15,7 +15,7 @@ app = Flask(__name__)
 app.jinja_env.filters['zip'] = zip
 item_mapper = ItemMapper(app)
 user_mapper = UserMapper(app)
-transaction_mapper = TransactionMapper(app)
+transaction_mapper = TransactionMapper(app, item_mapper.catalog.item_catalog)
 
 ACTIVE_USER_GRACE_PERIOD = 2400
 CATALOG_MANAGER_GRACE_PERIOD = 600
@@ -182,8 +182,8 @@ def borrowed_items():
         valid_return_state = user_mapper.validate_return()
         if valid_return_state is True:
             physical_items = item_mapper.get_physical_items_from_tuple(request.form)
-            item_mapper.return_items(user_id, request.form, physical_items)
-            user_mapper.remove_borrowed_items(user_id, request.form)
+            item_mapper.return_items(physical_items)
+            user_mapper.remove_borrowed_items(user_id, physical_items)
             transaction_mapper.add_transactions(user_id, physical_items, "return", strftime('%Y-%m-%d %H:%M:%S', localtime()))
             flash("Items were successfully returned.", 'success')
             return render_template('home.html', item_list=item_mapper.get_all_items("bb"), item="bb")

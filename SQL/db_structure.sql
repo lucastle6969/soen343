@@ -108,6 +108,7 @@ CREATE TABLE transaction_registry(
     id INT(20) AUTO_INCREMENT PRIMARY KEY,
     user_fk INT(7),
     prefix VARCHAR(2),
+    item_fk INT(6),
     physical_id INT(6),
     transaction_type VARCHAR(6),
     timestamp DATETIME
@@ -118,6 +119,7 @@ CREATE TABLE active_loan_registry(
     id INT(10) AUTO_INCREMENT PRIMARY KEY,
     user_fk INT(7),
     prefix VARCHAR(2),
+    item_fk INT(6),
     physical_id INT(6),
     return_date DATETIME  
 );

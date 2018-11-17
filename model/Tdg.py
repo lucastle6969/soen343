@@ -368,7 +368,7 @@ class Tdg:
     def get_transactions(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, user_fk, prefix, physical_id, transaction_type, timestamp FROM transaction_registry WHERE 1")
+        result = cur.execute("SELECT id, user_fk, prefix, item_fk, physical_id, transaction_type, timestamp FROM transaction_registry WHERE 1")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -381,7 +381,7 @@ class Tdg:
     def get_active_loans(self):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        result = cur.execute("SELECT id, user_fk, prefix, physical_id, return_date FROM active_loan_registry WHERE 1")
+        result = cur.execute("SELECT id, user_fk, prefix, item_fk, physical_id, return_date FROM active_loan_registry WHERE 1")
         data = []
         for row in cur.fetchall():
             data.append(row)
@@ -395,19 +395,19 @@ class Tdg:
         connection = self.mysql.connect()
         cur = connection.cursor()
         for item in physical_items:
-            cur.execute("""INSERT INTO transaction_registry(user_fk, prefix, physical_id, transaction_type, timestamp)
-                    VALUES(%s, %s, %s, %s, %s)""", (user_id, item.prefix, item.id, transaction_type, timestamp))
+            cur.execute("""INSERT INTO transaction_registry(user_fk, prefix, item_fk, physical_id, transaction_type, timestamp)
+                    VALUES(%s, %s, %s, %s, %s, %s)""", (user_id, item.prefix, item.item_fk, item.id, transaction_type, timestamp))
             if transaction_type is "loan":
-                cur.execute("""INSERT INTO active_loan_registry(user_fk, prefix, physical_id, return_date)
-                    VALUES(%s, %s, %s, %s)""", (user_id, item.prefix, item.id, item.return_date))
+                cur.execute("""INSERT INTO active_loan_registry(user_fk, prefix, item_fk, physical_id, return_date)
+                    VALUES(%s, %s, %s, %s, %s)""", (user_id, item.prefix, item.item_fk, item.id, item.return_date))
             elif transaction_type is "return":
                 cur.execute("DELETE FROM active_loan_registry WHERE user_fk = %s AND prefix = %s AND physical_id = %s", (user_id, item.prefix, item.id))
-        
+
         result = cur.execute("SELECT * FROM transaction_registry ORDER BY id DESC LIMIT 1")
         if result > 0:
             last_historical_id = cur.fetchone()
             last_historical_id = last_historical_id[0]
-        else :
+        else:
             last_historical_id = False
         if transaction_type is "loan":
             result = cur.execute("SELECT * FROM active_loan_history ORDER BY id DESC LIMIT 1")
