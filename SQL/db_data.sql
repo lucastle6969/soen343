@@ -25,7 +25,7 @@ INSERT INTO music (id, title, media_type, artist, label, release_date, asin, qua
 
 
 TRUNCATE TABLE book_physical;
-INSERT INTO book_physical (id, book_fk, status, return_date) VALUES
+INSERT INTO book_physical (id, item_fk, status, return_date) VALUES
 (NULL, 1, "Available", NULL),
 (NULL, 1, "Available", NULL),
 (NULL, 2, "Available", NULL),
@@ -41,7 +41,7 @@ INSERT INTO book_physical (id, book_fk, status, return_date) VALUES
 
 
 TRUNCATE TABLE magazine_physical;
-INSERT INTO magazine_physical (id, magazine_fk, status) VALUES
+INSERT INTO magazine_physical (id, item_fk, status) VALUES
 (NULL, 1, "Available"),
 (NULL, 1, "Reserved"),
 (NULL, 2, "Reserved"),
@@ -57,7 +57,7 @@ INSERT INTO magazine_physical (id, magazine_fk, status) VALUES
 
 
 TRUNCATE TABLE movie_physical;
-INSERT INTO movie_physical (id, movie_fk, status, return_date) VALUES
+INSERT INTO movie_physical (id, item_fk, status, return_date) VALUES
 (NULL, 1, "Available", NULL),
 (NULL, 1, "Available", NULL),
 (NULL, 2, "Available", NULL),
@@ -73,7 +73,7 @@ INSERT INTO movie_physical (id, movie_fk, status, return_date) VALUES
 
 
 TRUNCATE TABLE music_physical;
-INSERT INTO music_physical (id, music_fk, status, return_date) VALUES
+INSERT INTO music_physical (id, item_fk, status, return_date) VALUES
 (NULL, 1, "Available", NULL),
 (NULL, 1, "Available", NULL),
 (NULL, 2, "Available", NULL),

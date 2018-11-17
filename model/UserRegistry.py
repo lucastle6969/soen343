@@ -15,7 +15,7 @@ class UserRegistry:
         for entry in all_users:
             if user_id != entry[0]:
                 if user_id != -1:
-                    current_user.borrowed_items = items[:]
+                    current_user.borrowed_items = set(items[:])
                     self.list_of_users.append(current_user)
                 user_id = entry[0]
                 current_user = User(entry[0], entry[1], entry[2], entry[3], entry[4], entry[5], entry[6], entry[7])
@@ -28,7 +28,7 @@ class UserRegistry:
             if entry[18] is not None:
                     items.append(PhysicalMovie(entry[18], entry[19], entry[20], entry[21], entry[22]))
         #to account for the last user
-        current_user.borrowed_items = items[:]
+        current_user.borrowed_items = set(items[:])
         self.list_of_users.append(current_user)
             
     def check_lock(self):
@@ -62,7 +62,6 @@ class UserRegistry:
         # log user out if they are already logged in
         self.active_user_registry[:] = [tup for tup in self.active_user_registry if not user_id == tup[0]]
 
-
     def insert_user(self, user_id, first_name, last_name, address, email, phone, admin, password):
         self.list_of_users.append(User(user_id, first_name, last_name, address, email, phone, admin, password))
 
@@ -86,3 +85,13 @@ class UserRegistry:
 
     def get_all_users(self):
         return self.list_of_users
+
+    def remove_borrowed_items(self, user_id, prefix, item_fk, physical_id):
+        for user in self.list_of_users:
+            if user.id == user_id:
+                to_remove = []
+                for item in user.borrowed_items:
+                    if item.prefix == prefix and item.item_fk == item_fk and item.id == physical_id:
+                        to_remove.append(item)
+                for item_re in to_remove:
+                    user.borrowed_items.remove(item_re)

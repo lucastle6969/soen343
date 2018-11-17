@@ -16,7 +16,7 @@ CREATE TABLE book (
 DROP TABLE IF EXISTS book_physical;
 CREATE TABLE book_physical (
     id INT(6) AUTO_INCREMENT PRIMARY KEY,
-    book_fk INT(6),
+    item_fk INT(6),
     status VARCHAR(100),
     return_date DATETIME,
     user_fk INT(6) NULL DEFAULT NULL
@@ -38,8 +38,8 @@ CREATE TABLE magazine (
 DROP TABLE IF EXISTS magazine_physical;
 CREATE TABLE magazine_physical (
     id INT(6) AUTO_INCREMENT PRIMARY KEY,
-    magazine_fk INT(6),
-    status VARCHAR(100),
+    item_fk INT(6),
+    status VARCHAR(100)
 );
 
 
@@ -61,9 +61,9 @@ CREATE TABLE movie (
 DROP TABLE IF EXISTS movie_physical;
 CREATE TABLE movie_physical (
     id INT(6) AUTO_INCREMENT PRIMARY KEY,
-    movie_fk INT(6),
+    item_fk INT(6),
     status VARCHAR(100),
-    return_date DATETIME
+    return_date DATETIME,
     user_fk INT(6) NULL DEFAULT NULL
 );
 
@@ -84,9 +84,9 @@ CREATE TABLE music (
 DROP TABLE IF EXISTS music_physical;
 CREATE TABLE music_physical (
     id INT(6) AUTO_INCREMENT PRIMARY KEY,
-    music_fk INT(6),
+    item_fk INT(6),
     status VARCHAR(100),
-    return_date DATETIME
+    return_date DATETIME,
     user_fk INT(6) NULL DEFAULT NULL
 );
 
@@ -108,6 +108,7 @@ CREATE TABLE transaction_registry(
     id INT(20) AUTO_INCREMENT PRIMARY KEY,
     user_fk INT(7),
     prefix VARCHAR(2),
+    item_fk INT(6),
     physical_id INT(6),
     transaction_type VARCHAR(6),
     timestamp DATETIME
@@ -118,6 +119,15 @@ CREATE TABLE active_loan_registry(
     id INT(10) AUTO_INCREMENT PRIMARY KEY,
     user_fk INT(7),
     prefix VARCHAR(2),
+    item_fk INT(6),
     physical_id INT(6),
-    timestamp DATETIME  
+    return_date DATETIME  
+);
+
+DROP TABLE IF EXISTS cart;
+CREATE TABLE cart(
+    id INT(7) AUTO_INCREMENT PRIMARY KEY,
+    user_fk INT(7),
+    prefix VARCHAR(2),
+    physical_id_fk INT(6)
 );

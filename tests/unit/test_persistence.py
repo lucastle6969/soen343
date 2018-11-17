@@ -55,7 +55,7 @@ def test_book_persistence(new_book_form):
     removed_book = catalog.get_item_by_id("bb", book_id)
     assert removed_book is None
 
-    del_physical(tdg, 'book_physical', 'book_fk', str(book_id))
+    del_physical(tdg, 'book_physical', 'item_fk', str(book_id))
     keys = tdg.get_physical_keys(book_id, "bb")
     assert len(keys) == 0
 
@@ -81,7 +81,7 @@ def test_magazine_persistence(new_magazine_form):
     magazine = catalog.get_item_by_id("ma", magazine_id)
     assert magazine is None
 
-    del_physical(tdg, 'magazine_physical', 'magazine_fk', str(magazine_id))
+    del_physical(tdg, 'magazine_physical', 'item_fk', str(magazine_id))
     keys = tdg.get_physical_keys(magazine_id, "ma")
     assert len(keys) == 0
 
@@ -107,7 +107,7 @@ def test_movie_persistence(new_movie_form):
     movie = catalog.get_item_by_id("mo", movie_id)
     assert movie is None
 
-    del_physical(tdg, 'movie_physical', 'movie_fk', str(movie_id))
+    del_physical(tdg, 'movie_physical', 'item_fk', str(movie_id))
     keys = tdg.get_physical_keys(movie_id, "mo")
     assert len(keys) == 0
 
@@ -133,6 +133,6 @@ def test_music_persistence(new_music_form):
     music = catalog.get_item_by_id("mu", music_id)
     assert music is None
 
-    del_physical(tdg, 'music_physical', 'music_fk', str(music_id))
+    del_physical(tdg, 'music_physical', 'item_fk', str(music_id))
     keys = tdg.get_physical_keys(music_id, "mu")
     assert len(keys) == 0
