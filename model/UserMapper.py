@@ -66,11 +66,9 @@ class UserMapper:
     def validate_return(self):
         return self.user_registry.catalog_lock == -1
 
-    def remove_borrowed_items(self, user_id, prefix_fk_id_tuple):
-        for tup in prefix_fk_id_tuple:
-            prefix = tup[0:2]
-            item_fk = int(tup[2:])
-            self.user_registry.remove_borrowed_items(user_id, prefix, item_fk, int(prefix_fk_id_tuple[tup]))
+    def remove_borrowed_items(self, user_id, physical_items):
+        for item in physical_items:
+            self.user_registry.remove_borrowed_items(user_id, item.prefix, item.item_fk, item.id)
 
     def validate_cart_size(self, user_id):
         for user in self.user_registry.list_of_users:
