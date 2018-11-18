@@ -1,23 +1,41 @@
 class Item:
-    def __init__(self, item_id, title, prefix, quantity, copies):
+    def __init__(self, item_id, title, prefix, quantity):
         self.title = title
         self.prefix = prefix
         self.id = item_id
         self.quantity = quantity
-        self.copies = copies
 
-    def add_temp_copies(self, amount):
-        while amount < 0:
-            self.copies.append(PhysicalItem(None, self.prefix, self.id))
-            amount = amount - 1
-            quantity = quantity + 1
+    def add_temp_copies(self, amount, prefix):
+        for x in range(0, amount):
+            if prefix == "bb":
+                self.copies.append(PhysicalBook(None, self.id, "Available", None))
+                self.quantity = self.quantity + 1
+
+            if prefix == "ma":
+                self.copies.append(PhysicalMagazine(None, self.id, None))
+                self.quantity = self.quantity + 1
+
+            if prefix == "mo":
+                self.copies.append(PhysicalMovie(None, self.id, "Available", None))
+                self.quantity = self.quantity + 1
+
+            if prefix == "mu":
+                self.copies.append(PhysicalMusic(None, self.id, "Available", None))
+                self.quantity = self.quantity + 1
 
     def remove_physical_item(self, removed_physical_ids):
         for physical_id in removed_physical_ids:
-            for copy in copies:
-                if physical_id == copy.id:
-                    copies.remove(copy)
-                    quantity = quantity - 1
+            for copy in self.copies:
+                print("===============================================================")
+                print(physical_id)
+                if physical_id is not None:
+                    if int(physical_id) == copy.id:
+                        self.copies.remove(copy)
+                        self.quantity = self.quantity - 1
+                        break
+                if physical_id is None:
+                    self.copies.remove(copy)
+                    self.quantity = self.quantity - 1
                     break
 
 
@@ -36,7 +54,7 @@ class PhysicalItem:
 
 class Book(Item):
     def __init__(self, item_id, title, prefix, author, item_format, pages, publisher, publication_year, language, isbn10, isbn13, quantity, copies):
-        Item.__init__(self, item_id, title, prefix, quantity, copies)
+        Item.__init__(self, item_id, title, prefix, quantity)
         self.author = author
         self.format = item_format
         self.pages = pages
@@ -45,6 +63,7 @@ class Book(Item):
         self.language = language
         self.isbn10 = isbn10
         self.isbn13 = isbn13
+        self.copies = copies
 
 
 class PhysicalBook(PhysicalItem):
@@ -57,12 +76,13 @@ class PhysicalBook(PhysicalItem):
 
 class Magazine(Item):
     def __init__(self, item_id, title, prefix, publisher, publication_date, language, isbn10, isbn13, quantity, copies):
-        Item.__init__(self, item_id, title, prefix, quantity, copies)
+        Item.__init__(self, item_id, title, prefix, quantity)
         self.publisher = publisher
         self.publication_date = publication_date
         self.language = language
         self.isbn10 = isbn10
         self.isbn13 = isbn13
+        self.copies = copies
 
 
 class PhysicalMagazine(PhysicalItem):
@@ -74,7 +94,7 @@ class PhysicalMagazine(PhysicalItem):
 class Movie(Item):
     def __init__(self, item_id, title, prefix, director, producers, actors, language, subtitles, dubbed,
                  release_date, runtime, quantity, copies):
-        Item.__init__(self, item_id, title, prefix, quantity, copies)
+        Item.__init__(self, item_id, title, prefix, quantity)
         self.director = director
         self.producers = producers
         self.actors = actors
@@ -83,6 +103,7 @@ class Movie(Item):
         self.dubbed = dubbed
         self.release_date = release_date
         self.runtime = runtime
+        self.copies = copies
 
 
 class PhysicalMovie(PhysicalItem):
@@ -95,12 +116,13 @@ class PhysicalMovie(PhysicalItem):
 
 class Music(Item):
     def __init__(self, item_id, title, prefix, media_type, artist, label, release_date, asin, quantity, copies):
-        Item.__init__(self, item_id, title, prefix, quantity, copies)
+        Item.__init__(self, item_id, title, prefix, quantity)
         self.media_type = media_type
         self.artist = artist
         self.label = label
         self.release_date = release_date
         self.asin = asin
+        self.copies = copies
 
 
 class PhysicalMusic(PhysicalItem):

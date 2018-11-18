@@ -13,7 +13,7 @@ class Uow():
         self.deleted_items = []
 
         self.temp_id_counter = 0
-        
+
         self.additional_copies = []
         self.removed_physical_copies = {}
 
@@ -112,53 +112,52 @@ class Uow():
         item = None
         if prefix == "bb":
             for (book_id,  book) in self.mapped_book_items:
-                print((book_id, book))
-                if(item_id == book_id):
+                if(int(item_id) == book_id):
                     item = book
                     break
         elif prefix == "ma":
             for (magazine_id,  magazine) in self.mapped_magazine_items:
-                if(item_id == magazine_id):
+                if(int(item_id) == magazine_id):
                     item = magazine
                     break
         elif prefix == "mo":
             for (movie_id,  movie) in self.mapped_movie_items:
-                if(item_id == movie_id):
+                if(int(item_id) == movie_id):
                     item = movie
                     break
         elif prefix == "mu":
             for (music_id,  music) in self.mapped_music_items:
-                if(item_id == music_id):
+                if(int(item_id) == music_id):
                     item = music
                     break
-        item.add_temp_copies(added_amount)
+        item.add_temp_copies(int(added_amount), prefix)
 
     def remove_physical_item(self, prefix, removed_physical_ids, item_id):
-        if removed_item is not None and len(removed_item) != 0:
-            self.removed_physical_copies.append((prefix, item_id), removed_physical_ids)
+        if removed_physical_ids is not None and len(removed_physical_ids) != 0:
+            self.removed_physical_copies[(prefix, item_id)] = removed_physical_ids
             # Adding temporary copies to item in UoW so that changes are reflected on subsequent requests.
             item = None
             if prefix == "bb":
                 for (book_id,  book) in self.mapped_book_items:
-                    if(item_id == book_id):
+                    if(int(item_id) == book_id):
                         item = book
                         break
             elif prefix == "ma":
                 for (magazine_id,  magazine) in self.mapped_magazine_items:
-                    if(item_id == magazine_id):
+                    if(int(item_id) == magazine_id):
                         item = magazine
                         break
             elif prefix == "mo":
                 for (movie_id,  movie) in self.mapped_movie_items:
-                    if(item_id == movie_id):
+                    if(int(item_id) == movie_id):
                         item = movie
                         break
             elif prefix == "mu":
                 for (music_id,  music) in self.mapped_music_items:
-                    if(item_id == music_id):
+                    if(int(item_id) == music_id):
                         item = music
                         break
-            item.remove_physical_items(removed_physical_ids)
+            item.remove_physical_item(removed_physical_ids)
 
 
 

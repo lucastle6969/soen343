@@ -358,9 +358,8 @@ class Tdg:
                     for y in range(0, int(x[1])):
                         cur.execute("""INSERT INTO book_physical(item_fk, status) VALUES (%s, %s)""", (str(id), "Available"))
         if len(removed_item) != 0:
-            for x in removed_item:
-                if x[0] == "bb":
-                    item_id = x[1]
+            for (book_id,  book) in removed_item:
+                if(int(id) == book_id):
                     cur.execute("DELETE FROM book_physical WHERE id = %s", (item_id))
         cur.close()
 
