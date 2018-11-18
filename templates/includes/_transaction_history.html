@@ -26,7 +26,7 @@
             </td>
             <td>{{x.transaction_type}}</td>
             <td>{{x.timestamp}}</td>
-            <td>{% if x.transaction_type == "loan" %} {{x.physical_item.return_date}} {% else %} N/A {% endif %}</td>
+            <td>{% if x.transaction_type == "loan" %} {% if x.physical_item.return_date %} {{x.physical_item.return_date}} {% else %} Returned {% endif %} {% else %} N/A {% endif %}</td>
         </tr>
         {% endfor %}
     </tbody>
