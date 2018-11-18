@@ -21,6 +21,9 @@
     modal.find('.modal-body #book-isbn13').text(isbn13)
   })*/
 function add_to_cart(id){
+  if(id.substring(0,9) == "detailed_"){
+    id = id.substring(9);
+  }
   send_add_to_cart(id.substring(0,2), id.substring(2));
 }
 
@@ -30,20 +33,27 @@ function send_add_to_cart(prefix, id){
 
 function receive_add_to_cart(data){
   button = document.getElementById(data.item_prefix + data.item_id);
+  detailed_button = document.getElementById("detailed_" + data.item_prefix + data.item_id);
   switch(data.result){
     case "added":
       button.innerHTML="Added To Cart";
       button.style.backgroundColor = "#4CAF50";
       button.setAttribute("onclick", "");
-
+      detailed_button.innerHTML="Added To Cart";
+      detailed_button.style.backgroundColor = "#4CAF50";
+      detailed_button.setAttribute("onclick", "");
       break;
     case "unavailable":
       button.innerHTML="Unavailable";
       button.style.backgroundColor = "#888888";
+      detailed_button.innerHTML="Unavailable";
+      detailed_button.style.backgroundColor = "#888888";
       break;
     case "full":
       button.innerHTML="Cart Full";
       button.style.backgroundColor = "#EE7E3E";
+      detailed_button.innerHTML="Cart Full";
+      detailed_button.style.backgroundColor = "#EE7E3E";
       break;
   }
 }

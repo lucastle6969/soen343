@@ -86,7 +86,8 @@
                     <tr>
                         <th>Title</th>
                         <th>Author</th>
-                        <th>Detailed View</th>
+                        <th><center>Detailed View</center></th>
+                        <th><center>Add To Cart</center></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -99,11 +100,13 @@
                                 {% set loop_index0 = loop.index0 %}
                                 {% include 'includes/_detailed_view.html' %}
                             {% endwith %} 
-                            {% include 'includes/_modal_open.html' %}
+                            {% include 'includes/_modal_open.html' %}   
+                        </td>
+                        <td><center>
                             {% if session.admin == False %}
                             <button id={{x.prefix}}{{x.id}} type="button" class="btn btn-to-cart" onclick="add_to_cart(this.id)">Add To Cart</button>
                             {% endif %}
-                        </td>
+                        </center></td>
                     </tr>
                     {% endfor %}
                     </tbody>
@@ -170,7 +173,8 @@
                     <tr>
                         <th>Title</th>
                         <th>Publisher</th>
-                        <th>Detailed View</th>
+                        <th><center>Detailed View</center></th>
+                        <th><center>Add To Cart</center></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -184,10 +188,12 @@
                                 {% include 'includes/_detailed_view.html' %}
                             {% endwith %} 
                             {% include 'includes/_modal_open.html' %}
+                        </td>
+                        <td><center>
                             {% if session.admin == False %}
                             <button type="button" class="btn btn-mag">Not Loanable</button>
                             {% endif %}
-                        </td>
+                        </center></td>
                     </tr>
                     {% endfor %}
                     </tbody>
@@ -254,7 +260,8 @@
                     <tr>
                         <th>Title</th>
                         <th>Artist</th>
-                        <th>Detailed View</th>
+                        <th><center>Detailed View</center></th>
+                        <th><center>Add To Cart</center></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -268,10 +275,12 @@
                                 {% include 'includes/_detailed_view.html' %}
                             {% endwith %} 
                             {% include 'includes/_modal_open.html' %}
+                        </td>
+                        <td><center>
                             {% if session.admin == False %}
                             <button id={{x.prefix}}{{x.id}} type="button" class="btn btn-to-cart" onclick="add_to_cart(this.id)">Add To Cart</button>
                             {% endif %}
-                        </td>
+                        </center></td>
                     </tr>
                     {% endfor %}
                     </tbody>
@@ -344,7 +353,8 @@
                     <tr>
                         <th>Title</th>
                         <th>Director</th>
-                        <th>Detailed View</th>
+                        <th><center>Detailed View</center></th>
+                        <th><center>Add To Cart</center></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -359,11 +369,13 @@
                                 {% include 'includes/_detailed_view.html' %}
                             {% endwith %} 
                             {% include 'includes/_modal_open.html' %}
+                        </center>
+                        </td>
+                        <td><center>
                             {% if session.admin == False %}
                             <button id={{x.prefix}}{{x.id}} type="button" class="btn btn-to-cart" onclick="add_to_cart(this.id)">Add To Cart</button>
                             {% endif %}
-                        </center>
-                        </td>
+                        </center></td>
                     </tr>
                     {% endfor %}
                     </tbody>

@@ -332,7 +332,7 @@ def admin_tools_default():
     return redirect(url_for('home'))
 
 
-@app.route('/admin_tools/<tool>',  methods=['GET', 'POST'])
+@app.route('/admin_tools/<tool>', methods=['GET', 'POST'])
 def admin_tools(tool):
     if session['logged_in']:
         if user_mapper.validate_admin(session['user_id'], session['admin']):

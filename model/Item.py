@@ -98,4 +98,3 @@ class PhysicalMusic(PhysicalItem):
         self.status = status
         self.return_date = return_date
         self.user_fk = user_fk
-
