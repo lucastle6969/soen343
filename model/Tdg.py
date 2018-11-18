@@ -135,16 +135,6 @@ class Tdg:
         for x in range(0, quantity):
             cur.execute("""INSERT INTO magazine_physical(item_fk, status) VALUES (%s, %s)""", (str(id[0]), "Available"))
 
-    # def modify_physical_magazine(self, quantity, id, operation):
-    #     connection = self.mysql.connect()
-    #     cur = connection.cursor()
-    #     if operation == "Add":
-    #         self.add_physical_magazine(quantity, id, cur)
-    #     if operation == "Delete":
-    #         for x in range(0, quantity):
-    #             cur.execute("DELETE FROM magazine_physical WHERE item_fk = %s", id)
-    #     cur.close()
-
     def add_movie(self, movie):
         connection = self.mysql.connect()
         cur = connection.cursor()
@@ -165,16 +155,6 @@ class Tdg:
         for x in range(0, quantity):
             cur.execute("""INSERT INTO movie_physical(item_fk, status) VALUES (%s, %s)""", (str(id[0]), "Available"))
 
-    # def modify_physical_movie(self, quantity, id, operation):
-    #     connection = self.mysql.connect()
-    #     cur = connection.cursor()
-    #     if operation == "Add":
-    #         self.add_physical_movie(quantity, id, cur)
-    #     if operation == "Delete":
-    #         for x in range(0, quantity):
-    #             cur.execute("DELETE FROM movie_physical WHERE item_fk = %s", id)
-    #     cur.close()
-
     def add_music(self, music):
         connection = self.mysql.connect()
         cur = connection.cursor()
@@ -194,16 +174,6 @@ class Tdg:
     def add_physical_music(self, quantity, id, cur):
         for x in range(0, quantity):
             cur.execute("""INSERT INTO music_physical(item_fk, status) VALUES (%s, %s)""", (str(id[0]), "Available"))
-
-    # def modify_physical_music(self, quantity, id, operation):
-    #         connection = self.mysql.connect()
-    #         cur = connection.cursor()
-    #         if operation == "Add":
-    #             self.add_physical_music(quantity, id, cur)
-    #         if operation == "Delete":
-    #             for x in range(0, quantity):
-    #                 cur.execute("DELETE FROM music_physical WHERE item_fk = %s", id)
-    #         cur.close()
 
     def get_books(self):
         connection = self.mysql.connect()
@@ -360,7 +330,7 @@ class Tdg:
         if len(removed_item) != 0:
             for (book_id,  book) in removed_item:
                 if(int(id) == book_id):
-                    cur.execute("DELETE FROM book_physical WHERE id = %s", (item_id))
+                    cur.execute("DELETE FROM book_physical WHERE id = %s", (id))
         cur.close()
 
     def modify_magazines(self, modified_magazines):

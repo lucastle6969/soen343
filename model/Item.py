@@ -8,32 +8,25 @@ class Item:
     def add_temp_copies(self, amount, prefix):
         for x in range(0, amount):
             if prefix == "bb":
-                self.copies.append(PhysicalBook(None, self.id, "Available", None))
+                self.copies.append(PhysicalBook(0, self.id, "Available", None))
                 self.quantity = self.quantity + 1
 
             if prefix == "ma":
-                self.copies.append(PhysicalMagazine(None, self.id, None))
+                self.copies.append(PhysicalMagazine(0, self.id, None))
                 self.quantity = self.quantity + 1
 
             if prefix == "mo":
-                self.copies.append(PhysicalMovie(None, self.id, "Available", None))
+                self.copies.append(PhysicalMovie(0, self.id, "Available", None))
                 self.quantity = self.quantity + 1
 
             if prefix == "mu":
-                self.copies.append(PhysicalMusic(None, self.id, "Available", None))
+                self.copies.append(PhysicalMusic(0, self.id, "Available", None))
                 self.quantity = self.quantity + 1
 
     def remove_physical_item(self, removed_physical_ids):
         for physical_id in removed_physical_ids:
             for copy in self.copies:
-                print("===============================================================")
-                print(physical_id)
-                if physical_id is not None:
-                    if int(physical_id) == copy.id:
-                        self.copies.remove(copy)
-                        self.quantity = self.quantity - 1
-                        break
-                if physical_id is None:
+                if int(physical_id) == copy.id:
                     self.copies.remove(copy)
                     self.quantity = self.quantity - 1
                     break
