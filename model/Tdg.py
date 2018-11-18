@@ -324,7 +324,7 @@ class Tdg:
         cur = connection.cursor()
         if len(added_amount) != 0:
             for x in added_amount:
-                if x[0] == "bb":
+                if x[0] == "bb" and id == int(x[2]):
                     for y in range(0, int(x[1])):
                         cur.execute("""INSERT INTO book_physical(item_fk, status) VALUES (%s, %s)""", (str(id), "Available"))
         if len(removed_item) != 0:
@@ -346,7 +346,7 @@ class Tdg:
         cur = connection.cursor()
         if len(added_amount) != 0:
             for x in added_amount:
-                if x[0] == "ma":
+                if x[0] == "ma" and id == int(x[2]):
                     for y in range(0, int(x[1])):
                         cur.execute("""INSERT INTO magazine_physical(item_fk, status) VALUES (%s, %s)""", (str(id), "Available"))
         if len(removed_item) != 0:
@@ -368,7 +368,7 @@ class Tdg:
         cur = connection.cursor()
         if len(added_amount) != 0:
             for x in added_amount:
-                if x[0] == "mo":
+                if x[0] == "mo" and id == int(x[2]):
                     for y in range(0, int(x[1])):
                         cur.execute("""INSERT INTO movie_physical(item_fk, status) VALUES (%s, %s)""", (str(id), "Available"))
         if len(removed_item) != 0:
@@ -390,7 +390,7 @@ class Tdg:
         cur = connection.cursor()
         if len(added_amount) != 0:
             for x in added_amount:
-                if x[0] == "mu":
+                if x[0] == "mu" and id == int(x[2]):
                     for y in range(0, int(x[1])):
                         cur.execute("""INSERT INTO music_physical(item_fk, status) VALUES (%s, %s)""", (str(id), "Available"))
         if len(removed_item) != 0:
