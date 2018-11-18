@@ -131,7 +131,7 @@ class Tdg:
             new_magazine_id = False
         return new_magazine_id
 
-    def add_physical_magazine(self, magazine, id, cur):
+    def add_physical_magazine(self, quantity, id, cur):
         for x in range(0, quantity):
             cur.execute("""INSERT INTO magazine_physical(item_fk, status) VALUES (%s, %s)""", (str(id[0]), "Available"))
 
