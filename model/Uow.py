@@ -11,8 +11,10 @@ class Uow():
         self.created_items = []
         self.modified_items = []
         self.deleted_items = []
+        self.removed_physical_copies = []
 
         self.temp_id_counter = 0
+        self.additional_copies = []
 
     def get(self, item_prefix, item_id):
         int_id = int(item_id)
@@ -103,6 +105,13 @@ class Uow():
     def cancel_deletion(self, item_to_cancel):
         self.deleted_items[:] = [tup for tup in self.deleted_items if not (int(item_to_cancel.id) == tup[1] and item_to_cancel.prefix == tup[0])]
 
+    def add_physical_item(self, prefix, added_amount, item_id):
+        self.additional_copies.append([prefix, added_amount, item_id])
+
+    def remove_physical_item(self, prefix, removed_item):
+        if removed_item is not None:
+            self.removed_physical_copies.append([prefix, removed_item])
+
 # Retrieve the lists of updates (create, modify, delete)
     def get_saved_changes(self):
         """Create lists of objects (unlike the similarly named
@@ -173,4 +182,4 @@ class Uow():
                     if deleted_pair[1] == mapped_pair[0]:
                         deleted_items.append(mapped_pair[1])
 
-        return [created_items, modified_items, deleted_items]
+        return [created_items, modified_items, deleted_items, self.additional_copies, self.removed_physical_copies]

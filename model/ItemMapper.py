@@ -118,7 +118,7 @@ class ItemMapper:
         self.uow.cancel_deletion(item_to_cancel)
         return True
 
-    def set_item(self, item_prefix, item_id, form):
+    def set_item(self, item_prefix, item_id, form, physical_items_added, physical_items_removed):
         item = self.uow.get(item_prefix, item_id)
 
         if item_prefix == "bb":
@@ -131,6 +131,12 @@ class ItemMapper:
             item.language = form.language.data
             item.isbn10 = form.isbn10.data
             item.isbn13 = form.isbn13.data
+            if physical_items_added != 0:
+                item.quantity = int(form.quantity.data) + int(physical_items_added)
+            if len(physical_items_removed) != 0:
+                item.quantity = int(form.quantity.data) - len(physical_items_removed)
+            self.uow.add_physical_item("bb", physical_items_added, item_id)
+            self.uow.remove_physical_item("bb", physical_items_removed)
 
         elif item_prefix == "ma":
             item.title = form.title.data
@@ -139,6 +145,12 @@ class ItemMapper:
             item.language = form.language.data
             item.isbn10 = form.isbn10.data
             item.isbn13 = form.isbn13.data
+            if physical_items_added != 0:
+                item.quantity = int(form.quantity.data) + int(physical_items_added)
+            if len(physical_items_removed) != 0:
+                item.quantity = int(form.quantity.data) - len(physical_items_removed)
+            self.uow.add_physical_item("ma", physical_items_added, item_id)
+            self.uow.remove_physical_item("ma", physical_items_removed)
 
         elif item_prefix == "mo":
             item.title = form.title.data
@@ -150,6 +162,12 @@ class ItemMapper:
             item.dubbed = form.dubbed.data
             item.release_date = form.release_date.data
             item.runtime = form.runtime.data
+            if physical_items_added != 0:
+                item.quantity = int(form.quantity.data) + int(physical_items_added)
+            if len(physical_items_removed) != 0:
+                item.quantity = int(form.quantity.data) - len(physical_items_removed)
+            self.uow.add_physical_item("mo", physical_items_added, item_id)
+            self.uow.remove_physical_item("mo", physical_items_removed)
 
         elif item_prefix == "mu":
             item.title = form.title.data
@@ -158,6 +176,12 @@ class ItemMapper:
             item.label = form.label.data
             item.release_date = form.release_date.data
             item.asin = form.asin.data
+            if physical_items_added != 0:
+                item.quantity = int(form.quantity.data) + int(physical_items_added)
+            if len(physical_items_removed) != 0:
+                item.quantity = int(form.quantity.data) - len(physical_items_removed)
+            self.uow.add_physical_item("mu", physical_items_added, item_id)
+            self.uow.remove_physical_item("mu", physical_items_removed)
 
         self.uow.register_dirty(item)
 
@@ -289,15 +313,26 @@ class ItemMapper:
         if items_to_commit[1] is not None:
             for item in items_to_commit[1]:
                 if item.prefix == "bb":
+                    added_list = items_to_commit[3]
+                    removed_list = items_to_commit[4]
+                    self.tdg.modify_physical_book(item.id, added_list, removed_list)
                     modified_books.append(item)
                 elif item.prefix == "ma":
+                    added_list = items_to_commit[3]
+                    removed_list = items_to_commit[4]
+                    self.tdg.modify_physical_magazine(item.id, added_list, removed_list)
                     modified_magazines.append(item)
                 elif item.prefix == "mo":
+                    added_list = items_to_commit[3]
+                    removed_list = items_to_commit[4]
+                    self.tdg.modify_physical_movie(item.id, added_list, removed_list)
                     modified_movies.append(item)
                 elif item.prefix == "mu":
+                    added_list = items_to_commit[3]
+                    removed_list = items_to_commit[4]
+                    self.tdg.modify_physical_music(item.id, added_list, removed_list)
                     modified_music.append(item)
             self.catalog.edit_items(items_to_commit[1])
-            print("End method of ItemMappter ******************************************************************************")
             if len(modified_books) != 0:
                 self.tdg.modify_books(modified_books)
             if len(modified_magazines) != 0:

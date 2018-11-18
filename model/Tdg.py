@@ -135,6 +135,16 @@ class Tdg:
         for x in range(0, quantity):
             cur.execute("""INSERT INTO magazine_physical(item_fk, status) VALUES (%s, %s)""", (str(id[0]), "Available"))
 
+    # def modify_physical_magazine(self, quantity, id, operation):
+    #     connection = self.mysql.connect()
+    #     cur = connection.cursor()
+    #     if operation == "Add":
+    #         self.add_physical_magazine(quantity, id, cur)
+    #     if operation == "Delete":
+    #         for x in range(0, quantity):
+    #             cur.execute("DELETE FROM magazine_physical WHERE item_fk = %s", id)
+    #     cur.close()
+
     def add_movie(self, movie):
         connection = self.mysql.connect()
         cur = connection.cursor()
@@ -155,6 +165,16 @@ class Tdg:
         for x in range(0, quantity):
             cur.execute("""INSERT INTO movie_physical(item_fk, status) VALUES (%s, %s)""", (str(id[0]), "Available"))
 
+    # def modify_physical_movie(self, quantity, id, operation):
+    #     connection = self.mysql.connect()
+    #     cur = connection.cursor()
+    #     if operation == "Add":
+    #         self.add_physical_movie(quantity, id, cur)
+    #     if operation == "Delete":
+    #         for x in range(0, quantity):
+    #             cur.execute("DELETE FROM movie_physical WHERE item_fk = %s", id)
+    #     cur.close()
+
     def add_music(self, music):
         connection = self.mysql.connect()
         cur = connection.cursor()
@@ -170,10 +190,20 @@ class Tdg:
         else:
             new_music_id = False
         return new_music_id
- 
+
     def add_physical_music(self, quantity, id, cur):
         for x in range(0, quantity):
             cur.execute("""INSERT INTO music_physical(item_fk, status) VALUES (%s, %s)""", (str(id[0]), "Available"))
+
+    # def modify_physical_music(self, quantity, id, operation):
+    #         connection = self.mysql.connect()
+    #         cur = connection.cursor()
+    #         if operation == "Add":
+    #             self.add_physical_music(quantity, id, cur)
+    #         if operation == "Delete":
+    #             for x in range(0, quantity):
+    #                 cur.execute("DELETE FROM music_physical WHERE item_fk = %s", id)
+    #         cur.close()
 
     def get_books(self):
         connection = self.mysql.connect()
@@ -317,7 +347,21 @@ class Tdg:
         cur = connection.cursor()
         for book in modified_books:
             cur.execute("UPDATE book SET title = %s, author = %s, format = %s, pages = %s, publisher = %s, publication_year = %s, language = %s, isbn10 = %s, isbn13 = %s , quantity = %s WHERE id = %s", (book.title, book.author, book.format, book.pages, book.publisher, book.publication_year, book.language, book.isbn10, book.isbn13, book.quantity, book.id))
-        # ideally a check if there were errors here and return a boolean to be handled by the mapper
+        cur.close()
+
+    def modify_physical_book(self, id, added_amount, removed_item):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        if len(added_amount) != 0:
+            for x in added_amount:
+                if x[0] == "bb":
+                    for y in range(0, int(x[1])):
+                        cur.execute("""INSERT INTO book_physical(item_fk, status) VALUES (%s, %s)""", (str(id), "Available"))
+        if len(removed_item) != 0:
+            for x in removed_item:
+                if x[0] == "bb":
+                    item_id = x[1]
+                    cur.execute("DELETE FROM book_physical WHERE id = %s", (item_id))
         cur.close()
 
     def modify_magazines(self, modified_magazines):
@@ -327,6 +371,21 @@ class Tdg:
             cur.execute("UPDATE magazine SET title = %s, publisher = %s, publication_date = %s, language = %s, isbn10 = %s, isbn13 = %s, quantity = %s WHERE id = %s", (magazine.title, magazine.publisher, magazine.publication_date, magazine.language, magazine.isbn10, magazine.isbn13, magazine.quantity, magazine.id))
         cur.close()
 
+    def modify_physical_magazine(self, id, added_amount, removed_item):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        if len(added_amount) != 0:
+            for x in added_amount:
+                if x[0] == "ma":
+                    for y in range(0, int(x[1])):
+                        cur.execute("""INSERT INTO magazine_physical(item_fk, status) VALUES (%s, %s)""", (str(id), "Available"))
+        if len(removed_item) != 0:
+            for x in removed_item:
+                if x[0] == "ma":
+                    item_id = x[1]
+                    cur.execute("DELETE FROM magazine_physical WHERE id = %s", (item_id))
+        cur.close()
+
     def modify_movies(self, modified_movies):
         connection = self.mysql.connect()
         cur = connection.cursor()
@@ -334,11 +393,41 @@ class Tdg:
             cur.execute("UPDATE movie SET title = %s, director = %s, producers = %s, actors = %s, language = %s, subtitles = %s, dubbed = %s, release_date = %s, runtime = %s, quantity = %s WHERE id = %s", (movie.title, movie.director, movie.producers, movie.actors, movie.language, movie.subtitles, movie.dubbed, movie.release_date, movie.runtime, movie.quantity, movie.id))
         cur.close()
 
+    def modify_physical_movies(self, id, added_amount, removed_item):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        if len(added_amount) != 0:
+            for x in added_amount:
+                if x[0] == "mo":
+                    for y in range(0, int(x[1])):
+                        cur.execute("""INSERT INTO movie_physical(item_fk, status) VALUES (%s, %s)""", (str(id), "Available"))
+        if len(removed_item) != 0:
+            for x in removed_item:
+                if x[0] == "mo":
+                    item_id = x[1]
+                    cur.execute("DELETE FROM movie_physical WHERE id = %s", (item_id))
+        cur.close()
+
     def modify_music(self, modified_music):
         connection = self.mysql.connect()
         cur = connection.cursor()
         for music in modified_music:
             cur.execute("UPDATE music SET title = %s, media_type = %s, artist = %s, label = %s, release_date = %s, asin = %s, quantity = %s WHERE id = %s", (music.title, music.media_type, music.artist, music.label, music.release_date, music.asin, music.quantity, music.id))
+        cur.close()
+
+    def modify_physical_music(self, id, added_amount, removed_item):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        if len(added_amount) != 0:
+            for x in added_amount:
+                if x[0] == "mu":
+                    for y in range(0, int(x[1])):
+                        cur.execute("""INSERT INTO music_physical(item_fk, status) VALUES (%s, %s)""", (str(id), "Available"))
+        if len(removed_item) != 0:
+            for x in removed_item:
+                if x[0] == "mu":
+                    item_id = x[1]
+                    cur.execute("DELETE FROM music_physical WHERE id = %s", (item_id))
         cur.close()
 
     def get_physical_keys(self, id, prefix):
