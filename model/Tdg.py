@@ -328,9 +328,10 @@ class Tdg:
                     for y in range(0, int(x[1])):
                         cur.execute("""INSERT INTO book_physical(item_fk, status) VALUES (%s, %s)""", (str(id), "Available"))
         if len(removed_item) != 0:
-            for (book_id,  book) in removed_item:
-                if(int(id) == book_id):
-                    cur.execute("DELETE FROM book_physical WHERE id = %s", (id))
+            for (prefix,  book_id) in removed_item:
+                if prefix == "bb" and int(book_id) == id:
+                    for item_id in removed_item[(prefix, book_id)]:
+                        cur.execute("DELETE FROM book_physical WHERE id = %s", (int(item_id)))
         cur.close()
 
     def modify_magazines(self, modified_magazines):
@@ -349,10 +350,10 @@ class Tdg:
                     for y in range(0, int(x[1])):
                         cur.execute("""INSERT INTO magazine_physical(item_fk, status) VALUES (%s, %s)""", (str(id), "Available"))
         if len(removed_item) != 0:
-            for x in removed_item:
-                if x[0] == "ma":
-                    item_id = x[1]
-                    cur.execute("DELETE FROM magazine_physical WHERE id = %s", (item_id))
+            for (prefix,  magazine_id) in removed_item:
+                if prefix == "ma" and int(magazine_id) == id:
+                    for item_id in removed_item[(prefix, magazine_id)]:
+                        cur.execute("DELETE FROM magazine_physical WHERE id = %s", (int(item_id)))
         cur.close()
 
     def modify_movies(self, modified_movies):
@@ -362,7 +363,7 @@ class Tdg:
             cur.execute("UPDATE movie SET title = %s, director = %s, producers = %s, actors = %s, language = %s, subtitles = %s, dubbed = %s, release_date = %s, runtime = %s, quantity = %s WHERE id = %s", (movie.title, movie.director, movie.producers, movie.actors, movie.language, movie.subtitles, movie.dubbed, movie.release_date, movie.runtime, movie.quantity, movie.id))
         cur.close()
 
-    def modify_physical_movies(self, id, added_amount, removed_item):
+    def modify_physical_movie(self, id, added_amount, removed_item):
         connection = self.mysql.connect()
         cur = connection.cursor()
         if len(added_amount) != 0:
@@ -371,10 +372,10 @@ class Tdg:
                     for y in range(0, int(x[1])):
                         cur.execute("""INSERT INTO movie_physical(item_fk, status) VALUES (%s, %s)""", (str(id), "Available"))
         if len(removed_item) != 0:
-            for x in removed_item:
-                if x[0] == "mo":
-                    item_id = x[1]
-                    cur.execute("DELETE FROM movie_physical WHERE id = %s", (item_id))
+            for (prefix,  movie_id) in removed_item:
+                if prefix == "mo" and int(movie_id) == id:
+                    for item_id in removed_item[(prefix, movie_id)]:
+                        cur.execute("DELETE FROM movie_physical WHERE id = %s", (int(item_id)))
         cur.close()
 
     def modify_music(self, modified_music):
@@ -393,10 +394,10 @@ class Tdg:
                     for y in range(0, int(x[1])):
                         cur.execute("""INSERT INTO music_physical(item_fk, status) VALUES (%s, %s)""", (str(id), "Available"))
         if len(removed_item) != 0:
-            for x in removed_item:
-                if x[0] == "mu":
-                    item_id = x[1]
-                    cur.execute("DELETE FROM music_physical WHERE id = %s", (item_id))
+            for (prefix,  music_id) in removed_item:
+                if prefix == "mu" and int(music_id) == id:
+                    for item_id in removed_item[(prefix, music_id)]:
+                        cur.execute("DELETE FROM music_physical WHERE id = %s", (int(item_id)))
         cur.close()
 
     def get_physical_keys(self, id, prefix):

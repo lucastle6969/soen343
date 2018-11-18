@@ -314,7 +314,7 @@ class ItemMapper:
                     removed_list = items_to_commit[4]
                     self.tdg.modify_physical_music(item.id, added_list, removed_list)
                     modified_music.append(item)
-            self.catalog.edit_items(items_to_commit[1], items_to_commit[3], items_to_commit[4])
+            self.catalog.edit_items(items_to_commit[1])
             if len(modified_books) != 0:
                 self.tdg.modify_books(modified_books)
                 # new_physical_book = self.tdg.get_books_physical()
