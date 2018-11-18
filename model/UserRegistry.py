@@ -73,6 +73,12 @@ class UserRegistry:
     def insert_user(self, user_id, first_name, last_name, address, email, phone, admin, password):
         self.list_of_users.append(User(user_id, first_name, last_name, address, email, phone, admin, password))
 
+    def get_user_by_id(self, user_id):
+        for user in self.list_of_users:
+            if user_id == user.id:
+                return user
+        return none
+
     def get_user_by_email(self, email):
         for user in self.list_of_users:
             if email == user.email:
@@ -93,6 +99,16 @@ class UserRegistry:
 
     def get_all_users(self):
         return self.list_of_users
+
+    def get_borrowed_items(self, user_id, prefix, item_fk, physical_id):
+        for user in self.list_of_users:
+            if user.id == user_id:
+                to_return = []
+                for item in user.borrowed_items:
+                    if item.prefix == prefix and item.item_fk == item_fk and item.id == physical_id:
+                        to_return.append(item)
+                
+                return to_return
 
     def remove_borrowed_items(self, user_id, prefix, item_fk, physical_id):
         for user in self.list_of_users:
