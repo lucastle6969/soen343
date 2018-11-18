@@ -288,3 +288,11 @@ td, th {
     margin-top: 5px;
     margin-right: 5px;
 }
+
+.detailed-view {
+    text-align:center;
+}
+
+#detailed-view-content {
+    text-align:left;
+}

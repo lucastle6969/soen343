@@ -24,7 +24,7 @@
         </tr>
         </thead>
         <tbody>
-        {% for physical_item, spec_item in borrowed_items %}
+        {% for physical_item, x in borrowed_items %}
             <tr>
                 <td><center>
                     {% if physical_item.prefix == "bb" %}
@@ -37,9 +37,15 @@
                         Movie
                     {% endif %}
                 </center></td>
-                <td>{{spec_item.title}}</td>
+                <td>{{x.title}}</td>
                 <td><center>{{physical_item.return_date}}</center></td>
-                <td><center>Info</center></td>
+                <td class="detailed-view">
+                    {% with %}
+                        {% set loop_index0 = loop.index0 %}
+                        {% include 'includes/_detailed_view.html' %}
+                    {% endwith %} 
+                    {% include 'includes/_modal_open.html' %}
+                </td>
                 <td><center><input type="checkbox" class="return" name={{physical_item.prefix}}{{physical_item.item_fk}} value={{physical_item.id}}></center></td>
             </tr>
         {% endfor %}
