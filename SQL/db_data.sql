@@ -1,7 +1,8 @@
 TRUNCATE TABLE user;
 INSERT INTO user (id, first_name, last_name, address, email, phone, admin, password) VALUES
-(NULL, 'John', 'Doe', '125 Ave Du Parc', 'johndoe@gmail.com', '514-336-4545', 1, '$5$rounds=535000$Y9aJsj6nDUIxrdX8$KjzneFoNwSBd8MiedeoCuhDR3AnFTQeYm7vBrCV/9a4'),
-(NULL, 'Jane', 'Dee', '125 Ave Du Parc', 'janedee@gmail.com', '514-336-4545', 1, '$5$rounds=535000$vaRcpprbw7lAYCxY$onE09j6O55tDz45aVn0IgzCe/pzwcp44Q1TdAnO6lmB');
+(NULL, 'John', 'Doe', '125 Ave Du Parc', 'johndoe@gmail.com', '(514) 336-4545', 1, '$5$rounds=535000$Y9aJsj6nDUIxrdX8$KjzneFoNwSBd8MiedeoCuhDR3AnFTQeYm7vBrCV/9a4'),
+(NULL, 'Jane', 'Dee', '125 Ave Du Parc', 'janedee@gmail.com', '(514) 336-4545', 1, '$5$rounds=535000$vaRcpprbw7lAYCxY$onE09j6O55tDz45aVn0IgzCe/pzwcp44Q1TdAnO6lmB'),
+(NULL, 'Bob', 'Morane', '3000 Ganger ave', 'bob@gmail.com', '(514) 976-0327', 0, '$5$rounds=535000$hWigPp20nPqzUFTn$5wnADnsSsKFGYhcCFtyGh.sHXcNUmv.PrDKiFYQxll0');
 
 TRUNCATE TABLE book;
 INSERT INTO book (id, title, author, format, pages, publisher, publication_year, language, isbn10, isbn13, quantity) VALUES
@@ -43,8 +44,8 @@ INSERT INTO book_physical (id, item_fk, status, return_date) VALUES
 TRUNCATE TABLE magazine_physical;
 INSERT INTO magazine_physical (id, item_fk, status) VALUES
 (NULL, 1, "Available"),
-(NULL, 1, "Reserved"),
-(NULL, 2, "Reserved"),
+(NULL, 1, "Available"),
+(NULL, 2, "Available"),
 (NULL, 2, "Available"),
 (NULL, 2, "Available"),
 (NULL, 2, "Available"),

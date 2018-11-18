@@ -9,17 +9,18 @@ class TransactionRegistry:
 
     def add_transactions(self, user_id, physical_items, transaction_type, timestamp, last_ids):
         transaction_id = last_ids[0] - (len(physical_items) - 1)
+        if last_ids[1] is not None:
+            active_loan_id = last_ids[1] - (len(physical_items) - 1)
         for item in physical_items:
             self.historical_registry.append(HistoricalTransaction(transaction_id, user_id, item, transaction_type, timestamp))
             transaction_id = transaction_id + 1
             if transaction_type == "loan":
-                active_loan_id = last_ids[1] - (len(physical_items) - 1)
                 self.active_loan_registry.append(ActiveLoan(active_loan_id, user_id, item, item.return_date))
                 active_loan_id = active_loan_id + 1
             elif transaction_type == "return":
                 for active_loan in self.active_loan_registry:
                     if active_loan.user_fk == user_id and active_loan.physical_item.prefix == item.prefix and active_loan.physical_item.id == item.id:
-                        self.active_loan_registry.remove(item)
+                        self.active_loan_registry.remove(active_loan)
 
     def populate(self, all_transactions, active_loans, catalog):
         for entry in all_transactions:

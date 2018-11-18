@@ -422,16 +422,16 @@ class Tdg:
             last_historical_id = cur.fetchone()
             last_historical_id = last_historical_id[0]
         else:
-            last_historical_id = False
+            last_historical_id = None
         if transaction_type is "loan":
             result = cur.execute("SELECT * FROM active_loan_registry ORDER BY id DESC LIMIT 1")
             if result > 0:
                 last_active_id = cur.fetchone()
                 last_active_id = last_active_id[0]
             else:
-                last_active_id = False
+                last_active_id = None
         else:
-            last_active_id = False
+            last_active_id = None
         last_ids = []
         last_ids.append(last_historical_id)
         last_ids.append(last_active_id)
