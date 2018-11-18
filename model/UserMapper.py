@@ -3,6 +3,7 @@ from passlib.hash import sha256_crypt
 from model.Form import RegisterForm
 from model.UserRegistry import UserRegistry
 from model.Tdg import Tdg
+from dpcontracts import require, ensure
 
 
 class UserMapper:
@@ -43,6 +44,9 @@ class UserMapper:
     def get_user_by_email(self, email):
         return self.user_registry.get_user_by_email(email)
 
+    def get_user_by_id(self, user_id):
+        return self.user_registry.get_user_by_email(user_id)
+
     def ensure_not_already_logged(self, user_id):
         self.user_registry.ensure_not_already_logged(user_id)
 
@@ -64,6 +68,8 @@ class UserMapper:
     def validate_return(self):
         return self.user_registry.catalog_lock == -1
 
+    @require('Too many items to return.', lambda args: len(args.self.user_registry.get_user_by_id(args.user_id).borrowed_items) >= len(args.physical_items))
+    @ensure('All items must be removed from the user.', lambda args, result: all(args.self.user_registry.get_physical_item(args.user_id, item.prefix, item.item_fk, item.id) is None for item in args.physical_items))
     def remove_borrowed_items(self, user_id, physical_items):
         for item in physical_items:
             self.user_registry.remove_borrowed_items(user_id, item.prefix, item.item_fk, item.id)

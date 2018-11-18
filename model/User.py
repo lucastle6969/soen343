@@ -1,4 +1,7 @@
+from dpcontracts import invariant
 
+
+@invariant("The number of borrowed items cannot exceed 10", lambda self: len(self.borrowed_items) <= 10)
 class User:
     def __init__(self, user_id, first_name, last_name, address, email, phone, admin, password, borrowed_items = [], cart = []):
         self.id = user_id
