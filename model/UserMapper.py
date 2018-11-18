@@ -45,7 +45,7 @@ class UserMapper:
         return self.user_registry.get_user_by_email(email)
 
     def get_user_by_id(self, user_id):
-        return self.user_registry.get_user_by_email(user_id)
+        return self.user_registry.get_user_by_id(user_id)
 
     def ensure_not_already_logged(self, user_id):
         self.user_registry.ensure_not_already_logged(user_id)
