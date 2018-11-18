@@ -3,6 +3,7 @@ from model.Uow import Uow
 from model.Catalog import Catalog
 from model.Tdg import Tdg
 from copy import deepcopy
+from time import localtime, strftime
 
 
 class ItemMapper:
@@ -377,7 +378,6 @@ class ItemMapper:
             prefix = tup
             item_id = int(prefix_fk_tuple[tup])
             requested_items.append(self.catalog.get_item_by_id(prefix, item_id))
-            print("requested item: ", prefix, item_id)
         return requested_items
 
     def get_available_copy(self, item_prefix, item_id):
@@ -397,6 +397,7 @@ class ItemMapper:
                         if copy.status == "Available":
                             copy.status = "Loaned"
                             copy.user_fk = user_id
+                            copy.due_date = self.set_due_date(item.prefix, localtime)
                             loaned_items.append(copy)
                             break
         if len(loaned_items) != 0:
@@ -404,4 +405,13 @@ class ItemMapper:
         else:
             return None
 
-    def set_due_date(self, item_prefix, timestamp)
+    def set_due_date(self, item_prefix, localtime):
+        due_date = 0
+        if item_prefix == "bb":
+            due_date = localtime + 604800
+        elif item_prefix == "mo":
+            due_date = localtime + 172800
+        elif item_prefix == "mu":
+            due_date = localtime + 172800
+        return strftime('%Y-%m-%d %H:%M:%S', localtime(due_date))
+

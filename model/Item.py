@@ -34,7 +34,7 @@ class Book(Item):
 
 
 class PhysicalBook(PhysicalItem):
-    def __init__(self, id, item_fk, status, return_date, user_fk = None):
+    def __init__(self, id, item_fk, status, return_date, user_fk=None):
         PhysicalItem.__init__(self, id, "bb", item_fk)
         self.status = status
         self.return_date = return_date
@@ -74,7 +74,7 @@ class Movie(Item):
 
 
 class PhysicalMovie(PhysicalItem):
-    def __init__(self, id, item_fk, status, return_date, user_fk = None):
+    def __init__(self, id, item_fk, status, return_date, user_fk=None):
         PhysicalItem.__init__(self, id, "mo", item_fk)
         self.status = status
         self.return_date = return_date
@@ -93,7 +93,7 @@ class Music(Item):
 
 
 class PhysicalMusic(PhysicalItem):
-    def __init__(self, id, item_fk, status, return_date, user_fk = None):
+    def __init__(self, id, item_fk, status, return_date, user_fk=None):
         PhysicalItem.__init__(self, id, "mu", item_fk)
         self.status = status
         self.return_date = return_date
