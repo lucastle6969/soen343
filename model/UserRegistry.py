@@ -71,6 +71,12 @@ class UserRegistry:
                 return user
         return None
 
+    def check_email_exists(self, email):
+        for user in self.list_of_users:
+            if email == user.email:
+                return True
+        return False
+
     def validate_admin(self, user_id, admin):
         for tup in self.active_user_registry:
             if tup[0] == user_id and admin:
@@ -85,6 +91,9 @@ class UserRegistry:
 
     def get_all_users(self):
         return self.list_of_users
+
+    def empty_list_of_users(self):
+        self.list_of_users = []
 
     def remove_borrowed_items(self, user_id, prefix, item_fk, physical_id):
         for user in self.list_of_users:

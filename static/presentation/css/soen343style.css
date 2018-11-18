@@ -128,6 +128,10 @@
     font-size: 145%;
 }
 
+#tinyrow {
+    margin: 10px 0px 10px 0px;
+}
+
 table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
@@ -284,4 +288,3 @@ td, th {
     margin-top: 5px;
     margin-right: 5px;
 }
-

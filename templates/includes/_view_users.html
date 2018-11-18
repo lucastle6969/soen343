@@ -26,11 +26,13 @@
             <td>{{ 'Yes' if user.admin == 1 else 'No' }}</td>
             <td><form method="GET" action="/admin_tools/edit_user/{{user.id}}">
                 <input type="submit" value="Edit" /></form></td>
-            {% if user.admin == 1 %}
+            {% if admin_id == user.id %}
             <td></td>
             {% else %}
-            <td><form method="POST" action="/admin_tools/delete_user/{{user.id}}">
-                <input type="submit" value="Delete" /></form></td>
+            <td>
+                {% include 'includes/_user_delete.html' %}
+                <button type="button" data-toggle="modal" data-target="#user{{user.id}}">Delete</button>
+            </td>
             {% endif %}
         {% endfor %}
     </table>

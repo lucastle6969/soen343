@@ -37,20 +37,36 @@ class UserMapper:
 
         return render_template('admin_tools.html', tool=tool, form=form)
 
-    def update(self, user_id, form, request_):
-        return self.tdg.modify_user(user_id, request_.form['first_name'], request_.form['last_name'], request_.form['address'],
-            request_.form['email'], request_.form['phone'], sha256_crypt.encrypt(str(request_.form['password'])))
-        #if user_updated:
-        #    self.user_registry.modify_user(user_id, request_.form['first_name'], request_.form['last_name'], request_.form['address'], request_.form['email'], request_.form['phone'])
-        #                                 form.phone.data, is_admin, sha256_crypt.encrypt(str(form.password.data)))
-        #if is_admin == 1:
-        #    flash('The administrator account information has been modified.', 'success')
-        #if is_admin == 0:
-        #    flash('The client account information has been modified.', 'success')        
-        #return redirect('/admin_tools/view_users')
+    def update(self, user_id, is_admin, form, request_):
+        if self.user_registry.check_email_exists(request_.form['email']):
+            if str(self.user_registry.get_user_by_email(request_.form['email']).id) == user_id:
+                self.tdg.modify_user(user_id, request_.form['first_name'], request_.form['last_name'], request_.form['address'],
+                    request_.form['email'], request_.form['phone'], sha256_crypt.encrypt(str(request_.form['password'])))
+                self.user_registry.empty_list_of_users()
+                self.user_registry.populate(self.tdg.get_all_users_active_loans())
+                if is_admin == 1:
+                    flash(f'The administrator account information (id {user_id}) has been modified.', 'success')
+                else:
+                    flash(f'The client account information (id {user_id}) has been modified.', 'success')
+                return redirect('/admin_tools/view_users')
+            else:
+                flash(f"This email has already been used by id {self.user_registry.get_user_by_email(request_.form['email']).id} and can't be used by id {user_id}.", 'warning')
+                return redirect('/admin_tools/view_users')
+        else:
+            self.tdg.modify_user(user_id, request_.form['first_name'], request_.form['last_name'], request_.form['address'],
+                request_.form['email'], request_.form['phone'], sha256_crypt.encrypt(str(request_.form['password'])))
+            self.user_registry.empty_list_of_users()
+            self.user_registry.populate(self.tdg.get_all_users_active_loans())
+            if is_admin == 1:
+                flash(f'The administrator account information (id {user_id}) has been modified.', 'success')
+            else:
+                flash(f'The client account information (id {user_id}) has been modified.', 'success')
+            return redirect('/admin_tools/view_users')
 
     def delete(self, user_id):
-        return self.tdg.delete_user(user_id)
+        self.tdg.delete_user(user_id)
+        self.user_registry.empty_list_of_users()
+        self.user_registry.populate(self.tdg.get_all_users_active_loans())
 
     def check_restart_session(self, session):
         return self.user_registry.check_restart_session(session)
