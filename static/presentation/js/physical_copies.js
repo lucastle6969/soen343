@@ -10,13 +10,18 @@ function removeItem(button){
     table.deleteRow(index);
 }
 
-function addItem(){
+function addItem(loanable){
     let table = document.getElementById("physical-item-table");
     let row = table.insertRow(-1);
     let status = row.insertCell(0);
     status.innerHTML = "Available"
-    row.insertCell(1); // Return date - none is needed for newly created items
-    let button = row.insertCell(2);
+    let button;
+    if(loanable){
+        row.insertCell(1); // Return date - none is needed for newly created items
+        button = row.insertCell(2);
+    } else {
+        button = row.insertCell(1);
+    }
     button.innerHTML = "<button type=\"button\" class=\"btn btn-secondary\" onclick=\"removeItem(this)\">Remove</button>";
     modifyNewItemCount(1);
 }

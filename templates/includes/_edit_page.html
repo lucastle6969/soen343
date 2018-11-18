@@ -35,7 +35,14 @@
                 <div class="form-group text-white">
                     {{render_field(form.quantity, class_="form-control", placeholder="From 0 to 255")}}
                 </div>
-                <table id="physical-item-table" class="table table-hover table-bordered">
+                <table id="physical-item-table" class="table table-hover table-bordered table-light">
+                    <thead>
+                        <tr>
+                            <td>Status</td>
+                            <td>Return Date</td>
+                            <td>Action</td>
+                        </tr>
+                    </thead>
                     <tbody>
                     {% for copy in copies %}
                         <tr data-physicalCopyId="{{copy.id}}">
@@ -50,7 +57,7 @@
                     {% endfor %}
                     </tbody>
                 </table>
-                <button type="button" class="btn btn-secondary" onclick="addItem()">Add more copies</button>
+                <button type="button" class="btn btn-secondary" onclick="addItem(true)">Add more copies</button>
                 <input type="hidden" id="physicalAdd" name="physical_items_added" value="0" />
                 <span id="physicalDelete"></span>
 
@@ -85,7 +92,13 @@
                 <div class="form-group text-white">
                     {{render_field(form.quantity, class_="form-control", placeholder="From 0 to 255")}}
                 </div>
-                <table id="physical-item-table" class="table table-hover table-bordered">
+                <table id="physical-item-table" class="table table-hover table-bordered table-light">
+                    <thead>
+                        <tr>
+                            <td>Status</td>
+                            <td>Action</td>
+                        </tr>
+                    </thead>
                     <tbody>
                     {% for copy in copies %}
                         <tr data-physicalCopyId="{{copy.id}}">
@@ -99,7 +112,7 @@
                     {% endfor %}
                     </tbody>
                 </table>
-                <button type="button" class="btn btn-secondary" onclick="addItem()">Add more copies</button>
+                <button type="button" class="btn btn-secondary" onclick="addItem(false)">Add more copies</button>
                 <input type="hidden" id="physicalAdd" name="physical_items_added" value="0" />
                 <span id="physicalDelete"></span>
                 <div class="row form-group text-white">
@@ -132,7 +145,14 @@
                 <div class="form-group text-white">
                     {{render_field(form.quantity, class_="form-control", placeholder="From 0 to 255")}}
                 </div>
-                <table id="physical-item-table" class="table table-hover table-bordered">
+                <table id="physical-item-table" class="table table-hover table-bordered table-light">
+                    <thead>
+                        <tr>
+                            <td>Status</td>
+                            <td>Return Date</td>
+                            <td>Action</td>
+                        </tr>
+                    </thead>
                     <tbody>
                     {% for copy in copies %}
                         <tr data-physicalCopyId="{{copy.id}}">
@@ -147,7 +167,7 @@
                     {% endfor %}
                     </tbody>
                 </table>
-                <button type="button" class="btn btn-secondary" onclick="addItem()">Add more copies</button>
+                <button type="button" class="btn btn-secondary" onclick="addItem(true)">Add more copies</button>
                 <input type="hidden" id="physicalAdd" name="physical_items_added" value="0" />
                 <span id="physicalDelete"></span>
                 <div class="row form-group text-white">
@@ -189,7 +209,14 @@
                 <div class="form-group text-white">
                     {{render_field(form.quantity, class_="form-control", placeholder="From 0 to 255")}}
                 </div>
-                <table id="physical-item-table" class="table table-hover table-bordered">
+                <table id="physical-item-table" class="table table-hover table-bordered table-light">
+                    <thead>
+                        <tr>
+                            <td>Status</td>
+                            <td>Return Date</td>
+                            <td>Action</td>
+                        </tr>
+                    </thead>
                     <tbody>
                     {% for copy in copies %}
                         <tr data-physicalCopyId="{{copy.id}}">
@@ -204,7 +231,7 @@
                     {% endfor %}
                     </tbody>
                 </table>
-                <button type="button" class="btn btn-secondary" onclick="addItem()">Add more copies</button>
+                <button type="button" class="btn btn-secondary" onclick="addItem(true)">Add more copies</button>
                 <input type="hidden" id="physicalAdd" name="physical_items_added" value="0" />
                 <span id="physicalDelete"></span>
                 <div class="row form-group text-white">
