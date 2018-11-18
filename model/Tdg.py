@@ -362,6 +362,20 @@ class Tdg:
         cur.close()
         return True
 
+    def loan_items(self, loaned_items):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        for item in loaned_items:
+            if item.prefix == "bb":
+                cur.execute("UPDATE book_physical SET status = 'Loaned', user_fk = %s, return_date = %s WHERE id = %s", (item.user_fk, item.return_date, item.id))
+            elif item.prefix == "mo":
+                cur.execute("UPDATE movie_physical SET status = 'Loaned', user_fk = %s, return_date = %s WHERE id = %s", (item.user_fk, item.return_date, item.id))
+            elif item.prefix == "mu":
+                cur.execute("UPDATE music_physical SET status = 'Loaned', user_fk = %s, return_date = %s WHERE id = %s", (item.user_fk, item.return_date, item.id))
+        cur.close()
+        return True
+
+
 # ----------------------------------------------------
 # Transactions
 

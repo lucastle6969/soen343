@@ -401,6 +401,7 @@ class ItemMapper:
                             loaned_items.append(copy)
                             break
         if len(loaned_items) != 0:
+            self.tdg.loan_items(loaned_items)
             return loaned_items
         else:
             return None
@@ -414,4 +415,3 @@ class ItemMapper:
         elif item_prefix == "mu":
             due_date = localtime + 172800
         return strftime('%Y-%m-%d %H:%M:%S', localtime(due_date))
-

@@ -196,6 +196,7 @@ def cart():
                 return redirect('/cart')
         else:
             flash("This transaction would put you over the loan limit.")
+            return redirect('/cart')
     else:
         physical_items = []
         for user in user_mapper.user_registry.list_of_users:
