@@ -181,7 +181,7 @@ def cart():
         valid_loan_state = user_mapper.validate_loan(user_id, len(requested_items))
         if valid_loan_state[0] is True:
             if valid_loan_state[1] is True:
-                loaned_items = item_mapper.loan_items(user_id, requested_items, localtime())
+                loaned_items = item_mapper.loan_items(user_id, requested_items)
                 if loaned_items is not None:
                     user_mapper.loan_items(user_id, loaned_items)
                     transaction_mapper.add_transactions(user_id, loaned_items, "loan", strftime('%Y-%m-%d %H:%M:%S', localtime()))
@@ -196,6 +196,7 @@ def cart():
                 return redirect('/cart')
         else:
             flash("This transaction would put you over the loan limit.")
+            return redirect('/cart')
     else:
         physical_items = []
         for user in user_mapper.user_registry.list_of_users:
