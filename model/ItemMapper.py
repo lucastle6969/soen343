@@ -293,31 +293,30 @@ class ItemMapper:
                 if item.prefix == "bb":
                     added_list = items_to_commit[3]
                     removed_list = items_to_commit[4]
-                    self.tdg.modify_physical_book(item.id, added_list, removed_list)
-                    # if len(added_list) != 0:
-                    #     for x in added_list:
-                    #         if x[0] == "bb":
-                    #             self.catalog.add_item(item)
+                    self.catalog.add_physical_items(item.prefix, item.id, self.tdg.modify_physical_book(item.id, added_list, removed_list))
+                    self.catalog.delete_physical_items(item.prefix, item.id, removed_list)
                     modified_books.append(item)
                 elif item.prefix == "ma":
                     added_list = items_to_commit[3]
                     removed_list = items_to_commit[4]
-                    self.tdg.modify_physical_magazine(item.id, added_list, removed_list)
+                    self.catalog.add_physical_items(item.prefix, item.id, self.tdg.modify_physical_magazine(item.id, added_list, removed_list))
+                    self.catalog.delete_physical_items(item.prefix, item.id, removed_list)
                     modified_magazines.append(item)
                 elif item.prefix == "mo":
                     added_list = items_to_commit[3]
                     removed_list = items_to_commit[4]
-                    self.tdg.modify_physical_movie(item.id, added_list, removed_list)
+                    self.catalog.add_physical_items(item.prefix, item.id, self.tdg.modify_physical_movie(item.id, added_list, removed_list))
+                    self.catalog.delete_physical_items(item.prefix, item.id, removed_list)
                     modified_movies.append(item)
                 elif item.prefix == "mu":
                     added_list = items_to_commit[3]
                     removed_list = items_to_commit[4]
-                    self.tdg.modify_physical_music(item.id, added_list, removed_list)
+                    self.catalog.add_physical_items(item.prefix, item.id, self.tdg.modify_physical_music(item.id, added_list, removed_list))
+                    self.catalog.delete_physical_items(item.prefix, item.id, removed_list)
                     modified_music.append(item)
             self.catalog.edit_items(items_to_commit[1])
             if len(modified_books) != 0:
                 self.tdg.modify_books(modified_books)
-                # new_physical_book = self.tdg.get_books_physical()
             if len(modified_magazines) != 0:
                 self.tdg.modify_magazines(modified_magazines)
             if len(modified_movies) != 0:

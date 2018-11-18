@@ -11,15 +11,15 @@ class Item:
                 self.copies.append(PhysicalBook(0, self.id, "Available", None))
                 self.quantity = self.quantity + 1
 
-            if prefix == "ma":
+            elif prefix == "ma":
                 self.copies.append(PhysicalMagazine(0, self.id, None))
                 self.quantity = self.quantity + 1
 
-            if prefix == "mo":
+            elif prefix == "mo":
                 self.copies.append(PhysicalMovie(0, self.id, "Available", None))
                 self.quantity = self.quantity + 1
 
-            if prefix == "mu":
+            elif prefix == "mu":
                 self.copies.append(PhysicalMusic(0, self.id, "Available", None))
                 self.quantity = self.quantity + 1
 
@@ -30,6 +30,21 @@ class Item:
                     self.copies.remove(copy)
                     self.quantity = self.quantity - 1
                     break
+
+    def add_physical_item(self, phys_id):
+        if self.prefix == "bb":
+            self.copies.append(PhysicalBook(phys_id, self.id, "Available", None))
+
+        elif self.prefix == "ma":
+            self.copies.append(PhysicalMagazine(phys_id, self.id, None))
+
+        elif self.prefix == "mo":
+            self.copies.append(PhysicalMovie(phys_id, self.id, "Available", None))
+
+        elif self.prefix == "mu":
+            self.copies.append(PhysicalMusic(phys_id, self.id, "Available", None))
+
+        self.quantity = self.quantity + 1
 
 
 class PhysicalItem:
