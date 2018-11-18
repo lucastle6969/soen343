@@ -375,7 +375,7 @@ class ItemMapper:
     def get_items_from_tuple(self, prefix_fk_tuple):
         requested_items = []
         for tup in prefix_fk_tuple:
-            prefix = tup
+            prefix = tup[0:2]
             item_id = int(prefix_fk_tuple[tup])
             requested_items.append(self.catalog.get_item_by_id(prefix, item_id))
         return requested_items

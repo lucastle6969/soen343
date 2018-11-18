@@ -39,7 +39,7 @@
                 <td>{{spec_item.title}}</td>
                 <td><center>Info</center></td>
                 <td><center>{{physical_item.status}}</center></td>
-                <td><center><input type="checkbox" class="checkboxes" name={{physical_item.prefix}} value={{physical_item.item_fk}}></center></td>
+                <td><center><input type="checkbox" class="checkboxes" name={{physical_item.prefix}}{{physical_item.item_fk}} value={{physical_item.item_fk}}></center></td>
                 <td><center> <button id={{physical_item.prefix}}{{physical_item.id}} type="button" class="btn btn-remove-from-cart" onclick="remove_from_cart(this.id)">Remove From Cart</button></center></td>
             </tr>
         {% endfor %}
