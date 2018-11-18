@@ -269,7 +269,7 @@ td, th {
 }
 
 .divider {
-    width:115px;
+    width:105px;
     height:auto;
     display:inline-block;
 }
@@ -315,4 +315,8 @@ td, th {
 
 #detailed-view-content {
     text-align:left;
+}
+
+.btn-hidden {
+    visibility: hidden;
 }

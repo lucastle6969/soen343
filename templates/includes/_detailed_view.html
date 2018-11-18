@@ -56,7 +56,11 @@
                         <div class = "container">
                             <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{{ item_list[loop_index0-1].id }}" data-dismiss="modal">&lt;</button>
                             <div class = "divider"></div>
-                            <button type="button" class="btn btn-to-cart">Add To Cart</button>
+                            {% if session.admin == False %}
+                            <button id={{x.prefix}}{{x.id}} type="button" class="btn btn-to-cart" onclick="add_to_cart(this.id)">Add To Cart</button>
+                            {% else %}
+                            <button type="button" class="btn-hidden">Add To Cart</button>
+                            {% endif %}
                             <div class = "divider"></div>
                             <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{% if loop_index0 == item_list|length -1 %}{{ item_list[0].id }}{% else %}{{ item_list[loop_index0+1].id }}{% endif %}" data-dismiss="modal">&gt;</button>
                         </div>
@@ -124,7 +128,11 @@
                         <div class = "container">
                             <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{{ item_list[loop_index0-1].id }}" data-dismiss="modal">&lt;</button>
                             <div class = "divider"></div>
-                            <button type="button" class="btn btn-to-cart">Add To Cart</button>
+                            {% if session.admin == False %}
+                            <button id={{x.prefix}}{{x.id}} type="button" class="btn btn-to-cart" onclick="add_to_cart(this.id)">Add To Cart</button>
+                            {% else %}
+                            <button type="button" class="btn-hidden">Add To Cart</button>
+                            {% endif %}
                             <div class = "divider"></div>
                             <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{% if loop_index0 == item_list|length -1 %}{{ item_list[0].id }}{% else %}{{ item_list[loop_index0+1].id }}{% endif %}" data-dismiss="modal">&gt;</button>
                         </div>
@@ -180,7 +188,11 @@
                         <div class = "container">
                             <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{{ item_list[loop_index0-1].id }}" data-dismiss="modal">&lt;</button>
                             <div class = "divider"></div>
-                            <button type="button" class="btn btn-to-cart">Add To Cart</button>
+                            {% if session.admin == False %}
+                            <button id={{x.prefix}}{{x.id}} type="button" class="btn btn-to-cart" onclick="add_to_cart(this.id)">Add To Cart</button>
+                            {% else %}
+                            <button type="button" class="btn-hidden">Add To Cart</button>
+                            {% endif %}
                             <div class = "divider"></div>
                             <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{% if loop_index0 == item_list|length -1 %}{{ item_list[0].id }}{% else %}{{ item_list[loop_index0+1].id }}{% endif %}" data-dismiss="modal">&gt;</button>
                         </div>
@@ -232,7 +244,11 @@
                         <div class = "container">
                             <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{{ item_list[loop_index0-1].id }}" data-dismiss="modal">&lt;</button>
                             <div class = "divider-small"></div>
+                            {% if session.admin == False %}
                             <button type="button" class="btn btn-mag" disabled>Not Loanable</button>
+                            {% else %}
+                            <button type="button" class="btn-hidden">Not Loanable</button>
+                            {% endif %}
                             <div class = "divider-small"></div>
                             <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{% if loop_index0 == item_list|length -1 %}{{ item_list[0].id }}{% else %}{{ item_list[loop_index0+1].id }}{% endif %}" data-dismiss="modal">&gt;</button>
                         </div>
