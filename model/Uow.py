@@ -11,10 +11,11 @@ class Uow():
         self.created_items = []
         self.modified_items = []
         self.deleted_items = []
-        self.removed_physical_copies = []
 
         self.temp_id_counter = 0
+
         self.additional_copies = []
+        self.removed_physical_copies = {}
 
     def get(self, item_prefix, item_id):
         int_id = int(item_id)
@@ -107,10 +108,58 @@ class Uow():
 
     def add_physical_item(self, prefix, added_amount, item_id):
         self.additional_copies.append([prefix, added_amount, item_id])
+        # Adding temporary copies to item in UoW so that changes are reflected on subsequent requests.
+        item = None
+        if prefix == "bb":
+            for (book_id,  book) in self.mapped_book_items:
+                if(int(item_id) == book_id):
+                    item = book
+                    break
+        elif prefix == "ma":
+            for (magazine_id,  magazine) in self.mapped_magazine_items:
+                if(int(item_id) == magazine_id):
+                    item = magazine
+                    break
+        elif prefix == "mo":
+            for (movie_id,  movie) in self.mapped_movie_items:
+                if(int(item_id) == movie_id):
+                    item = movie
+                    break
+        elif prefix == "mu":
+            for (music_id,  music) in self.mapped_music_items:
+                if(int(item_id) == music_id):
+                    item = music
+                    break
+        item.add_temp_copies(int(added_amount), prefix)
 
-    def remove_physical_item(self, prefix, removed_item):
-        if removed_item is not None:
-            self.removed_physical_copies.append([prefix, removed_item])
+    def remove_physical_item(self, prefix, removed_physical_ids, item_id):
+        if removed_physical_ids is not None and len(removed_physical_ids) != 0:
+            self.removed_physical_copies[(prefix, item_id)] = removed_physical_ids
+            # Adding temporary copies to item in UoW so that changes are reflected on subsequent requests.
+            item = None
+            if prefix == "bb":
+                for (book_id,  book) in self.mapped_book_items:
+                    if(int(item_id) == book_id):
+                        item = book
+                        break
+            elif prefix == "ma":
+                for (magazine_id,  magazine) in self.mapped_magazine_items:
+                    if(int(item_id) == magazine_id):
+                        item = magazine
+                        break
+            elif prefix == "mo":
+                for (movie_id,  movie) in self.mapped_movie_items:
+                    if(int(item_id) == movie_id):
+                        item = movie
+                        break
+            elif prefix == "mu":
+                for (music_id,  music) in self.mapped_music_items:
+                    if(int(item_id) == music_id):
+                        item = music
+                        break
+            item.remove_physical_item(removed_physical_ids)
+
+
 
 # Retrieve the lists of updates (create, modify, delete)
     def get_saved_changes(self):
