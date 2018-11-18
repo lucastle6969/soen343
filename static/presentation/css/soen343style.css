@@ -285,6 +285,7 @@ td, th {
     margin-right: 5px;
 }
 
+
 .cart_header{
     font-size: 145%;
     font-weight: bold;
@@ -306,4 +307,12 @@ td, th {
     color:#fff;
     background-color: #888888;
     border-color: #0062cc;
+}
+
+.detailed-view {
+    text-align:center;
+}
+
+#detailed-view-content {
+    text-align:left;
 }

@@ -86,7 +86,7 @@
                     <tr>
                         <th>Title</th>
                         <th>Author</th>
-                        <th></th>
+                        <th>Detailed View</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -94,7 +94,7 @@
                     <tr>
                         <td>{{x.title}}</td>
                         <td>{{x.author}}</td>
-                        <td>
+                        <td class="detailed-view">
                             {% with %}
                                 {% set loop_index0 = loop.index0 %}
                                 {% include 'includes/_detailed_view.html' %}
@@ -168,7 +168,7 @@
                     <tr>
                         <th>Title</th>
                         <th>Publisher</th>
-                        <th></th>
+                        <th>Detailed View</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -176,7 +176,7 @@
                     <tr>
                         <td>{{x.title}}</td>
                         <td>{{x.publisher}}</td>
-                        <td>
+                        <td class="detailed-view">
                             {% with %}
                                 {% set loop_index0 = loop.index0 %}
                                 {% include 'includes/_detailed_view.html' %}
@@ -250,7 +250,7 @@
                     <tr>
                         <th>Title</th>
                         <th>Artist</th>
-                        <th></th>
+                        <th>Detailed View</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -258,7 +258,7 @@
                     <tr>
                         <td>{{x.title}}</td>
                         <td>{{x.artist}}</td>
-                        <td>
+                        <td class="detailed-view">
                             {% with %}
                                 {% set loop_index0 = loop.index0 %}
                                 {% include 'includes/_detailed_view.html' %}
@@ -338,7 +338,7 @@
                     <tr>
                         <th>Title</th>
                         <th>Director</th>
-                        <th></th>
+                        <th>Detailed View</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -346,7 +346,8 @@
                     <tr>
                         <td>{{x.title}}</td>
                         <td>{{x.director}}</td>
-                        <td><center>
+                        <td class="detailed-view"><center>
+
                             {% with %}
                                 {% set loop_index0 = loop.index0 %}
                                 {% include 'includes/_detailed_view.html' %}
