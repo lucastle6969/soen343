@@ -285,3 +285,11 @@ td, th {
     margin-right: 5px;
 }
 
+.detailed-view {
+    text-align:center;
+}
+
+#detailed-view-content {
+    text-align:left;
+}
+
