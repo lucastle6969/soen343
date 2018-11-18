@@ -131,12 +131,6 @@ class ItemMapper:
             item.language = form.language.data
             item.isbn10 = form.isbn10.data
             item.isbn13 = form.isbn13.data
-            if physical_items_added != 0:
-                item.quantity = int(form.quantity.data) + int(physical_items_added)
-            if len(physical_items_removed) != 0:
-                item.quantity = int(form.quantity.data) - len(physical_items_removed)
-            self.uow.add_physical_item("bb", physical_items_added, item_id)
-            self.uow.remove_physical_item("bb", physical_items_removed)
 
         elif item_prefix == "ma":
             item.title = form.title.data
@@ -145,12 +139,6 @@ class ItemMapper:
             item.language = form.language.data
             item.isbn10 = form.isbn10.data
             item.isbn13 = form.isbn13.data
-            if physical_items_added != 0:
-                item.quantity = int(form.quantity.data) + int(physical_items_added)
-            if len(physical_items_removed) != 0:
-                item.quantity = int(form.quantity.data) - len(physical_items_removed)
-            self.uow.add_physical_item("ma", physical_items_added, item_id)
-            self.uow.remove_physical_item("ma", physical_items_removed)
 
         elif item_prefix == "mo":
             item.title = form.title.data
@@ -162,12 +150,6 @@ class ItemMapper:
             item.dubbed = form.dubbed.data
             item.release_date = form.release_date.data
             item.runtime = form.runtime.data
-            if physical_items_added != 0:
-                item.quantity = int(form.quantity.data) + int(physical_items_added)
-            if len(physical_items_removed) != 0:
-                item.quantity = int(form.quantity.data) - len(physical_items_removed)
-            self.uow.add_physical_item("mo", physical_items_added, item_id)
-            self.uow.remove_physical_item("mo", physical_items_removed)
 
         elif item_prefix == "mu":
             item.title = form.title.data
@@ -176,14 +158,10 @@ class ItemMapper:
             item.label = form.label.data
             item.release_date = form.release_date.data
             item.asin = form.asin.data
-            if physical_items_added != 0:
-                item.quantity = int(form.quantity.data) + int(physical_items_added)
-            if len(physical_items_removed) != 0:
-                item.quantity = int(form.quantity.data) - len(physical_items_removed)
-            self.uow.add_physical_item("mu", physical_items_added, item_id)
-            self.uow.remove_physical_item("mu", physical_items_removed)
 
         self.uow.register_dirty(item)
+        self.uow.add_physical_item(item_prefix, physical_items_added, item_id)
+        self.uow.remove_physical_item(item_prefix, physical_items_removed, item_id)
 
     def add_book(self, form):
         title = form.title.data
