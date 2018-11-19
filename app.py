@@ -3,7 +3,7 @@ from model.ItemMapper import ItemMapper
 from model.UserMapper import UserMapper
 from model.TransactionMapper import TransactionMapper
 from passlib.hash import sha256_crypt
-from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, SearchForm, Forms, OrderForm
+from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, SearchForm, Forms, OrderForm, EditForm, PasswordForm
 from apscheduler.schedulers.background import BackgroundScheduler
 from time import localtime, strftime
 
@@ -326,12 +326,29 @@ def edit_entry(item_prefix, item_id):
 @app.route('/admin_tools/edit_user/<user_id>', methods=['GET', 'POST'])
 def edit_user(user_id):
     user_selected = user_mapper.get_user_by_id(user_id)
-    form = Forms.get_user_form_data(user_selected, request)
+    form = EditForm(request.form)
+    if request.method == 'POST':
+        form.user = user_mapper.get_user_by_id(user_id)
+        form.all_users = user_mapper.get_all_users()
+        if form.validate():
+            user_mapper.update(user_id, user_selected[6], form, request)
+            return redirect('/admin_tools/view_users')
+        else:
+            return render_template('admin_tools.html', tool='view_users', form=form, id=user_selected[0], user="edit")
+    else:
+        form = Forms.get_user_form_data(user_selected, request)
+        return render_template('admin_tools.html', tool='view_users', form=form, id=user_selected[0], user="edit")
+
+
+@app.route('/admin_tools/edit_password/<user_id>', methods=['GET', 'POST'])
+def edit_password(user_id):
+    user_selected = user_mapper.get_user_by_id(user_id)
+    form = PasswordForm(request.form)
     if request.method == 'POST' and form.validate():
-        user_mapper.update(user_id, user_selected[6], form, request)
+        user_mapper.update_password(user_id, user_selected[6], form, request)
         return redirect('/admin_tools/view_users')
     else:
-        return render_template('admin_tools.html', tool='view_users', form=form, id=user_selected[0], user="edit")
+        return render_template('admin_tools.html', tool='view_users', form=form, id=user_selected[0], password="edit")
 
 
 @app.route('/admin_tools/delete_entry/<item_prefix>/<item_id>', methods=['POST'])

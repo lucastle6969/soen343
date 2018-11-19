@@ -30,7 +30,7 @@ class UserRegistry:
         #to account for the last user
         current_user.borrowed_items = set(items[:])
         self.list_of_users.append(current_user)
-            
+
     def check_lock(self):
         return self.catalog_lock
 
@@ -98,7 +98,11 @@ class UserRegistry:
         return self.active_user_registry
 
     def get_all_users(self):
+        self.list_of_users.sort(key=self.sort_list_of_users)
         return self.list_of_users
+
+    def sort_list_of_users(self, user):
+        return user.id
 
     def empty_list_of_users(self):
         self.list_of_users = []

@@ -38,32 +38,33 @@ class UserMapper:
         return render_template('admin_tools.html', tool=tool, form=form)
 
     def update(self, user_id, is_admin, form, request_):
-        if self.user_registry.check_email_exists(request_.form['email']):
-            if str(self.user_registry.get_user_by_email(request_.form['email']).id) == user_id:
-                self.tdg.modify_user(user_id, request_.form['first_name'], request_.form['last_name'], request_.form['address'],
-                    request_.form['email'], request_.form['phone'], sha256_crypt.encrypt(str(request_.form['password'])))
-                self.user_registry.empty_list_of_users()
-                self.user_registry.populate(self.tdg.get_all_users_active_loans())
-                if is_admin == 1:
-                    flash(f'The administrator account information (id {user_id}) has been modified.', 'success')
-                else:
-                    flash(f'The client account information (id {user_id}) has been modified.', 'success')
-                return redirect('/admin_tools/view_users')
-            else:
-                flash(f"This email has already been used by id {self.user_registry.get_user_by_email(request_.form['email']).id} and can't be used by id {user_id}.", 'warning')
-                return redirect('/admin_tools/view_users')
+        self.tdg.modify_user(user_id, request_.form['first_name'], request_.form['last_name'], request_.form['address'],
+            request_.form['email'], request_.form['phone'])
+        self.user_registry.empty_list_of_users()
+        self.user_registry.populate(self.tdg.get_all_users_active_loans())
+        if is_admin == 1:
+            flash(f'The administrator account information (id {user_id}) has been modified.', 'success')
         else:
-            self.tdg.modify_user(user_id, request_.form['first_name'], request_.form['last_name'], request_.form['address'],
-                request_.form['email'], request_.form['phone'], sha256_crypt.encrypt(str(request_.form['password'])))
-            self.user_registry.empty_list_of_users()
-            self.user_registry.populate(self.tdg.get_all_users_active_loans())
-            if is_admin == 1:
-                flash(f'The administrator account information (id {user_id}) has been modified.', 'success')
-            else:
-                flash(f'The client account information (id {user_id}) has been modified.', 'success')
-            return redirect('/admin_tools/view_users')
+            flash(f'The client account information (id {user_id}) has been modified.', 'success')
+
+    def update_password(self, user_id, is_admin, form, request_):
+        self.tdg.modify_password(user_id, sha256_crypt.encrypt(str(request_.form['password'])))
+        self.user_registry.empty_list_of_users()
+        self.user_registry.populate(self.tdg.get_all_users_active_loans())
+        if is_admin == 1:
+            flash(f'The password for the administrator account (id {user_id}) has been modified.', 'success')
+        else:
+            flash(f'The password for the client account (id {user_id}) has been modified.', 'success')
 
     def delete(self, user_id):
+        list_active_users = self.get_active_users()
+        for user in list_active_users:
+            if str(user[0]) == user_id:
+                self.remove_from_active(user_id)
+        list_active_loans = self.tdg.get_active_loans()
+        for loan in list_active_loans:
+            if str(loan[1]) == user_id:
+                return render_template('admin_tools.html', tool='view_users', id=user_id, loan="outstanding")
         self.tdg.delete_user(user_id)
         self.user_registry.empty_list_of_users()
         self.user_registry.populate(self.tdg.get_all_users_active_loans())

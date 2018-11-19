@@ -35,11 +35,17 @@ class Tdg:
             new_user_id = False
         return new_user_id
 
-    def modify_user(self, user_id, first_name, last_name, address, email, phone, password):
+    def modify_user(self, user_id, first_name, last_name, address, email, phone):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        cur.execute("UPDATE user SET first_name = %s, last_name = %s, address = %s, email = %s, phone = %s, password = %s WHERE id = %s", 
-                    (first_name, last_name, address, email, phone, password, user_id))
+        cur.execute("UPDATE user SET first_name = %s, last_name = %s, address = %s, email = %s, phone = %s WHERE id = %s",
+                    (first_name, last_name, address, email, phone, user_id))
+        cur.close()
+
+    def modify_password(self, user_id, password):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        cur.execute("UPDATE user SET password = %s WHERE id = %s", (password, user_id))
         cur.close()
 
     def delete_user(self, user_id):

@@ -51,6 +51,12 @@ def date(form, field):
         raise ValueError("The date must be formatted as follows: YYYY-MM-DD.")
 
 
+def unique_email_validator(form, field):
+        for user in form.all_users:
+            if form.email.data == user.email and not form.user[0] == user.id:
+                raise ValidationError('This email has already been used by user id' + str(user.id) + " and can't be used by user id " + str(form.user[0]) + '.')
+
+
 def unique_isbn10_validator(form, field):
     if field.data == '' or not all(char.isdigit() for char in field.data):
         raise ValidationError('Input must be a valid digit.')
@@ -79,6 +85,22 @@ class RegisterForm(Form):
     email = StringField('Email', [validators.Email(message='This is not a valid email address.')])
     phone = StringField('Phone', [phone_number])
     address = StringField('Address', [alpha(2, 100, 1)])
+    password = PasswordField('Password', [
+        password,
+        validators.EqualTo('confirm', message='Passwords do not match.')
+    ])
+    confirm = PasswordField('Confirmed Password')
+
+
+class EditForm(Form):
+    first_name = StringField('First Name', [alpha(2, 50, 0)])
+    last_name = StringField('Last Name', [alpha(2, 50, 0)])
+    email = StringField('Email', [validators.Email(message='This is not a valid email address.'), unique_email_validator])
+    phone = StringField('Phone', [phone_number])
+    address = StringField('Address', [alpha(2, 100, 1)])
+
+
+class PasswordForm(Form):
     password = PasswordField('Password', [
         password,
         validators.EqualTo('confirm', message='Passwords do not match.')
@@ -214,7 +236,7 @@ class Forms(Form):
     @staticmethod
     def get_user_form_data(user_selected, request):
 
-        form = RegisterForm(request.form)
+        form = EditForm(request.form)
         form.first_name.data = user_selected[1]
         form.last_name.data = user_selected[2]
         form.address.data = user_selected[3]
