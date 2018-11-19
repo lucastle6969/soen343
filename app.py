@@ -78,9 +78,12 @@ def before_request():
                         user_as_list[7] = time.time()
                         user_mapper.remove_from_active(session['user_id'])
                         user_mapper.user_registry.active_user_registry.append(tuple(user_as_list))
-    cleared = user_mapper.check_restart_session(session)
-    if cleared:
-        flash('Automatically logged out due to a disconnect/inactivity', 'warning')
+    result = user_mapper.check_restart_session(session)
+    if result[0]:
+        if result[1] == 'simultaneous':
+            flash('Your account has been logged in from another location, you have been automatically logged out.', 'warning')
+        if result[1] == 'disconnect':
+            flash('Automatically logged out due to a disconnect/inactivity.', 'warning')
         return redirect(url_for('home'))
 
 
@@ -145,16 +148,16 @@ def login():
                 # log user out if they are already logged in
                 user_mapper.ensure_not_already_logged(user.id)
                 app.logger.info('PASSWORD MATCHED')
+                timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
                 session['logged_in'] = True
                 session['first_name'] = user.first_name
                 session['user_id'] = user.id
                 session['admin'] = user.admin
+                session['timestamp'] = timestamp
                 session.permanent = True
                 app.permanent_session_lifetime = datetime.timedelta(days=30)
 
             # add the user to the active user registry in the form of a tuple (user_id, timestamp)
-                timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
-
                 user_mapper.enlist_active_user(user.id, user.first_name, user.last_name, user.email, user.admin, timestamp, time.time(), time.time(), False)
 
                 flash('You are now logged in', 'success')
@@ -303,19 +306,21 @@ def edit_entry(item_prefix, item_id):
                 if item.id == int(item_id) and item.prefix == item_prefix:
                     form.all_items.remove(item)
         if form.validate():
-            item_mapper.set_item(item_prefix, item_id, form)
+            physical_items_added = request.form.get("physical_items_added")
+            physical_items_removed = request.form.getlist("physical_items_removed")
+            item_mapper.set_item(item_prefix, item_id, form, physical_items_added, physical_items_removed)
             return redirect('/admin_tools/catalog_manager')
         else:
             form.quantity.render_kw = {'readonly': 'readonly'}
             return render_template('admin_tools.html', form=form, prefix=item_selected.prefix, id=item_selected.id,
-                                   item="edit")
+                                   item="edit", copies=item_selected.copies)
     else:
 
         # Forms class has a getFormData() which returns a preloaded form with the data of the selected item
         form = Forms.get_form_data(item_selected, request)
         form.quantity.render_kw = {'readonly': 'readonly'}
         return render_template('admin_tools.html', form=form, prefix=item_selected.prefix, id=item_selected.id,
-                               item="edit")
+                               item="edit", copies=item_selected.copies)
 
 
 @app.route('/admin_tools/edit_user/<user_id>', methods=['GET', 'POST'])
