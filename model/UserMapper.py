@@ -57,14 +57,7 @@ class UserMapper:
             flash(f'The password for the client account (id {user_id}) has been modified.', 'success')
 
     def delete(self, user_id):
-        list_active_users = self.get_active_users()
-        for user in list_active_users:
-            if str(user[0]) == user_id:
-                self.remove_from_active(user_id)
-        list_active_loans = self.tdg.get_active_loans()
-        for loan in list_active_loans:
-            if str(loan[1]) == user_id:
-                return render_template('admin_tools.html', tool='view_users', id=user_id, loan="outstanding")
+        self.remove_from_active(user_id)
         self.tdg.delete_user(user_id)
         self.user_registry.empty_list_of_users()
         self.user_registry.populate(self.tdg.get_all_users_active_loans())

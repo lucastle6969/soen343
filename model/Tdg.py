@@ -52,6 +52,9 @@ class Tdg:
         connection = self.mysql.connect()
         cur = connection.cursor()
         cur.execute("DELETE FROM user WHERE id = %s", user_id)
+        cur.execute("UPDATE book_physical SET return_date = NULL, user_fk = NULL, status = 'Available' where user_fk = %s", user_id)
+        cur.execute("UPDATE movie_physical SET return_date = NULL, user_fk = NULL, status = 'Available' where user_fk = %s", user_id)
+        cur.execute("UPDATE music_physical SET return_date = NULL, user_fk = NULL, status = 'Available' where user_fk = %s", user_id)
         cur.close()
 
     # -- SELECT Queries
@@ -183,7 +186,7 @@ class Tdg:
         result = cur.execute("SELECT * FROM music ORDER BY id DESC LIMIT 1")
         new_music_id = cur.fetchone()
         self.add_physical_music(music.quantity, new_music_id, cur)
-        cur.close
+        cur.close()
         if result > 0:
             return new_music_id[0]
         else:
@@ -463,6 +466,7 @@ class Tdg:
                 cur.execute("UPDATE music_physical SET status = 'Available', user_fk = NULL, return_date = NULL WHERE id = %s", item.id)
         cur.close()
         return True
+
 
 # ----------------------------------------------------
 # Transactions

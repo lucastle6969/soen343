@@ -37,10 +37,10 @@
             {% else %}
             <td>
                 {% include 'includes/_user_delete.html' %}
-                {% if loan == "outstanding" %}
-                    <button type="button" data-toggle="modal" data-target="#loan{{user.id}}">Delete</button>
-                {% else %}
+                {% if user.borrowed_items | length == 0 %}
                     <button type="button" data-toggle="modal" data-target="#user{{user.id}}">Delete</button>
+                {% else %}
+                    <button type="button" data-toggle="modal" data-target="#loan{{user.id}}">Delete</button>
                 {% endif %}
             </td>
             {% endif %}
