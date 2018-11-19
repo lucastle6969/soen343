@@ -21,14 +21,20 @@ class Catalog:
                 return item
         return None
 
-    def get_filtered_items(self, prefix, filter_field, search_value, order_filter, order_type):
+    def get_filtered_items(self, prefix, filter_field, search_value):
+        search_tokens = search_value.split(" ")
         filtered_items = []
         for item in self.item_catalog:
-            if item.prefix == prefix:
-                value = eval("item." + filter_field)
-                if search_value.lower() in str(value).lower():
-                    filtered_items.append(item)
-        return self.order_items(filtered_items, order_filter, order_type)
+            if item.prefix != prefix:
+                continue
+
+            value = eval("item." + filter_field)
+            for token in search_tokens:
+                if token.lower() in str(value).lower():
+                    if item not in filtered_items:
+                        filtered_items.append(item)
+
+        return filtered_items
 
     @staticmethod
     def order_items(item_list, order_filter, order_type):
@@ -59,6 +65,18 @@ class Catalog:
     def add_item(self, item):
         if item is not None:
             self.item_catalog.append(item)
+
+    def add_physical_items(self, prefix, id, physical_items):
+        item = self.get_item_by_id(prefix, id)
+        for phys_id in physical_items:
+            item.add_physical_item(phys_id)
+
+    def delete_physical_items(self, prefix, id, physical_items):
+        item = self.get_item_by_id(prefix, id)
+        if len(physical_items) != 0:
+            for (item_prefix,  item_id) in physical_items:
+                if item_prefix == prefix and int(item_id) == id:
+                    item.remove_physical_item(physical_items[item_prefix, item_id])
 
     def edit_items(self, items):
         for mod_item in items:
@@ -111,3 +129,18 @@ class Catalog:
             if item is not None:
                 self.item_catalog.remove(item)
         return True
+
+    def mark_as_returned(self, prefix, item_fk, physical_id):
+        for item in self.item_catalog:
+            if item.prefix == prefix and item.id == item_fk:
+                for physical_item in item.copies:
+                    if physical_item.id == physical_id:
+                        physical_item.status = "Available"
+                        physical_item.return_date = None
+
+    def get_physical_items_from_tuple(self, prefix, item_fk, item_id):
+        for item in self.item_catalog:
+            if item.prefix == prefix and item.id == item_fk:
+                for physical_item in item.copies:
+                    if physical_item.id == item_id:
+                        return physical_item

@@ -6,13 +6,13 @@
         
         <form method="POST" action="/admin_tools/catalog_manager/add_magazine">
             <div class="form-group text-white">
-                {{render_field(form.title, class_="form-control", placeholder="example: Rimes Magazine")}}
+                {{render_field(form.title, class_="form-control", placeholder="example: Times Magazine")}}
             </div>
             <div class="form-group text-white">
                 {{render_field(form.publisher, class_="form-control", placeholder="example: Bob Morano")}}
             </div>
             <div class="form-group text-white">
-                {{render_field(form.publication_date, class_="form-control", placeholder="DD-MM-YY")}}
+                {{render_field(form.publication_date, class_="form-control", placeholder="YYYY-MM-DD")}}
             </div>
             <div class="form-group text-white">
                 {{render_field(form.language, class_="form-control", placeholder="example: English")}}

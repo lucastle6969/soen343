@@ -1,22 +1,89 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, request
 from model.ItemMapper import ItemMapper
 from model.UserMapper import UserMapper
+from model.TransactionMapper import TransactionMapper
 from passlib.hash import sha256_crypt
-from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, SearchForm, Forms
+from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, SearchForm, Forms, OrderForm
+from apscheduler.schedulers.background import BackgroundScheduler
+from time import localtime, strftime
+
 import datetime
 import time
 
 
 app = Flask(__name__)
+app.jinja_env.filters['zip'] = zip
 item_mapper = ItemMapper(app)
 user_mapper = UserMapper(app)
+transaction_mapper = TransactionMapper(app, item_mapper.catalog.item_catalog)
+
+ACTIVE_USER_GRACE_PERIOD = 2400
+CATALOG_MANAGER_GRACE_PERIOD = 600
+SECONDS_CLEAN_ACTIVE_USERS = 300
+SECONDS_CLEAN_CATALOG_USERS = 120
+
+
+def active_users():
+    for user in user_mapper.user_registry.active_user_registry:
+        if time.time() - user[6] > ACTIVE_USER_GRACE_PERIOD:
+            user_to_remove = user[0]
+            user_mapper.remove_from_active(user_to_remove)
+            locker = user_mapper.user_registry.check_lock()
+            if locker == user[0]:
+                user_mapper.user_registry.remove_lock()
+
+
+def catalog_users():
+    for user in user_mapper.user_registry.active_user_registry:
+        if time.time() - user[7] > CATALOG_MANAGER_GRACE_PERIOD and user[8]:
+            user_as_list = list(user)
+            user_as_list[7] = 0
+            user_mapper.remove_from_active(user[0])
+            user_mapper.user_registry.active_user_registry.append(tuple(user_as_list))
+            locker = user_mapper.user_registry.check_lock()
+            if locker == user[0]:
+                user_mapper.user_registry.remove_lock()
+
+
+sched = BackgroundScheduler(daemon=True)
+sched.add_job(active_users, 'interval', seconds=SECONDS_CLEAN_ACTIVE_USERS)
+sched.add_job(catalog_users, 'interval', seconds=SECONDS_CLEAN_CATALOG_USERS)
+sched.start()
 
 
 @app.before_request
 def before_request():
-    cleared = user_mapper.check_restart_session(session)
-    if cleared:
-        flash('Automatically logged out due to a disconnect', 'warning')
+    if len(session) > 0 and not (len(session) == 1 and '_flashes' in session):
+        user_id = session['user_id']
+        for user in user_mapper.user_registry.active_user_registry:
+            if user[0] == user_id:
+                user_as_list = list(user)
+                user_as_list[6] = time.time()
+                user_mapper.remove_from_active(session['user_id'])
+                user_mapper.user_registry.active_user_registry.append(tuple(user_as_list))
+                if "catalog_manager" in request.path and user[8]:
+                    if time.time() - user[7] > CATALOG_MANAGER_GRACE_PERIOD:
+                        user_as_list = list(user)
+                        user_as_list[8] = False
+                        user_mapper.remove_from_active(session['user_id'])
+                        user_mapper.user_registry.active_user_registry.append(tuple(user_as_list))
+                        item_mapper.uow = None
+                        locker = user_mapper.user_registry.check_lock()
+                        if locker == session['user_id']:
+                            user_mapper.user_registry.remove_lock()
+                        flash('You have been removed from the catalog manager for inactivity, changes were not saved.', 'warning')
+                        return redirect(url_for('home'))
+                    else:
+                        user_as_list = list(user)
+                        user_as_list[7] = time.time()
+                        user_mapper.remove_from_active(session['user_id'])
+                        user_mapper.user_registry.active_user_registry.append(tuple(user_as_list))
+    result = user_mapper.check_restart_session(session)
+    if result[0]:
+        if result[1] == 'simultaneous':
+            flash('Your account has been logged in from another location, you have been automatically logged out.', 'warning')
+        if result[1] == 'disconnect':
+            flash('Automatically logged out due to a disconnect/inactivity.', 'warning')
         return redirect(url_for('home'))
 
 
@@ -57,6 +124,12 @@ def search(item):
         return render_template('home.html', item_list=item_mapper.get_filtered_items("mu", form), item="mu")
 
 
+@app.route('/home/order/<item_prefix>', methods=['GET', 'POST'])
+def order(item_prefix):
+    form = OrderForm(request.form)
+    return render_template('home.html', item_list=item_mapper.get_ordered_items(form), item=item_prefix)
+
+
 @app.route('/about')
 def about():
     return render_template('about.html')
@@ -80,18 +153,17 @@ def login():
                 # log user out if they are already logged in
                 user_mapper.ensure_not_already_logged(user.id)
                 app.logger.info('PASSWORD MATCHED')
+                timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
                 session['logged_in'] = True
                 session['first_name'] = user.first_name
                 session['user_id'] = user.id
                 session['admin'] = user.admin
+                session['timestamp'] = timestamp
+                session.permanent = True
+                app.permanent_session_lifetime = datetime.timedelta(days=30)
 
             # add the user to the active user registry in the form of a tuple (user_id, timestamp)
-                timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
-
-                user_mapper.enlist_active_user(user.id, user.first_name, user.last_name, user.email, user.admin, timestamp)
-                if user_mapper.check_another_admin(user.id):
-                    flash('Limited functionality', 'warning')
-                    return redirect(url_for('home'))
+                user_mapper.enlist_active_user(user.id, user.first_name, user.last_name, user.email, user.admin, timestamp, time.time(), time.time(), False)
 
                 flash('You are now logged in', 'success')
                 return redirect(url_for('home'))
@@ -108,8 +180,37 @@ def login():
     return render_template('login.html', form=form)
 
 
+@app.route('/borrowed_items', methods=['GET', 'POST'])
+def borrowed_items():
+    if session.get('user_id') is not None:
+        user_id = session['user_id']
+    else:
+        return redirect('/home')
+    if request.method == 'POST':
+        valid_return_state = user_mapper.validate_return()
+        if valid_return_state is True:
+            physical_items = item_mapper.get_physical_items_from_tuple(request.form)
+            item_mapper.return_items(physical_items)
+            user_mapper.remove_borrowed_items(user_id, physical_items)
+            transaction_mapper.add_transactions(user_id, physical_items, "return", strftime('%Y-%m-%d %H:%M:%S', localtime()))
+            flash("Items were successfully returned.", 'success')
+            return render_template('home.html', item_list=item_mapper.get_all_items("bb"), item="bb")
+        else:
+            flash("There was an problem returning your items, please try again later.", 'warning')
+            return redirect('/borrowed_items')
+    else:
+        physical_items = []
+        for user in user_mapper.user_registry.list_of_users:
+            if user.id == user_id:
+                physical_items = user.borrowed_items
+
+        detailed_items = item_mapper.get_item_details(physical_items)
+        return render_template('borrowed_items.html', borrowed_items=zip(physical_items, detailed_items))
+
+
 def add_book(request_):
     form = BookForm(request_.form)
+    form.all_items = item_mapper.get_all_isbn_items()
     if request_.method == 'POST' and form.validate():
         item_mapper.add_book(form)
         flash('Book is ready to be added - save changes', 'success')
@@ -120,6 +221,7 @@ def add_book(request_):
 
 def add_magazine(request_):
     form = MagazineForm(request_.form)
+    form.all_items = item_mapper.get_all_isbn_items()
     if request_.method == 'POST' and form.validate():
         item_mapper.add_magazine(form)
         flash('Magazine is ready to be added - save changes', 'success')
@@ -151,10 +253,8 @@ def add_music(request_):
 @app.route('/admin_tools')
 def admin_tools_default():
     if session['logged_in']:
-        if user_mapper.validate_admin(session['user_id'], session['admin']) and not user_mapper.check_another_admin(int(session['user_id'])):
+        if user_mapper.validate_admin(session['user_id'], session['admin']):
             return render_template('admin_tools.html')
-        flash("Limited functionality, cannot modify catalog.", "warning")
-        return render_template('admin_tools.html', limited='limited')
     flash('You must be logged in as an admin to view this page.')
     return redirect(url_for('home'))
 
@@ -168,11 +268,27 @@ def admin_tools(tool):
             elif tool == 'create_admin' or tool == 'create_client':
                 return user_mapper.register(request, tool)
             elif tool == 'catalog_manager':
-                return render_template('admin_tools.html', tool=tool, catalog=item_mapper.get_catalog(), saved_changes=item_mapper.get_saved_changes())
-            elif tool == 'catalog_manager_limited':
-                return render_template('admin_tools.html', tool=tool, catalog=item_mapper.get_catalog())
+                locker = user_mapper.user_registry.check_lock()
+                if locker == -1 or locker == session['user_id']:
+                    user_mapper.user_registry.lock(session['user_id'])
+                    locker = session['user_id']
+                    for user in user_mapper.user_registry.active_user_registry:
+                        if user[0] == locker and not user[8]:
+                            user_as_list = list(user)
+                            user_as_list[7] = time.time()
+                            user_as_list[8] = True
+                            user_mapper.remove_from_active(session['user_id'])
+                            user_mapper.user_registry.active_user_registry.append(tuple(user_as_list))
+                    return render_template('admin_tools.html', tool=tool, catalog=item_mapper.get_catalog(), saved_changes=item_mapper.get_saved_changes())
+                else:
+                    flash("Catalog currently locked by ID#: " + str(locker) + ".", 'warning')
+                    return redirect(url_for('admin_tools_default'))
             elif tool == 'view_users':
                 return render_template('admin_tools.html', tool=tool, list_of_users=user_mapper.get_all_users())
+            elif tool == 'view_transaction_history':
+                return render_template('admin_tools.html', tool=tool, transaction=transaction_mapper.transaction_registry.historical_registry)
+            elif tool == 'view_active_loans':
+                return render_template('admin_tools.html', tool=tool, transaction=transaction_mapper.transaction_registry.active_loan_registry)
         else:
             flash('invalid tool')
             return render_template('admin_tools.html')
@@ -187,15 +303,28 @@ def edit_entry(item_prefix, item_id):
 
     # the Forms class has a getFormForItemType() which creates a form for the item type selected
     form = Forms.get_form_for_item_type(item_selected.prefix, request.form)
-
     if request.method == 'POST':
-        item_mapper.set_item(item_prefix, item_id, form)
-        return redirect('/admin_tools/catalog_manager')
+        if item_prefix == 'bb' or item_prefix == 'ma':
+            form.all_items = item_mapper.get_all_isbn_items()
+            for item in form.all_items:
+                if item.id == int(item_id) and item.prefix == item_prefix:
+                    form.all_items.remove(item)
+        if form.validate():
+            physical_items_added = request.form.get("physical_items_added")
+            physical_items_removed = request.form.getlist("physical_items_removed")
+            item_mapper.set_item(item_prefix, item_id, form, physical_items_added, physical_items_removed)
+            return redirect('/admin_tools/catalog_manager')
+        else:
+            form.quantity.render_kw = {'readonly': 'readonly'}
+            return render_template('admin_tools.html', form=form, prefix=item_selected.prefix, id=item_selected.id,
+                                   item="edit", copies=item_selected.copies)
     else:
+
         # Forms class has a getFormData() which returns a preloaded form with the data of the selected item
         form = Forms.get_form_data(item_selected, request)
+        form.quantity.render_kw = {'readonly': 'readonly'}
         return render_template('admin_tools.html', form=form, prefix=item_selected.prefix, id=item_selected.id,
-                               item="edit")
+                               item="edit", copies=item_selected.copies)
 
 
 @app.route('/admin_tools/delete_entry/<item_prefix>/<item_id>', methods=['POST'])
@@ -249,8 +378,10 @@ def save_changes():
 @app.route('/logout')
 def logout():
     user_mapper.remove_from_active(session['user_id'])
+    locker = user_mapper.user_registry.check_lock()
+    if locker == session['user_id']:
+        user_mapper.user_registry.remove_lock()
     session.clear()
-
     flash('You are now logged out', 'success')
     return redirect(url_for('login'))
 

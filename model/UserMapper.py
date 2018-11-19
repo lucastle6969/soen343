@@ -9,7 +9,7 @@ class UserMapper:
     def __init__(self, app):
         self.tdg = Tdg(app)
         self.user_registry = UserRegistry()
-        self.user_registry.populate(self.tdg.get_all_users())
+        self.user_registry.populate(self.tdg.get_all_users_active_loans())
 
     def register(self, request_, tool):
         form = RegisterForm(request_.form)
@@ -46,11 +46,8 @@ class UserMapper:
     def ensure_not_already_logged(self, user_id):
         self.user_registry.ensure_not_already_logged(user_id)
 
-    def enlist_active_user(self, user_id, user_first_name, user_last_name, user_email, user_admin, timestamp):
-        self.user_registry.enlist_active_user(user_id, user_first_name, user_last_name, user_email, user_admin, timestamp)
-
-    def check_another_admin(self, user_id):
-        return self.user_registry.check_another_admin(user_id)
+    def enlist_active_user(self, user_id, user_first_name, user_last_name, user_email, user_admin, timestamp, active_time, catalog_time, catalog_flag):
+        self.user_registry.enlist_active_user(user_id, user_first_name, user_last_name, user_email, user_admin, timestamp, active_time, catalog_time, catalog_flag)
 
     def validate_admin(self, user_id, admin):
         return self.user_registry.validate_admin(user_id, admin)
@@ -63,3 +60,10 @@ class UserMapper:
 
     def remove_from_active(self, user_id):
         self.user_registry.remove_from_active(user_id)
+
+    def validate_return(self):
+        return self.user_registry.catalog_lock == -1
+
+    def remove_borrowed_items(self, user_id, physical_items):
+        for item in physical_items:
+            self.user_registry.remove_borrowed_items(user_id, item.prefix, item.item_fk, item.id)

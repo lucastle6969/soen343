@@ -1,3 +1,4 @@
+<script src="../../../static/presentation/js/physical_copies.js"></script>
 <div class="container login-container">
     <div class="col-md-12 login-form-2">
         {% from "includes/_form_helpers.html" import render_field %}
@@ -5,32 +6,62 @@
             <h3>Modify a book</h3>
             <form method="POST" action="/admin_tools/edit_entry/{{prefix}}/{{id}}">
                 <div class="form-group text-white">
-                    {{render_field(form.title, class_="form-control")}}
+                    {{render_field(form.title, class_="form-control", placeholder="example: King John")}}
                 </div>
                 <div class="form-group text-white">
-                    {{render_field(form.author, class_="form-control")}}
+                    {{render_field(form.author, class_="form-control", placeholder="example: Shakespeare")}}
                 </div>
                 <div class="form-group text-white">
-                    {{render_field(form.format, class_="form-control")}}
+                    {{render_field(form.format, class_="form-control", placeholder="example: Paperback")}}
                 </div>
                 <div class="form-group text-white">
-                    {{render_field(form.pages, class_="form-control")}}
-                </div>
-                <div class="form-group text-white">
-                    {{render_field(form.publisher, class_="form-control")}}
-                </div>
-                <div class="form-group text-white">
-                    {{render_field(form.publication_year, class_="form-control")}}
+                    {{render_field(form.publication_year, class_="form-control", placeholder="example: 1988")}}
                  </div>
                 <div class="form-group text-white">
-                    {{render_field(form.language, class_="form-control")}}
+                    {{render_field(form.pages, class_="form-control", placeholder="example: 298")}}
                 </div>
                 <div class="form-group text-white">
-                    {{render_field(form.isbn10, class_="form-control")}}
+                    {{render_field(form.publisher, class_="form-control", placeholder="example: Penguin Leaders")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.language, class_="form-control", placeholder="example: English")}}
+                </div>
+                <div class="form-group text-white">
+                    {{render_field(form.isbn10, class_="form-control", placeholder="10-digit number")}}
                  </div>
                 <div class="form-group text-white">
-                    {{render_field(form.isbn13, class_="form-control")}}
+                    {{render_field(form.isbn13, class_="form-control", placeholder="13-digit number")}}
                  </div>
+                <div class="form-group text-white">
+                    {{render_field(form.quantity, class_="form-control", placeholder="From 0 to 255")}}
+                </div>
+                <table id="physical-item-table" class="table table-hover table-bordered table-light">
+                    <thead>
+                        <tr>
+                            <td>Status</td>
+                            <td>Return Date</td>
+                            <td>Action</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for copy in copies %}
+                        <tr data-physicalCopyId="{{copy.id}}">
+                            <td>{{copy.status}}</td>
+                            <td>{{copy.return_date}}</td>
+                            <td>
+                                <button type="button" class="btn btn-secondary" onclick="removeItem(this)">
+                                    Remove
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <button type="button" class="btn btn-secondary" onclick="addItem(true)">Add more copies</button>
+                <input type="hidden" id="physicalAdd" name="physical_items_added" value="0" />
+                <span id="physicalDelete"></span>
+
+
                 <div class="row form-group text-white">
                     <input type="submit" class="col-md-5 btnSubmit" value="Modify" />
                     <div class="col-md-2"></div>
@@ -41,23 +72,49 @@
             <h3>Modify a magazine</h3>
             <form method="POST" action="/admin_tools/edit_entry/{{prefix}}/{{id}}">
                 <div class="form-group text-white">
-                    {{render_field(form.title, class_="form-control")}}
+                    {{render_field(form.title, class_="form-control", placeholder="example: Rimes Magazine")}}
                 </div>
                 <div class="form-group text-white">
-                    {{render_field(form.publisher, class_="form-control")}}
+                    {{render_field(form.publisher, class_="form-control", placeholder="example: Bob Morano")}}
                 </div>
                 <div class="form-group text-white">
-                    {{render_field(form.publication_date, class_="form-control")}}
+                    {{render_field(form.publication_date, class_="form-control", placeholder="DD-MM-YY")}}
                 </div>
                 <div class="form-group text-white">
-                    {{render_field(form.language, class_="form-control")}}
+                    {{render_field(form.language, class_="form-control", placeholder="example: English")}}
                 </div>
                 <div class="form-group text-white">
-                    {{render_field(form.isbn10, class_="form-control")}}
+                    {{render_field(form.isbn10, class_="form-control", placeholder="10-digit number")}}
                 </div>
                 <div class="form-group text-white">
-                    {{render_field(form.isbn13, class_="form-control")}}
+                    {{render_field(form.isbn13, class_="form-control", placeholder="13-digit number")}}
                 </div>
+                <div class="form-group text-white">
+                    {{render_field(form.quantity, class_="form-control", placeholder="From 0 to 255")}}
+                </div>
+                <table id="physical-item-table" class="table table-hover table-bordered table-light">
+                    <thead>
+                        <tr>
+                            <td>Status</td>
+                            <td>Action</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for copy in copies %}
+                        <tr data-physicalCopyId="{{copy.id}}">
+                            <td>{{copy.status}}</td>
+                            <td>
+                                <button type="button" class="btn btn-secondary" onclick="removeItem(this)">
+                                    Remove
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <button type="button" class="btn btn-secondary" onclick="addItem(false)">Add more copies</button>
+                <input type="hidden" id="physicalAdd" name="physical_items_added" value="0" />
+                <span id="physicalDelete"></span>
                 <div class="row form-group text-white">
                     <input type="submit" class="col-md-5 btnSubmit" value="Modify" />
                     <div class="col-md-2"></div>
@@ -68,23 +125,51 @@
             <h3>Modify a music</h3>
             <form method="POST" action="/admin_tools/edit_entry/{{prefix}}/{{id}}">
                 <div class="form-group text-white">
-                    {{render_field(form.title, class_="form-control")}}
+                    {{render_field(form.title, class_="form-control", placeholder="example: MP3")}}
                 </div>
                 <div class="form-group text-white">
-                    {{render_field(form.media_type, class_="form-control")}}
+                    {{render_field(form.media_type, class_="form-control", placeholder="example: Another Brick in the Wall")}}
                 </div>
                 <div class="form-group text-white">
-                    {{render_field(form.artist, class_="form-control")}}
+                    {{render_field(form.artist, class_="form-control", placeholder="example: Pink Floyd")}}
                 </div>
                 <div class="form-group text-white">
-                    {{render_field(form.label, class_="form-control")}}
+                    {{render_field(form.label, class_="form-control", placeholder="example: Sony Music")}}
                 </div>
                 <div class="form-group text-white">
-                    {{render_field(form.release_date, class_="form-control")}}
+                    {{render_field(form.release_date, class_="form-control", placeholder="DD-MM-YYYY")}}
                 </div>
                 <div class="form-group text-white">
-                    {{render_field(form.asin, class_="form-control")}}
+                    {{render_field(form.asin, class_="form-control", placeholder="10 character alphanumeric")}}
                 </div>
+                <div class="form-group text-white">
+                    {{render_field(form.quantity, class_="form-control", placeholder="From 0 to 255")}}
+                </div>
+                <table id="physical-item-table" class="table table-hover table-bordered table-light">
+                    <thead>
+                        <tr>
+                            <td>Status</td>
+                            <td>Return Date</td>
+                            <td>Action</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for copy in copies %}
+                        <tr data-physicalCopyId="{{copy.id}}">
+                            <td>{{copy.status}}</td>
+                            <td>{{copy.return_date}}</td>
+                            <td>
+                                <button type="button" class="btn btn-secondary" onclick="removeItem(this)">
+                                    Remove
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <button type="button" class="btn btn-secondary" onclick="addItem(true)">Add more copies</button>
+                <input type="hidden" id="physicalAdd" name="physical_items_added" value="0" />
+                <span id="physicalDelete"></span>
                 <div class="row form-group text-white">
                     <input type="submit" class="col-md-5 btnSubmit" value="Modify" />
                     <div class="col-md-2"></div>
@@ -95,32 +180,60 @@
             <h3>Modify a movie</h3>
             <form method="POST" action="/admin_tools/edit_entry/{{prefix}}/{{id}}">
                 <div class="form-group text-white">
-                    {{render_field(form.title, class_="form-control")}}
+                    {{render_field(form.title, class_="form-control", placeholder="example: The Crimson King")}}
                 </div>
                 <div class="form-group text-white">
-                    {{render_field(form.director, class_="form-control")}}
+                    {{render_field(form.director, class_="form-control", placeholder="example: Kiefer Shaw")}}
                 </div>
                 <div class="form-group text-white">
-                    {{render_field(form.producers, class_="form-control")}}
+                    {{render_field(form.producers, class_="form-control", placeholder="example: Guy Tremblay, Regis Mortimer")}}
                 </div>
                 <div class="form-group text-white">
-                    {{render_field(form.actors, class_="form-control")}}
+                    {{render_field(form.actors, class_="form-control", placeholder="example: Robert Ricky, Billy Boller")}}
                 </div>
                 <div class="form-group text-white">
-                    {{render_field(form.language, class_="form-control")}}
+                    {{render_field(form.language, class_="form-control", placeholder="example: English")}}
                 </div>
                 <div class="form-group text-white">
-                    {{render_field(form.subtitles, class_="form-control")}}
+                    {{render_field(form.subtitles, class_="form-control", placeholder="example: English")}}
                 </div>
                 <div class="form-group text-white">
-                    {{render_field(form.dubbed, class_="form-control")}}
+                    {{render_field(form.dubbed, class_="form-control", placeholder="(optional) example: French")}}
                 </div>
                 <div class="form-group text-white">
-                    {{render_field(form.release_date, class_="form-control")}}
+                    {{render_field(form.release_date, class_="form-control", placeholder="DD-MM-YYYY")}}
                 </div>
                 <div class="form-group text-white">
-                    {{render_field(form.runtime, class_="form-control")}}
+                    {{render_field(form.runtime, class_="form-control", placeholder="In minutes")}}
                 </div>
+                <div class="form-group text-white">
+                    {{render_field(form.quantity, class_="form-control", placeholder="From 0 to 255")}}
+                </div>
+                <table id="physical-item-table" class="table table-hover table-bordered table-light">
+                    <thead>
+                        <tr>
+                            <td>Status</td>
+                            <td>Return Date</td>
+                            <td>Action</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for copy in copies %}
+                        <tr data-physicalCopyId="{{copy.id}}">
+                            <td>{{copy.status}}</td>
+                            <td>{{copy.return_date}}</td>
+                            <td>
+                                <button type="button" class="btn btn-secondary" onclick="removeItem(this)">
+                                    Remove
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <button type="button" class="btn btn-secondary" onclick="addItem(true)">Add more copies</button>
+                <input type="hidden" id="physicalAdd" name="physical_items_added" value="0" />
+                <span id="physicalDelete"></span>
                 <div class="row form-group text-white">
                     <input type="submit" class="col-md-5 btnSubmit" value="Modify" />
                     <div class="col-md-2"></div>

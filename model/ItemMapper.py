@@ -6,6 +6,9 @@ from copy import deepcopy
 
 
 class ItemMapper:
+
+    visible_items = []
+
     def __init__(self, app):
         self.uow = None
         self.catalog = Catalog()
@@ -17,17 +20,18 @@ class ItemMapper:
         return self.catalog
 
     def get_all_items(self, item_prefix):
-        return self.catalog.get_all_items(item_prefix)
+        self.visible_items = self.catalog.get_all_items(item_prefix)
+        return self.visible_items
 
     def get_all_books(self):
         all_copies = []
         for copy in self.tdg.get_books_physical():
-            all_copies.append(PhysicalBook(copy[0], copy[1], copy[2], copy[3]))
+            all_copies.append(PhysicalBook(copy[0], copy[1], copy[2], copy[3], copy[4]))
         book_list = []
         for book in self.tdg.get_books():
             copies = []
             for single_copy in all_copies:
-                if single_copy.book_fk == book[0]:
+                if single_copy.item_fk == book[0]:
                     copies.append(single_copy)
             book_list.append(Book(book[0], book[1], "bb", book[2], book[3], book[4], book[5], book[6], book[7], book[8], book[9], book[10], copies))
         return book_list
@@ -35,12 +39,12 @@ class ItemMapper:
     def get_all_magazines(self):
         all_copies = []
         for copy in self.tdg.get_magazines_physical():
-            all_copies.append(PhysicalMagazine(copy[0], copy[1], copy[2], copy[3]))
+            all_copies.append(PhysicalMagazine(copy[0], copy[1], copy[2]))
         magazine_list = []
         for magazine in self.tdg.get_magazines():
             copies = []
             for single_copy in all_copies:
-                if single_copy.magazine_fk == magazine[0]:
+                if single_copy.item_fk == magazine[0]:
                     copies.append(single_copy)
             magazine_list.append(Magazine(magazine[0], magazine[1], "ma", magazine[2], magazine[3], magazine[4], magazine[5], magazine[6], magazine[7], copies))
         return magazine_list
@@ -48,12 +52,12 @@ class ItemMapper:
     def get_all_music(self):
         all_copies = []
         for copy in self.tdg.get_music_physical():
-            all_copies.append(PhysicalMusic(copy[0], copy[1], copy[2], copy[3]))
+            all_copies.append(PhysicalMusic(copy[0], copy[1], copy[2], copy[3], copy[4]))
         music_list = []
         for music in self.tdg.get_music():
             copies = []
             for single_copy in all_copies:
-                if single_copy.music_fk == music[0]:
+                if single_copy.item_fk == music[0]:
                     copies.append(single_copy)
             music_list.append(Music(music[0], music[1], "mu", music[2], music[3], music[4], music[5], music[6], music[7], copies))
         return music_list
@@ -61,15 +65,22 @@ class ItemMapper:
     def get_all_movies(self):
         all_copies = []
         for copy in self.tdg.get_movies_physical():
-            all_copies.append(PhysicalMovie(copy[0], copy[1], copy[2], copy[3]))
+            all_copies.append(PhysicalMovie(copy[0], copy[1], copy[2], copy[3], copy[4]))
         movie_list = []
         for movie in self.tdg.get_movies():
             copies = []
             for single_copy in all_copies:
-                if single_copy.movie_fk == movie[0]:
+                if single_copy.item_fk == movie[0]:
                     copies.append(single_copy)
             movie_list.append(Movie(movie[0], movie[1], "mo", movie[2], movie[3], movie[4], movie[5], movie[6], movie[7], movie[8], movie[9], movie[10], copies))
         return movie_list
+
+    def get_all_isbn_items(self):
+        all_isbn_items = self.get_all_books()
+        all_magazines = self.get_all_magazines()
+        for magazine in all_magazines:
+            all_isbn_items.append(magazine)
+        return all_isbn_items
 
     def get_saved_changes(self):
         if self.uow is None:
@@ -107,7 +118,7 @@ class ItemMapper:
         self.uow.cancel_deletion(item_to_cancel)
         return True
 
-    def set_item(self, item_prefix, item_id, form):
+    def set_item(self, item_prefix, item_id, form, physical_items_added, physical_items_removed):
         item = self.uow.get(item_prefix, item_id)
 
         if item_prefix == "bb":
@@ -149,6 +160,8 @@ class ItemMapper:
             item.asin = form.asin.data
 
         self.uow.register_dirty(item)
+        self.uow.add_physical_item(item_prefix, physical_items_added, item_id)
+        self.uow.remove_physical_item(item_prefix, physical_items_removed, item_id)
 
     def add_book(self, form):
         title = form.title.data
@@ -161,7 +174,7 @@ class ItemMapper:
         language = form.language.data
         isbn10 = form.isbn10.data
         isbn13 = form.isbn13.data
-        quantity = form.quantity.data
+        quantity = int(form.quantity.data)
         book = Book(None, title, prefix, author, book_format, pages, publisher, publication_year, language, isbn10, isbn13, quantity, None)
 
         if self.uow is None:
@@ -178,7 +191,7 @@ class ItemMapper:
         language = form.language.data
         isbn10 = form.isbn10.data
         isbn13 = form.isbn13.data
-        quantity = form.quantity.data
+        quantity = int(form.quantity.data)
         magazine = Magazine(None, title, prefix, publisher, publication_date, language, isbn10, isbn13, quantity, None)
 
         if self.uow is None:
@@ -198,7 +211,7 @@ class ItemMapper:
         dubbed = form.dubbed.data
         release_date = form.release_date.data
         run_time = form.runtime.data
-        quantity = form.quantity.data
+        quantity = int(form.quantity.data)
         movie = Movie(None, title, prefix, director, producers, actors,
                       language, subtitles, dubbed, release_date, run_time, quantity, None)
         if self.uow is None:
@@ -215,7 +228,7 @@ class ItemMapper:
         label = form.label.data
         release_date = form.release_date.data
         asin = form.asin.data
-        quantity = form.quantity.data
+        quantity = int(form.quantity.data)
         music = Music(None, title, prefix, media_type, artist, label,
                       release_date, asin, quantity, None)
         if self.uow is None:
@@ -254,7 +267,7 @@ class ItemMapper:
                     keys = self.tdg.get_physical_keys(item.id, item.prefix)
                     physical_copies = []
                     for key in keys:
-                        physical_copies.append(PhysicalMagazine(key, item.id, "Available", None))
+                        physical_copies.append(PhysicalMagazine(key, item.id, "Available"))
                     item.copies = physical_copies[:]
                     self.catalog.add_item(item)
                 elif item.prefix == "mo":
@@ -278,12 +291,28 @@ class ItemMapper:
         if items_to_commit[1] is not None:
             for item in items_to_commit[1]:
                 if item.prefix == "bb":
+                    added_list = items_to_commit[3]
+                    removed_list = items_to_commit[4]
+                    self.catalog.add_physical_items(item.prefix, item.id, self.tdg.modify_physical_book(item.id, added_list, removed_list))
+                    self.catalog.delete_physical_items(item.prefix, item.id, removed_list)
                     modified_books.append(item)
                 elif item.prefix == "ma":
+                    added_list = items_to_commit[3]
+                    removed_list = items_to_commit[4]
+                    self.catalog.add_physical_items(item.prefix, item.id, self.tdg.modify_physical_magazine(item.id, added_list, removed_list))
+                    self.catalog.delete_physical_items(item.prefix, item.id, removed_list)
                     modified_magazines.append(item)
                 elif item.prefix == "mo":
+                    added_list = items_to_commit[3]
+                    removed_list = items_to_commit[4]
+                    self.catalog.add_physical_items(item.prefix, item.id, self.tdg.modify_physical_movie(item.id, added_list, removed_list))
+                    self.catalog.delete_physical_items(item.prefix, item.id, removed_list)
                     modified_movies.append(item)
                 elif item.prefix == "mu":
+                    added_list = items_to_commit[3]
+                    removed_list = items_to_commit[4]
+                    self.catalog.add_physical_items(item.prefix, item.id, self.tdg.modify_physical_music(item.id, added_list, removed_list))
+                    self.catalog.delete_physical_items(item.prefix, item.id, removed_list)
                     modified_music.append(item)
             self.catalog.edit_items(items_to_commit[1])
             if len(modified_books) != 0:
@@ -319,9 +348,43 @@ class ItemMapper:
     def get_filtered_items(self, prefix, form):
         filter_value = form.filter.data
         search_value = form.search.data
+
+        self.visible_items = self.catalog.get_filtered_items(prefix, filter_value, search_value)
+        return self.visible_items
+
+    def get_ordered_items(self, form):
         order_filter = form.order_filter.data
         order_type = form.order_type.data
 
-        filtered_items = self.catalog.get_filtered_items(prefix, filter_value, search_value, order_filter, order_type)
-        return filtered_items
+        self.visible_items = self.catalog.order_items(self.visible_items, order_filter, order_type)
+        return self.visible_items
 
+    def get_item_details(self, physical_items):
+        items = []
+        for physical_item in physical_items:
+            item = None
+            if physical_item.prefix == "bb":
+                item = self.catalog.get_item_by_id(physical_item.prefix, physical_item.item_fk)
+            elif physical_item.prefix == "ma":
+                item = self.catalog.get_item_by_id(physical_item.prefix, physical_item.item_fk)
+            elif physical_item.prefix == "mo":
+                item = self.catalog.get_item_by_id(physical_item.prefix, physical_item.item_fk)
+            elif physical_item.prefix == "mu":
+                item = self.catalog.get_item_by_id(physical_item.prefix, physical_item.item_fk)
+            items.append(item)
+        return items
+
+    def return_items(self, physical_items):
+        for item in physical_items:
+            self.catalog.mark_as_returned(item.prefix, item.item_fk, item.id)
+        self.tdg.mark_as_returned(physical_items)
+        return True
+
+    def get_physical_items_from_tuple(self, prefix_fk_id_tuple):
+        physical_items = []
+        for tup in prefix_fk_id_tuple:
+            prefix = tup[0:2]
+            item_fk = int(tup[2:])
+            item_id = int(prefix_fk_id_tuple[tup])
+            physical_items.append(self.catalog.get_physical_items_from_tuple(prefix, item_fk, item_id))
+        return physical_items

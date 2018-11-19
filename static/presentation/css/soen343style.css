@@ -68,6 +68,7 @@
 .admin-tools {
     font-family: dindin, Arial, sans-serif;
     color: #ffffff;
+    text-shadow: -1px 0 grey, 0 1px grey, 1px 0 grey, 0 -1px grey;
     margin: 10px 10px 10px 10px;
     height: 50px;
     width: 150px;
@@ -95,10 +96,38 @@
     z-index: 1;
 }
 
+#admin-glow {
+    color: white;
+    text-shadow: -1px 0 grey, 0 1px grey, 1px 0 grey, 0 -1px grey;
+}
+
+#admin-glow:hover {
+    color: #fdf02a;
+}
+
+#borrowed_item_glow {
+    color: white;
+    text-shadow: -1px 0 #673ab7, 0 1px #673ab7, 1px 0 #673ab7, 0 -1px #673ab7;
+}
+
+#borrowed_item_glow:hover {
+    color: #da9df0;
+}
+
 #cancel {
     color:red;
     text-align:center;
     text-decoration:none;
+}
+
+.detailed_copies{
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+    border-radius: 5px;
+    text-align: center;
+    padding: 4px;
+    background-color: white;
 }
 
 #tools-title {
@@ -264,5 +293,13 @@ td, th {
 .sort-tag {
     margin-top: 5px;
     margin-right: 5px;
+}
+
+.detailed-view {
+    text-align:center;
+}
+
+#detailed-view-content {
+    text-align:left;
 }
 

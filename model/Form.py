@@ -1,40 +1,29 @@
-from wtforms import ValidationError, Form, StringField, PasswordField, validators, IntegerField
+from wtforms import ValidationError, Form, StringField, PasswordField, validators, IntegerField, SelectField
 import datetime
+import re
 
 
-def quantity(item_type):
-    def validate_quantity(form, field):
-        if field.data is None:
-            raise ValidationError('Please enter the amount of items to stock.')
-        elif type(field.data) is not int:
-            if type(field.data) is str:
-                if any(char.isalpha() for char in field.data):
-                    raise ValidationError('Please enter a valid quantity of items to stock.')
-        elif field.data > 255:
-            raise ValidationError('Item quantity must not be greater than 255.')
-
-    return validate_quantity
+def alpha(minimum, maximum, allow_digits):
+    def _alpha(form, field):
+        length = len(field.data)
+        if length < minimum or length > maximum:
+            raise ValidationError('Input length must be between %d and %d characters long.' % (minimum, maximum))
+        if allow_digits == 0:
+            if any(char.isdigit() for char in field.data):
+                raise ValidationError('Input must not contain any digits.')
+    return _alpha
 
 
-def input_required(message):
-    def _input_required(form, field):
-        if len(field.data) < 1:
-            raise ValidationError(message)  
-    return _input_required
+def num(minimum, maximum):
+    def num(form, field):
+        if field.data == '' or not all(char.isdigit() for char in field.data):
+            raise ValidationError('Input must be a valid digit.')
+        data = int(field.data)
+        if data < minimum or data > maximum:
+            raise ValidationError('Input value must be between %d and %d.' % (minimum, maximum))
+    return num
 
 
-def person_name(form, field):
-    if len(field.data) == 0:
-        raise ValidationError('Please enter a name.')
-    elif len(field.data) > 70:
-        raise ValidationError('Name length must not be greater than 70 characters.')
-    elif len(field.data) < 2:
-        raise ValidationError('Name length must not be less than 2 characters.')
-    elif any(char.isdigit() for char in field.data):
-        raise ValidationError('Name must not contain any digits.')
-
-
-# Verifies if password does contain at least a letter and a digit
 def password(form, field):
     minimum_password_length = 6
     if type(field.data) is str:
@@ -42,53 +31,54 @@ def password(form, field):
             raise ValidationError('Password must contain at least 1 digit.')
         elif not any(char.isalpha() for char in field.data):
             raise ValidationError('Password must contain at least 1 letter.')
-    elif (len(field.data) < minimum_password_length):
+    elif len(field.data) < minimum_password_length:
         raise ValidationError('The password needs to be at least ' + str(minimum_password_length) + ' characters.')
 
 
 # Verifies phone number does not contain any letter
 def phone_number(form, field):
     if len(field.data) == 0:
-        raise ValidationError('Please enter a phone number.')  
-    elif type(field.data) is not int:
-        if type(field.data) is str:
-            if any(char.isalpha() for char in field.data):
-                raise ValidationError('Phone number must not contain any alphabetical characters.')
-    elif len(field.data) < 10:
-        raise ValidationError('Phone number must be at least 10 digits.')
+        raise ValidationError('Please enter a phone number.')
+    elif not re.match('^[(]\d{3}[)]\s*\d{3}[-]\d{4}$', field.data):
+        raise ValidationError('Invalid phone number, please follow the pattern: (514) 423-3918')
 
 
 # Verifies that the date input matches the format DD-MM-YYYY
 def date(form, field):
     try:
-        datetime.datetime.strptime(field.data, "%d-%m-%Y")
+        datetime.datetime.strptime(field.data, "%Y-%m-%d")
     except ValueError:
-        raise ValueError("The date must be formatted as follows: DD-MM-YYYY.")
+        raise ValueError("The date must be formatted as follows: YYYY-MM-DD.")
 
 
-# Verifies string does not contain any letter
-def number(form, field):
-    if type(field.data) is not int:
-        if type(field.data) is str:
-            if any(char.isalpha() for char in field.data):
-                raise ValidationError('The number must not contain any alphabetical characters.')
-    
+def unique_isbn10_validator(form, field):
+    if field.data == '' or not all(char.isdigit() for char in field.data):
+        raise ValidationError('Input must be a valid digit.')
+    data = int(field.data)
+    if data < 1000000000 or data > 9999999999:
+        raise ValidationError('Please enter a valid 10-digit ISBN number.')
+    for item in form.all_items:
+        if int(form.isbn10.data) == item.isbn10:
+            raise ValidationError("Duplicate ISBN - " + item.prefix + " ID#: " + str(item.id) + ", Title: " + item.title + ", ISBN10: " + str(item.isbn10))
 
-# Verifies word does not contain any digit
-def no_digit(form, field):
-    if type(field.data) is str:
-        if any(char.isdigit() for char in field.data):
-            raise ValidationError('This field must not contain any digits.')
-    else:
-        raise ValidationError('This field must not contain any digits.')
+
+def unique_isbn13_validator(form, field):
+    if field.data == '' or not all(char.isdigit() for char in field.data):
+        raise ValidationError('Input must be a valid digit.')
+    data = int(field.data)
+    if data < 1000000000000 or data > 9999999999999:
+        raise ValidationError('Please enter a valid 13-digit ISBN number.')
+    for item in form.all_items:
+        if int(form.isbn13.data) == item.isbn13:
+            raise ValidationError("Duplicate ISBN - " + item.prefix + " ID#: " + str(item.id) + ", Title: " + item.title + ", ISBN13: " + str(item.isbn13))
 
 
 class RegisterForm(Form):
-    first_name = StringField('First Name', [person_name])
-    last_name = StringField('Last Name', [person_name])
+    first_name = StringField('First Name', [alpha(2, 50, 0)])
+    last_name = StringField('Last Name', [alpha(2, 50, 0)])
     email = StringField('Email', [validators.Email(message='This is not a valid email address.')])
-    phone = StringField('Phone', [phone_number, validators.Length(min=8, max=15, message='This is not a valid phone number.')])
-    address = StringField('Address', [input_required(message='Please enter the home address.')])
+    phone = StringField('Phone', [phone_number])
+    address = StringField('Address', [alpha(2, 100, 1)])
     password = PasswordField('Password', [
         password,
         validators.EqualTo('confirm', message='Passwords do not match.')
@@ -98,54 +88,57 @@ class RegisterForm(Form):
 
 class BookForm(Form):
     current_time = datetime.datetime.now()
-    title = StringField('Title', [input_required(message='Please enter the title of the book.')])
-    author = StringField('Author', [person_name, no_digit])
-    format = StringField('Format', [input_required(message='Please enter the format of the book.')])
-    # From the first printed text (Gutenberg Bible in 1455) to this present year
-    publication_year = IntegerField('Publication Year', [validators.NumberRange(min=1455, max=current_time.year, message='This is not a valid year for a published book.')])
-    pages = IntegerField('Pages', [number, validators.NumberRange(min=1, max=99999, message="That is not a valid number of pages.")])
-    publisher = StringField('Publisher', [input_required(message='Please enter the name of the publisher.')])
-    language = StringField('Language', [no_digit, input_required(message='Please enter the language in which the book is published.')])
-    isbn10 = IntegerField('ISBN10', [number, validators.NumberRange(min=1000000000, max=9999999999, message='Please enter a valid 10-digit ISBN.')])
-    isbn13 = IntegerField('ISBN13', [number, validators.NumberRange(min=1000000000000, max=9999999999999, message='Please enter a valid 13-digit ISBN.')])
-    quantity = IntegerField('Quantity', [quantity(item_type='book')])
+    title = StringField('Title', [alpha(1, 100, 1)])
+    author = StringField('Author', [alpha(5, 100, 0)])
+    format = SelectField('Format', choices=[('Paperback', 'Paperback'), ('Hardcover', 'Hardcover')])
+    publication_year = StringField('Publication Year', [num(0, current_time.year)])
+    pages = StringField('Pages', [num(1, 99999)])
+    publisher = StringField('Publisher', [alpha(1, 100, 1)])
+    language = StringField('Language', [alpha(1, 100, 0)])
+    isbn10 = StringField('ISBN10', [unique_isbn10_validator])
+    isbn13 = StringField('ISBN13', [unique_isbn13_validator])
+    quantity = StringField('Quantity', [num(0, 255)])
+
 
 class MagazineForm(Form):
-    title = StringField('Title', [input_required(message='Please enter the title of the magazine.')])
-    publisher = StringField('Publisher', [input_required(message='Please enter the name of the publisher.')])
+    title = StringField('Title', [alpha(1, 100, 1)])
+    publisher = StringField('Publisher', [alpha(1, 100, 1)])
     publication_date = StringField('Publication Date', [date])
-    language = StringField('Language', [no_digit, input_required(message='Please enter the language in which the magazine is published.')])
-    isbn10 = IntegerField('ISBN10', [number, validators.NumberRange(min=1000000000, max=9999999999, message='Please enter a valid 10-digit ISBN.')])
-    isbn13 = IntegerField('ISBN13', [number, validators.NumberRange(min=1000000000000, max=9999999999999, message='Please enter a valid 13-digit ISBN.')])
-    quantity = IntegerField('Quantity', [quantity(item_type='magazine')])
+    language = StringField('Language', [alpha(1, 100, 0)])
+    isbn10 = StringField('ISBN10', [unique_isbn10_validator])
+    isbn13 = StringField('ISBN13', [unique_isbn13_validator])
+    quantity = StringField('Quantity', [num(0, 255)])
 
 
 class MovieForm(Form):
-    title = StringField('Title', [input_required(message='Please enter the title of the movie.')])
-    director = StringField('Director', [no_digit, input_required(message='Please enter the name of the director.')])
-    producers = StringField('Producers', [no_digit, input_required(message='Please enter the name of the producer(s).')])
-    actors = StringField('Actors', [no_digit, input_required(message='Please enter the name of the actor(s).')])
-    language = StringField('Language', [no_digit, input_required(message='Please enter the name of the actor(s).')])
-    subtitles = StringField('Subtitles', [no_digit, input_required(message='Please enter the language of the subtitles.')])
-    dubbed = StringField('Dubbed', [no_digit])
+    title = StringField('Title', [alpha(1, 100, 1)])
+    director = StringField('Director', [alpha(5, 100, 0)])
+    producers = StringField('Producers', [alpha(5, 100, 0)])
+    actors = StringField('Actors', [alpha(5, 100, 0)])
+    language = StringField('Language', [alpha(1, 100, 0)])
+    subtitles = StringField('Subtitles', [alpha(1, 100, 0)])
+    dubbed = StringField('Dubbed', [alpha(0, 100, 0)])
     release_date = StringField('Release Date', [date])
-    runtime = StringField('Run Time ', [number, validators.Length(min=1, max=30)])
-    quantity = IntegerField('Quantity', [quantity(item_type='movie')])
+    runtime = StringField('Run Time ', [alpha(2, 50, 1)])
+    quantity = StringField('Quantity', [num(0, 255)])
 
 
 class MusicForm(Form):
-    media_type = StringField('Type', [validators.Length(min=1, max=5, message="This is not a valid format for a music file.")])
-    title = StringField('Title', [input_required(message='Please enter the title of the music.')])
-    artist = StringField('Artist', [input_required(message='Please enter the name of the artist.')])
-    label = StringField('Label', [input_required(message='Please enter the label of the music.')])
+    media_type = StringField('Type', [alpha(2, 100, 0)])
+    title = StringField('Title', [alpha(1, 100, 1)])
+    artist = StringField('Artist', [alpha(1, 100, 1)])
+    label = StringField('Label', [alpha(1, 100, 1)])
     release_date = StringField('Release Date', [date])
-    asin = StringField('ASIN', [validators.Length(min=10, max=10, message='This is not a valid ASIN code.')])
-    quantity = IntegerField('Quantity', [quantity(item_type='music')])
+    asin = StringField('ASIN', [alpha(10, 10, 1)])
+    quantity = StringField('Quantity', [num(0, 255)])
 
 
 class SearchForm(Form):
     filter = StringField('Filter')
     search = StringField('Search')
+
+
+class OrderForm(Form):
     order_filter = StringField('Order Filter')
     order_type = StringField('Order Type')
 
