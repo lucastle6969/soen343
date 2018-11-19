@@ -443,9 +443,7 @@ class Tdg:
     def add_log(self, user_id, log_type, timestamp):
         connection = self.mysql.connect()
         cur = connection.cursor()
-        for item in physical_items:
-            cur.execute("""INSERT INTO log_registry(user_fk, log_type, timestamp)
-                    VALUES(%s, %s, %s)""", (user_id, log_type, timestamp))
+        cur.execute("""INSERT INTO log_registry(user_fk, log_type, timestamp) VALUES(%s, %s, %s)""", (user_id, log_type, timestamp))
         result = cur.execute("SELECT * FROM log_registry ORDER BY timestamp DESC")
         if result > 0:
             last_historical_id = cur.fetchone()
@@ -454,6 +452,5 @@ class Tdg:
             last_historical_id = False
         last_ids = []
         last_ids.append(last_historical_id)
-        last_ids.append(last_active_id)
         cur.close()
         return last_ids

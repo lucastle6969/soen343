@@ -1,6 +1,6 @@
 
 class Log:
-    def __init__(user_fk, type_of_log):
+    def __init__(self, user_fk, type_of_log, timestamp):
         self.user_fk = user_fk
-        self.type = type_of_log
-        self.time = strftime('%Y-%m-%d %H:%M:%S', localtime())
+        self.log_type = type_of_log
+        self.time = timestamp

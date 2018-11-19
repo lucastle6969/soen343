@@ -286,7 +286,7 @@ def admin_tools(tool):
             elif tool == 'view_active_loans':
                 return render_template('admin_tools.html', tool=tool, transaction=transaction_mapper.transaction_registry.active_loan_registry)
             elif tool == 'view_log_history':
-                return render_template('admin_tools.html', tool=tool, transaction=transaction_mapper.log_registry.historical_registry)
+                return render_template('admin_tools.html', tool=tool, transaction=log_mapper.log_registry.historical_registry)
         else:
             flash('invalid tool')
             return render_template('admin_tools.html')
@@ -373,6 +373,7 @@ def save_changes():
 
 @app.route('/logout')
 def logout():
+    user = user_mapper.get_user_by_id(session['user_id'])
     log_mapper.add_log(user.id, "in", strftime('%Y-%m-%d %H:%M:%S', localtime()))
     user_mapper.remove_from_active(session['user_id'])
     locker = user_mapper.user_registry.check_lock()
