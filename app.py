@@ -420,7 +420,7 @@ def cancel_deletion(item_prefix, item_id):
         return redirect(url_for('admin_tools', tool='catalog_manager'))
 
 
-@app.route('/admin_tools/catalog_manager/<item>',  methods=['GET', 'POST'])
+@app.route('/admin_tools/catalog_manager/<item>', methods=['GET', 'POST'])
 def catalog_manager(item):
     if session['logged_in']:
         if user_mapper.validate_admin(session['user_id'], session['admin']):
