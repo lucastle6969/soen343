@@ -17,7 +17,7 @@ Michael Gagnon | 40030481 | m.gagnon04@hotmail.com
 
 # Web App Deployment 
 
-From a terminal or console window inside the project directory (soen343) on a system supporting python 3.7, pip should be installed to automatically install all requirements with ```pip install -r requirements.txt``` then run ```python app.py``` (python3 app.py from Mac) and visit ```localhost:5000``` from a web browswer on the local machine. The database is hosted by an online server so an internet connection will be required for the app to function correctly.
+From a terminal or console window inside the project directory (soen343) on a system supporting python 3.7, pip should be installed to automatically install all requirements with ```pip install -r requirements.txt``` then run ```python app.py``` (```python3 app.py``` from Mac) and visit ```localhost:5000``` from a web browswer on the local machine. The database is hosted by an online server so an internet connection will be required for the app to function correctly.
 
-To log-in as an Admin use : johndoe@gmail.com  ,  pw: 123456
-To log-in as a client use : bob@gmail.com , pw: 123qwe
+To log-in as an Admin use : ```alice@gmail.com```  ,  pw: ```098poi```
+To log-in as a client use : bob@gmail.com , pw: ```123qwe```
