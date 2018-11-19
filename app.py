@@ -156,7 +156,7 @@ def login():
                 session['timestamp'] = timestamp
                 session.permanent = True
                 app.permanent_session_lifetime = datetime.timedelta(days=30)
-                log_mapper.add_log(user.id, "in", strftime('%Y-%m-%d %H:%M:%S', localtime()))
+                log_mapper.add_log(user.id, "in", timestamp)
         
             # add the user to the active user registry in the form of a tuple (user_id, timestamp)
                 user_mapper.enlist_active_user(user.id, user.first_name, user.last_name, user.email, user.admin, timestamp, time.time(), time.time(), False)
@@ -286,7 +286,7 @@ def admin_tools(tool):
             elif tool == 'view_active_loans':
                 return render_template('admin_tools.html', tool=tool, transaction=transaction_mapper.transaction_registry.active_loan_registry)
             elif tool == 'view_log_history':
-                return render_template('admin_tools.html', tool=tool, transaction=log_mapper.log_registry.historical_registry)
+                return render_template('admin_tools.html', tool=tool, log=log_mapper.log_registry.historical_registry)
         else:
             flash('invalid tool')
             return render_template('admin_tools.html')
@@ -374,7 +374,7 @@ def save_changes():
 @app.route('/logout')
 def logout():
     user = user_mapper.get_user_by_id(session['user_id'])
-    log_mapper.add_log(user.id, "in", strftime('%Y-%m-%d %H:%M:%S', localtime()))
+    log_mapper.add_log(user.id, "out", datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S'))
     user_mapper.remove_from_active(session['user_id'])
     locker = user_mapper.user_registry.check_lock()
     if locker == session['user_id']:

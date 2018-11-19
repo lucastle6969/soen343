@@ -3,20 +3,22 @@
 <table id="table" class="table table-hover table-bordered">
     <thead>
         <tr>
+            <th>Time</th>
             <th>User ID</th>
             <th>Type</th>
-            <th>Time</th>
+            
         </tr>
     </thead>
     <tbody>
         {% for x in log %}
         <tr>
+            <td>{{x.timestamp}}</td>
             <td>{{x.user_fk}}</td>
             <td>{% if x.log_type == "in" %} Login 
                 {% elif x.log_type == "out" %} Logout 
                 {% endif %}
             </td>
-            <td>{{x.timestamp}}</td>
+            
         </tr>
         {% endfor %}
     </tbody>
