@@ -1,6 +1,7 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, request
 from model.ItemMapper import ItemMapper
 from model.UserMapper import UserMapper
+from model.LogMapper import LogMapper
 from model.TransactionMapper import TransactionMapper
 from passlib.hash import sha256_crypt
 from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, SearchForm, Forms, OrderForm
@@ -16,7 +17,7 @@ app.jinja_env.filters['zip'] = zip
 item_mapper = ItemMapper(app)
 user_mapper = UserMapper(app)
 transaction_mapper = TransactionMapper(app, item_mapper.catalog.item_catalog)
-
+log_mapper = LogMapper(app)
 ACTIVE_USER_GRACE_PERIOD = 2400
 CATALOG_MANAGER_GRACE_PERIOD = 600
 SECONDS_CLEAN_ACTIVE_USERS = 300
@@ -42,8 +43,7 @@ def catalog_users():
             user_mapper.user_registry.active_user_registry.append(tuple(user_as_list))
             locker = user_mapper.user_registry.check_lock()
             if locker == user[0]:
-                user_mapper.user_registry.remove_lock()
-
+                user_mapper.user_registry.remove_lock()    
 
 sched = BackgroundScheduler(daemon=True)
 sched.add_job(active_users, 'interval', seconds=SECONDS_CLEAN_ACTIVE_USERS)
@@ -156,7 +156,8 @@ def login():
                 session['timestamp'] = timestamp
                 session.permanent = True
                 app.permanent_session_lifetime = datetime.timedelta(days=30)
-
+                log_mapper.add_log(user.id, "in", strftime('%Y-%m-%d %H:%M:%S', localtime()))
+        
             # add the user to the active user registry in the form of a tuple (user_id, timestamp)
                 user_mapper.enlist_active_user(user.id, user.first_name, user.last_name, user.email, user.admin, timestamp, time.time(), time.time(), False)
 
@@ -284,6 +285,8 @@ def admin_tools(tool):
                 return render_template('admin_tools.html', tool=tool, transaction=transaction_mapper.transaction_registry.historical_registry)
             elif tool == 'view_active_loans':
                 return render_template('admin_tools.html', tool=tool, transaction=transaction_mapper.transaction_registry.active_loan_registry)
+            elif tool == 'view_log_history':
+                return render_template('admin_tools.html', tool=tool, transaction=transaction_mapper.log_registry.historical_registry)
         else:
             flash('invalid tool')
             return render_template('admin_tools.html')
@@ -370,6 +373,7 @@ def save_changes():
 
 @app.route('/logout')
 def logout():
+    log_mapper.add_log(user.id, "in", strftime('%Y-%m-%d %H:%M:%S', localtime()))
     user_mapper.remove_from_active(session['user_id'])
     locker = user_mapper.user_registry.check_lock()
     if locker == session['user_id']:

@@ -131,3 +131,11 @@ CREATE TABLE cart(
     prefix VARCHAR(2),
     physical_id_fk INT(6)
 );
+
+DROP TABLE IF EXISTS log_registry;
+CREATE TABLE log_registry(
+    id INT(30) AUTO_INCREMENT PRIMARY KEY,
+    user_fk INT(7),
+    log_type VARCHAR(6),
+    timestamp DATETIME
+);

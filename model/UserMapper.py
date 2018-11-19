@@ -55,6 +55,13 @@ class UserMapper:
     def get_active_users(self):
         return self.user_registry.get_active_users()
 
+    def get_user_by_id(self, user_id):
+        for user in self.user_registry.get_all_users():
+            if user.id == user_id:
+                return user
+        else:
+            return false
+
     def get_all_users(self):
         return self.user_registry.get_all_users()
 
