@@ -35,6 +35,25 @@ class Tdg:
             new_user_id = False
         return new_user_id
 
+    def modify_user(self, user_id, first_name, last_name, address, email, phone):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        cur.execute("UPDATE user SET first_name = %s, last_name = %s, address = %s, email = %s, phone = %s WHERE id = %s",
+                    (first_name, last_name, address, email, phone, user_id))
+        cur.close()
+
+    def modify_password(self, user_id, password):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        cur.execute("UPDATE user SET password = %s WHERE id = %s", (password, user_id))
+        cur.close()
+
+    def delete_user(self, user_id):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        cur.execute("DELETE FROM user WHERE id = %s", user_id)
+        cur.close()
+
     # -- SELECT Queries
     def get_user_by_email(self, email):
         connection = self.mysql.connect()
@@ -50,7 +69,7 @@ class Tdg:
 
         return data
 
-    def get_item_by_id(self, id):
+    def get_user_by_id(self, id):
         connection = self.mysql.connect()
         cur = connection.cursor()
         result = cur.execute("SELECT * FROM user WHERE id = %s", [id])

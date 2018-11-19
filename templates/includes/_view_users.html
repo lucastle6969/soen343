@@ -1,5 +1,11 @@
-﻿{% if list_of_users %}
-<table>
+﻿{% if user == "edit" %}
+    {% include 'includes/_edit_user.html' %}
+{% endif %}﻿
+{% if password == "edit" %}
+    {% include 'includes/_edit_password.html' %}
+{% endif %}
+{% if list_of_users %}
+    <table>
         <caption style="caption-side:top">List of Users</caption>
         <tr>
             <th>ID</th>
@@ -9,6 +15,9 @@
             <th>Email</th>
             <th>Phone</th>
             <th>Administrator</th>
+            <th></th>
+            <th></th>
+            <th></th>
         </tr>
         {% for user in list_of_users %}
         <tr>
@@ -19,6 +28,22 @@
             <td>{{ user.email }}</td>
             <td>{{ user.phone }}</td>
             <td>{{ 'Yes' if user.admin == 1 else 'No' }}</td>
+            <td><form method="GET" action="/admin_tools/edit_user/{{user.id}}">
+                <input type="submit" value="Edit" /></form></td>
+            <td><form method="GET" action="/admin_tools/edit_password/{{user.id}}">
+                <input type="submit" value="Change Password" /></form></td>
+            {% if admin_id == user.id %}
+            <td></td>
+            {% else %}
+            <td>
+                {% include 'includes/_user_delete.html' %}
+                {% if loan == "outstanding" %}
+                    <button type="button" data-toggle="modal" data-target="#loan{{user.id}}">Delete</button>
+                {% else %}
+                    <button type="button" data-toggle="modal" data-target="#user{{user.id}}">Delete</button>
+                {% endif %}
+            </td>
+            {% endif %}
         {% endfor %}
     </table>
 {% endif %}

@@ -37,11 +37,46 @@ class UserMapper:
 
         return render_template('admin_tools.html', tool=tool, form=form)
 
+    def update(self, user_id, is_admin, form, request_):
+        self.tdg.modify_user(user_id, request_.form['first_name'], request_.form['last_name'], request_.form['address'],
+            request_.form['email'], request_.form['phone'])
+        self.user_registry.empty_list_of_users()
+        self.user_registry.populate(self.tdg.get_all_users_active_loans())
+        if is_admin == 1:
+            flash(f'The administrator account information (id {user_id}) has been modified.', 'success')
+        else:
+            flash(f'The client account information (id {user_id}) has been modified.', 'success')
+
+    def update_password(self, user_id, is_admin, form, request_):
+        self.tdg.modify_password(user_id, sha256_crypt.encrypt(str(request_.form['password'])))
+        self.user_registry.empty_list_of_users()
+        self.user_registry.populate(self.tdg.get_all_users_active_loans())
+        if is_admin == 1:
+            flash(f'The password for the administrator account (id {user_id}) has been modified.', 'success')
+        else:
+            flash(f'The password for the client account (id {user_id}) has been modified.', 'success')
+
+    def delete(self, user_id):
+        list_active_users = self.get_active_users()
+        for user in list_active_users:
+            if str(user[0]) == user_id:
+                self.remove_from_active(user_id)
+        list_active_loans = self.tdg.get_active_loans()
+        for loan in list_active_loans:
+            if str(loan[1]) == user_id:
+                return render_template('admin_tools.html', tool='view_users', id=user_id, loan="outstanding")
+        self.tdg.delete_user(user_id)
+        self.user_registry.empty_list_of_users()
+        self.user_registry.populate(self.tdg.get_all_users_active_loans())
+
     def check_restart_session(self, session):
         return self.user_registry.check_restart_session(session)
 
     def get_user_by_email(self, email):
         return self.user_registry.get_user_by_email(email)
+
+    def get_user_by_id(self, user_id):
+        return self.tdg.get_user_by_id(user_id)
 
     def ensure_not_already_logged(self, user_id):
         self.user_registry.ensure_not_already_logged(user_id)
