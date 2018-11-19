@@ -20,8 +20,8 @@ class ItemMapper:
     def get_catalog(self):
         return self.catalog
 
-    def get_all_items(self, item_prefix):
-        self.visible_items = self.catalog.get_all_items(item_prefix)
+    def get_all_items(self, item_prefix, user_cart):
+        self.visible_items = self.catalog.get_all_items(item_prefix, user_cart)
         return self.visible_items
 
     def get_all_books(self):

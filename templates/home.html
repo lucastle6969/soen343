@@ -106,7 +106,7 @@
                         </td>
                         {% if session.admin == False %}
                         <td><center>
-                            <button id="{{x.prefix}}{{x.id}}" type="button" class="btn btn-to-cart" onclick="add_to_cart(this.id)">Add To Cart <img src="/static/presentation/img/in_cart.png"></button>
+                            <button id="{{x.prefix}}{{x.id}}" type="button" class="btn btn-to-cart" onclick="add_to_cart(this.id)">Add To Cart {% if x.in_cart == True %}<img src="/static/presentation/img/in_cart.png">{% endif %}</button>
                         </center></td>
                         {% endif %}
                     </tr>
@@ -284,7 +284,7 @@
                         </td>
                         {% if session.admin == False %}
                         <td><center>
-                            <button id="{{x.prefix}}{{x.id}}" type="button" class="btn btn-to-cart" onclick="add_to_cart(this.id)">Add To Cart <img src="/static/presentation/img/in_cart.png"></button>
+                            <button id="{{x.prefix}}{{x.id}}" type="button" class="btn btn-to-cart" onclick="add_to_cart(this.id)">Add To Cart {% if x.in_cart == True %}<img src="/static/presentation/img/in_cart.png">{% endif %}</button>
                         </center></td>
                         {% endif %}
                     </tr>
@@ -381,7 +381,7 @@
                         </td>
                         {% if session.admin == False %}
                         <td><center> 
-                            <button id="{{x.prefix}}{{x.id}}" type="button" class="btn btn-to-cart" onclick="add_to_cart(this.id)">Add To Cart <img src="/static/presentation/img/in_cart.png"></button>
+                            <button id="{{x.prefix}}{{x.id}}" type="button" class="btn btn-to-cart" onclick="add_to_cart(this.id)">Add To Cart {% if x.in_cart == True %}<img src="/static/presentation/img/in_cart.png">{% endif %}</button>
                         </center></td>
                         {% endif %}
                     </tr>

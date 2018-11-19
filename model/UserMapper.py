@@ -124,3 +124,10 @@ class UserMapper:
                 user.cart = []
                 return True
         return False
+
+    def get_user_cart(self, user_id):
+        if user_id is not None:
+            for user in self.user_registry.list_of_users:
+                if user.id == user_id:
+                    return user.cart
+        return None

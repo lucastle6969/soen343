@@ -57,7 +57,7 @@
                             <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{{ item_list[loop_index0-1].id }}" data-dismiss="modal">&lt;</button>
                             <div class = "divider"></div>
                             {% if session.admin == False %}
-                            <button id="detailed_{{x.prefix}}{{x.id}}" type="button" class="btn btn-to-cart" onclick="add_to_cart(this.id)">Add To Cart</button>
+                            <button id="detailed_{{x.prefix}}{{x.id}}" type="button" class="btn btn-to-cart" onclick="add_to_cart(this.id)">Add To Cart {% if x.in_cart == True %}<img src="/static/presentation/img/in_cart.png">{% endif %}</button>
                             {% else %}
                             <button type="button" class="btn-hidden">Add To Cart</button>
                             {% endif %}
@@ -129,7 +129,7 @@
                             <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{{ item_list[loop_index0-1].id }}" data-dismiss="modal">&lt;</button>
                             <div class = "divider"></div>
                             {% if session.admin == False %}
-                            <button id="detailed_{{x.prefix}}{{x.id}}" type="button" class="btn btn-to-cart" onclick="add_to_cart(this.id)">Add To Cart</button>
+                            <button id="detailed_{{x.prefix}}{{x.id}}" type="button" class="btn btn-to-cart" onclick="add_to_cart(this.id)">Add To Cart {% if x.in_cart == True %}<img src="/static/presentation/img/in_cart.png">{% endif %}</button>
                             {% else %}
                             <button type="button" class="btn-hidden">Add To Cart</button>
                             {% endif %}
@@ -189,7 +189,7 @@
                             <button type="button" class="btn btn-default" data-toggle="modal" data-target="#demo-{{ item_list[loop_index0-1].id }}" data-dismiss="modal">&lt;</button>
                             <div class = "divider"></div>
                             {% if session.admin == False %}
-                            <button id="detailed_{{x.prefix}}{{x.id}}" type="button" class="btn btn-to-cart" onclick="add_to_cart(this.id)">Add To Cart</button>
+                            <button id="detailed_{{x.prefix}}{{x.id}}" type="button" class="btn btn-to-cart" onclick="add_to_cart(this.id)">Add To Cart {% if x.in_cart == True %}<img src="/static/presentation/img/in_cart.png">{% endif %}</button>
                             {% else %}
                             <button type="button" class="btn-hidden">Add To Cart</button>
                             {% endif %}
