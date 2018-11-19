@@ -414,8 +414,7 @@ class ItemMapper:
                             return copy
                 return None
 
-    @require("All passed items must be available to loan", lambda args: all(args.self.catalog.get_physical_items_from_tuple(item.prefix, item.item_fk, item.id).status == 'Available' for item in args.physical_items))
-    @ensure("All passed items must be added to the borrowed_items list", lambda args, result: ((item in args.self.user_registry.get_user_by_id(args.user_id).borrowed_items) for item in args.loaned_items))
+    @ensure("All passed items must be added to the borrowed_items list", lambda args, result: ((item in args.self.user_registry.get_user_by_id(args.user_id).borrowed_items) for item in args.requested_items))
     def loan_items(self, user_id, requested_items):
         loaned_items = []
         for requested_item in requested_items:

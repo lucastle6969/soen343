@@ -445,7 +445,7 @@ class Tdg:
         cur.close()
         return True
 
-    @require("All passed items must be available to loan", lambda args: all(args.self.catalog.get_physical_items_from_tuple(item.prefix, item.item_fk, item.id).status == 'Available' for item in args.physical_items))
+    @require("All passed items must be available to loan", lambda args: (args.self.catalog.get_physical_items_from_tuple(item.prefix, item_fk, item.id).status == 'Available' for item in args.loaned_items))
     def loan_items(self, loaned_items):
         connection = self.mysql.connect()
         cur = connection.cursor()

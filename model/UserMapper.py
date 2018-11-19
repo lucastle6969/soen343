@@ -76,10 +76,9 @@ class UserMapper:
             if user.id == user_id:
                 return len(user.cart) < CART_MAX_SIZE
 
-    @require("All passed items must be available to add to the cart", lambda args: all(args.self.catalog.get_physical_items_from_tuple(item.prefix, item.item_fk, item.id).status == 'Available' for item in args.physical_items))
-    @ensure("All passed items must be added to the cart", lambda args, result: ((copy in args.self.user_registry.get_user_by_id(args.user_id).cart) for copy in args.available_copy))
+    @ensure("All passed items must be added to the cart", lambda args, result: (args.available_copy in args.self.user_registry.get_user_by_id(args.user_id).cart))
     def add_to_cart(self, user_id, available_copy):
-        user = get_user_by_id(user_id)
+        user = self.get_user_by_id(user_id)
         user.cart.append(available_copy)
 
     def get_user_by_id(self, user_id):
@@ -108,7 +107,6 @@ class UserMapper:
         valid_loan_state[1] = self.user_registry.catalog_lock == -1
         return valid_loan_state
 
-    @require("All passed items must be available to loan", lambda args: all(args.self.catalog.get_physical_items_from_tuple(item.prefix, item.item_fk, item.id).status == 'Available' for item in args.physical_items))
     @ensure("All passed items must be added to the borrowed_items list", lambda args, result: ((item in args.self.user_registry.get_user_by_id(args.user_id).borrowed_items) for item in args.loaned_items))
     def loan_items(self, user_id, loaned_items):
         items_to_remove_from_cart = []
@@ -123,7 +121,7 @@ class UserMapper:
                     user.cart.remove(item)
 
     @require("The list must not be empty", lambda args: (args.self.user_registry.get_user_by_id(args.user_id).cart is not []))
-    @ensure("The list must be empty", lambda args, result: (args.self.user_registry.get_user_by_id(args.user_id).cart is []))
+    @ensure("The list must be empty for the user", lambda args, result: ((args.self.user_registry.get_user_by_id(args.user_id)).cart == []))
     def empty_cart(self, user_id):
         print("user_id param: ", user_id)
         for user in self.user_registry.list_of_users:
