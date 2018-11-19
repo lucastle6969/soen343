@@ -359,8 +359,8 @@ class ItemMapper:
         return items
 
 
-    @require("Length of the set of items to return cannot be greater than 10", lambda args: len(args.physical_items) <=10)
-    @ensure("`All passed items must be marked as returned",
+    @require("Length of the set of items to return cannot be greater than 10.", lambda args: len(args.physical_items) <=10)
+    @ensure("All passed items must be marked as returned.",
             lambda args, result: all(args.self.catalog.get_physical_items_from_tuple(item.prefix, item.item_fk, item.id).status == 'Available' for item in args.physical_items))
     def return_items(self, physical_items):
         for item in physical_items:
