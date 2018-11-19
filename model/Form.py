@@ -54,7 +54,7 @@ def date(form, field):
 def unique_email_validator(form, field):
         for user in form.all_users:
             if form.email.data == user.email and not form.user[0] == user.id:
-                raise ValidationError('This email has already been used by user id:' + str(user.id) + " and can't be used by user id: " + str(form.user[0]) + '.')
+                raise ValidationError('This email has already been used by user id: ' + str(user.id) + " and can't be used by user id: " + str(form.user[0]) + '.')
 
 
 def unique_isbn10_validator(form, field):
