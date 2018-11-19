@@ -348,7 +348,7 @@ def edit_password(user_id):
         user_mapper.update_password(user_id, user_selected[6], form, request)
         return redirect('/admin_tools/view_users')
     else:
-        return render_template('admin_tools.html', tool='view_users', form=form, id=user_selected[0], password="edit")
+        return render_template('admin_tools.html', tool='view_users', form=form, user=user_selected, password="edit")
 
 
 @app.route('/admin_tools/delete_entry/<item_prefix>/<item_id>', methods=['POST'])
