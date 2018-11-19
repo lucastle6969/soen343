@@ -62,6 +62,11 @@ def about():
     return render_template('about.html')
 
 
+@app.route('/about/admin_help')
+def admin_help():
+    return render_template('_admin_help.html')
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = RegisterForm(request.form)
@@ -154,7 +159,7 @@ def admin_tools_default():
     return redirect(url_for('home'))
 
 
-@app.route('/admin_tools/<tool>',  methods=['GET', 'POST'])
+@app.route('/admin_tools/<tool>', methods=['GET', 'POST'])
 def admin_tools(tool):
     if session['logged_in']:
         if user_mapper.validate_admin(session['user_id'], session['admin']):
