@@ -1,6 +1,11 @@
 {% extends 'layout.html' %}
 
 {% block body %}
+    {% if session.admin == True %}
+    hello
+        {% include 'includes/_admin_help.html' %}
+    {% endif %}
+
     <span class="about_header" id="about">About</span>
     <hr>
     <br>
@@ -18,8 +23,8 @@
     <br>
     <table class="borderless">
         <tr>
-            <td><img src="/static/presentation/img/Bob Says Hi.png" alt="Bob Says Hi"/></td>
-            <td><img src="/static/presentation/img/Bob is Lost.png" alt="Bob Is Lost"/></td>
+            <td><img src="/static/presentation/img/Bob_Says_Hi.png" alt="Bob Says Hi"/></td>
+            <td><img src="/static/presentation/img/Bob_is_Lost.png" alt="Bob Is Lost"/></td>
             <td>Bob visited the Booker Library yesterday and chose an email and password he would use to gain access to the on-line system. After his account being setup, he decided to visit, for the first time, the Booker LMS web application to choose an item to borrow. However, he has no clue how to navigate the system! Follow the steps below to find out how!</td>
         </tr>
         <tr>
@@ -42,6 +47,7 @@
         </tr>
         <tr>
             <th class="borderless"> Hi, I am Alice! Log in, come back on this page and follow me to get more instructions about how to navigate as an administrator.</th>  
+            <td class="borderless" colspan="3"><a href="/about/_admin_help" ><button class="actors"><img src="/static/presentation/img/Alice_Says_Follow_Me.png" alt="Follow Me!"/></button></a></td>
             <td class="instruction">Coming soon !</td>  
         </tr>
     </table>
