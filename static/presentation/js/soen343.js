@@ -26,14 +26,22 @@ function receive_add_to_cart(data){
     case "unavailable":
       button.innerHTML="Unavailable";
       button.style.backgroundColor = "#888888";
+      button.setAttribute("onclick", "");
+      button.setAttribute("onmouseover", "");
       detailed_button.innerHTML="Unavailable";
       detailed_button.style.backgroundColor = "#888888";
+      detailed_button.setAttribute("onclick", "");
+      detailed_button.setAttribute("onmouseover", "");
       break;
     case "full":
       button.innerHTML="Cart Full";
       button.style.backgroundColor = "#EE7E3E";
+      button.setAttribute("onclick", "");
+      button.setAttribute("onmouseover", "");
       detailed_button.innerHTML="Cart Full";
       detailed_button.style.backgroundColor = "#EE7E3E";
+      detailed_button.setAttribute("onclick", "");
+      detailed_button.setAttribute("onmouseover", "");
       break;
   }
 }
