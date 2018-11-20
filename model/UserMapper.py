@@ -91,9 +91,9 @@ class UserMapper:
                         break
                 if item_to_remove is not None:
                     user.cart.remove(item_to_remove)
-                    return True
+                    return "True"  # text used because comparison needs to work in javascript
                 else:
-                    return False
+                    return "False"
 
     def validate_loan(self, user_id, loan_size):
         valid_loan_state = [False, False]
