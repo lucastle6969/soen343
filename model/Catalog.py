@@ -71,6 +71,18 @@ class Catalog:
         if item is not None:
             self.item_catalog.append(item)
 
+    def add_physical_items(self, prefix, id, physical_items):
+        item = self.get_item_by_id(prefix, id)
+        for phys_id in physical_items:
+            item.add_physical_item(phys_id)
+
+    def delete_physical_items(self, prefix, id, physical_items):
+        item = self.get_item_by_id(prefix, id)
+        if len(physical_items) != 0:
+            for (item_prefix,  item_id) in physical_items:
+                if item_prefix == prefix and int(item_id) == id:
+                    item.remove_physical_item(physical_items[item_prefix, item_id])
+
     def edit_items(self, items):
         for mod_item in items:
             item = self.get_item_by_id(mod_item.prefix, mod_item.id)
