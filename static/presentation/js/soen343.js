@@ -36,10 +36,10 @@ function receive_add_to_cart(data){
   detailed_button = document.getElementById("detailed_" + data.item_prefix + data.item_id);
   switch(data.result){
     case "added":
-      button.innerHTML="Added To Cart";
+      button.innerHTML="Added To Cart <img src='/static/presentation/img/in_cart.png'>";
       button.style.backgroundColor = "#4CAF50";
       button.setAttribute("onclick", "");
-      detailed_button.innerHTML="Added To Cart";
+      detailed_button.innerHTML="Added To Cart <img src='/static/presentation/img/in_cart.png'>";
       detailed_button.style.backgroundColor = "#4CAF50";
       detailed_button.setAttribute("onclick", "");
       break;
