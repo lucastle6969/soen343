@@ -1,7 +1,7 @@
 from model.Item import Book, PhysicalBook, Magazine, PhysicalMagazine, Movie, PhysicalMovie, Music, PhysicalMusic
 from model.Uow import Uow
 from model.Catalog import Catalog
-from model.Tdg import Tdg
+from model.Tdg import ItemTdg
 from copy import deepcopy
 from time import localtime, strftime, time
 
@@ -13,7 +13,7 @@ class ItemMapper:
     def __init__(self, app):
         self.uow = None
         self.catalog = Catalog()
-        self.tdg = Tdg(app)
+        self.tdg = ItemTdg(app)
         self.catalog.populate(self.get_all_books(), self.get_all_magazines(),
                               self.get_all_movies(), self.get_all_music())
 
