@@ -1,25 +1,3 @@
-/*$('#book-modal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget) // Button that triggered the modal
-    var title = button.data('title') // Extract info from data-* attributes
-    var author = button.data('author')
-    var format = button.data('format')
-    var pages = button.data('pages')
-    var publisher = button.data('publisher')
-    var language = button.data('language')
-    var isbn10 = button.data('isbn10')
-    var isbn13 = button.data('isbn13')
-    // Update the modal's content. 
-    var modal = $(this)
-    modal.find('.modal-title').text(title)
-    modal.find('.modal-body #book-title').text(title)
-    modal.find('.modal-body #book-author').text(author)
-    modal.find('.modal-body #book-format').text(format)
-    modal.find('.modal-body #book-pages').text(pages)
-    modal.find('.modal-body #book-publisher').text(publisher)
-    modal.find('.modal-body #book-language').text(language)
-    modal.find('.modal-body #book-isbn10').text(isbn10)
-    modal.find('.modal-body #book-isbn13').text(isbn13)
-  })*/
 function add_to_cart(id){
   if(id.substring(0,9) == "detailed_"){
     id = id.substring(9);
@@ -39,9 +17,11 @@ function receive_add_to_cart(data){
       button.innerHTML="Added To Cart";
       button.style.backgroundColor = "#4CAF50";
       button.setAttribute("onclick", "");
+      button.setAttribute("onmouseover", "display_add_to_cart(this.id)");
       detailed_button.innerHTML="Added To Cart";
       detailed_button.style.backgroundColor = "#4CAF50";
       detailed_button.setAttribute("onclick", "");
+      detailed_button.setAttribute("onmouseover", "display_add_to_cart(this.id)");
       break;
     case "unavailable":
       button.innerHTML="Unavailable";
@@ -76,4 +56,11 @@ function remove_from_cart(id){
 
 function my_redirect_function(location){
   window.location.href=location
+}
+
+function display_add_to_cart(id){
+  button = document.getElementById(id);
+  button.innerHTML="Add To Cart <img src='/static/presentation/img/in_cart.png'>";
+  button.style.backgroundColor = "#0062cc";
+  button.setAttribute("onclick", "add_to_cart(this.id)");
 }
