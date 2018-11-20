@@ -85,6 +85,11 @@ class UserRegistry:
                 return True
         return False
 
+    def remove_user_from_list(self, user_id):
+        for user in self.list_of_users:
+            if int(user_id) == user.id:
+                self.list_of_users.remove(user)
+
     def remove_from_active(self, user_id):
         self.active_user_registry[:] = [tup for tup in self.active_user_registry if not user_id == tup[0]]
 

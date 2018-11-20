@@ -62,8 +62,7 @@ class UserMapper:
     def delete(self, user_id):
         self.remove_active_user(user_id)
         self.tdg.delete_user(user_id)
-        self.user_registry.empty_list_of_users()
-        self.user_registry.populate(self.tdg.get_all_users_active_loans())
+        self.remove_user_from_list(user_id)
 
     def check_restart_session(self, session):
         return self.user_registry.check_restart_session(session)
@@ -94,6 +93,9 @@ class UserMapper:
 
     def remove_active_user(self, user_id):
         self.user_registry.remove_active_user(user_id)
+
+    def remove_user_from_list(self, user_id):
+        self.user_registry.remove_user_from_list(user_id)
 
     def validate_return(self):
         return self.user_registry.catalog_lock == -1
