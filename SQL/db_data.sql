@@ -1,8 +1,11 @@
 TRUNCATE TABLE user;
 INSERT INTO user (id, first_name, last_name, address, email, phone, admin, password) VALUES
-(NULL, 'John', 'Doe', '125 Ave Du Parc', 'johndoe@gmail.com', '(514) 336-4545', 1, '$5$rounds=535000$Y9aJsj6nDUIxrdX8$KjzneFoNwSBd8MiedeoCuhDR3AnFTQeYm7vBrCV/9a4'),
-(NULL, 'Jane', 'Dee', '125 Ave Du Parc', 'janedee@gmail.com', '(514) 336-4545', 1, '$5$rounds=535000$vaRcpprbw7lAYCxY$onE09j6O55tDz45aVn0IgzCe/pzwcp44Q1TdAnO6lmB'),
-(NULL, 'Bob', 'Morane', '3000 Ganger ave', 'bob@gmail.com', '(514) 976-0327', 0, '$5$rounds=535000$hWigPp20nPqzUFTn$5wnADnsSsKFGYhcCFtyGh.sHXcNUmv.PrDKiFYQxll0');
+
+(NULL, 'John', 'Doe', '125 Ave Du Parc', 'johndoe@gmail.com', '514-336-4545', 1, '$5$rounds=535000$Y9aJsj6nDUIxrdX8$KjzneFoNwSBd8MiedeoCuhDR3AnFTQeYm7vBrCV/9a4'),
+(NULL, 'Jane', 'Dee', '125 Ave Du Parc', 'janedee@gmail.com', '514-336-4545', 1, '$5$rounds=535000$vaRcpprbw7lAYCxY$onE09j6O55tDz45aVn0IgzCe/pzwcp44Q1TdAnO6lmB'),
+(NULL, 'Bob', 'Morane', '3000 Ganger ave', 'bob@gmail.com', '(514) 976-0327', 0, '$5$rounds=535000$hWigPp20nPqzUFTn$5wnADnsSsKFGYhcCFtyGh.sHXcNUmv.PrDKiFYQxll0'),
+(NULL, 'Alice', 'Abernathy', '2002 Umbrella rd', 'alice@gmail.com', '(212) 767-2155', 1, '$5$rounds=535000$z4NOXYGdV2l5IUC0$2NkzDIhgIrZKYelebunTN0eubLqb02jXso/vgcx36u5');
+
 
 TRUNCATE TABLE book;
 INSERT INTO book (id, title, author, format, pages, publisher, publication_year, language, isbn10, isbn13, quantity) VALUES
