@@ -269,13 +269,13 @@ td, th {
 }
 
 .divider {
-    width:105px;
+    width:90px;
     height:auto;
     display:inline-block;
 }
 
 .divider-small {
-    width:110px;
+    width:100px;
     height:auto;
     display:inline-block;
 }
