@@ -380,12 +380,19 @@ class ItemMapper:
             requested_items.append(self.catalog.get_item_by_id(prefix, item_id))
         return requested_items
 
-    def get_available_copy(self, item_prefix, item_id):
+    def get_available_copy(self, item_prefix, item_id, user_cart):
         for item in self.catalog.item_catalog:
             if item.prefix == item_prefix and item.id == item_id:
                 for copy in item.copies:
+                    duplicate = False
                     if copy.status == "Available":
-                        return copy
+                        for cart_item in user_cart:
+                            if copy.prefix == cart_item.prefix and copy.id == cart_item.id:
+                                duplicate = True
+                        if duplicate is True:
+                            continue
+                        else:
+                            return copy
                 return None
 
     def loan_items(self, user_id, requested_items):
