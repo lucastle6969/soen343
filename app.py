@@ -17,37 +17,14 @@ item_mapper = ItemMapper(app)
 user_mapper = UserMapper(app)
 transaction_mapper = TransactionMapper(app, item_mapper.catalog.item_catalog)
 
-ACTIVE_USER_GRACE_PERIOD = 2400
+
 CATALOG_MANAGER_GRACE_PERIOD = 600
 SECONDS_CLEAN_ACTIVE_USERS = 300
 SECONDS_CLEAN_CATALOG_USERS = 120
 
-
-def active_users():
-    for user in user_mapper.user_registry.active_user_registry:
-        if time.time() - user[6] > ACTIVE_USER_GRACE_PERIOD:
-            user_to_remove = user[0]
-            user_mapper.remove_from_active(user_to_remove)
-            locker = user_mapper.user_registry.check_lock()
-            if locker == user[0]:
-                user_mapper.user_registry.remove_lock()
-
-
-def catalog_users():
-    for user in user_mapper.user_registry.active_user_registry:
-        if time.time() - user[7] > CATALOG_MANAGER_GRACE_PERIOD and user[8]:
-            user_as_list = list(user)
-            user_as_list[7] = 0
-            user_mapper.remove_from_active(user[0])
-            user_mapper.user_registry.active_user_registry.append(tuple(user_as_list))
-            locker = user_mapper.user_registry.check_lock()
-            if locker == user[0]:
-                user_mapper.user_registry.remove_lock()
-
-
 sched = BackgroundScheduler(daemon=True)
-sched.add_job(active_users, 'interval', seconds=SECONDS_CLEAN_ACTIVE_USERS)
-sched.add_job(catalog_users, 'interval', seconds=SECONDS_CLEAN_CATALOG_USERS)
+sched.add_job(user_mapper.active_users, 'interval', seconds=SECONDS_CLEAN_ACTIVE_USERS)
+sched.add_job(user_mapper.catalog_users, 'interval', seconds=SECONDS_CLEAN_CATALOG_USERS)
 sched.start()
 
 

@@ -4,8 +4,13 @@ from model.Form import RegisterForm
 from model.UserRegistry import UserRegistry
 from model.Tdg import Tdg
 
+import time
+
+
 CART_MAX_SIZE = 10
 BORROWED_MAX_SIZE = 10
+ACTIVE_USER_GRACE_PERIOD = 2400
+CATALOG_MANAGER_GRACE_PERIOD = 600
 
 
 class UserMapper:
@@ -39,6 +44,26 @@ class UserMapper:
                 return render_template('admin_tools.html', tool='create_admin', form=form)
 
         return render_template('admin_tools.html', tool=tool, form=form)
+
+    def active_users(self):
+        for user in self.user_registry.active_user_registry:
+            if time.time() - user[6] > ACTIVE_USER_GRACE_PERIOD:
+                user_to_remove = user[0]
+                self.remove_from_active(user_to_remove)
+                locker = self.user_registry.check_lock()
+                if locker == user[0]:
+                    self.user_registry.remove_lock()
+
+    def catalog_users(self):
+        for user in self.user_registry.active_user_registry:
+            if time.time() - user[7] > CATALOG_MANAGER_GRACE_PERIOD and user[8]:
+                user_as_list = list(user)
+                user_as_list[7] = 0
+                self.remove_from_active(user[0])
+                self.user_registry.active_user_registry.append(tuple(user_as_list))
+                locker = self.user_registry.check_lock()
+                if locker == user[0]:
+                    self.user_registry.remove_lock()
 
     def check_restart_session(self, session):
         return self.user_registry.check_restart_session(session)
