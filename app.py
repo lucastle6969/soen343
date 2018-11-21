@@ -131,14 +131,13 @@ def order(item_prefix):
 
 
 @app.route('/about')
-def about():
+def about_default():
     return render_template('about.html')
 
-
-@app.route('/about/admin_help')
-def admin_help():
-    return render_template('_admin_help.html')
-
+@app.route('/about/<view>')
+def about(view):
+    if view == 'admin':
+        return render_template('about.html', view ="admin")
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

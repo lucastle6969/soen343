@@ -1,9 +1,13 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-    {% if session.admin == True %}
-        {% include 'includes/_admin_help.html' %}
-    {% endif %}
+    {% if view  %}
+        {% if view == "admin" %}
+            {% include 'includes/_admin_help.html' %}
+        {% elif view == "user" %}
+            {% include 'includes/_user_help.html' %}
+        {% endif %}
+    {% else %}
 
     <span class="about_header" id="about">About</span>
     <hr>
@@ -45,9 +49,13 @@
             <td class="instruction">Are you like Alice and have an administrator account? Log in as explained above and follow Alice to view further instructions.</td>
         </tr>
         <tr>
-            <th class="borderless"> Hi, I am Alice! Log in, come back on this page and follow me to get more instructions about how to navigate as an administrator.</th>  
-            <td class="borderless" colspan="3"><a href="/about/_admin_help" ><button class="actors"><img src="/static/presentation/img/Alice_Says_Follow_Me.png" alt="Follow Me!"/></button></a></td>
-            <td class="instruction">Coming soon !</td>  
+            {% if session.admin == True %}
+                <th class="borderless"> Hi, I am Alice! Follow me to get more information about the tools available to you as an administrator.</th>  
+                <td class="instruction"><a href="/about/admin"><img src="/static/presentation/img/Alice_Says_Follow_Me.png"></a></td>
+            {% else %}
+            <th class="borderless"> Hi, I am Alice! Log in, with your administrator account and follow me to get more information about the tools available to you as an administrator.</th>  
+            <td class="instruction">You don't have an administrator account ? Send a request for an admin account to <a href="mailto:alice@gmail.com">alice@gmail.com</a> along with your emloyee id number. Already have your account ? <a href="/login">Log in.</a></td>  
+            {% endif %}
         </tr>
     </table>
     <br>
@@ -80,5 +88,5 @@
         <br>
 
     
-
+    {% endif %}
 {% endblock %}
