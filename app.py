@@ -1,6 +1,6 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, request, jsonify
 from model.ItemMapper import ItemMapper
-from model.UserMapper import UserMapper
+from model.UserMapper import UserMapper, CATALOG_MANAGER_GRACE_PERIOD, SECONDS_CLEAN_ACTIVE_USERS, SECONDS_CLEAN_CATALOG_USERS
 from model.TransactionMapper import TransactionMapper
 from passlib.hash import sha256_crypt
 from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, SearchForm, Forms, OrderForm
@@ -17,10 +17,6 @@ item_mapper = ItemMapper(app)
 user_mapper = UserMapper(app)
 transaction_mapper = TransactionMapper(app, item_mapper.catalog.item_catalog)
 
-
-CATALOG_MANAGER_GRACE_PERIOD = 600
-SECONDS_CLEAN_ACTIVE_USERS = 300
-SECONDS_CLEAN_CATALOG_USERS = 120
 
 sched = BackgroundScheduler(daemon=True)
 sched.add_job(user_mapper.active_users, 'interval', seconds=SECONDS_CLEAN_ACTIVE_USERS)
