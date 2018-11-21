@@ -137,7 +137,11 @@ def about_default():
 @app.route('/about/<view>')
 def about(view):
     if view == 'admin':
-        return render_template('about.html', view ="admin")
+        if session['logged_in']:
+            if user_mapper.validate_admin(session['user_id'], session['admin']):
+                return render_template('about.html', view ="admin")
+    else:
+        return render_template('about.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
