@@ -1,5 +1,4 @@
 from flask import Flask
-from model.Tdg import Tdg
 from model.ItemMapper import ItemMapper
 
 

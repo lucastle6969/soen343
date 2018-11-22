@@ -16,6 +16,8 @@
             {% include 'includes/_transaction_history.html' %}
         {% elif tool == "view_active_loans" %}
             {% include 'includes/_active_loans.html' %}
+        {% elif tool == "view_log_history" %}
+            {% include 'includes/_user_log_history.html' %}
         {% endif %}
     {% elif item %}
         {% include 'includes/_catalog_manager.html' %}
@@ -27,7 +29,7 @@
                 <a class="admin-tools rounded" href="/admin_tools/create_admin"><div class="rounded">Create New Admin</div></a>
                 <a class="admin-tools rounded" href="/admin_tools/create_client"><div class="rounded">Create New Client</div></a>
                 <a class="admin-tools rounded" href="/admin_tools/view_active_registry"><div class="rounded">View Active Users</div></a>
-                <a class="admin-tools rounded" href="/admin_tools/view_users"><div class="rounded">View List of Users</div></a>
+                <a class="admin-tools rounded" href="/admin_tools/view_users"><div class="rounded">View All Users</div></a>
                 {% if limited %}
                     <a class="admin-tools rounded" href="/admin_tools/catalog_manager_limited"><div class="rounded">Catalog Manager</div></a>
                 {% else %}
@@ -36,6 +38,7 @@
               
                 <a class="admin-tools rounded" href="/admin_tools/view_transaction_history"><div class="rounded">View Transactions</div></a>
                 <a class="admin-tools rounded" href="/admin_tools/view_active_loans"><div class="rounded">View Active Loans</div></a>
+                <a class="admin-tools rounded" href="/admin_tools/view_log_history"><div class="rounded">View Login History</div></a>
 
             </div>
         </div>

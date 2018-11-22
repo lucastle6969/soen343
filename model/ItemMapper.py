@@ -1,9 +1,11 @@
-from model.Item import Book, PhysicalBook, Magazine, PhysicalMagazine, Movie, PhysicalMovie, Music, PhysicalMusic
+from model.Item import Book, PhysicalBook, Magazine, PhysicalMagazine, Movie, PhysicalMovie, Music, PhysicalMusic, PhysicalItem
 from model.Uow import Uow
 from model.Catalog import Catalog
-from model.Tdg import Tdg
+from model.Tdg import ItemTdg
 from copy import deepcopy
+from dpcontracts import require, ensure
 from time import localtime, strftime, time
+from dpcontracts import require, ensure
 
 
 class ItemMapper:
@@ -13,7 +15,7 @@ class ItemMapper:
     def __init__(self, app):
         self.uow = None
         self.catalog = Catalog()
-        self.tdg = Tdg(app)
+        self.tdg = ItemTdg(app)
         self.catalog.populate(self.get_all_books(), self.get_all_magazines(),
                               self.get_all_movies(), self.get_all_music())
 
@@ -375,6 +377,10 @@ class ItemMapper:
             items.append(item)
         return items
 
+
+    @require("Length of the set of items to return cannot be greater than 10.", lambda args: len(args.physical_items) <=10)
+    @ensure("All passed items must be marked as returned.",
+            lambda args, result: all(args.self.catalog.get_physical_items_from_tuple(item.prefix, item.item_fk, item.id).status == 'Available' for item in args.physical_items))
     def return_items(self, physical_items):
         for item in physical_items:
             self.catalog.mark_as_returned(item.prefix, item.item_fk, item.id)
@@ -385,18 +391,10 @@ class ItemMapper:
         physical_items = []
         for tup in prefix_fk_id_tuple:
             prefix = tup[0:2]
-            item_fk = int(tup[2:])
+            item_fk = int(tup[2:tup.find('_')])
             item_id = int(prefix_fk_id_tuple[tup])
             physical_items.append(self.catalog.get_physical_items_from_tuple(prefix, item_fk, item_id))
         return physical_items
-
-    def get_items_from_tuple(self, prefix_fk_tuple):
-        requested_items = []
-        for tup in prefix_fk_tuple:
-            prefix = tup[0:2]
-            item_id = int(prefix_fk_tuple[tup])
-            requested_items.append(self.catalog.get_item_by_id(prefix, item_id))
-        return requested_items
 
     def get_available_copy(self, item_prefix, item_id, user_cart):
         for item in self.catalog.item_catalog:
@@ -413,11 +411,12 @@ class ItemMapper:
                             return copy
                 return None
 
+    @ensure("All passed items must be added to the borrowed_items list", lambda args, result: ((item in args.self.user_registry.get_user_by_id(args.user_id).borrowed_items) for item in args.requested_items))
     def loan_items(self, user_id, requested_items):
         loaned_items = []
         for requested_item in requested_items:
             for item in self.catalog.item_catalog:
-                if item.prefix == requested_item.prefix and item.id == requested_item.id:
+                if item.prefix == requested_item.prefix and item.id == requested_item.item_fk:
                     for copy in item.copies:
                         if copy.status == "Available":
                             copy.status = "Loaned"
@@ -433,6 +432,6 @@ class ItemMapper:
 
     def set_due_date(self, item_prefix):
         if item_prefix == "bb":
-            return strftime('%Y-%m-%d %H:%M:%S', localtime(time() + 604800)) 
+            return strftime('%Y-%m-%d %H:%M:%S', localtime(time() + 604800))
         elif item_prefix == "mo" or item_prefix == "mu":
             return strftime('%Y-%m-%d %H:%M:%S', localtime(time() + 172800))
