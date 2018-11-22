@@ -1,9 +1,9 @@
-from flask import Flask, render_template, flash, redirect, url_for, session, request
+from flask import Flask, render_template, flash, redirect, url_for, session, request, jsonify
 from model.ItemMapper import ItemMapper
 from model.UserMapper import UserMapper
 from model.TransactionMapper import TransactionMapper
 from passlib.hash import sha256_crypt
-from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, SearchForm, Forms, OrderForm
+from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, SearchForm, Forms, OrderForm, EditForm, PasswordForm
 from apscheduler.schedulers.background import BackgroundScheduler
 from time import localtime, strftime
 
@@ -78,34 +78,49 @@ def before_request():
                         user_as_list[7] = time.time()
                         user_mapper.remove_from_active(session['user_id'])
                         user_mapper.user_registry.active_user_registry.append(tuple(user_as_list))
-    cleared = user_mapper.check_restart_session(session)
-    if cleared:
-        flash('Automatically logged out due to a disconnect/inactivity', 'warning')
+    result = user_mapper.check_restart_session(session)
+    if result[0]:
+        if result[1] == 'simultaneous':
+            flash('Your account has been logged in from another location, you have been automatically logged out.', 'warning')
+        if result[1] == 'disconnect':
+            flash('Automatically logged out due to a disconnect/inactivity.', 'warning')
         return redirect(url_for('home'))
 
 
 @app.route('/')
 def index():
+    if session.get('user_id') is not None:
+        user_id = session['user_id']
+    else:
+        user_id = None
     # Default table view shows all books
-    return render_template('home.html', item_list=item_mapper.get_all_items("bb"), item="bb")
+    return render_template('home.html', item_list=item_mapper.get_all_items("bb", user_mapper.get_user_cart(user_id)), item="bb")
 
 
 @app.route('/home')
 def home():
+    if session.get('user_id') is not None:
+        user_id = session['user_id']
+    else:
+        user_id = None
     # Default table view shows all books
-    return render_template('home.html', item_list=item_mapper.get_all_items("bb"), item="bb")
+    return render_template('home.html', item_list=item_mapper.get_all_items("bb", user_mapper.get_user_cart(user_id)), item="bb")
 
 
 @app.route('/home/<item>')
 def itemList(item):
+    if session.get('user_id') is not None:
+        user_id = session['user_id']
+    else:
+        user_id = None
     if item == "bb":
-        return render_template('home.html', item_list=item_mapper.get_all_items("bb"), item="bb")
+        return render_template('home.html', item_list=item_mapper.get_all_items("bb", user_mapper.get_user_cart(user_id)), item="bb")
     elif item == "ma":
-        return render_template('home.html', item_list=item_mapper.get_all_items("ma"), item="ma")
+        return render_template('home.html', item_list=item_mapper.get_all_items("ma", user_mapper.get_user_cart(user_id)), item="ma")
     elif item == "mu":
-        return render_template('home.html', item_list=item_mapper.get_all_items("mu"), item="mu")
+        return render_template('home.html', item_list=item_mapper.get_all_items("mu", user_mapper.get_user_cart(user_id)), item="mu")
     elif item == "mo":
-        return render_template('home.html', item_list=item_mapper.get_all_items("mo"), item="mo")
+        return render_template('home.html', item_list=item_mapper.get_all_items("mo", user_mapper.get_user_cart(user_id)), item="mo")
 
 
 @app.route('/home/search/<item>', methods=['GET', 'POST'])
@@ -127,6 +142,87 @@ def order(item_prefix):
     return render_template('home.html', item_list=item_mapper.get_ordered_items(form), item=item_prefix)
 
 
+@app.route('/home/add_to_cart/<item_prefix>/<item_id>')
+def add_to_cart(item_prefix, item_id):
+    if session.get('user_id') is not None:
+        user_id = session['user_id']
+    else:
+        return redirect('/home')
+    valid_cart_size = user_mapper.validate_cart_size(user_id)
+    if valid_cart_size:
+        available_copy = item_mapper.get_available_copy(item_prefix, int(item_id), user_mapper.get_user_cart(user_id))
+        if available_copy is not None:
+            user_mapper.add_to_cart(user_id, available_copy)
+            response = "added"
+        else:
+            response = "unavailable"
+    else:
+        response = "full"
+    return jsonify(result=response, item_prefix=item_prefix, item_id=item_id)
+
+
+@app.route('/cart/remove_from_cart/<physical_item_prefix>/<physical_item_id>')
+def remove_from_cart(physical_item_prefix, physical_item_id):
+    if session.get('user_id') is not None:
+        user_id = session['user_id']
+    else:
+        return redirect('/home')
+    response = user_mapper.remove_from_cart(user_id, physical_item_prefix, int(physical_item_id))
+    return jsonify(result=response, physical_item_prefix=physical_item_prefix, physical_item_id=physical_item_id)
+
+
+@app.route('/cart/empty_cart')
+def empty_cart():
+    if session.get('user_id') is not None:
+        user_id = session['user_id']
+    else:
+        return redirect('/home')
+    if user_mapper.empty_cart(user_id):
+        flash('Items were successfully removed from your cart.', 'success')
+        return redirect('/home')
+    else:
+        flash('Items were not successfully removed from cart. please, try again later.', 'warning')
+        return redirect('/cart')
+
+
+@app.route('/cart', methods=['GET', 'POST'])
+def cart():
+    if session.get('user_id') is not None:
+        user_id = session['user_id']
+    else:
+        return redirect('/home')
+    if request.method == 'POST':
+        requested_items = item_mapper.get_items_from_tuple(request.form)
+        valid_loan_state = user_mapper.validate_loan(user_id, len(requested_items))
+        if valid_loan_state[0] is True:
+            if valid_loan_state[1] is True:
+                loaned_items = item_mapper.loan_items(user_id, requested_items)
+                if loaned_items is not None:
+                    user_mapper.loan_items(user_id, loaned_items)
+                    transaction_mapper.add_transactions(user_id, loaned_items, "loan", strftime('%Y-%m-%d %H:%M:%S', localtime()))
+                if len(loaned_items) == len(requested_items):
+                    flash("Items successfully loaned", 'success')
+                    return redirect('/borrowed_items')
+                else:
+                    flash("Some items became unavailable.", "warning")
+                    return redirect('/borrowed_items')
+            else:
+                flash("There was a problem loaning these items at this time, please try again later.", 'warning')
+                return redirect('/cart')
+        else:
+            flash("This transaction would put you over the loan limit.")
+            return redirect('/cart')
+    else:
+        physical_items = []
+        for user in user_mapper.user_registry.list_of_users:
+            if user.id == user_id:
+                physical_items = user.cart
+
+        detailed_items = item_mapper.get_item_details(physical_items)
+        return render_template('cart.html', cart=zip(physical_items, detailed_items))
+    return render_template('cart.html')
+
+
 @app.route('/about')
 def about():
     return render_template('about.html')
@@ -145,16 +241,16 @@ def login():
                 # log user out if they are already logged in
                 user_mapper.ensure_not_already_logged(user.id)
                 app.logger.info('PASSWORD MATCHED')
+                timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
                 session['logged_in'] = True
                 session['first_name'] = user.first_name
                 session['user_id'] = user.id
                 session['admin'] = user.admin
+                session['timestamp'] = timestamp
                 session.permanent = True
                 app.permanent_session_lifetime = datetime.timedelta(days=30)
 
             # add the user to the active user registry in the form of a tuple (user_id, timestamp)
-                timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
-
                 user_mapper.enlist_active_user(user.id, user.first_name, user.last_name, user.email, user.admin, timestamp, time.time(), time.time(), False)
 
                 flash('You are now logged in', 'success')
@@ -186,7 +282,7 @@ def borrowed_items():
             user_mapper.remove_borrowed_items(user_id, physical_items)
             transaction_mapper.add_transactions(user_id, physical_items, "return", strftime('%Y-%m-%d %H:%M:%S', localtime()))
             flash("Items were successfully returned.", 'success')
-            return render_template('home.html', item_list=item_mapper.get_all_items("bb"), item="bb")
+            return render_template('home.html', item_list=item_mapper.get_all_items("bb", user_mapper.get_user_cart(user_id)), item="bb")
         else:
             flash("There was an problem returning your items, please try again later.", 'warning')
             return redirect('/borrowed_items')
@@ -251,7 +347,7 @@ def admin_tools_default():
     return redirect(url_for('home'))
 
 
-@app.route('/admin_tools/<tool>',  methods=['GET', 'POST'])
+@app.route('/admin_tools/<tool>', methods=['GET', 'POST'])
 def admin_tools(tool):
     if session['logged_in']:
         if user_mapper.validate_admin(session['user_id'], session['admin']):
@@ -276,7 +372,8 @@ def admin_tools(tool):
                     flash("Catalog currently locked by ID#: " + str(locker) + ".", 'warning')
                     return redirect(url_for('admin_tools_default'))
             elif tool == 'view_users':
-                return render_template('admin_tools.html', tool=tool, list_of_users=user_mapper.get_all_users())
+                admin_id = session['user_id']
+                return render_template('admin_tools.html', tool=tool, list_of_users=user_mapper.get_all_users(), admin_id=admin_id)
             elif tool == 'view_transaction_history':
                 return render_template('admin_tools.html', tool=tool, transaction=transaction_mapper.transaction_registry.historical_registry)
             elif tool == 'view_active_loans':
@@ -302,19 +399,49 @@ def edit_entry(item_prefix, item_id):
                 if item.id == int(item_id) and item.prefix == item_prefix:
                     form.all_items.remove(item)
         if form.validate():
-            item_mapper.set_item(item_prefix, item_id, form)
+            physical_items_added = request.form.get("physical_items_added")
+            physical_items_removed = request.form.getlist("physical_items_removed")
+            item_mapper.set_item(item_prefix, item_id, form, physical_items_added, physical_items_removed)
             return redirect('/admin_tools/catalog_manager')
         else:
             form.quantity.render_kw = {'readonly': 'readonly'}
             return render_template('admin_tools.html', form=form, prefix=item_selected.prefix, id=item_selected.id,
-                                   item="edit")
+                                   item="edit", copies=item_selected.copies)
     else:
 
         # Forms class has a getFormData() which returns a preloaded form with the data of the selected item
         form = Forms.get_form_data(item_selected, request)
         form.quantity.render_kw = {'readonly': 'readonly'}
         return render_template('admin_tools.html', form=form, prefix=item_selected.prefix, id=item_selected.id,
-                               item="edit")
+                               item="edit", copies=item_selected.copies)
+
+
+@app.route('/admin_tools/edit_user/<user_id>', methods=['GET', 'POST'])
+def edit_user(user_id):
+    user_selected = user_mapper.user_registry.get_user_by_id(int(user_id))
+    form = EditForm(request.form)
+    if request.method == 'POST':
+        form.user = user_mapper.user_registry.get_user_by_id(int(user_id))
+        form.all_users = user_mapper.user_registry.get_all_users()
+        if form.validate():
+            user_mapper.update_user(user_id, user_selected.admin, form, request)
+            return redirect('/admin_tools/view_users')
+        else:
+            return render_template('admin_tools.html', tool='view_users', form=form, id=user_selected.id, user="edit")
+    else:
+        form = Forms.get_user_form_data(user_selected, request)
+        return render_template('admin_tools.html', tool='view_users', form=form, id=user_selected.id, user="edit")
+
+
+@app.route('/admin_tools/edit_password/<user_id>', methods=['GET', 'POST'])
+def edit_password(user_id):
+    user_selected = user_mapper.user_registry.get_user_by_id(int(user_id))
+    form = PasswordForm(request.form)
+    if request.method == 'POST' and form.validate():
+        user_mapper.update_password(user_id, user_selected.admin, form, request)
+        return redirect('/admin_tools/view_users')
+    else:
+        return render_template('admin_tools.html', tool='view_users', form=form, user=user_selected, password="edit")
 
 
 @app.route('/admin_tools/delete_entry/<item_prefix>/<item_id>', methods=['POST'])
@@ -328,6 +455,14 @@ def delete_item(item_prefix, item_id):
         return redirect(url_for('admin_tools', tool='catalog_manager'))
 
 
+@app.route('/admin_tools/delete_user/<user_id>', methods=['POST'])
+def delete_user(user_id):
+    items = user_mapper.delete(user_id)
+    item_mapper.return_items(items)
+    flash(f'User (id {user_id}) has been deleted.', 'success')
+    return redirect('/admin_tools/view_users')
+
+
 @app.route('/admin_tools/delete_entry/cancel/<item_prefix>/<item_id>', methods=['POST'])
 def cancel_deletion(item_prefix, item_id):
     cancel_success = item_mapper.cancel_deletion(item_prefix, item_id)
@@ -339,7 +474,7 @@ def cancel_deletion(item_prefix, item_id):
         return redirect(url_for('admin_tools', tool='catalog_manager'))
 
 
-@app.route('/admin_tools/catalog_manager/<item>',  methods=['GET', 'POST'])
+@app.route('/admin_tools/catalog_manager/<item>', methods=['GET', 'POST'])
 def catalog_manager(item):
     if session['logged_in']:
         if user_mapper.validate_admin(session['user_id'], session['admin']):

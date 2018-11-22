@@ -6,10 +6,15 @@ class Catalog:
     def __init__(self):
         self.item_catalog = []
 
-    def get_all_items(self, item_type):
+    def get_all_items(self, item_type, user_cart):
         item_list = []
         for item in self.item_catalog:
             if item.prefix == item_type:
+                item.in_cart = False
+                if user_cart is not None:
+                    for cart_item in user_cart:
+                        if cart_item.prefix == item_type and cart_item.item_fk == item.id:
+                            item.in_cart = True
                 item_list.append(item)
         return item_list
 
@@ -65,6 +70,18 @@ class Catalog:
     def add_item(self, item):
         if item is not None:
             self.item_catalog.append(item)
+
+    def add_physical_items(self, prefix, id, physical_items):
+        item = self.get_item_by_id(prefix, id)
+        for phys_id in physical_items:
+            item.add_physical_item(phys_id)
+
+    def delete_physical_items(self, prefix, id, physical_items):
+        item = self.get_item_by_id(prefix, id)
+        if len(physical_items) != 0:
+            for (item_prefix,  item_id) in physical_items:
+                if item_prefix == prefix and int(item_id) == id:
+                    item.remove_physical_item(physical_items[item_prefix, item_id])
 
     def edit_items(self, items):
         for mod_item in items:

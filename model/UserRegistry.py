@@ -30,14 +30,14 @@ class UserRegistry:
         #to account for the last user
         current_user.borrowed_items = set(items[:])
         self.list_of_users.append(current_user)
-            
+
     def check_lock(self):
         return self.catalog_lock
 
     def remove_lock(self):
         self.catalog_lock = -1
 
-    def lock (self, user_id):
+    def lock(self, user_id):
         self.catalog_lock = user_id
 
     def enlist_active_user(self, user_id, first_name, last_name, email, admin, timestamp, active_time, catalog_time, catalog_flag):
@@ -45,18 +45,26 @@ class UserRegistry:
 
     def check_restart_session(self, session):
         online = False
+        cleared = False
+        reason = None
         only_flashes = len(session) == 1 and '_flashes' in session
         for id, first_name, last_name, email, admin, time, active_time, catalog_time, catalog_flag in self.active_user_registry:
             if 'user_id' in session and id == session['user_id']:
                 online = True
+                if session['timestamp'] != time:
+                    session.clear()
+                    reason = 'simultaneous'
+                    cleared = True
         if not online and only_flashes:
             cleared = False
         elif not online and session:
             session.clear()
             cleared = True
-        else:
+            reason = 'disconnect'
+        elif not cleared:
             cleared = False
-        return cleared
+        result = [cleared, reason]
+        return result
 
     def ensure_not_already_logged(self, user_id):
         # log user out if they are already logged in
@@ -83,6 +91,11 @@ class UserRegistry:
                 return True
         return False
 
+    def remove_user_from_list(self, user_id):
+        for user in self.list_of_users:
+            if int(user_id) == user.id:
+                self.list_of_users.remove(user)
+
     def remove_from_active(self, user_id):
         self.active_user_registry[:] = [tup for tup in self.active_user_registry if not user_id == tup[0]]
 
@@ -90,7 +103,14 @@ class UserRegistry:
         return self.active_user_registry
 
     def get_all_users(self):
+        self.list_of_users.sort(key=self.sort_list_of_users)
         return self.list_of_users
+
+    def sort_list_of_users(self, user):
+        return user.id
+
+    def empty_list_of_users(self):
+        self.list_of_users = []
 
     def remove_borrowed_items(self, user_id, prefix, item_fk, physical_id):
         for user in self.list_of_users:
