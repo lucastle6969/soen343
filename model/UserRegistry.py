@@ -37,7 +37,7 @@ class UserRegistry:
     def remove_lock(self):
         self.catalog_lock = -1
 
-    def lock (self, user_id):
+    def lock(self, user_id):
         self.catalog_lock = user_id
 
     def enlist_active_user(self, user_id, first_name, last_name, email, admin, timestamp, active_time, catalog_time, catalog_flag):
@@ -84,6 +84,11 @@ class UserRegistry:
             if tup[0] == user_id and admin:
                 return True
         return False
+
+    def remove_user_from_list(self, user_id):
+        for user in self.list_of_users:
+            if int(user_id) == user.id:
+                self.list_of_users.remove(user)
 
     def remove_from_active(self, user_id):
         self.active_user_registry[:] = [tup for tup in self.active_user_registry if not user_id == tup[0]]

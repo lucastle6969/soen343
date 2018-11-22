@@ -6,10 +6,15 @@ class Catalog:
     def __init__(self):
         self.item_catalog = []
 
-    def get_all_items(self, item_type):
+    def get_all_items(self, item_type, user_cart):
         item_list = []
         for item in self.item_catalog:
             if item.prefix == item_type:
+                item.in_cart = False
+                if user_cart is not None:
+                    for cart_item in user_cart:
+                        if cart_item.prefix == item_type and cart_item.item_fk == item.id:
+                            item.in_cart = True
                 item_list.append(item)
         return item_list
 
