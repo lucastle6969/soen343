@@ -1,9 +1,11 @@
-from model.Item import Book, PhysicalBook, Magazine, PhysicalMagazine, Movie, PhysicalMovie, Music, PhysicalMusic
+from model.Item import Book, PhysicalBook, Magazine, PhysicalMagazine, Movie, PhysicalMovie, Music, PhysicalMusic, PhysicalItem
 from model.Uow import Uow
 from model.Catalog import Catalog
 from model.Tdg import Tdg
 from copy import deepcopy
+from dpcontracts import require, ensure
 from time import localtime, strftime, time
+from dpcontracts import require, ensure
 
 
 class ItemMapper:
@@ -375,6 +377,10 @@ class ItemMapper:
             items.append(item)
         return items
 
+
+    @require("Length of the set of items to return cannot be greater than 10.", lambda args: len(args.physical_items) <=10)
+    @ensure("All passed items must be marked as returned.",
+            lambda args, result: all(args.self.catalog.get_physical_items_from_tuple(item.prefix, item.item_fk, item.id).status == 'Available' for item in args.physical_items))
     def return_items(self, physical_items):
         for item in physical_items:
             self.catalog.mark_as_returned(item.prefix, item.item_fk, item.id)
@@ -405,6 +411,7 @@ class ItemMapper:
                             return copy
                 return None
 
+    @ensure("All passed items must be added to the borrowed_items list", lambda args, result: ((item in args.self.user_registry.get_user_by_id(args.user_id).borrowed_items) for item in args.requested_items))
     def loan_items(self, user_id, requested_items):
         loaned_items = []
         for requested_item in requested_items:
@@ -425,6 +432,6 @@ class ItemMapper:
 
     def set_due_date(self, item_prefix):
         if item_prefix == "bb":
-            return strftime('%Y-%m-%d %H:%M:%S', localtime(time() + 604800)) 
+            return strftime('%Y-%m-%d %H:%M:%S', localtime(time() + 604800))
         elif item_prefix == "mo" or item_prefix == "mu":
             return strftime('%Y-%m-%d %H:%M:%S', localtime(time() + 172800))

@@ -1,5 +1,5 @@
 from flaskext.mysql import MySQL
-
+from dpcontracts import require
 
 class Tdg:
     def __init__(self, app):
@@ -464,6 +464,7 @@ class Tdg:
         cur.close()
         return True
 
+    @require("All passed items must be available to loan", lambda args: (args.self.catalog.get_physical_items_from_tuple(item.prefix, item_fk, item.id).status == 'Available' for item in args.loaned_items))
     def loan_items(self, loaned_items):
         connection = self.mysql.connect()
         cur = connection.cursor()
