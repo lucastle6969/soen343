@@ -1,5 +1,6 @@
 from flask import Flask
 from flaskext.mysql import MySQL
+import sys
 
 app = Flask(__name__)
 mysql = MySQL()
@@ -42,6 +43,22 @@ for command in sqlCommands2:
     except:
         if command != '':
             print('Command skipped')
+
+if len (sys.argv) > 1:
+    if sys.argv[1] == 'test':
+        print('Adding test data...')
+        ft = open('../SQL/db_test.sql', 'r')
+        sqlFile3 = ft.read()
+        ft.close()
+
+        sqlCommands3 = sqlFile3.split(';')
+        for command in sqlCommands3:
+
+            try:
+                c.execute(command)
+            except:
+                if command != '':
+                    print('Command skipped')
 
 c.close()
 print('All tables reset and repopulated')

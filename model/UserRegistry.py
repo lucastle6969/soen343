@@ -30,7 +30,7 @@ class UserRegistry:
         #to account for the last user
         current_user.borrowed_items = set(items[:])
         self.list_of_users.append(current_user)
-            
+
     def check_lock(self):
         return self.catalog_lock
 
@@ -79,11 +79,22 @@ class UserRegistry:
                 return user
         return None
 
+    def get_user_by_id(self, user_id):
+        for user in self.list_of_users:
+            if user_id == user.id:
+                return user
+        return None
+
     def validate_admin(self, user_id, admin):
         for tup in self.active_user_registry:
             if tup[0] == user_id and admin:
                 return True
         return False
+
+    def remove_user_from_list(self, user_id):
+        for user in self.list_of_users:
+            if int(user_id) == user.id:
+                self.list_of_users.remove(user)
 
     def remove_from_active(self, user_id):
         self.active_user_registry[:] = [tup for tup in self.active_user_registry if not user_id == tup[0]]
@@ -92,7 +103,14 @@ class UserRegistry:
         return self.active_user_registry
 
     def get_all_users(self):
+        self.list_of_users.sort(key=self.sort_list_of_users)
         return self.list_of_users
+
+    def sort_list_of_users(self, user):
+        return user.id
+
+    def empty_list_of_users(self):
+        self.list_of_users = []
 
     def remove_borrowed_items(self, user_id, prefix, item_fk, physical_id):
         for user in self.list_of_users:

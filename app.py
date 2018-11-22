@@ -3,7 +3,7 @@ from model.ItemMapper import ItemMapper
 from model.UserMapper import UserMapper
 from model.TransactionMapper import TransactionMapper
 from passlib.hash import sha256_crypt
-from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, SearchForm, Forms, OrderForm
+from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, SearchForm, Forms, OrderForm, EditForm, PasswordForm
 from apscheduler.schedulers.background import BackgroundScheduler
 from time import localtime, strftime
 
@@ -372,7 +372,8 @@ def admin_tools(tool):
                     flash("Catalog currently locked by ID#: " + str(locker) + ".", 'warning')
                     return redirect(url_for('admin_tools_default'))
             elif tool == 'view_users':
-                return render_template('admin_tools.html', tool=tool, list_of_users=user_mapper.get_all_users())
+                admin_id = session['user_id']
+                return render_template('admin_tools.html', tool=tool, list_of_users=user_mapper.get_all_users(), admin_id=admin_id)
             elif tool == 'view_transaction_history':
                 return render_template('admin_tools.html', tool=tool, transaction=transaction_mapper.transaction_registry.historical_registry)
             elif tool == 'view_active_loans':
@@ -415,6 +416,34 @@ def edit_entry(item_prefix, item_id):
                                item="edit", copies=item_selected.copies)
 
 
+@app.route('/admin_tools/edit_user/<user_id>', methods=['GET', 'POST'])
+def edit_user(user_id):
+    user_selected = user_mapper.user_registry.get_user_by_id(int(user_id))
+    form = EditForm(request.form)
+    if request.method == 'POST':
+        form.user = user_mapper.user_registry.get_user_by_id(int(user_id))
+        form.all_users = user_mapper.user_registry.get_all_users()
+        if form.validate():
+            user_mapper.update_user(user_id, user_selected.admin, form, request)
+            return redirect('/admin_tools/view_users')
+        else:
+            return render_template('admin_tools.html', tool='view_users', form=form, id=user_selected.id, user="edit")
+    else:
+        form = Forms.get_user_form_data(user_selected, request)
+        return render_template('admin_tools.html', tool='view_users', form=form, id=user_selected.id, user="edit")
+
+
+@app.route('/admin_tools/edit_password/<user_id>', methods=['GET', 'POST'])
+def edit_password(user_id):
+    user_selected = user_mapper.user_registry.get_user_by_id(int(user_id))
+    form = PasswordForm(request.form)
+    if request.method == 'POST' and form.validate():
+        user_mapper.update_password(user_id, user_selected.admin, form, request)
+        return redirect('/admin_tools/view_users')
+    else:
+        return render_template('admin_tools.html', tool='view_users', form=form, user=user_selected, password="edit")
+
+
 @app.route('/admin_tools/delete_entry/<item_prefix>/<item_id>', methods=['POST'])
 def delete_item(item_prefix, item_id):
     delete_success = item_mapper.delete_item(item_prefix, item_id)
@@ -424,6 +453,14 @@ def delete_item(item_prefix, item_id):
     else:
         flash('Item not found.')
         return redirect(url_for('admin_tools', tool='catalog_manager'))
+
+
+@app.route('/admin_tools/delete_user/<user_id>', methods=['POST'])
+def delete_user(user_id):
+    items = user_mapper.delete(user_id)
+    item_mapper.return_items(items)
+    flash(f'User (id {user_id}) has been deleted.', 'success')
+    return redirect('/admin_tools/view_users')
 
 
 @app.route('/admin_tools/delete_entry/cancel/<item_prefix>/<item_id>', methods=['POST'])
