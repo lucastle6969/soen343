@@ -130,11 +130,7 @@
     background-color: white;
 }
 
-#tools-title {
-    font-size: 145%;
-}
-
-#items-title {
+.titles {
     font-size: 145%;
 }
 
