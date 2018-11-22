@@ -1,9 +1,11 @@
 {% extends 'layout.html' %}
 
 {% block body %}
+
     <div class="tool-container container">
         <span class="titles">Home</span>
         <hr>
+
     </div>
     {%if session.logged_in %}
         Welcome to the library {{session.first_name}} <br>
@@ -391,7 +393,7 @@
             {% endif %}
         </div>
         </div>
-        {% else %}
-        <img src="/static/presentation/img/bob_and_alice_intro.png"/>
+    {% else %}
+    <center><img src="/static/presentation/img/bob_and_alice_intro.png"/></center>
     {% endif %}
 {% endblock %}

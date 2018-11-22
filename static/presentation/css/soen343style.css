@@ -105,6 +105,11 @@
     color: #fdf02a;
 }
 
+.admin_help, .client_help {
+    width: 50%;
+    text-align: justify;
+ }
+
 #borrowed_item_glow {
     color: white;
     text-shadow: -1px 0 #673ab7, 0 1px #673ab7, 1px 0 #673ab7, 0 -1px #673ab7;
@@ -201,11 +206,6 @@ td, th {
     -webkit-transition-duration: 0.3s; /* Safari */
     z-index: 1;
     border: transparent;
-}
-
-.about_header{
-    font-size: 145%;
-    font-weight: bold;
 }
 
 .imgInstruction{

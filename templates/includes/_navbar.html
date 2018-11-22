@@ -22,13 +22,22 @@
             <li class="nav-item">
                 <a id="admin-glow" class="nav-link" href="/admin_tools">Admin Tools</a>
             </li>
+            <li class="nav-item">
+                    <a class="nav-link-symbol" href="/about/admin"><img src="/static/presentation/img/Help_button.png"></a>
+            </li>
             {% endif %}
             {% if session.admin == False %}
             <li class="nav-item">
                 <a id="nav-link" class="nav-link" href="/borrowed_items">Borrowed Items</a>
             </li>
             <li class="nav-item">
-                <a id="admin-glow" class="nav-link" href="/cart">Cart<img src="/static/presentation/img/cart_button.png"/></a>
+                <a id="admin-glow" class="nav-link" href="/cart">Cart</a>
+            </li>
+            <li>
+                <a class="nav-link-symbol" href="/cart"><img src="/static/presentation/img/cart_button.png"/></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link-symbol" href="/about/client"><img src="/static/presentation/img/Help_button.png"></a>
             </li>
             {% endif %}
         </ul>
