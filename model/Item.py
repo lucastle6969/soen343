@@ -4,6 +4,7 @@ class Item:
         self.prefix = prefix
         self.id = item_id
         self.quantity = quantity
+        self.copies = []
 
     def add_temp_copies(self, amount, prefix):
         for x in range(0, amount):
@@ -60,6 +61,14 @@ class PhysicalItem:
         return hash(('id', self.id, "prefix", self.prefix))
 
 
+class LoanableItem(PhysicalItem):
+    def __init__(self, id, prefix, item_fk, status, return_date, user_fk):
+        PhysicalItem.__init__(self, id, prefix, item_fk)
+        self.status = status
+        self.return_date = return_date
+        self.user_fk = user_fk
+
+
 class Book(Item):
     def __init__(self, item_id, title, prefix, author, item_format, pages, publisher, publication_year, language, isbn10, isbn13, quantity, copies):
         Item.__init__(self, item_id, title, prefix, quantity)
@@ -74,12 +83,9 @@ class Book(Item):
         self.copies = copies
 
 
-class PhysicalBook(PhysicalItem):
+class PhysicalBook(LoanableItem):
     def __init__(self, id, item_fk, status, return_date, user_fk=None):
-        PhysicalItem.__init__(self, id, "bb", item_fk)
-        self.status = status
-        self.return_date = return_date
-        self.user_fk = user_fk
+        LoanableItem.__init__(self, id, "bb", item_fk, status, return_date, user_fk)
 
 
 class Magazine(Item):
@@ -114,12 +120,9 @@ class Movie(Item):
         self.copies = copies
 
 
-class PhysicalMovie(PhysicalItem):
+class PhysicalMovie(LoanableItem):
     def __init__(self, id, item_fk, status, return_date, user_fk=None):
-        PhysicalItem.__init__(self, id, "mo", item_fk)
-        self.status = status
-        self.return_date = return_date
-        self.user_fk = user_fk
+        LoanableItem.__init__(self, id, "mo", item_fk, status, return_date, user_fk)
 
 
 class Music(Item):
@@ -133,9 +136,6 @@ class Music(Item):
         self.copies = copies
 
 
-class PhysicalMusic(PhysicalItem):
+class PhysicalMusic(LoanableItem):
     def __init__(self, id, item_fk, status, return_date, user_fk=None):
-        PhysicalItem.__init__(self, id, "mu", item_fk)
-        self.status = status
-        self.return_date = return_date
-        self.user_fk = user_fk
+        LoanableItem.__init__(self, id, "mu", item_fk, status, return_date, user_fk)
