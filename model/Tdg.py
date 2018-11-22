@@ -540,3 +540,32 @@ class Tdg:
         last_ids.append(last_active_id)
         cur.close()
         return last_ids
+
+# ----------------------------------------------------
+# Logs
+
+    def get_logs(self):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        result = cur.execute("SELECT id, user_fk, log_type, timestamp FROM historical_user_log_registry")
+        data = []
+        for row in cur.fetchall():
+            data.append(row)
+        cur.close()
+        if result is None:
+            return False
+        else:
+            return data
+
+    def add_log(self, user_id, log_type, timestamp):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        cur.execute("""INSERT INTO historical_user_log_registry(user_fk, log_type, timestamp) VALUES(%s, %s, %s)""", (user_id, log_type, timestamp))
+        result = cur.execute("SELECT * FROM log_registry ORDER BY timestamp DESC")
+        if result > 0:
+            last_historical_id = cur.fetchone()
+            last_historical_id = last_historical_id[0]
+        else:
+            last_historical_id = False
+        cur.close()
+        return last_historical_id

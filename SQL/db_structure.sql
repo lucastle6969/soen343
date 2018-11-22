@@ -123,3 +123,12 @@ CREATE TABLE active_loan_registry(
     physical_id INT(6),
     return_date DATETIME  
 );
+
+DROP TABLE IF EXISTS historical_user_log_registry;
+CREATE TABLE historical_user_log_registry(
+    id INT(8) AUTO_INCREMENT PRIMARY KEY,
+    user_fk INT(7),
+    log_type VARCHAR(6),
+    timestamp DATETIME
+);
+
