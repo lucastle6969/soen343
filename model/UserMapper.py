@@ -40,8 +40,13 @@ class UserMapper:
     def update(self, user_id, is_admin, form, request_):
         self.tdg.modify_user(user_id, request_.form['first_name'], request_.form['last_name'], request_.form['address'],
             request_.form['email'], request_.form['phone'])
-        self.user_registry.empty_list_of_users()
-        self.user_registry.populate(self.tdg.get_all_users_active_loans())
+        for user in self.user_registry.list_of_users:
+            if user.id == int(user_id):
+                user.first_name = request_.form['first_name']
+                user.last_name = request_.form['last_name']
+                user.address = request_.form['address']
+                user.email = request_.form['email']
+                user.phone = request_.form['phone']
         if is_admin == 1:
             flash(f'The administrator account information (id {user_id}) has been modified.', 'success')
         else:
