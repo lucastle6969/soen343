@@ -121,3 +121,11 @@ class UserRegistry:
                         to_remove.append(item)
                 for item_re in to_remove:
                     user.borrowed_items.remove(item_re)
+
+    def get_physical_item(self, user_id, prefix, item_fk, physical_id):
+        for user in self.list_of_users:
+            if user.id == user_id:
+                for item in user.borrowed_items:
+                    if item.prefix == prefix and item.item_fk == item_fk and item.id == physical_id:
+                        return item
+        return None
