@@ -161,14 +161,14 @@ def add_to_cart(item_prefix, item_id):
     return jsonify(result=response, item_prefix=item_prefix, item_id=item_id)
 
 
-@app.route('/cart/remove_from_cart/<physical_item_prefix>/<physical_item_id>')
-def remove_from_cart(physical_item_prefix, physical_item_id):
+@app.route('/cart/remove_from_cart/<physical_item_prefix>/<physical_item_fk>/<physical_item_id>')
+def remove_from_cart(physical_item_prefix, physical_item_fk, physical_item_id):
     if session.get('user_id') is not None:
         user_id = session['user_id']
     else:
         return redirect('/home')
-    response = user_mapper.remove_from_cart(user_id, physical_item_prefix, int(physical_item_id))
-    return jsonify(result=response, physical_item_prefix=physical_item_prefix, physical_item_id=physical_item_id)
+    response = user_mapper.remove_from_cart(user_id, physical_item_prefix, int(physical_item_fk), int(physical_item_id))
+    return jsonify(result=response, physical_item_prefix=physical_item_prefix, physical_item_fk=physical_item_fk, physical_item_id=physical_item_id)
 
 
 @app.route('/cart/empty_cart')
@@ -192,7 +192,7 @@ def cart():
     else:
         return redirect('/home')
     if request.method == 'POST':
-        requested_items = item_mapper.get_items_from_tuple(request.form)
+        requested_items = item_mapper.get_physical_items_from_tuple(request.form)
         valid_loan_state = user_mapper.validate_loan(user_id, len(requested_items))
         if valid_loan_state[0] is True:
             if valid_loan_state[1] is True:
