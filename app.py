@@ -3,7 +3,7 @@ from model.ItemMapper import ItemMapper
 from model.UserMapper import UserMapper
 from model.TransactionMapper import TransactionMapper
 from passlib.hash import sha256_crypt
-from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, SearchForm, Forms, OrderForm
+from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, SearchForm, Forms, OrderForm, EditForm, PasswordForm
 from apscheduler.schedulers.background import BackgroundScheduler
 from time import localtime, strftime
 
@@ -42,8 +42,7 @@ def catalog_users():
             user_mapper.user_registry.active_user_registry.append(tuple(user_as_list))
             locker = user_mapper.user_registry.check_lock()
             if locker == user[0]:
-                user_mapper.user_registry.remove_lock()
-
+                user_mapper.user_registry.remove_lock()    
 
 sched = BackgroundScheduler(daemon=True)
 sched.add_job(active_users, 'interval', seconds=SECONDS_CLEAN_ACTIVE_USERS)
@@ -161,28 +160,28 @@ def add_to_cart(item_prefix, item_id):
     return jsonify(result=response, item_prefix=item_prefix, item_id=item_id)
 
 
-@app.route('/cart/remove_from_cart/<physical_item_prefix>/<physical_item_id>')
-def remove_from_cart(physical_item_prefix, physical_item_id):
+@app.route('/cart/remove_from_cart/<physical_item_prefix>/<physical_item_fk>/<physical_item_id>')
+def remove_from_cart(physical_item_prefix, physical_item_fk, physical_item_id):
     if session.get('user_id') is not None:
         user_id = session['user_id']
     else:
         return redirect('/home')
-    response = user_mapper.remove_from_cart(user_id, physical_item_prefix, int(physical_item_id))
-    return jsonify(result=response, physical_item_prefix=physical_item_prefix, physical_item_id=physical_item_id)
-
+    response = user_mapper.remove_from_cart(user_id, physical_item_prefix, int(physical_item_fk), int(physical_item_id))
+    return jsonify(result=response, physical_item_prefix=physical_item_prefix, physical_item_fk=physical_item_fk, physical_item_id=physical_item_id)
 
 @app.route('/cart/empty_cart')
 def empty_cart():
     if session.get('user_id') is not None:
         user_id = session['user_id']
+        if user_mapper.empty_cart(user_id):
+            flash('Items were successfully removed from your cart.', 'success')
+            return redirect('/home')
+        else:
+            flash('Items were not successfully removed from cart. please, try again later.', 'warning')
+            return redirect('/cart')
     else:
         return redirect('/home')
-    if user_mapper.empty_cart(user_id):
-        flash('Items were successfully removed from your cart.', 'success')
-        return redirect('/home')
-    else:
-        flash('Items were not successfully removed from cart. please, try again later.', 'warning')
-        return redirect('/cart')
+    
 
 
 @app.route('/cart', methods=['GET', 'POST'])
@@ -192,14 +191,14 @@ def cart():
     else:
         return redirect('/home')
     if request.method == 'POST':
-        requested_items = item_mapper.get_items_from_tuple(request.form)
+        requested_items = item_mapper.get_physical_items_from_tuple(request.form)
         valid_loan_state = user_mapper.validate_loan(user_id, len(requested_items))
         if valid_loan_state[0] is True:
             if valid_loan_state[1] is True:
                 loaned_items = item_mapper.loan_items(user_id, requested_items)
                 if loaned_items is not None:
                     user_mapper.loan_items(user_id, loaned_items)
-                    transaction_mapper.add_transactions(user_id, loaned_items, "loan", strftime('%Y-%m-%d %H:%M:%S', localtime()))
+                    transaction_mapper.add_loan_transactions(user_id, loaned_items, "loan", strftime('%Y-%m-%d %H:%M:%S', localtime()))
                 if len(loaned_items) == len(requested_items):
                     flash("Items successfully loaned", 'success')
                     return redirect('/borrowed_items')
@@ -238,8 +237,6 @@ def login():
         user = user_mapper.get_user_by_email(email)
         if user:
             if sha256_crypt.verify(password_candidate, user.password):
-                # log user out if they are already logged in
-                user_mapper.ensure_not_already_logged(user.id)
                 app.logger.info('PASSWORD MATCHED')
                 timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
                 session['logged_in'] = True
@@ -249,10 +246,11 @@ def login():
                 session['timestamp'] = timestamp
                 session.permanent = True
                 app.permanent_session_lifetime = datetime.timedelta(days=30)
-
-            # add the user to the active user registry in the form of a tuple (user_id, timestamp)
+                # log user out if they are already logged in
+                user_mapper.ensure_not_already_logged(user.id, timestamp)
                 user_mapper.enlist_active_user(user.id, user.first_name, user.last_name, user.email, user.admin, timestamp, time.time(), time.time(), False)
-
+                user_mapper.add_to_historical_user_log(user.id, 'in', timestamp)
+                
                 flash('You are now logged in', 'success')
                 return redirect(url_for('home'))
 
@@ -280,7 +278,7 @@ def borrowed_items():
             physical_items = item_mapper.get_physical_items_from_tuple(request.form)
             item_mapper.return_items(physical_items)
             user_mapper.remove_borrowed_items(user_id, physical_items)
-            transaction_mapper.add_transactions(user_id, physical_items, "return", strftime('%Y-%m-%d %H:%M:%S', localtime()))
+            transaction_mapper.add_return_transactions(user_id, physical_items, "return", strftime('%Y-%m-%d %H:%M:%S', localtime()))
             flash("Items were successfully returned.", 'success')
             return render_template('home.html', item_list=item_mapper.get_all_items("bb", user_mapper.get_user_cart(user_id)), item="bb")
         else:
@@ -372,11 +370,14 @@ def admin_tools(tool):
                     flash("Catalog currently locked by ID#: " + str(locker) + ".", 'warning')
                     return redirect(url_for('admin_tools_default'))
             elif tool == 'view_users':
-                return render_template('admin_tools.html', tool=tool, list_of_users=user_mapper.get_all_users())
+                admin_id = session['user_id']
+                return render_template('admin_tools.html', tool=tool, list_of_users=user_mapper.get_all_users(), admin_id=admin_id)
             elif tool == 'view_transaction_history':
                 return render_template('admin_tools.html', tool=tool, transaction=transaction_mapper.transaction_registry.historical_registry)
             elif tool == 'view_active_loans':
                 return render_template('admin_tools.html', tool=tool, transaction=transaction_mapper.transaction_registry.active_loan_registry)
+            elif tool == 'view_log_history':
+                return render_template('admin_tools.html', tool=tool, log=user_mapper.get_historical_user_log_registry())
         else:
             flash('invalid tool')
             return render_template('admin_tools.html')
@@ -415,6 +416,34 @@ def edit_entry(item_prefix, item_id):
                                item="edit", copies=item_selected.copies)
 
 
+@app.route('/admin_tools/edit_user/<user_id>', methods=['GET', 'POST'])
+def edit_user(user_id):
+    user_selected = user_mapper.user_registry.get_user_by_id(int(user_id))
+    form = EditForm(request.form)
+    if request.method == 'POST':
+        form.user = user_mapper.user_registry.get_user_by_id(int(user_id))
+        form.all_users = user_mapper.user_registry.get_all_users()
+        if form.validate():
+            user_mapper.update_user(user_id, user_selected.admin, form, request)
+            return redirect('/admin_tools/view_users')
+        else:
+            return render_template('admin_tools.html', tool='view_users', form=form, id=user_selected.id, user="edit")
+    else:
+        form = Forms.get_user_form_data(user_selected, request)
+        return render_template('admin_tools.html', tool='view_users', form=form, id=user_selected.id, user="edit")
+
+
+@app.route('/admin_tools/edit_password/<user_id>', methods=['GET', 'POST'])
+def edit_password(user_id):
+    user_selected = user_mapper.user_registry.get_user_by_id(int(user_id))
+    form = PasswordForm(request.form)
+    if request.method == 'POST' and form.validate():
+        user_mapper.update_password(user_id, user_selected.admin, form, request)
+        return redirect('/admin_tools/view_users')
+    else:
+        return render_template('admin_tools.html', tool='view_users', form=form, user=user_selected, password="edit")
+
+
 @app.route('/admin_tools/delete_entry/<item_prefix>/<item_id>', methods=['POST'])
 def delete_item(item_prefix, item_id):
     delete_success = item_mapper.delete_item(item_prefix, item_id)
@@ -424,6 +453,14 @@ def delete_item(item_prefix, item_id):
     else:
         flash('Item not found.')
         return redirect(url_for('admin_tools', tool='catalog_manager'))
+
+
+@app.route('/admin_tools/delete_user/<user_id>', methods=['POST'])
+def delete_user(user_id):
+    items = user_mapper.delete(user_id)
+    item_mapper.return_items(items)
+    flash(f'User (id {user_id}) has been deleted.', 'success')
+    return redirect('/admin_tools/view_users')
 
 
 @app.route('/admin_tools/delete_entry/cancel/<item_prefix>/<item_id>', methods=['POST'])
@@ -466,6 +503,7 @@ def save_changes():
 @app.route('/logout')
 def logout():
     user_mapper.remove_from_active(session['user_id'])
+    user_mapper.add_to_historical_user_log(session['user_id'], "out", datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S'))
     locker = user_mapper.user_registry.check_lock()
     if locker == session['user_id']:
         user_mapper.user_registry.remove_lock()

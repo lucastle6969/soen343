@@ -1,5 +1,5 @@
 from flaskext.mysql import MySQL
-
+from dpcontracts import require
 
 class UserTdg:
     def __init__(self, app):
@@ -35,6 +35,25 @@ class UserTdg:
             new_user_id = False
         return new_user_id
 
+    def modify_user(self, user_id, first_name, last_name, address, email, phone):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        cur.execute("UPDATE user SET first_name = %s, last_name = %s, address = %s, email = %s, phone = %s WHERE id = %s",
+                    (first_name, last_name, address, email, phone, user_id))
+        cur.close()
+
+    def modify_password(self, user_id, password):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        cur.execute("UPDATE user SET password = %s WHERE id = %s", (password, user_id))
+        cur.close()
+
+    def delete_user(self, user_id):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        cur.execute("DELETE FROM user WHERE id = %s", user_id)
+        cur.close()
+
     # -- SELECT Queries
     def get_user_by_email(self, email):
         connection = self.mysql.connect()
@@ -49,6 +68,17 @@ class UserTdg:
             data = False
 
         return data
+
+    def get_user_by_id(self, id):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        result = cur.execute("SELECT * FROM user WHERE id = %s", [id])
+        data = cur.fetchone()
+        cur.close()
+        if result is None:
+            return False
+        else:
+            return data
 
     def get_all_users(self):
         connection = self.mysql.connect()
@@ -80,6 +110,32 @@ class UserTdg:
             return False
         else:
             return data
+
+    def get_logs(self):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        result = cur.execute("SELECT id, user_fk, log_type, timestamp FROM historical_user_log_registry")
+        data = []
+        for row in cur.fetchall():
+            data.append(row)
+        cur.close()
+        if result is None:
+            return False
+        else:
+            return data
+
+    def add_log(self, user_id, log_type, timestamp):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        cur.execute("""INSERT INTO historical_user_log_registry(user_fk, log_type, timestamp) VALUES(%s, %s, %s)""", (user_id, log_type, timestamp))
+        result = cur.execute("SELECT * FROM log_registry ORDER BY timestamp DESC")
+        if result > 0:
+            last_historical_id = cur.fetchone()
+            last_historical_id = last_historical_id[0]
+        else:
+            last_historical_id = False
+        cur.close()
+        return last_historical_id
 
 
 class ItemTdg:
@@ -178,7 +234,7 @@ class ItemTdg:
         result = cur.execute("SELECT * FROM music ORDER BY id DESC LIMIT 1")
         new_music_id = cur.fetchone()
         self.add_physical_music(music.quantity, new_music_id, cur)
-        cur.close
+        cur.close()
         if result > 0:
             return new_music_id[0]
         else:
@@ -459,6 +515,7 @@ class ItemTdg:
         cur.close()
         return True
 
+    @require("All passed items must be available to loan", lambda args: (args.self.catalog.get_physical_items_from_tuple(item.prefix, item_fk, item.id).status == 'Available' for item in args.loaned_items))
     def loan_items(self, loaned_items):
         connection = self.mysql.connect()
         cur = connection.cursor()
@@ -472,9 +529,6 @@ class ItemTdg:
         cur.close()
         return True
 
-
-# ----------------------------------------------------
-# Transactions
 
 class TransactionTdg:
     def __init__(self, app):
