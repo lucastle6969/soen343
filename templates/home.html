@@ -86,7 +86,10 @@
                     <tr>
                         <th>Title</th>
                         <th>Author</th>
-                        <th></th>
+                        <th><center>Detailed View</center></th>
+                        {% if session.admin == False %}
+                        <th><center>Add To Cart</center></th>
+                        {% endif %}
                     </tr>
                     </thead>
                     <tbody>
@@ -94,13 +97,18 @@
                     <tr>
                         <td>{{x.title}}</td>
                         <td>{{x.author}}</td>
-                        <td>
+                        <td class="detailed-view">
                             {% with %}
                                 {% set loop_index0 = loop.index0 %}
                                 {% include 'includes/_detailed_view.html' %}
                             {% endwith %} 
-                            {% include 'includes/_modal_open.html' %}
+                            {% include 'includes/_modal_open.html' %}   
                         </td>
+                        {% if session.admin == False %}
+                        <td><center>
+                            <button id="{{x.prefix}}{{x.id}}" type="button" class="btn btn-to-cart" onclick="add_to_cart(this.id)">Add To Cart {% if x.in_cart == True %}<img src="/static/presentation/img/in_cart.png">{% endif %}</button>
+                        </center></td>
+                        {% endif %}
                     </tr>
                     {% endfor %}
                     </tbody>
@@ -167,7 +175,10 @@
                     <tr>
                         <th>Title</th>
                         <th>Publisher</th>
-                        <th></th>
+                        <th><center>Detailed View</center></th>
+                        {% if session.admin == False %}
+                        <th><center>Add To Cart</center></th>
+                        {% endif %}
                     </tr>
                     </thead>
                     <tbody>
@@ -175,13 +186,18 @@
                     <tr>
                         <td>{{x.title}}</td>
                         <td>{{x.publisher}}</td>
-                        <td>
+                        <td class="detailed-view">
                             {% with %}
                                 {% set loop_index0 = loop.index0 %}
                                 {% include 'includes/_detailed_view.html' %}
                             {% endwith %} 
                             {% include 'includes/_modal_open.html' %}
                         </td>
+                        {% if session.admin == False %}
+                        <td><center>
+                            <button type="button" class="btn btn-mag">Not Loanable</button>
+                        </center></td>
+                        {% endif %}
                     </tr>
                     {% endfor %}
                     </tbody>
@@ -248,7 +264,10 @@
                     <tr>
                         <th>Title</th>
                         <th>Artist</th>
-                        <th></th>
+                        <th><center>Detailed View</center></th>
+                        {% if session.admin == False %}
+                        <th><center>Add To Cart</center></th>
+                        {% endif %}
                     </tr>
                     </thead>
                     <tbody>
@@ -256,13 +275,18 @@
                     <tr>
                         <td>{{x.title}}</td>
                         <td>{{x.artist}}</td>
-                        <td>
+                        <td class="detailed-view">
                             {% with %}
                                 {% set loop_index0 = loop.index0 %}
                                 {% include 'includes/_detailed_view.html' %}
                             {% endwith %} 
                             {% include 'includes/_modal_open.html' %}
                         </td>
+                        {% if session.admin == False %}
+                        <td><center>
+                            <button id="{{x.prefix}}{{x.id}}" type="button" class="btn btn-to-cart" onclick="add_to_cart(this.id)">Add To Cart {% if x.in_cart == True %}<img src="/static/presentation/img/in_cart.png">{% endif %}</button>
+                        </center></td>
+                        {% endif %}
                     </tr>
                     {% endfor %}
                     </tbody>
@@ -335,7 +359,10 @@
                     <tr>
                         <th>Title</th>
                         <th>Director</th>
-                        <th></th>
+                        <th><center>Detailed View</center></th>
+                        {% if session.admin == False %}
+                        <th><center>Add To Cart</center></th>
+                        {% endif %}
                     </tr>
                     </thead>
                     <tbody>
@@ -343,20 +370,28 @@
                     <tr>
                         <td>{{x.title}}</td>
                         <td>{{x.director}}</td>
-                        <td>
+                        <td class="detailed-view"><center>
+
                             {% with %}
                                 {% set loop_index0 = loop.index0 %}
                                 {% include 'includes/_detailed_view.html' %}
                             {% endwith %} 
                             {% include 'includes/_modal_open.html' %}
+                        </center>
                         </td>
+                        {% if session.admin == False %}
+                        <td><center> 
+                            <button id="{{x.prefix}}{{x.id}}" type="button" class="btn btn-to-cart" onclick="add_to_cart(this.id)">Add To Cart {% if x.in_cart == True %}<img src="/static/presentation/img/in_cart.png">{% endif %}</button>
+                        </center></td>
+                        {% endif %}
                     </tr>
                     {% endfor %}
                     </tbody>
                 </table>
-            </div>
             {% endif %}
         </div>
         </div>
+        {% else %}
+        <img src="/static/presentation/img/bob_and_alice_intro.png"/>
     {% endif %}
 {% endblock %}

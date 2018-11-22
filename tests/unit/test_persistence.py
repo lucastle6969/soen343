@@ -45,7 +45,7 @@ def test_book_persistence(new_book_form):
 
     new_book_form.title.data = "Testing Book"
     item_mapper.find("bb", book_id)
-    item_mapper.set_item("bb", book_id, new_book_form)
+    item_mapper.set_item("bb", book_id, new_book_form, 0, None)
     item_mapper.end()
     edited_book = catalog.get_item_by_id("bb", book_id)
     assert edited_book.title is "Testing Book"
@@ -71,7 +71,7 @@ def test_magazine_persistence(new_magazine_form):
 
     new_magazine_form.title.data = "Testing Magazine"
     item_mapper.find("ma", magazine_id)
-    item_mapper.set_item("ma", magazine_id, new_magazine_form)
+    item_mapper.set_item("ma", magazine_id, new_magazine_form, 0, None)
     item_mapper.end()
     edited_magazine = catalog.get_item_by_id("ma", magazine_id)
     assert edited_magazine.title is "Testing Magazine"
@@ -97,7 +97,7 @@ def test_movie_persistence(new_movie_form):
 
     new_movie_form.title.data = "Testing Movie"
     item_mapper.find("mo", movie_id)
-    item_mapper.set_item("mo", movie_id, new_movie_form)
+    item_mapper.set_item("mo", movie_id, new_movie_form, 0, None)
     item_mapper.end()
     edited_movie = catalog.get_item_by_id("mo", movie_id)
     assert edited_movie.title is "Testing Movie"
@@ -123,7 +123,7 @@ def test_music_persistence(new_music_form):
 
     new_music_form.title.data = "Testing Music"
     item_mapper.find("mu", music_id)
-    item_mapper.set_item("mu", music_id, new_music_form)
+    item_mapper.set_item("mu", music_id, new_music_form, 0, None)
     item_mapper.end()
     edited_music = catalog.get_item_by_id("mu", music_id)
     assert edited_music.title is "Testing Music"

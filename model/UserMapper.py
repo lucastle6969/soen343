@@ -5,6 +5,9 @@ from model.UserRegistry import UserRegistry
 from model.Tdg import Tdg
 from dpcontracts import require, ensure
 
+CART_MAX_SIZE = 10
+BORROWED_MAX_SIZE = 10
+
 
 class UserMapper:
     def __init__(self, app):
@@ -73,3 +76,64 @@ class UserMapper:
     def remove_borrowed_items(self, user_id, physical_items):
         for item in physical_items:
             self.user_registry.remove_borrowed_items(user_id, item.prefix, item.item_fk, item.id)
+
+    def validate_cart_size(self, user_id):
+        for user in self.user_registry.list_of_users:
+            if user.id == user_id:
+                return len(user.cart) < CART_MAX_SIZE
+
+    def add_to_cart(self, user_id, available_copy):
+        for user in self.user_registry.list_of_users:
+            if user.id == user_id:
+                user.cart.append(available_copy)
+
+    def remove_from_cart(self, user_id, physical_item_prefix, physical_item_id):
+        item_to_remove = None
+        for user in self.user_registry.list_of_users:
+            if user.id == user_id:
+                for physical_item in user.cart:
+                    if physical_item.prefix == physical_item_prefix and physical_item.id == physical_item_id:
+                        item_to_remove = physical_item
+                        break
+                if item_to_remove is not None:
+                    user.cart.remove(item_to_remove)
+                    return "True"  # text used because comparison needs to work in javascript
+                else:
+                    return "False"
+
+    def validate_loan(self, user_id, loan_size):
+        valid_loan_state = [False, False]
+        for user in self.user_registry.list_of_users:
+            if user.id == user_id:
+                valid_loan_state[0] = loan_size <= (BORROWED_MAX_SIZE - len(user.borrowed_items))
+                break
+        valid_loan_state[1] = self.user_registry.catalog_lock == -1
+        return valid_loan_state
+
+    def loan_items(self, user_id, loaned_items):
+        items_to_remove_from_cart = []
+        for user in self.user_registry.list_of_users:
+            if user.id == user_id:
+                for loaned_item in loaned_items:
+                    user.borrowed_items.add(loaned_item)
+                    for cart_item in user.cart:
+                        if cart_item.prefix == loaned_item.prefix and cart_item.item_fk == loaned_item.item_fk and cart_item.id == loaned_item.id:
+                            items_to_remove_from_cart.append(cart_item)
+                for item in items_to_remove_from_cart:
+                    user.cart.remove(item)
+
+    def empty_cart(self, user_id):
+        print("user_id param: ", user_id)
+        for user in self.user_registry.list_of_users:
+            print("user.id in loop: ", user.id)
+            if user.id == user_id:
+                user.cart = []
+                return True
+        return False
+
+    def get_user_cart(self, user_id):
+        if user_id is not None:
+            for user in self.user_registry.list_of_users:
+                if user.id == user_id:
+                    return user.cart
+        return None
