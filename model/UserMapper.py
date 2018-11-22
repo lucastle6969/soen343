@@ -66,7 +66,7 @@ class UserMapper:
             flash(f'The password for the client account (id {user_id}) has been modified.', 'success')
 
     def delete(self, user_id):
-        self.remove_active_user(user_id)
+        self.remove_from_active(int(user_id))
         self.tdg.delete_user(user_id)
         self.remove_user_from_list(user_id)
 
@@ -96,9 +96,6 @@ class UserMapper:
 
     def remove_from_active(self, user_id):
         self.user_registry.remove_from_active(user_id)
-
-    def remove_active_user(self, user_id):
-        self.user_registry.remove_active_user(user_id)
 
     def remove_user_from_list(self, user_id):
         self.user_registry.remove_user_from_list(user_id)
