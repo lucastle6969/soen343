@@ -10,6 +10,7 @@ class UserMapper:
         self.tdg = Tdg(app)
         self.user_registry = UserRegistry()
         self.user_registry.populate(self.tdg.get_all_users_active_loans())
+        self.fetched_historical_user_log = False
 
     def register(self, request_, tool):
         form = RegisterForm(request_.form)
@@ -43,8 +44,11 @@ class UserMapper:
     def get_user_by_email(self, email):
         return self.user_registry.get_user_by_email(email)
 
-    def ensure_not_already_logged(self, user_id):
-        self.user_registry.ensure_not_already_logged(user_id)
+    def ensure_not_already_logged(self, user_id, timestamp):
+        result = self.user_registry.ensure_not_already_logged(user_id)
+        if result is False:
+            historical_log_id = self.tdg.add_log(user_id, "out", timestamp)
+            self.user_registry.add_log(user_id, "out", timestamp, historical_log_id)
 
     def enlist_active_user(self, user_id, user_first_name, user_last_name, user_email, user_admin, timestamp, active_time, catalog_time, catalog_flag):
         self.user_registry.enlist_active_user(user_id, user_first_name, user_last_name, user_email, user_admin, timestamp, active_time, catalog_time, catalog_flag)
@@ -54,13 +58,6 @@ class UserMapper:
 
     def get_active_users(self):
         return self.user_registry.get_active_users()
-
-    def get_user_by_id(self, user_id):
-        for user in self.user_registry.get_all_users():
-            if user.id == user_id:
-                return user
-        else:
-            return false
 
     def get_all_users(self):
         return self.user_registry.get_all_users()
@@ -74,3 +71,15 @@ class UserMapper:
     def remove_borrowed_items(self, user_id, physical_items):
         for item in physical_items:
             self.user_registry.remove_borrowed_items(user_id, item.prefix, item.item_fk, item.id)
+
+    def get_historical_user_log_registry(self):
+        if self.fetched_historical_user_log is True:
+            return self.user_registry.historical_user_log_registry
+        else:
+            self.user_registry.populate_historical_log(self.tdg.get_logs())
+            self.fetched_historical_user_log = True
+            return self.user_registry.historical_user_log_registry
+
+    def add_to_historical_user_log(self, user_id, log_type, timestamp):
+        historical_log_id = self.tdg.add_log(user_id, log_type, timestamp)
+        self.user_registry.add_log(user_id, log_type, timestamp, historical_log_id)

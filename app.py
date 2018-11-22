@@ -1,7 +1,6 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, request
 from model.ItemMapper import ItemMapper
 from model.UserMapper import UserMapper
-from model.LogMapper import LogMapper
 from model.TransactionMapper import TransactionMapper
 from passlib.hash import sha256_crypt
 from model.Form import RegisterForm, BookForm, MagazineForm, MovieForm, MusicForm, SearchForm, Forms, OrderForm
@@ -17,7 +16,7 @@ app.jinja_env.filters['zip'] = zip
 item_mapper = ItemMapper(app)
 user_mapper = UserMapper(app)
 transaction_mapper = TransactionMapper(app, item_mapper.catalog.item_catalog)
-log_mapper = LogMapper(app)
+
 ACTIVE_USER_GRACE_PERIOD = 2400
 CATALOG_MANAGER_GRACE_PERIOD = 600
 SECONDS_CLEAN_ACTIVE_USERS = 300
@@ -145,8 +144,6 @@ def login():
         user = user_mapper.get_user_by_email(email)
         if user:
             if sha256_crypt.verify(password_candidate, user.password):
-                # log user out if they are already logged in
-                user_mapper.ensure_not_already_logged(user.id)
                 app.logger.info('PASSWORD MATCHED')
                 timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
                 session['logged_in'] = True
@@ -156,11 +153,11 @@ def login():
                 session['timestamp'] = timestamp
                 session.permanent = True
                 app.permanent_session_lifetime = datetime.timedelta(days=30)
-                log_mapper.add_log(user.id, "in", timestamp)
-        
-            # add the user to the active user registry in the form of a tuple (user_id, timestamp)
+                # log user out if they are already logged in
+                user_mapper.ensure_not_already_logged(user.id, timestamp)
                 user_mapper.enlist_active_user(user.id, user.first_name, user.last_name, user.email, user.admin, timestamp, time.time(), time.time(), False)
-
+                user_mapper.add_to_historical_user_log(user.id, 'in', timestamp)
+                
                 flash('You are now logged in', 'success')
                 return redirect(url_for('home'))
 
@@ -286,7 +283,7 @@ def admin_tools(tool):
             elif tool == 'view_active_loans':
                 return render_template('admin_tools.html', tool=tool, transaction=transaction_mapper.transaction_registry.active_loan_registry)
             elif tool == 'view_log_history':
-                return render_template('admin_tools.html', tool=tool, log=log_mapper.log_registry.historical_registry)
+                return render_template('admin_tools.html', tool=tool, log=user_mapper.get_historical_user_log_registry())
         else:
             flash('invalid tool')
             return render_template('admin_tools.html')
@@ -373,9 +370,8 @@ def save_changes():
 
 @app.route('/logout')
 def logout():
-    user = user_mapper.get_user_by_id(session['user_id'])
-    log_mapper.add_log(user.id, "out", datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S'))
     user_mapper.remove_from_active(session['user_id'])
+    user_mapper.add_to_historical_user_log(session['user_id'], "out", datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S'))
     locker = user_mapper.user_registry.check_lock()
     if locker == session['user_id']:
         user_mapper.user_registry.remove_lock()
