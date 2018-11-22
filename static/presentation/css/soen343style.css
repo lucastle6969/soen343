@@ -105,7 +105,7 @@
     color: #fdf02a;
 }
 
-.admin_help {
+.admin_help, .client_help {
     width: 50%;
     text-align: justify;
  }
@@ -156,15 +156,15 @@ td, th {
 }
 
 .uow-added {
-    background-color: green !important;
+    background-color: #80ff80 !important;
 }
 
 .uow-modify {
-    background-color: yellow !important;
+    background-color: #ffff66 !important;
 }
 
 .uow-delete {
-    background-color: red !important;
+    background-color: #ff704d !important;
 }
 
 .hidden {
@@ -206,11 +206,6 @@ td, th {
     -webkit-transition-duration: 0.3s; /* Safari */
     z-index: 1;
     border: transparent;
-}
-
-.about_header{
-    font-size: 145%;
-    font-weight: bold;
 }
 
 .imgInstruction{
