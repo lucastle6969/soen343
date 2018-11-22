@@ -1,7 +1,7 @@
 from flaskext.mysql import MySQL
 from dpcontracts import require
 
-class Tdg:
+class UserTdg:
     def __init__(self, app):
         self.mysql = MySQL()
 
@@ -105,6 +105,57 @@ class Tdg:
         data = []
         for row in cur.fetchall():
             data.append(row)
+        cur.close()
+        if result is None:
+            return False
+        else:
+            return data
+
+    def get_logs(self):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        result = cur.execute("SELECT id, user_fk, log_type, timestamp FROM historical_user_log_registry")
+        data = []
+        for row in cur.fetchall():
+            data.append(row)
+        cur.close()
+        if result is None:
+            return False
+        else:
+            return data
+
+    def add_log(self, user_id, log_type, timestamp):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        cur.execute("""INSERT INTO historical_user_log_registry(user_fk, log_type, timestamp) VALUES(%s, %s, %s)""", (user_id, log_type, timestamp))
+        result = cur.execute("SELECT * FROM log_registry ORDER BY timestamp DESC")
+        if result > 0:
+            last_historical_id = cur.fetchone()
+            last_historical_id = last_historical_id[0]
+        else:
+            last_historical_id = False
+        cur.close()
+        return last_historical_id
+
+
+class ItemTdg:
+    def __init__(self, app):
+        self.mysql = MySQL()
+
+        # Config MySQL
+        app.config['MYSQL_DATABASE_USER'] = 'pomoroad_soen09'
+        app.config['MYSQL_DATABASE_PASSWORD'] = 'discordApp343'
+        app.config['MYSQL_DATABASE_DB'] = 'pomoroad_soen343'
+        app.config['MYSQL_DATABASE_HOST'] = '108.167.160.63'
+
+        # init MYSQL
+        self.mysql.init_app(app)
+
+    def get_item_by_id(self, id):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        result = cur.execute("SELECT * FROM user WHERE id = %s", [id])
+        data = cur.fetchone()
         cur.close()
         if result is None:
             return False
@@ -479,8 +530,18 @@ class Tdg:
         return True
 
 
-# ----------------------------------------------------
-# Transactions
+class TransactionTdg:
+    def __init__(self, app):
+        self.mysql = MySQL()
+
+        # Config MySQL
+        app.config['MYSQL_DATABASE_USER'] = 'pomoroad_soen09'
+        app.config['MYSQL_DATABASE_PASSWORD'] = 'discordApp343'
+        app.config['MYSQL_DATABASE_DB'] = 'pomoroad_soen343'
+        app.config['MYSQL_DATABASE_HOST'] = '108.167.160.63'
+
+        # init MYSQL
+        self.mysql.init_app(app)
 
     def get_transactions(self):
         connection = self.mysql.connect()

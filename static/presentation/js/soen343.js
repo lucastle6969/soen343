@@ -48,18 +48,19 @@ function receive_add_to_cart(data){
 
 function receive_remove_from_cart(data){
   if(data.result == "True"){
-    document.getElementById("table_row_" + data.physical_item_prefix + data.physical_item_id).setAttribute("class", "hidden");
+    document.getElementById("table_row_" + data.physical_item_prefix + data.physical_item_fk + "_" + data.physical_item_id).setAttribute("class", "hidden");
   }else{
     document.getElementById("message").innerHTML="Item could not be removed";
   }
 }
 
-function send_remove_from_cart(prefix, id){
-  $.getJSON("/cart/remove_from_cart/" + prefix + "/" + id, {}, receive_remove_from_cart);
+function send_remove_from_cart(prefix, item_fk, item_id){
+  $.getJSON("/cart/remove_from_cart/" + prefix + "/" + item_fk + "/" + item_id, {}, receive_remove_from_cart);
 }
 
 function remove_from_cart(id){
-  send_remove_from_cart(id.substring(0,2), id.substring(2));
+  var underscore = id.indexOf('_');
+  send_remove_from_cart(id.substring(0,2), id.substring(2, underscore), id.substring(underscore + 1));
 }
 
 function my_redirect_function(location){

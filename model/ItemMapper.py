@@ -1,7 +1,7 @@
 from model.Item import Book, PhysicalBook, Magazine, PhysicalMagazine, Movie, PhysicalMovie, Music, PhysicalMusic, PhysicalItem
 from model.Uow import Uow
 from model.Catalog import Catalog
-from model.Tdg import Tdg
+from model.Tdg import ItemTdg
 from copy import deepcopy
 from dpcontracts import require, ensure
 from time import localtime, strftime, time
@@ -15,7 +15,7 @@ class ItemMapper:
     def __init__(self, app):
         self.uow = None
         self.catalog = Catalog()
-        self.tdg = Tdg(app)
+        self.tdg = ItemTdg(app)
         self.catalog.populate(self.get_all_books(), self.get_all_magazines(),
                               self.get_all_movies(), self.get_all_music())
 
@@ -391,19 +391,10 @@ class ItemMapper:
         physical_items = []
         for tup in prefix_fk_id_tuple:
             prefix = tup[0:2]
-            item_fk = int(tup[2:])
+            item_fk = int(tup[2:tup.find('_')])
             item_id = int(prefix_fk_id_tuple[tup])
             physical_items.append(self.catalog.get_physical_items_from_tuple(prefix, item_fk, item_id))
         return physical_items
-
-
-    def get_items_from_tuple(self, prefix_fk_tuple):
-        requested_items = []
-        for tup in prefix_fk_tuple:
-            prefix = tup[0:2]
-            item_id = int(prefix_fk_tuple[tup])
-            requested_items.append(self.catalog.get_item_by_id(prefix, item_id))
-        return requested_items
 
     def get_available_copy(self, item_prefix, item_id, user_cart):
         for item in self.catalog.item_catalog:
@@ -425,7 +416,7 @@ class ItemMapper:
         loaned_items = []
         for requested_item in requested_items:
             for item in self.catalog.item_catalog:
-                if item.prefix == requested_item.prefix and item.id == requested_item.id:
+                if item.prefix == requested_item.prefix and item.id == requested_item.item_fk:
                     for copy in item.copies:
                         if copy.status == "Available":
                             copy.status = "Loaned"

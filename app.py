@@ -134,14 +134,14 @@ def add_to_cart(item_prefix, item_id):
     return jsonify(result=response, item_prefix=item_prefix, item_id=item_id)
 
 
-@app.route('/cart/remove_from_cart/<physical_item_prefix>/<physical_item_id>')
-def remove_from_cart(physical_item_prefix, physical_item_id):
+@app.route('/cart/remove_from_cart/<physical_item_prefix>/<physical_item_fk>/<physical_item_id>')
+def remove_from_cart(physical_item_prefix, physical_item_fk, physical_item_id):
     if session.get('user_id') is not None:
         user_id = session['user_id']
     else:
         return redirect('/home')
-    response = user_mapper.remove_from_cart(user_id, physical_item_prefix, int(physical_item_id))
-    return jsonify(result=response, physical_item_prefix=physical_item_prefix, physical_item_id=physical_item_id)
+    response = user_mapper.remove_from_cart(user_id, physical_item_prefix, int(physical_item_fk), int(physical_item_id))
+    return jsonify(result=response, physical_item_prefix=physical_item_prefix, physical_item_fk=physical_item_fk, physical_item_id=physical_item_id)
 
 @app.route('/cart/empty_cart')
 def empty_cart():
@@ -165,7 +165,7 @@ def cart():
     else:
         return redirect('/home')
     if request.method == 'POST':
-        requested_items = item_mapper.get_items_from_tuple(request.form)
+        requested_items = item_mapper.get_physical_items_from_tuple(request.form)
         valid_loan_state = user_mapper.validate_loan(user_id, len(requested_items))
         if valid_loan_state[0] is True:
             if valid_loan_state[1] is True:
@@ -211,8 +211,6 @@ def login():
         user = user_mapper.get_user_by_email(email)
         if user:
             if sha256_crypt.verify(password_candidate, user.password):
-                # log user out if they are already logged in
-                user_mapper.ensure_not_already_logged(user.id)
                 app.logger.info('PASSWORD MATCHED')
                 timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
                 session['logged_in'] = True
@@ -222,10 +220,11 @@ def login():
                 session['timestamp'] = timestamp
                 session.permanent = True
                 app.permanent_session_lifetime = datetime.timedelta(days=30)
-
-            # add the user to the active user registry in the form of a tuple (user_id, timestamp)
+                # log user out if they are already logged in
+                user_mapper.ensure_not_already_logged(user.id, timestamp)
                 user_mapper.enlist_active_user(user.id, user.first_name, user.last_name, user.email, user.admin, timestamp, time.time(), time.time(), False)
-
+                user_mapper.add_to_historical_user_log(user.id, 'in', timestamp)
+                
                 flash('You are now logged in', 'success')
                 return redirect(url_for('home'))
 
@@ -269,48 +268,6 @@ def borrowed_items():
         return render_template('borrowed_items.html', borrowed_items=zip(physical_items, detailed_items))
 
 
-def add_book(request_):
-    form = BookForm(request_.form)
-    form.all_items = item_mapper.get_all_isbn_items()
-    if request_.method == 'POST' and form.validate():
-        item_mapper.add_book(form)
-        flash('Book is ready to be added - save changes', 'success')
-        return redirect('/admin_tools/catalog_manager')
-    else:
-        return render_template('admin_tools.html', item='add_book', form=form)
-
-
-def add_magazine(request_):
-    form = MagazineForm(request_.form)
-    form.all_items = item_mapper.get_all_isbn_items()
-    if request_.method == 'POST' and form.validate():
-        item_mapper.add_magazine(form)
-        flash('Magazine is ready to be added - save changes', 'success')
-        return redirect('/admin_tools/catalog_manager')
-    else:
-        return render_template('admin_tools.html', item='add_magazine', form=form)
-
-
-def add_movie(request_):
-    form = MovieForm(request_.form)
-    if request_.method == 'POST' and form.validate():
-        item_mapper.add_movie(form)
-        flash('Movie is ready to be added - save changes', 'success')
-        return redirect('/admin_tools/catalog_manager')
-    else:
-        return render_template('admin_tools.html', item='add_movie', form=form)
-
-
-def add_music(request_):
-    form = MusicForm(request_.form)
-    if request_.method == 'POST' and form.validate():
-        item_mapper.add_music(form)
-        flash('Music is ready to be added - save changes', 'success')
-        return redirect('/admin_tools/catalog_manager')
-    else:
-        return render_template('admin_tools.html', item='add_music', form=form)
-
-
 @app.route('/admin_tools')
 def admin_tools_default():
     if session['logged_in']:
@@ -351,6 +308,8 @@ def admin_tools(tool):
                 return render_template('admin_tools.html', tool=tool, transaction=transaction_mapper.transaction_registry.historical_registry)
             elif tool == 'view_active_loans':
                 return render_template('admin_tools.html', tool=tool, transaction=transaction_mapper.transaction_registry.active_loan_registry)
+            elif tool == 'view_log_history':
+                return render_template('admin_tools.html', tool=tool, log=user_mapper.get_historical_user_log_registry())
         else:
             flash('invalid tool')
             return render_template('admin_tools.html')
@@ -452,16 +411,42 @@ def catalog_manager(item):
     if session['logged_in']:
         if user_mapper.validate_admin(session['user_id'], session['admin']):
             if item == 'add_movie':
-                return add_movie(request)
+                    form = MovieForm(request.form)
+                    if request.method == 'POST' and form.validate():
+                        item_mapper.add_movie(form)
+                        flash('Movie is ready to be added - save changes', 'success')
+                        return redirect('/admin_tools/catalog_manager')
+                    else:
+                        return render_template('admin_tools.html', item='add_movie', form=form)
             elif item == 'add_book':
-                return add_book(request)
+                form = BookForm(request.form)
+                form.all_items = item_mapper.get_all_isbn_items()
+                if request.method == 'POST' and form.validate():
+                    item_mapper.add_book(form)
+                    flash('Book is ready to be added - save changes', 'success')
+                    return redirect('/admin_tools/catalog_manager')
+                else:
+                    return render_template('admin_tools.html', item='add_book', form=form)
             elif item == 'add_magazine':
-                return add_magazine(request)
+                    form = MagazineForm(request.form)
+                    form.all_items = item_mapper.get_all_isbn_items()
+                    if request.method == 'POST' and form.validate():
+                        item_mapper.add_magazine(form)
+                        flash('Magazine is ready to be added - save changes', 'success')
+                        return redirect('/admin_tools/catalog_manager')
+                    else:
+                        return render_template('admin_tools.html', item='add_magazine', form=form)
             elif item == 'add_music':
-                return add_music(request)
-        else:
-            flash('invalid item')
-            return render_template('admin_tools.html')
+                    form = MusicForm(request.form)
+                    if request.method == 'POST' and form.validate():
+                        item_mapper.add_music(form)
+                        flash('Music is ready to be added - save changes', 'success')
+                        return redirect('/admin_tools/catalog_manager')
+                    else:
+                        return render_template('admin_tools.html', item='add_music', form=form)
+            else:
+                flash('invalid item')
+                return render_template('admin_tools.html')
     flash('You must be logged in as an admin to view this page')
     return redirect(url_for('login'))
 
@@ -476,6 +461,7 @@ def save_changes():
 @app.route('/logout')
 def logout():
     user_mapper.remove_from_active(session['user_id'])
+    user_mapper.add_to_historical_user_log(session['user_id'], "out", datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S'))
     locker = user_mapper.user_registry.check_lock()
     if locker == session['user_id']:
         user_mapper.user_registry.remove_lock()

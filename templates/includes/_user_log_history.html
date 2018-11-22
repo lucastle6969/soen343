@@ -1,0 +1,36 @@
+<h3>User Log History</h3>
+<hr>
+<table id="table" class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>Log Event ID</th>
+            <th>User ID</th>
+            <th>Time</th>
+            <th>Type</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        {% for x in log %}
+        <tr>
+            <td>{{x.id}}</td>
+            <td>{{x.user_fk}}</td>
+            <td>{{x.timestamp}}</td>
+            <td>{% if x.log_type == "in" %} Login 
+                {% elif x.log_type == "out" %} Logout 
+                {% endif %}
+            </td>
+            
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- This script should not be called from an external js file -->
+<script>
+    $(document).ready( function () {
+        $('table').DataTable({
+            "orderClasses": false
+        });
+    } );
+</script>

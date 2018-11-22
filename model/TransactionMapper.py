@@ -1,11 +1,11 @@
-from model.Tdg import Tdg
+from model.Tdg import TransactionTdg
 from model.TransactionRegistry import TransactionRegistry
 from dpcontracts import require, ensure
 
 class TransactionMapper:
 
     def __init__(self, app, catalog):
-        self.tdg = Tdg(app)
+        self.tdg = TransactionTdg(app)
         self.transaction_registry = TransactionRegistry()
         self.transaction_registry.populate(self.tdg.get_transactions(), self.tdg.get_active_loans(), catalog)
 
