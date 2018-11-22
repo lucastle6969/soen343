@@ -294,48 +294,6 @@ def borrowed_items():
         return render_template('borrowed_items.html', borrowed_items=zip(physical_items, detailed_items))
 
 
-def add_book(request_):
-    form = BookForm(request_.form)
-    form.all_items = item_mapper.get_all_isbn_items()
-    if request_.method == 'POST' and form.validate():
-        item_mapper.add_book(form)
-        flash('Book is ready to be added - save changes', 'success')
-        return redirect('/admin_tools/catalog_manager')
-    else:
-        return render_template('admin_tools.html', item='add_book', form=form)
-
-
-def add_magazine(request_):
-    form = MagazineForm(request_.form)
-    form.all_items = item_mapper.get_all_isbn_items()
-    if request_.method == 'POST' and form.validate():
-        item_mapper.add_magazine(form)
-        flash('Magazine is ready to be added - save changes', 'success')
-        return redirect('/admin_tools/catalog_manager')
-    else:
-        return render_template('admin_tools.html', item='add_magazine', form=form)
-
-
-def add_movie(request_):
-    form = MovieForm(request_.form)
-    if request_.method == 'POST' and form.validate():
-        item_mapper.add_movie(form)
-        flash('Movie is ready to be added - save changes', 'success')
-        return redirect('/admin_tools/catalog_manager')
-    else:
-        return render_template('admin_tools.html', item='add_movie', form=form)
-
-
-def add_music(request_):
-    form = MusicForm(request_.form)
-    if request_.method == 'POST' and form.validate():
-        item_mapper.add_music(form)
-        flash('Music is ready to be added - save changes', 'success')
-        return redirect('/admin_tools/catalog_manager')
-    else:
-        return render_template('admin_tools.html', item='add_music', form=form)
-
-
 @app.route('/admin_tools')
 def admin_tools_default():
     if session['logged_in']:
@@ -479,16 +437,42 @@ def catalog_manager(item):
     if session['logged_in']:
         if user_mapper.validate_admin(session['user_id'], session['admin']):
             if item == 'add_movie':
-                return add_movie(request)
+                    form = MovieForm(request.form)
+                    if request.method == 'POST' and form.validate():
+                        item_mapper.add_movie(form)
+                        flash('Movie is ready to be added - save changes', 'success')
+                        return redirect('/admin_tools/catalog_manager')
+                    else:
+                        return render_template('admin_tools.html', item='add_movie', form=form)
             elif item == 'add_book':
-                return add_book(request)
+                form = BookForm(request.form)
+                form.all_items = item_mapper.get_all_isbn_items()
+                if request.method == 'POST' and form.validate():
+                    item_mapper.add_book(form)
+                    flash('Book is ready to be added - save changes', 'success')
+                    return redirect('/admin_tools/catalog_manager')
+                else:
+                    return render_template('admin_tools.html', item='add_book', form=form)
             elif item == 'add_magazine':
-                return add_magazine(request)
+                    form = MagazineForm(request.form)
+                    form.all_items = item_mapper.get_all_isbn_items()
+                    if request.method == 'POST' and form.validate():
+                        item_mapper.add_magazine(form)
+                        flash('Magazine is ready to be added - save changes', 'success')
+                        return redirect('/admin_tools/catalog_manager')
+                    else:
+                        return render_template('admin_tools.html', item='add_magazine', form=form)
             elif item == 'add_music':
-                return add_music(request)
-        else:
-            flash('invalid item')
-            return render_template('admin_tools.html')
+                    form = MusicForm(request.form)
+                    if request.method == 'POST' and form.validate():
+                        item_mapper.add_music(form)
+                        flash('Music is ready to be added - save changes', 'success')
+                        return redirect('/admin_tools/catalog_manager')
+                    else:
+                        return render_template('admin_tools.html', item='add_music', form=form)
+            else:
+                flash('invalid item')
+                return render_template('admin_tools.html')
     flash('You must be logged in as an admin to view this page')
     return redirect(url_for('login'))
 
