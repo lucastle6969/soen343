@@ -183,7 +183,7 @@ def cart():
                 flash("There was a problem loaning these items at this time, please try again later.", 'warning')
                 return redirect('/cart')
         else:
-            flash("This transaction would put you over the loan limit.")
+            flash("This transaction would put you over the loan limit.", 'warning')
             return redirect('/cart')
     else:
         physical_items = []
@@ -273,7 +273,7 @@ def admin_tools_default():
     if session['logged_in']:
         if user_mapper.validate_admin(session['user_id'], session['admin']):
             return render_template('admin_tools.html')
-    flash('You must be logged in as an admin to view this page.')
+    flash('You must be logged in as an admin to view this page.', 'warning')
     return redirect(url_for('home'))
 
 
@@ -311,9 +311,9 @@ def admin_tools(tool):
             elif tool == 'view_log_history':
                 return render_template('admin_tools.html', tool=tool, log=user_mapper.get_historical_user_log_registry())
         else:
-            flash('invalid tool')
+            flash('invalid tool', 'warning')
             return render_template('admin_tools.html')
-    flash('You must be logged in as an admin to view this page.')
+    flash('You must be logged in as an admin to view this page.', 'warning')
     return redirect(url_for('login'))
 
 
@@ -383,7 +383,7 @@ def delete_item(item_prefix, item_id):
         flash(f'Item (id {item_prefix} {item_id}) is ready to be deleted. - save changes', 'success')
         return redirect(url_for('admin_tools', tool='catalog_manager'))
     else:
-        flash('Item not found.')
+        flash('Item not found.', 'warning')
         return redirect(url_for('admin_tools', tool='catalog_manager'))
 
 
@@ -402,7 +402,7 @@ def cancel_deletion(item_prefix, item_id):
         flash(f'Item (id {item_prefix} {item_id}) will not be deleted.', 'success')
         return redirect(url_for('admin_tools', tool='catalog_manager'))
     else:
-        flash('Item not found.')
+        flash('Item not found.', 'warning')
         return redirect(url_for('admin_tools', tool='catalog_manager'))
 
 
@@ -445,16 +445,24 @@ def catalog_manager(item):
                     else:
                         return render_template('admin_tools.html', item='add_music', form=form)
             else:
-                flash('invalid item')
+                flash('invalid item', 'warning')
                 return render_template('admin_tools.html')
-    flash('You must be logged in as an admin to view this page')
+    flash('You must be logged in as an admin to view this page', 'warning')
     return redirect(url_for('login'))
 
 
 @app.route('/admin_tools/catalog_manager/commit', methods=['POST'])
 def save_changes():
     item_mapper.end()
-    flash('All changes have been saved')
+    flash('All changes have been saved', 'success')
+    return redirect(url_for('admin_tools', tool='catalog_manager'))
+
+
+
+@app.route('/admin_tools/catalog_manager/cancel_changes')
+def cancel_changes():
+    item_mapper.cancel_changes()
+    flash('All the changes you made have been canceled', 'warning')
     return redirect(url_for('admin_tools', tool='catalog_manager'))
 
 
