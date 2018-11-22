@@ -124,14 +124,6 @@ CREATE TABLE active_loan_registry(
     return_date DATETIME  
 );
 
-DROP TABLE IF EXISTS cart;
-CREATE TABLE cart(
-    id INT(7) AUTO_INCREMENT PRIMARY KEY,
-    user_fk INT(7),
-    prefix VARCHAR(2),
-    physical_id_fk INT(6)
-);
-
 DROP TABLE IF EXISTS historical_user_log_registry;
 CREATE TABLE historical_user_log_registry(
     id INT(8) AUTO_INCREMENT PRIMARY KEY,
@@ -139,3 +131,4 @@ CREATE TABLE historical_user_log_registry(
     log_type VARCHAR(6),
     timestamp DATETIME
 );
+

@@ -1,0 +1,38 @@
+<div class="modal fade" id="user{{user.id}}" tabindex="-1">
+    <div class="modal-dialog container">
+        <div class="modal-content col-md-12">
+            <div class="row modal-header tinyrow">
+                <h5><strong>User (id {{user.id}}) will be deleted. Are you sure?</strong></h5>
+            </div>
+            <div class="row modal-body tinyrow">
+                <div class="col-md-2"></div>
+                <div class="col-md-5">
+                    <form method="POST" action="/admin_tools/delete_user/{{user.id}}">
+                    <input type="submit" id="cancel" value="Delete" /></form>
+                </div>
+                <div class="col-md-5">
+                    <button type="button" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="loan{{user.id}}" tabindex="-1">
+    <div class="modal-dialog container">
+        <div class="modal-content col-md-12">
+            <div class="row modal-header tinyrow">
+                <h5><strong>User (id {{user.id}}) still has outstanding loans. Are you absolutely sure? All items will be marked "Available"  after deletion.</strong></strong></h5>
+            </div>
+            <div class="row modal-body tinyrow">
+                <div class="col-md-2"></div>
+                <div class="col-md-5">
+                    <form method="POST" action="/admin_tools/delete_user/{{user.id}}">
+                        <input type="submit" id="cancel" value="Delete" /></form>
+                </div>
+                <div class="col-md-5">
+                    <button type="button" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

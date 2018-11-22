@@ -3,29 +3,28 @@
 {% block body %}
 
 {% from "includes/_form_helpers.html" import render_field %}
-<form method="POST" action="/borrowed_items">
+<form method="POST" action="/cart">
     <div class="row m-0">
         <div class="col-sm-9">
-            <h4>Borrowed Items</h4>
-        </div>
-        <div class="col-sm-3">
-            <input id="submit" class="form-control btn btn-primary float-right" type="submit" value="Return selected items">
+            <h4>My Cart</h4>
         </div>
     </div>
     <br/>
+    <span id="message"></span>
     <table class="table table-hover table-bordered">
         <thead>
         <tr>
-            <th>Item Type</th>
+            <th><center>Item Type</center></th>
             <th>Title</th>
-            <th>Due Date</th>
-            <th>View Details</th>
-            <th>Return</th>
+            <th><center>View Details</center></th>
+            <th><center>Status</center></th>
+            <th><center>Select</center></th>
+            <th><center>Remove From Cart</center></th>
         </tr>
         </thead>
         <tbody>
-        {% for physical_item, x in borrowed_items %}
-            <tr>
+        {% for physical_item, x in cart %}
+            <tr id="table_row_{{physical_item.prefix}}{{physical_item.item_fk}}_{{physical_item.id}}">
                 <td><center>
                     {% if physical_item.prefix == "bb" %}
                         Book
@@ -38,8 +37,6 @@
                     {% endif %}
                 </center></td>
                 <td>{{x.title}}</td>
-                <td><center>{{physical_item.return_date}}</center></td>
-
                 <td class="detailed-view">
                     {% with %}
                         {% set loop_index0 = loop.index0 %}
@@ -47,13 +44,22 @@
                     {% endwith %} 
                     {% include 'includes/_modal_open.html' %}
                 </td>
+                <td><center>{{physical_item.status}}</center></td>
                 <td><center><input type="checkbox" class="checkboxes" name="{{physical_item.prefix}}{{physical_item.item_fk}}_{{physical_item.id}}" value={{physical_item.id}}></center></td>
+                <td><center> <button id="{{physical_item.prefix}}{{physical_item.item_fk}}_{{physical_item.id}}" type="button" class="btn btn-remove-from-cart" onclick="remove_from_cart(this.id)">Remove</button></center></td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+    <div class="row m-0">
+        <div class="col-sm-3">
+            <input id="submit" class="form-control btn btn-primary float-right" type="submit" value="Loan Selected Items">
+        </div>
+        <div class="col-sm-3">
+            <button type="button" class="btn btn-remove-from-cart" onclick="my_redirect_function('/cart/empty_cart')">Empty My Cart</button>
+        </div>
+    </div>
 </form>
-
 
 <script src="../static/presentation/js/check_items.js"></script>
 

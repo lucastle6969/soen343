@@ -1,5 +1,5 @@
 from flaskext.mysql import MySQL
-
+from dpcontracts import require
 
 class Tdg:
     def __init__(self, app):
@@ -35,6 +35,25 @@ class Tdg:
             new_user_id = False
         return new_user_id
 
+    def modify_user(self, user_id, first_name, last_name, address, email, phone):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        cur.execute("UPDATE user SET first_name = %s, last_name = %s, address = %s, email = %s, phone = %s WHERE id = %s",
+                    (first_name, last_name, address, email, phone, user_id))
+        cur.close()
+
+    def modify_password(self, user_id, password):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        cur.execute("UPDATE user SET password = %s WHERE id = %s", (password, user_id))
+        cur.close()
+
+    def delete_user(self, user_id):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        cur.execute("DELETE FROM user WHERE id = %s", user_id)
+        cur.close()
+
     # -- SELECT Queries
     def get_user_by_email(self, email):
         connection = self.mysql.connect()
@@ -50,7 +69,7 @@ class Tdg:
 
         return data
 
-    def get_item_by_id(self, id):
+    def get_user_by_id(self, id):
         connection = self.mysql.connect()
         cur = connection.cursor()
         result = cur.execute("SELECT * FROM user WHERE id = %s", [id])
@@ -102,8 +121,7 @@ class Tdg:
         # get the new user id
         result = cur.execute("SELECT * FROM book ORDER BY id DESC LIMIT 1")
         new_book_id = cur.fetchone()
-        for x in range(0, book.quantity):
-            cur.execute("""INSERT INTO book_physical(item_fk, status) VALUES (%s, %s)""", (str(new_book_id[0]), "Available"))
+        self.add_physical_book(book.quantity, new_book_id, cur)
         # send new id back to the controller
         cur.close()
         if result > 0:
@@ -111,6 +129,10 @@ class Tdg:
         else:
             new_book_id = False
         return new_book_id
+
+    def add_physical_book(self, quantity, id, cur):
+        for x in range(0, quantity):
+            cur.execute("""INSERT INTO book_physical(item_fk, status) VALUES (%s, %s)""", (str(id[0]), "Available"))
 
     def add_magazine(self, magazine):
         connection = self.mysql.connect()
@@ -120,14 +142,17 @@ class Tdg:
                     (magazine.title, magazine.publisher, magazine.publication_date, magazine.language, magazine.isbn10, magazine.isbn13, magazine.quantity))
         result = cur.execute("SELECT * FROM magazine ORDER BY id DESC LIMIT 1")
         new_magazine_id = cur.fetchone()
-        for x in range(0, magazine.quantity):
-            cur.execute("""INSERT INTO magazine_physical(item_fk, status) VALUES (%s, %s)""", (str(new_magazine_id[0]), "Available"))
+        self.add_physical_magazine(magazine.quantity, new_magazine_id, cur)
         cur.close()
         if result > 0:
             return new_magazine_id[0]
         else:
             new_magazine_id = False
         return new_magazine_id
+
+    def add_physical_magazine(self, quantity, id, cur):
+        for x in range(0, quantity):
+            cur.execute("""INSERT INTO magazine_physical(item_fk, status) VALUES (%s, %s)""", (str(id[0]), "Available"))
 
     def add_movie(self, movie):
         connection = self.mysql.connect()
@@ -137,14 +162,17 @@ class Tdg:
                     (movie.title, movie.director, movie.producers, movie.actors, movie.language, movie.subtitles, movie.dubbed, movie.release_date, movie.runtime, movie.quantity))
         result = cur.execute("SELECT * FROM movie ORDER BY id DESC LIMIT 1")
         new_movie_id = cur.fetchone()
-        for x in range(0, movie.quantity):
-            cur.execute("""INSERT INTO movie_physical(item_fk, status) VALUES (%s, %s)""", (str(new_movie_id[0]), "Available"))
+        self.add_physical_movie(movie.quantity, new_movie_id, cur)
         cur.close()
         if result > 0:
             return new_movie_id[0]
         else:
             new_movie_id = False
         return new_movie_id
+
+    def add_physical_movie(self, quantity, id, cur):
+        for x in range(0, quantity):
+            cur.execute("""INSERT INTO movie_physical(item_fk, status) VALUES (%s, %s)""", (str(id[0]), "Available"))
 
     def add_music(self, music):
         connection = self.mysql.connect()
@@ -154,14 +182,17 @@ class Tdg:
                     (music.title, music.media_type, music.artist, music.label, music.release_date, music.asin, music.quantity))
         result = cur.execute("SELECT * FROM music ORDER BY id DESC LIMIT 1")
         new_music_id = cur.fetchone()
-        for x in range(0, music.quantity):
-            cur.execute("""INSERT INTO music_physical(item_fk, status) VALUES (%s, %s)""", (str(new_music_id[0]), "Available"))
+        self.add_physical_music(music.quantity, new_music_id, cur)
         cur.close()
         if result > 0:
             return new_music_id[0]
         else:
             new_music_id = False
         return new_music_id
+
+    def add_physical_music(self, quantity, id, cur):
+        for x in range(0, quantity):
+            cur.execute("""INSERT INTO music_physical(item_fk, status) VALUES (%s, %s)""", (str(id[0]), "Available"))
 
     def get_books(self):
         connection = self.mysql.connect()
@@ -304,30 +335,101 @@ class Tdg:
         connection = self.mysql.connect()
         cur = connection.cursor()
         for book in modified_books:
-            cur.execute("UPDATE book SET title = %s, author = %s, format = %s, pages = %s, publisher = %s, publication_year = %s, language = %s, isbn10 = %s, isbn13 = %s WHERE id = %s", (book.title, book.author, book.format, book.pages, book.publisher, book.publication_year, book.language, book.isbn10, book.isbn13, book.id))
-        # ideally a check if there were errors here and return a boolean to be handled by the mapper
+            cur.execute("UPDATE book SET title = %s, author = %s, format = %s, pages = %s, publisher = %s, publication_year = %s, language = %s, isbn10 = %s, isbn13 = %s , quantity = %s WHERE id = %s", (book.title, book.author, book.format, book.pages, book.publisher, book.publication_year, book.language, book.isbn10, book.isbn13, book.quantity, book.id))
         cur.close()
+
+    def modify_physical_book(self, id, added_amount, removed_item):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        added_item_ids = []
+        if len(added_amount) != 0:
+            for x in added_amount:
+                if x[0] == "bb" and id == int(x[2]):
+                    for y in range(0, int(x[1])):
+                        cur.execute("""INSERT INTO book_physical(item_fk, status) VALUES (%s, %s)""", (str(id), "Available"))
+                        added_item_ids.append(int(cur.execute("""SELECT LAST_INSERT_ID()""")))
+        if len(removed_item) != 0:
+            for (prefix,  book_id) in removed_item:
+                if prefix == "bb" and int(book_id) == id:
+                    for item_id in removed_item[(prefix, book_id)]:
+                        cur.execute("DELETE FROM book_physical WHERE id = %s", (int(item_id)))
+        cur.close()
+        return added_item_ids
 
     def modify_magazines(self, modified_magazines):
         connection = self.mysql.connect()
         cur = connection.cursor()
         for magazine in modified_magazines:
-            cur.execute("UPDATE magazine SET title = %s, publisher = %s, publication_date = %s, language = %s, isbn10 = %s, isbn13 = %s WHERE id = %s", (magazine.title, magazine.publisher, magazine.publication_date, magazine.language, magazine.isbn10, magazine.isbn13, magazine.id))
+            cur.execute("UPDATE magazine SET title = %s, publisher = %s, publication_date = %s, language = %s, isbn10 = %s, isbn13 = %s, quantity = %s WHERE id = %s", (magazine.title, magazine.publisher, magazine.publication_date, magazine.language, magazine.isbn10, magazine.isbn13, magazine.quantity, magazine.id))
         cur.close()
+
+    def modify_physical_magazine(self, id, added_amount, removed_item):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        added_item_ids = []
+        if len(added_amount) != 0:
+            for x in added_amount:
+                if x[0] == "ma" and id == int(x[2]):
+                    for y in range(0, int(x[1])):
+                        cur.execute("""INSERT INTO magazine_physical(item_fk, status) VALUES (%s, %s)""", (str(id), "Available"))
+                        added_item_ids.append(int(cur.execute("""SELECT LAST_INSERT_ID()""")))
+        if len(removed_item) != 0:
+            for (prefix,  magazine_id) in removed_item:
+                if prefix == "ma" and int(magazine_id) == id:
+                    for item_id in removed_item[(prefix, magazine_id)]:
+                        cur.execute("DELETE FROM magazine_physical WHERE id = %s", (int(item_id)))
+        cur.close()
+        return added_item_ids
 
     def modify_movies(self, modified_movies):
         connection = self.mysql.connect()
         cur = connection.cursor()
         for movie in modified_movies:
-            cur.execute("UPDATE movie SET title = %s, director = %s, producers = %s, actors = %s, language = %s, subtitles = %s, dubbed = %s, release_date = %s, runtime = %s WHERE id = %s", (movie.title, movie.director, movie.producers, movie.actors, movie.language, movie.subtitles, movie.dubbed, movie.release_date, movie.runtime, movie.id))
+            cur.execute("UPDATE movie SET title = %s, director = %s, producers = %s, actors = %s, language = %s, subtitles = %s, dubbed = %s, release_date = %s, runtime = %s, quantity = %s WHERE id = %s", (movie.title, movie.director, movie.producers, movie.actors, movie.language, movie.subtitles, movie.dubbed, movie.release_date, movie.runtime, movie.quantity, movie.id))
         cur.close()
+
+    def modify_physical_movie(self, id, added_amount, removed_item):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        added_item_ids = []
+        if len(added_amount) != 0:
+            for x in added_amount:
+                if x[0] == "mo" and id == int(x[2]):
+                    for y in range(0, int(x[1])):
+                        cur.execute("""INSERT INTO movie_physical(item_fk, status) VALUES (%s, %s)""", (str(id), "Available"))
+                        added_item_ids.append(int(cur.execute("""SELECT LAST_INSERT_ID()""")))
+        if len(removed_item) != 0:
+            for (prefix,  movie_id) in removed_item:
+                if prefix == "mo" and int(movie_id) == id:
+                    for item_id in removed_item[(prefix, movie_id)]:
+                        cur.execute("DELETE FROM movie_physical WHERE id = %s", (int(item_id)))
+        cur.close()
+        return added_item_ids
 
     def modify_music(self, modified_music):
         connection = self.mysql.connect()
         cur = connection.cursor()
         for music in modified_music:
-            cur.execute("UPDATE music SET title = %s, media_type = %s, artist = %s, label = %s, release_date = %s, asin = %s WHERE id = %s", (music.title, music.media_type, music.artist, music.label, music.release_date, music.asin, music.id))
+            cur.execute("UPDATE music SET title = %s, media_type = %s, artist = %s, label = %s, release_date = %s, asin = %s, quantity = %s WHERE id = %s", (music.title, music.media_type, music.artist, music.label, music.release_date, music.asin, music.quantity, music.id))
         cur.close()
+
+    def modify_physical_music(self, id, added_amount, removed_item):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        added_item_ids = []
+        if len(added_amount) != 0:
+            for x in added_amount:
+                if x[0] == "mu" and id == int(x[2]):
+                    for y in range(0, int(x[1])):
+                        cur.execute("""INSERT INTO music_physical(item_fk, status) VALUES (%s, %s)""", (str(id), "Available"))
+                        added_item_ids.append(int(cur.execute("""SELECT LAST_INSERT_ID()""")))
+        if len(removed_item) != 0:
+            for (prefix,  music_id) in removed_item:
+                if prefix == "mu" and int(music_id) == id:
+                    for item_id in removed_item[(prefix, music_id)]:
+                        cur.execute("DELETE FROM music_physical WHERE id = %s", (int(item_id)))
+        cur.close()
+        return added_item_ids
 
     def get_physical_keys(self, id, prefix):
         connection = self.mysql.connect()
@@ -361,6 +463,21 @@ class Tdg:
                 cur.execute("UPDATE music_physical SET status = 'Available', user_fk = NULL, return_date = NULL WHERE id = %s", item.id)
         cur.close()
         return True
+
+    @require("All passed items must be available to loan", lambda args: (args.self.catalog.get_physical_items_from_tuple(item.prefix, item_fk, item.id).status == 'Available' for item in args.loaned_items))
+    def loan_items(self, loaned_items):
+        connection = self.mysql.connect()
+        cur = connection.cursor()
+        for item in loaned_items:
+            if item.prefix == "bb":
+                cur.execute("UPDATE book_physical SET status = 'Loaned', user_fk = %s, return_date = %s WHERE id = %s", (item.user_fk, item.return_date, item.id))
+            elif item.prefix == "mo":
+                cur.execute("UPDATE movie_physical SET status = 'Loaned', user_fk = %s, return_date = %s WHERE id = %s", (item.user_fk, item.return_date, item.id))
+            elif item.prefix == "mu":
+                cur.execute("UPDATE music_physical SET status = 'Loaned', user_fk = %s, return_date = %s WHERE id = %s", (item.user_fk, item.return_date, item.id))
+        cur.close()
+        return True
+
 
 # ----------------------------------------------------
 # Transactions
@@ -408,16 +525,16 @@ class Tdg:
             last_historical_id = cur.fetchone()
             last_historical_id = last_historical_id[0]
         else:
-            last_historical_id = False
+            last_historical_id = None
         if transaction_type is "loan":
-            result = cur.execute("SELECT * FROM active_loan_history ORDER BY id DESC LIMIT 1")
+            result = cur.execute("SELECT * FROM active_loan_registry ORDER BY id DESC LIMIT 1")
             if result > 0:
                 last_active_id = cur.fetchone()
                 last_active_id = last_active_id[0]
             else:
-                last_active_id = False
+                last_active_id = None
         else:
-            last_active_id = False
+            last_active_id = None
         last_ids = []
         last_ids.append(last_historical_id)
         last_ids.append(last_active_id)

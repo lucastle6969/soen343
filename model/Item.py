@@ -5,6 +5,47 @@ class Item:
         self.id = item_id
         self.quantity = quantity
 
+    def add_temp_copies(self, amount, prefix):
+        for x in range(0, amount):
+            if prefix == "bb":
+                self.copies.append(PhysicalBook(0, self.id, "Available", None))
+                self.quantity = self.quantity + 1
+
+            elif prefix == "ma":
+                self.copies.append(PhysicalMagazine(0, self.id, None))
+                self.quantity = self.quantity + 1
+
+            elif prefix == "mo":
+                self.copies.append(PhysicalMovie(0, self.id, "Available", None))
+                self.quantity = self.quantity + 1
+
+            elif prefix == "mu":
+                self.copies.append(PhysicalMusic(0, self.id, "Available", None))
+                self.quantity = self.quantity + 1
+
+    def remove_physical_item(self, removed_physical_ids):
+        for physical_id in removed_physical_ids:
+            for copy in self.copies:
+                if int(physical_id) == copy.id:
+                    self.copies.remove(copy)
+                    self.quantity = self.quantity - 1
+                    break
+
+    def add_physical_item(self, phys_id):
+        if self.prefix == "bb":
+            self.copies.append(PhysicalBook(phys_id, self.id, "Available", None))
+
+        elif self.prefix == "ma":
+            self.copies.append(PhysicalMagazine(phys_id, self.id, None))
+
+        elif self.prefix == "mo":
+            self.copies.append(PhysicalMovie(phys_id, self.id, "Available", None))
+
+        elif self.prefix == "mu":
+            self.copies.append(PhysicalMusic(phys_id, self.id, "Available", None))
+
+        self.quantity = self.quantity + 1
+
 
 class PhysicalItem:
     def __init__(self, id, prefix, item_fk):
@@ -34,7 +75,7 @@ class Book(Item):
 
 
 class PhysicalBook(PhysicalItem):
-    def __init__(self, id, item_fk, status, return_date, user_fk = None):
+    def __init__(self, id, item_fk, status, return_date, user_fk=None):
         PhysicalItem.__init__(self, id, "bb", item_fk)
         self.status = status
         self.return_date = return_date
@@ -74,7 +115,7 @@ class Movie(Item):
 
 
 class PhysicalMovie(PhysicalItem):
-    def __init__(self, id, item_fk, status, return_date, user_fk = None):
+    def __init__(self, id, item_fk, status, return_date, user_fk=None):
         PhysicalItem.__init__(self, id, "mo", item_fk)
         self.status = status
         self.return_date = return_date
@@ -93,9 +134,8 @@ class Music(Item):
 
 
 class PhysicalMusic(PhysicalItem):
-    def __init__(self, id, item_fk, status, return_date, user_fk = None):
+    def __init__(self, id, item_fk, status, return_date, user_fk=None):
         PhysicalItem.__init__(self, id, "mu", item_fk)
         self.status = status
         self.return_date = return_date
         self.user_fk = user_fk
-
