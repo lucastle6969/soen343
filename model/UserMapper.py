@@ -54,8 +54,9 @@ class UserMapper:
 
     def update_password(self, user_id, is_admin, form, request_):
         self.tdg.modify_password(user_id, sha256_crypt.encrypt(str(request_.form['password'])))
-        self.user_registry.empty_list_of_users()
-        self.user_registry.populate(self.tdg.get_all_users_active_loans())
+        for user in self.user_registry.list_of_users:
+            if user.id == int(user_id):
+                user.password = sha256_crypt.encrypt(str(request_.form['password']))
         if is_admin == 1:
             flash(f'The password for the administrator account (id {user_id}) has been modified.', 'success')
         else:
