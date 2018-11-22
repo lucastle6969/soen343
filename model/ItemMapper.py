@@ -5,6 +5,7 @@ from model.Tdg import Tdg
 from copy import deepcopy
 from dpcontracts import require, ensure
 from time import localtime, strftime, time
+from dpcontracts import require, ensure
 
 
 class ItemMapper:
@@ -419,6 +420,7 @@ class ItemMapper:
                             return copy
                 return None
 
+    @ensure("All passed items must be added to the borrowed_items list", lambda args, result: ((item in args.self.user_registry.get_user_by_id(args.user_id).borrowed_items) for item in args.requested_items))
     def loan_items(self, user_id, requested_items):
         loaned_items = []
         for requested_item in requested_items:

@@ -106,6 +106,16 @@ class UserRegistry:
         self.list_of_users.sort(key=self.sort_list_of_users)
         return self.list_of_users
 
+    def get_borrowed_items(self, user_id, prefix, item_fk, physical_id):
+        for user in self.list_of_users:
+            if user.id == user_id:
+                to_return = []
+                for item in user.borrowed_items:
+                    if item.prefix == prefix and item.item_fk == item_fk and item.id == physical_id:
+                        to_return.append(item)
+
+                return to_return
+
     def sort_list_of_users(self, user):
         return user.id
 

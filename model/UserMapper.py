@@ -4,12 +4,11 @@ from model.Form import RegisterForm
 from model.UserRegistry import UserRegistry
 from model.Tdg import Tdg
 from dpcontracts import require, ensure
-
 CART_MAX_SIZE = 10
 BORROWED_MAX_SIZE = 10
 
-
 class UserMapper:
+
     def __init__(self, app):
         self.tdg = Tdg(app)
         self.user_registry = UserRegistry()
@@ -120,10 +119,11 @@ class UserMapper:
             if user.id == user_id:
                 return len(user.cart) < CART_MAX_SIZE
 
+    @ensure("All passed items must be added to the cart", lambda args, result: (args.available_copy in args.self.user_registry.get_user_by_id(args.user_id).cart))
     def add_to_cart(self, user_id, available_copy):
-        for user in self.user_registry.list_of_users:
-            if user.id == user_id:
-                user.cart.append(available_copy)
+        user = self.get_user_by_id(user_id)
+        user.cart.append(available_copy)
+
 
     def remove_from_cart(self, user_id, physical_item_prefix, physical_item_id):
         item_to_remove = None
@@ -148,6 +148,7 @@ class UserMapper:
         valid_loan_state[1] = self.user_registry.catalog_lock == -1
         return valid_loan_state
 
+    @ensure("All passed items must be added to the borrowed_items list", lambda args, result: ((item in args.self.user_registry.get_user_by_id(args.user_id).borrowed_items) for item in args.loaned_items))
     def loan_items(self, user_id, loaned_items):
         items_to_remove_from_cart = []
         for user in self.user_registry.list_of_users:
@@ -160,6 +161,8 @@ class UserMapper:
                 for item in items_to_remove_from_cart:
                     user.cart.remove(item)
 
+    @require("The list must not be empty", lambda args: (args.self.user_registry.get_user_by_id(args.user_id).cart is not []))
+    @ensure("The list must be empty for the user", lambda args, result: ((args.self.user_registry.get_user_by_id(args.user_id)).cart == []))
     def empty_cart(self, user_id):
         print("user_id param: ", user_id)
         for user in self.user_registry.list_of_users:

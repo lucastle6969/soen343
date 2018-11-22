@@ -170,19 +170,19 @@ def remove_from_cart(physical_item_prefix, physical_item_id):
     response = user_mapper.remove_from_cart(user_id, physical_item_prefix, int(physical_item_id))
     return jsonify(result=response, physical_item_prefix=physical_item_prefix, physical_item_id=physical_item_id)
 
-
 @app.route('/cart/empty_cart')
 def empty_cart():
     if session.get('user_id') is not None:
         user_id = session['user_id']
+        if user_mapper.empty_cart(user_id):
+            flash('Items were successfully removed from your cart.', 'success')
+            return redirect('/home')
+        else:
+            flash('Items were not successfully removed from cart. please, try again later.', 'warning')
+            return redirect('/cart')
     else:
         return redirect('/home')
-    if user_mapper.empty_cart(user_id):
-        flash('Items were successfully removed from your cart.', 'success')
-        return redirect('/home')
-    else:
-        flash('Items were not successfully removed from cart. please, try again later.', 'warning')
-        return redirect('/cart')
+    
 
 
 @app.route('/cart', methods=['GET', 'POST'])
@@ -199,7 +199,7 @@ def cart():
                 loaned_items = item_mapper.loan_items(user_id, requested_items)
                 if loaned_items is not None:
                     user_mapper.loan_items(user_id, loaned_items)
-                    transaction_mapper.add_transactions(user_id, loaned_items, "loan", strftime('%Y-%m-%d %H:%M:%S', localtime()))
+                    transaction_mapper.add_loan_transactions(user_id, loaned_items, "loan", strftime('%Y-%m-%d %H:%M:%S', localtime()))
                 if len(loaned_items) == len(requested_items):
                     flash("Items successfully loaned", 'success')
                     return redirect('/borrowed_items')
@@ -280,7 +280,7 @@ def borrowed_items():
             physical_items = item_mapper.get_physical_items_from_tuple(request.form)
             item_mapper.return_items(physical_items)
             user_mapper.remove_borrowed_items(user_id, physical_items)
-            transaction_mapper.add_transactions(user_id, physical_items, "return", strftime('%Y-%m-%d %H:%M:%S', localtime()))
+            transaction_mapper.add_return_transactions(user_id, physical_items, "return", strftime('%Y-%m-%d %H:%M:%S', localtime()))
             flash("Items were successfully returned.", 'success')
             return render_template('home.html', item_list=item_mapper.get_all_items("bb", user_mapper.get_user_cart(user_id)), item="bb")
         else:
