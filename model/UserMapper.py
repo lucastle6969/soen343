@@ -3,9 +3,9 @@ from passlib.hash import sha256_crypt
 from model.Form import RegisterForm
 from model.UserRegistry import UserRegistry
 from model.Tdg import Tdg
+from dpcontracts import require, ensure
 
 import time
-
 
 CART_MAX_SIZE = 10
 BORROWED_MAX_SIZE = 10
@@ -17,6 +17,7 @@ SECONDS_CLEAN_CATALOG_USERS = 120
 
 
 class UserMapper:
+
     def __init__(self, app):
         self.tdg = Tdg(app)
         self.user_registry = UserRegistry()
@@ -68,11 +69,49 @@ class UserMapper:
                 if locker == user[0]:
                     self.user_registry.remove_lock()
 
+    def update_user(self, user_id, is_admin, form, request_):
+        self.tdg.modify_user(user_id, request_.form['first_name'], request_.form['last_name'], request_.form['address'],
+            request_.form['email'], request_.form['phone'])
+        for user in self.user_registry.list_of_users:
+            if user.id == int(user_id):
+                user.first_name = request_.form['first_name']
+                user.last_name = request_.form['last_name']
+                user.address = request_.form['address']
+                user.email = request_.form['email']
+                user.phone = request_.form['phone']
+        if is_admin == 1:
+            flash(f'The administrator account information (id {user_id}) has been modified.', 'success')
+        else:
+            flash(f'The client account information (id {user_id}) has been modified.', 'success')
+
+    def update_password(self, user_id, is_admin, form, request_):
+        self.tdg.modify_password(user_id, sha256_crypt.encrypt(str(request_.form['password'])))
+        for user in self.user_registry.list_of_users:
+            if user.id == int(user_id):
+                user.password = sha256_crypt.encrypt(str(request_.form['password']))
+        if is_admin == 1:
+            flash(f'The password for the administrator account (id {user_id}) has been modified.', 'success')
+        else:
+            flash(f'The password for the client account (id {user_id}) has been modified.', 'success')
+
+    def delete(self, user_id):
+        user_to_delete = self.user_registry.get_user_by_id(int(user_id))
+        physical_items = []
+        for item in user_to_delete.borrowed_items:
+            physical_items.append(item)
+        self.remove_from_active(int(user_id))
+        self.tdg.delete_user(user_id)
+        self.remove_user_from_list(user_id)
+        return physical_items
+
     def check_restart_session(self, session):
         return self.user_registry.check_restart_session(session)
 
     def get_user_by_email(self, email):
         return self.user_registry.get_user_by_email(email)
+
+    def get_user_by_id(self, user_id):
+        return self.user_registry.get_user_by_id(user_id)
 
     def ensure_not_already_logged(self, user_id):
         self.user_registry.ensure_not_already_logged(user_id)
@@ -92,9 +131,14 @@ class UserMapper:
     def remove_from_active(self, user_id):
         self.user_registry.remove_from_active(user_id)
 
+    def remove_user_from_list(self, user_id):
+        self.user_registry.remove_user_from_list(user_id)
+
     def validate_return(self):
         return self.user_registry.catalog_lock == -1
 
+    @require('Too many items to return.', lambda args: len(args.self.user_registry.get_user_by_id(args.user_id).borrowed_items) >= len(args.physical_items))
+    @ensure('All items must be removed from the user.', lambda args, result: all(args.self.user_registry.get_physical_item(args.user_id, item.prefix, item.item_fk, item.id) is None for item in args.physical_items))
     def remove_borrowed_items(self, user_id, physical_items):
         for item in physical_items:
             self.user_registry.remove_borrowed_items(user_id, item.prefix, item.item_fk, item.id)
@@ -104,10 +148,10 @@ class UserMapper:
             if user.id == user_id:
                 return len(user.cart) < CART_MAX_SIZE
 
+    @ensure("All passed items must be added to the cart", lambda args, result: (args.available_copy in args.self.user_registry.get_user_by_id(args.user_id).cart))
     def add_to_cart(self, user_id, available_copy):
-        for user in self.user_registry.list_of_users:
-            if user.id == user_id:
-                user.cart.append(available_copy)
+        user = self.get_user_by_id(user_id)
+        user.cart.append(available_copy)
 
     def remove_from_cart(self, user_id, physical_item_prefix, physical_item_id):
         item_to_remove = None
@@ -132,6 +176,7 @@ class UserMapper:
         valid_loan_state[1] = self.user_registry.catalog_lock == -1
         return valid_loan_state
 
+    @ensure("All passed items must be added to the borrowed_items list", lambda args, result: ((item in args.self.user_registry.get_user_by_id(args.user_id).borrowed_items) for item in args.loaned_items))
     def loan_items(self, user_id, loaned_items):
         items_to_remove_from_cart = []
         for user in self.user_registry.list_of_users:
@@ -144,6 +189,8 @@ class UserMapper:
                 for item in items_to_remove_from_cart:
                     user.cart.remove(item)
 
+    @require("The list must not be empty", lambda args: (args.self.user_registry.get_user_by_id(args.user_id).cart is not []))
+    @ensure("The list must be empty for the user", lambda args, result: ((args.self.user_registry.get_user_by_id(args.user_id)).cart == []))
     def empty_cart(self, user_id):
         print("user_id param: ", user_id)
         for user in self.user_registry.list_of_users:
