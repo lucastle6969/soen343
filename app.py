@@ -54,7 +54,6 @@ sched.start()
 def before_request():
     if len(session) > 0 and not (len(session) == 1 and '_flashes' in session):
         user_id = session['user_id']
-        timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
         for user in user_mapper.user_registry.active_user_registry:
             if user[0] == user_id:
                 user_as_list = list(user)
