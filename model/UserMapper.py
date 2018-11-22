@@ -45,7 +45,7 @@ class UserMapper:
 
                 return redirect(url_for('admin_tools_default'))
             else:
-                flash("This email has already been used.")
+                flash("This email has already been used.", 'warning')
                 return render_template('admin_tools.html', tool='create_admin', form=form)
 
         return render_template('admin_tools.html', tool=tool, form=form)
