@@ -1,10 +1,10 @@
 from flask import Flask
-from model.Tdg import Tdg
+from model.Tdg import ItemTdg
 from model.ItemMapper import ItemMapper
 import pytest
 
 app = Flask(__name__)
-tdg = Tdg(app)
+tdg = ItemTdg(app)
 item_mapper = ItemMapper(app)
 catalog = item_mapper.get_catalog()
 

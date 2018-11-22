@@ -2,15 +2,17 @@ from flask import render_template, flash, redirect, url_for
 from passlib.hash import sha256_crypt
 from model.Form import RegisterForm
 from model.UserRegistry import UserRegistry
-from model.Tdg import Tdg
 from dpcontracts import require, ensure
+from model.Tdg import UserTdg
+
+
 CART_MAX_SIZE = 10
 BORROWED_MAX_SIZE = 10
 
 class UserMapper:
 
     def __init__(self, app):
-        self.tdg = Tdg(app)
+        self.tdg = UserTdg(app)
         self.user_registry = UserRegistry()
         self.user_registry.populate(self.tdg.get_all_users_active_loans())
         self.fetched_historical_user_log = False
