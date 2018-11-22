@@ -348,6 +348,9 @@ class ItemMapper:
             if len(deleted_music) != 0:
                 self.tdg.delete_music(deleted_music)
 
+    def cancel_changes(self):
+        self.uow = None
+
     def get_filtered_items(self, prefix, form):
         filter_value = form.filter.data
         search_value = form.search.data

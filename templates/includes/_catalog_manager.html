@@ -2,7 +2,6 @@
 
 <div class="container main-catalog">
 
-<h1> Catalog Manager </h1>
 
 {% if item %}
     {% if item == "add_movie" %}
@@ -20,6 +19,7 @@
 
 {% else %}
 <div class="tool-container container">
+        <span class="titles">Catalog Manager</span>
     <hr>
     <div class="row container tool-container1">
         <a class="admin-tools rounded" href="/admin_tools/catalog_manager/add_book"><div class="rounded">Add Book</div></a>
@@ -478,7 +478,10 @@
         <div class = "row">
             <div class="col-md-10"></div>
             <div class="form-group text-white col-md-2">
-                <input type="submit" class="btnSubmit2 pull-right" value="Save Changes" />
+            <div class="row container tool-container1">
+                <a class="btnSubmit2 pull-right admin-tools rounded" href="/admin_tools/catalog_manager/cancel_changes"><div class="rounded">Cancel</div></a>
+                <input type="submit" class="btnSubmit2 pull-right admin-tools rounded" value="Save Changes" />
+            </div>
             </div>
         </div>
     </form>

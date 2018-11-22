@@ -1,9 +1,11 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-   <div class="tool-container container">
-        <span id="items-title">Home</span>
-        <hr> 
+
+    <div class="tool-container container">
+        <span class="titles">Home</span>
+        <hr>
+
     </div>
     {%if session.logged_in %}
         Welcome to the library {{session.first_name}} <br>

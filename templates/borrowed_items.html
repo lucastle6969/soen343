@@ -5,9 +5,10 @@
 {% from "includes/_form_helpers.html" import render_field %}
 <form method="POST" action="/borrowed_items">
     <div class="row m-0">
-        <div class="col-sm-9">
-            <h4>Borrowed Items</h4>
-        </div>
+            <div class="tool-container container">
+                    <span class="titles">Borrowed Items</span>
+                    <hr>
+                </div>
         <div class="col-sm-3">
             <input id="submit" class="form-control btn btn-primary float-right" type="submit" value="Return selected items">
         </div>

@@ -1,9 +1,13 @@
 {% extends 'layout.html' %}
 
 {% block body %}
+<div class="tool-container container">
+        <span class="titles">Login</span>
+        <hr>
+    </div>
+
 <div class="container login-container">
     <div class="login-form-1">
-        <h3>Login</h3>
         <form method="POST" action="/login">
             <div class="form-group">
                 <input type="text" name="email" class="form-control" placeholder="E-mail" value="{{request.form.email}}" />
