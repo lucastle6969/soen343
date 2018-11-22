@@ -1,12 +1,14 @@
 from model.User import User
+from model.UserLog import UserLog
 from model.Item import PhysicalBook, PhysicalMagazine, PhysicalMovie, PhysicalMusic
 
 
 class UserRegistry:
 
     def __init__(self):
-        self.active_user_registry = []
         self.list_of_users = []
+        self.active_user_registry = []
+        self.historical_user_log_registry = []
         self.catalog_lock = -1
 
     def populate(self, all_users):
@@ -27,9 +29,17 @@ class UserRegistry:
                     items.append(PhysicalMusic(entry[13], entry[14], entry[15], entry[16], entry[17]))
             if entry[18] is not None:
                     items.append(PhysicalMovie(entry[18], entry[19], entry[20], entry[21], entry[22]))
-        #to account for the last user
+        # to account for the last user
         current_user.borrowed_items = set(items[:])
         self.list_of_users.append(current_user)
+
+    def populate_historical_log(self, all_logs):
+        self.historical_user_log_registry = []
+        for log_entry in all_logs:
+            self.historical_user_log_registry.append(UserLog(log_entry[0], log_entry[1], log_entry[2], log_entry[3]))
+
+    def add_log(self, user_id, log_type, timestamp, historical_log_id):
+        self.historical_user_log_registry.append(UserLog(historical_log_id, user_id, log_type, timestamp))
 
     def check_lock(self):
         return self.catalog_lock
@@ -68,7 +78,12 @@ class UserRegistry:
 
     def ensure_not_already_logged(self, user_id):
         # log user out if they are already logged in
+        active_size_before = len(self.active_user_registry)
         self.active_user_registry[:] = [tup for tup in self.active_user_registry if not user_id == tup[0]]
+        if len(self.active_user_registry) < active_size_before:
+            return False
+        else:
+            return True
 
     def insert_user(self, user_id, first_name, last_name, address, email, phone, admin, password):
         self.list_of_users.append(User(user_id, first_name, last_name, address, email, phone, admin, password))
@@ -106,6 +121,16 @@ class UserRegistry:
         self.list_of_users.sort(key=self.sort_list_of_users)
         return self.list_of_users
 
+    def get_borrowed_items(self, user_id, prefix, item_fk, physical_id):
+        for user in self.list_of_users:
+            if user.id == user_id:
+                to_return = []
+                for item in user.borrowed_items:
+                    if item.prefix == prefix and item.item_fk == item_fk and item.id == physical_id:
+                        to_return.append(item)
+
+                return to_return
+
     def sort_list_of_users(self, user):
         return user.id
 
@@ -121,3 +146,11 @@ class UserRegistry:
                         to_remove.append(item)
                 for item_re in to_remove:
                     user.borrowed_items.remove(item_re)
+
+    def get_physical_item(self, user_id, prefix, item_fk, physical_id):
+        for user in self.list_of_users:
+            if user.id == user_id:
+                for item in user.borrowed_items:
+                    if item.prefix == prefix and item.item_fk == item_fk and item.id == physical_id:
+                        return item
+        return None

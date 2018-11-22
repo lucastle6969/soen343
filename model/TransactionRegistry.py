@@ -35,3 +35,9 @@ class TransactionRegistry:
                     for copy in item.copies:
                         if copy.id == entry[4]:
                             self.active_loan_registry.append(ActiveLoan(entry[0], entry[1], copy, entry[5]))
+
+    def get_transaction(self, user_id, item, timestamp):
+        for transaction in self.historical_registry:
+            if transaction.user_fk == user_id and transaction.physical_item == item and transaction.timestamp == timestamp:
+                return transaction
+        return False
