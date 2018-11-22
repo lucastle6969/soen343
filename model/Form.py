@@ -146,7 +146,7 @@ class MovieForm(Form):
 
 
 class MusicForm(Form):
-    media_type = StringField('Type', [alpha(2, 100, 0)])
+    media_type = StringField('Type', [alpha(2, 100, 1)])
     title = StringField('Title', [alpha(1, 100, 1)])
     artist = StringField('Artist', [alpha(1, 100, 1)])
     label = StringField('Label', [alpha(1, 100, 1)])
