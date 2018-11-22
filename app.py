@@ -233,6 +233,10 @@ def about(view):
         if session['logged_in']:
             if user_mapper.validate_admin(session['user_id'], session['admin']):
                 return render_template('about.html', view ="admin")
+    elif view == 'client':
+        if session['logged_in'] and session['admin'] == 0:
+            return render_template('about.html', view="client")
+
     else:
         return render_template('about.html')
 
