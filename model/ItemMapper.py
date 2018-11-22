@@ -3,6 +3,7 @@ from model.Uow import Uow
 from model.Catalog import Catalog
 from model.Tdg import Tdg
 from copy import deepcopy
+from time import localtime, strftime, time
 
 
 class ItemMapper:
@@ -19,8 +20,8 @@ class ItemMapper:
     def get_catalog(self):
         return self.catalog
 
-    def get_all_items(self, item_prefix):
-        self.visible_items = self.catalog.get_all_items(item_prefix)
+    def get_all_items(self, item_prefix, user_cart):
+        self.visible_items = self.catalog.get_all_items(item_prefix, user_cart)
         return self.visible_items
 
     def get_all_books(self):
@@ -388,3 +389,50 @@ class ItemMapper:
             item_id = int(prefix_fk_id_tuple[tup])
             physical_items.append(self.catalog.get_physical_items_from_tuple(prefix, item_fk, item_id))
         return physical_items
+
+    def get_items_from_tuple(self, prefix_fk_tuple):
+        requested_items = []
+        for tup in prefix_fk_tuple:
+            prefix = tup[0:2]
+            item_id = int(prefix_fk_tuple[tup])
+            requested_items.append(self.catalog.get_item_by_id(prefix, item_id))
+        return requested_items
+
+    def get_available_copy(self, item_prefix, item_id, user_cart):
+        for item in self.catalog.item_catalog:
+            if item.prefix == item_prefix and item.id == item_id:
+                for copy in item.copies:
+                    duplicate = False
+                    if copy.status == "Available":
+                        for cart_item in user_cart:
+                            if copy.prefix == cart_item.prefix and copy.id == cart_item.id:
+                                duplicate = True
+                        if duplicate is True:
+                            continue
+                        else:
+                            return copy
+                return None
+
+    def loan_items(self, user_id, requested_items):
+        loaned_items = []
+        for requested_item in requested_items:
+            for item in self.catalog.item_catalog:
+                if item.prefix == requested_item.prefix and item.id == requested_item.id:
+                    for copy in item.copies:
+                        if copy.status == "Available":
+                            copy.status = "Loaned"
+                            copy.user_fk = user_id
+                            copy.return_date = self.set_due_date(item.prefix)
+                            loaned_items.append(copy)
+                            break
+        if len(loaned_items) != 0:
+            self.tdg.loan_items(loaned_items)
+            return loaned_items
+        else:
+            return None
+
+    def set_due_date(self, item_prefix):
+        if item_prefix == "bb":
+            return strftime('%Y-%m-%d %H:%M:%S', localtime(time() + 604800)) 
+        elif item_prefix == "mo" or item_prefix == "mu":
+            return strftime('%Y-%m-%d %H:%M:%S', localtime(time() + 172800))

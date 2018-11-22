@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, redirect, url_for, session, request
+from flask import Flask, render_template, flash, redirect, url_for, session, request, jsonify
 from model.ItemMapper import ItemMapper
 from model.UserMapper import UserMapper
 from model.TransactionMapper import TransactionMapper
@@ -89,26 +89,38 @@ def before_request():
 
 @app.route('/')
 def index():
+    if session.get('user_id') is not None:
+        user_id = session['user_id']
+    else:
+        user_id = None
     # Default table view shows all books
-    return render_template('home.html', item_list=item_mapper.get_all_items("bb"), item="bb")
+    return render_template('home.html', item_list=item_mapper.get_all_items("bb", user_mapper.get_user_cart(user_id)), item="bb")
 
 
 @app.route('/home')
 def home():
+    if session.get('user_id') is not None:
+        user_id = session['user_id']
+    else:
+        user_id = None
     # Default table view shows all books
-    return render_template('home.html', item_list=item_mapper.get_all_items("bb"), item="bb")
+    return render_template('home.html', item_list=item_mapper.get_all_items("bb", user_mapper.get_user_cart(user_id)), item="bb")
 
 
 @app.route('/home/<item>')
 def itemList(item):
+    if session.get('user_id') is not None:
+        user_id = session['user_id']
+    else:
+        user_id = None
     if item == "bb":
-        return render_template('home.html', item_list=item_mapper.get_all_items("bb"), item="bb")
+        return render_template('home.html', item_list=item_mapper.get_all_items("bb", user_mapper.get_user_cart(user_id)), item="bb")
     elif item == "ma":
-        return render_template('home.html', item_list=item_mapper.get_all_items("ma"), item="ma")
+        return render_template('home.html', item_list=item_mapper.get_all_items("ma", user_mapper.get_user_cart(user_id)), item="ma")
     elif item == "mu":
-        return render_template('home.html', item_list=item_mapper.get_all_items("mu"), item="mu")
+        return render_template('home.html', item_list=item_mapper.get_all_items("mu", user_mapper.get_user_cart(user_id)), item="mu")
     elif item == "mo":
-        return render_template('home.html', item_list=item_mapper.get_all_items("mo"), item="mo")
+        return render_template('home.html', item_list=item_mapper.get_all_items("mo", user_mapper.get_user_cart(user_id)), item="mo")
 
 
 @app.route('/home/search/<item>', methods=['GET', 'POST'])
@@ -128,6 +140,87 @@ def search(item):
 def order(item_prefix):
     form = OrderForm(request.form)
     return render_template('home.html', item_list=item_mapper.get_ordered_items(form), item=item_prefix)
+
+
+@app.route('/home/add_to_cart/<item_prefix>/<item_id>')
+def add_to_cart(item_prefix, item_id):
+    if session.get('user_id') is not None:
+        user_id = session['user_id']
+    else:
+        return redirect('/home')
+    valid_cart_size = user_mapper.validate_cart_size(user_id)
+    if valid_cart_size:
+        available_copy = item_mapper.get_available_copy(item_prefix, int(item_id), user_mapper.get_user_cart(user_id))
+        if available_copy is not None:
+            user_mapper.add_to_cart(user_id, available_copy)
+            response = "added"
+        else:
+            response = "unavailable"
+    else:
+        response = "full"
+    return jsonify(result=response, item_prefix=item_prefix, item_id=item_id)
+
+
+@app.route('/cart/remove_from_cart/<physical_item_prefix>/<physical_item_id>')
+def remove_from_cart(physical_item_prefix, physical_item_id):
+    if session.get('user_id') is not None:
+        user_id = session['user_id']
+    else:
+        return redirect('/home')
+    response = user_mapper.remove_from_cart(user_id, physical_item_prefix, int(physical_item_id))
+    return jsonify(result=response, physical_item_prefix=physical_item_prefix, physical_item_id=physical_item_id)
+
+
+@app.route('/cart/empty_cart')
+def empty_cart():
+    if session.get('user_id') is not None:
+        user_id = session['user_id']
+    else:
+        return redirect('/home')
+    if user_mapper.empty_cart(user_id):
+        flash('Items were successfully removed from your cart.', 'success')
+        return redirect('/home')
+    else:
+        flash('Items were not successfully removed from cart. please, try again later.', 'warning')
+        return redirect('/cart')
+
+
+@app.route('/cart', methods=['GET', 'POST'])
+def cart():
+    if session.get('user_id') is not None:
+        user_id = session['user_id']
+    else:
+        return redirect('/home')
+    if request.method == 'POST':
+        requested_items = item_mapper.get_items_from_tuple(request.form)
+        valid_loan_state = user_mapper.validate_loan(user_id, len(requested_items))
+        if valid_loan_state[0] is True:
+            if valid_loan_state[1] is True:
+                loaned_items = item_mapper.loan_items(user_id, requested_items)
+                if loaned_items is not None:
+                    user_mapper.loan_items(user_id, loaned_items)
+                    transaction_mapper.add_transactions(user_id, loaned_items, "loan", strftime('%Y-%m-%d %H:%M:%S', localtime()))
+                if len(loaned_items) == len(requested_items):
+                    flash("Items successfully loaned", 'success')
+                    return redirect('/borrowed_items')
+                else:
+                    flash("Some items became unavailable.", "warning")
+                    return redirect('/borrowed_items')
+            else:
+                flash("There was a problem loaning these items at this time, please try again later.", 'warning')
+                return redirect('/cart')
+        else:
+            flash("This transaction would put you over the loan limit.")
+            return redirect('/cart')
+    else:
+        physical_items = []
+        for user in user_mapper.user_registry.list_of_users:
+            if user.id == user_id:
+                physical_items = user.cart
+
+        detailed_items = item_mapper.get_item_details(physical_items)
+        return render_template('cart.html', cart=zip(physical_items, detailed_items))
+    return render_template('cart.html')
 
 
 @app.route('/about')
@@ -197,7 +290,7 @@ def borrowed_items():
             user_mapper.remove_borrowed_items(user_id, physical_items)
             transaction_mapper.add_transactions(user_id, physical_items, "return", strftime('%Y-%m-%d %H:%M:%S', localtime()))
             flash("Items were successfully returned.", 'success')
-            return render_template('home.html', item_list=item_mapper.get_all_items("bb"), item="bb")
+            return render_template('home.html', item_list=item_mapper.get_all_items("bb", user_mapper.get_user_cart(user_id)), item="bb")
         else:
             flash("There was an problem returning your items, please try again later.", 'warning')
             return redirect('/borrowed_items')
@@ -352,7 +445,7 @@ def cancel_deletion(item_prefix, item_id):
         return redirect(url_for('admin_tools', tool='catalog_manager'))
 
 
-@app.route('/admin_tools/catalog_manager/<item>',  methods=['GET', 'POST'])
+@app.route('/admin_tools/catalog_manager/<item>', methods=['GET', 'POST'])
 def catalog_manager(item):
     if session['logged_in']:
         if user_mapper.validate_admin(session['user_id'], session['admin']):
