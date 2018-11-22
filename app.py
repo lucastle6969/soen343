@@ -418,27 +418,27 @@ def edit_entry(item_prefix, item_id):
 
 @app.route('/admin_tools/edit_user/<user_id>', methods=['GET', 'POST'])
 def edit_user(user_id):
-    user_selected = user_mapper.get_user_by_id(user_id)
+    user_selected = user_mapper.user_registry.get_user_by_id(int(user_id))
     form = EditForm(request.form)
     if request.method == 'POST':
-        form.user = user_mapper.get_user_by_id(user_id)
-        form.all_users = user_mapper.get_all_users()
+        form.user = user_mapper.user_registry.get_user_by_id(int(user_id))
+        form.all_users = user_mapper.user_registry.get_all_users()
         if form.validate():
-            user_mapper.update(user_id, user_selected[6], form, request)
+            user_mapper.update_user(user_id, user_selected.admin, form, request)
             return redirect('/admin_tools/view_users')
         else:
-            return render_template('admin_tools.html', tool='view_users', form=form, id=user_selected[0], user="edit")
+            return render_template('admin_tools.html', tool='view_users', form=form, id=user_selected.id, user="edit")
     else:
         form = Forms.get_user_form_data(user_selected, request)
-        return render_template('admin_tools.html', tool='view_users', form=form, id=user_selected[0], user="edit")
+        return render_template('admin_tools.html', tool='view_users', form=form, id=user_selected.id, user="edit")
 
 
 @app.route('/admin_tools/edit_password/<user_id>', methods=['GET', 'POST'])
 def edit_password(user_id):
-    user_selected = user_mapper.get_user_by_id(user_id)
+    user_selected = user_mapper.user_registry.get_user_by_id(int(user_id))
     form = PasswordForm(request.form)
     if request.method == 'POST' and form.validate():
-        user_mapper.update_password(user_id, user_selected[6], form, request)
+        user_mapper.update_password(user_id, user_selected.admin, form, request)
         return redirect('/admin_tools/view_users')
     else:
         return render_template('admin_tools.html', tool='view_users', form=form, user=user_selected, password="edit")
@@ -457,7 +457,8 @@ def delete_item(item_prefix, item_id):
 
 @app.route('/admin_tools/delete_user/<user_id>', methods=['POST'])
 def delete_user(user_id):
-    user_mapper.delete(user_id)
+    items = user_mapper.delete(user_id)
+    item_mapper.return_items(items)
     flash(f'User (id {user_id}) has been deleted.', 'success')
     return redirect('/admin_tools/view_users')
 

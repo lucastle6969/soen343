@@ -52,9 +52,9 @@ class Tdg:
         connection = self.mysql.connect()
         cur = connection.cursor()
         cur.execute("DELETE FROM user WHERE id = %s", user_id)
-        cur.execute("UPDATE book_physical SET return_date = NULL, user_fk = NULL, status = 'Available' where user_fk = %s", user_id)
-        cur.execute("UPDATE movie_physical SET return_date = NULL, user_fk = NULL, status = 'Available' where user_fk = %s", user_id)
-        cur.execute("UPDATE music_physical SET return_date = NULL, user_fk = NULL, status = 'Available' where user_fk = %s", user_id)
+        # cur.execute("UPDATE book_physical SET return_date = NULL, user_fk = NULL, status = 'Available' where user_fk = %s", user_id)
+        # cur.execute("UPDATE movie_physical SET return_date = NULL, user_fk = NULL, status = 'Available' where user_fk = %s", user_id)
+        # cur.execute("UPDATE music_physical SET return_date = NULL, user_fk = NULL, status = 'Available' where user_fk = %s", user_id)
         cur.close()
 
     # -- SELECT Queries

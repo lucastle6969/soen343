@@ -40,7 +40,7 @@ class UserMapper:
 
         return render_template('admin_tools.html', tool=tool, form=form)
 
-    def update(self, user_id, is_admin, form, request_):
+    def update_user(self, user_id, is_admin, form, request_):
         self.tdg.modify_user(user_id, request_.form['first_name'], request_.form['last_name'], request_.form['address'],
             request_.form['email'], request_.form['phone'])
         for user in self.user_registry.list_of_users:
@@ -66,9 +66,14 @@ class UserMapper:
             flash(f'The password for the client account (id {user_id}) has been modified.', 'success')
 
     def delete(self, user_id):
+        user_to_delete = self.user_registry.get_user_by_id(int(user_id))
+        physical_items = []
+        for item in user_to_delete.borrowed_items:
+            physical_items.append(item)
         self.remove_from_active(int(user_id))
         self.tdg.delete_user(user_id)
         self.remove_user_from_list(user_id)
+        return physical_items
 
     def check_restart_session(self, session):
         return self.user_registry.check_restart_session(session)
@@ -77,7 +82,7 @@ class UserMapper:
         return self.user_registry.get_user_by_email(email)
 
     def get_user_by_id(self, user_id):
-        return self.tdg.get_user_by_id(user_id)
+        return self.user_registry.get_user_by_id(user_id)
 
     def ensure_not_already_logged(self, user_id):
         self.user_registry.ensure_not_already_logged(user_id)

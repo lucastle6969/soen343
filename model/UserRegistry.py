@@ -79,6 +79,12 @@ class UserRegistry:
                 return user
         return None
 
+    def get_user_by_id(self, user_id):
+        for user in self.list_of_users:
+            if user_id == user.id:
+                return user
+        return None
+
     def validate_admin(self, user_id, admin):
         for tup in self.active_user_registry:
             if tup[0] == user_id and admin:
