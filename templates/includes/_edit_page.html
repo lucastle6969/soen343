@@ -122,13 +122,13 @@
                 </div>
             </form>
         {% elif prefix == "mu" %}
-            <h3>Modify a music</h3>
+            <h3>Modify music</h3>
             <form method="POST" action="/admin_tools/edit_entry/{{prefix}}/{{id}}">
                 <div class="form-group text-white">
-                    {{render_field(form.title, class_="form-control", placeholder="example: MP3")}}
+                    {{render_field(form.title, class_="form-control", placeholder="example: Another Brick in the Wall")}}
                 </div>
                 <div class="form-group text-white">
-                    {{render_field(form.media_type, class_="form-control", placeholder="example: Another Brick in the Wall")}}
+                    {{render_field(form.media_type, class_="form-control", placeholder="example: CD")}}
                 </div>
                 <div class="form-group text-white">
                     {{render_field(form.artist, class_="form-control", placeholder="example: Pink Floyd")}}

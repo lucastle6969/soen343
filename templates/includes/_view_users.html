@@ -5,8 +5,22 @@
     {% include 'includes/_edit_password.html' %}
 {% endif %}
 {% if list_of_users %}
+<div class="tool-container container">
+        <span class="titles">User Manager</span>
+        <hr>
+        </div>
+        <div class="row container tool-container1">
+
+        <a class="admin-tools rounded" href="/admin_tools/create_admin"><div class="rounded">Create New Admin</div></a>
+        <a class="admin-tools rounded" href="/admin_tools/create_client"><div class="rounded">Create New Client</div></a>
+        <a class="admin-tools rounded" href="/admin_tools/view_active_registry"><div class="rounded">View Active Users</div></a>
+
+        </div>
+<div class="tool-container container">
+        <span class="titles">List of Users</span>
+        <hr>
+        </div>
     <table>
-        <caption style="caption-side:top">List of Users</caption>
         <tr>
             <th>ID</th>
             <th>First Name</th>

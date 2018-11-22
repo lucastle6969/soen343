@@ -130,11 +130,7 @@
     background-color: white;
 }
 
-#tools-title {
-    font-size: 145%;
-}
-
-#items-title {
+.titles {
     font-size: 145%;
 }
 
@@ -155,15 +151,15 @@ td, th {
 }
 
 .uow-added {
-    background-color: green !important;
+    background-color: #d4eddc !important;
 }
 
 .uow-modify {
-    background-color: yellow !important;
+    background-color: #ffff66 !important;
 }
 
 .uow-delete {
-    background-color: red !important;
+    background-color: #f85b5d !important;
 }
 
 .hidden {

@@ -2,7 +2,6 @@
 
 <div class="container main-catalog">
 
-<h1> Catalog Manager </h1>
 
 {% if item %}
     {% if item == "add_movie" %}
@@ -20,6 +19,7 @@
 
 {% else %}
 <div class="tool-container container">
+        <span class="titles">Catalog Manager</span>
     <hr>
     <div class="row container tool-container1">
         <a class="admin-tools rounded" href="/admin_tools/catalog_manager/add_book"><div class="rounded">Add Book</div></a>
