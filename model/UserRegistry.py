@@ -73,7 +73,7 @@ class UserRegistry:
             reason = 'disconnect'
         elif not cleared:
             cleared = False
-        if session:
+        if 'user_id' in session:
             user_id = session['user_id']
         else:
             user_id = None
