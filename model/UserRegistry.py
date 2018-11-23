@@ -73,7 +73,11 @@ class UserRegistry:
             reason = 'disconnect'
         elif not cleared:
             cleared = False
-        result = [cleared, reason]
+        if session:
+            user_id = session['user_id']
+        else:
+            user_id = None
+        result = [cleared, reason, user_id]
         return result
 
     def ensure_not_already_logged(self, user_id):
