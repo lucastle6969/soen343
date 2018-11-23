@@ -128,7 +128,7 @@ class UserTdg:
         connection = self.mysql.connect()
         cur = connection.cursor()
         cur.execute("""INSERT INTO historical_user_log_registry(user_fk, log_type, timestamp) VALUES(%s, %s, %s)""", (user_id, log_type, timestamp))
-        result = cur.execute("SELECT * FROM log_registry ORDER BY timestamp DESC")
+        result = cur.execute("SELECT * FROM historical_user_log_registry ORDER BY timestamp DESC")
         if result > 0:
             last_historical_id = cur.fetchone()
             last_historical_id = last_historical_id[0]
