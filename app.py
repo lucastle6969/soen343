@@ -53,6 +53,8 @@ def before_request():
                         user_mapper.user_registry.active_user_registry.append(tuple(user_as_list))
     result = user_mapper.check_restart_session(session)
     if result[0]:
+        if result[2] is not None:
+            user_mapper.add_to_historical_user_log(result[2], "out", strftime('%Y-%m-%d %H:%M:%S', localtime()))
         if result[1] == 'simultaneous':
             flash('Your account has been logged in from another location, you have been automatically logged out.', 'warning')
         if result[1] == 'disconnect':
@@ -481,7 +483,7 @@ def cancel_changes():
 @app.route('/logout')
 def logout():
     user_mapper.remove_from_active(session['user_id'])
-    user_mapper.add_to_historical_user_log(session['user_id'], "out", datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S'))
+    user_mapper.add_to_historical_user_log(session['user_id'], "out", strftime('%Y-%m-%d %H:%M:%S', localtime()))
     locker = user_mapper.user_registry.check_lock()
     if locker == session['user_id']:
         user_mapper.user_registry.remove_lock()
