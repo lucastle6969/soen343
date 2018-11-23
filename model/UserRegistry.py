@@ -57,26 +57,26 @@ class UserRegistry:
         online = False
         cleared = False
         reason = None
+        user_id = None
         only_flashes = len(session) == 1 and '_flashes' in session
         for id, first_name, last_name, email, admin, time, active_time, catalog_time, catalog_flag in self.active_user_registry:
             if 'user_id' in session and id == session['user_id']:
                 online = True
                 if session['timestamp'] != time:
+                    user_id = session['user_id']
                     session.clear()
                     reason = 'simultaneous'
                     cleared = True
         if not online and only_flashes:
             cleared = False
         elif not online and session:
+            if 'user_id' in session:
+                user_id = session['user_id']
             session.clear()
             cleared = True
             reason = 'disconnect'
         elif not cleared:
             cleared = False
-        if 'user_id' in session:
-            user_id = session['user_id']
-        else:
-            user_id = None
         result = [cleared, reason, user_id]
         return result
 
